@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.DetFacturaDto;
+import sv.com.jsoft.efactmh.services.ComprobanteCreditoFiscalServices;
+import sv.com.jsoft.efactmh.services.ContribuyenteServices;
 import sv.com.jsoft.efactmh.util.CantidadALetras;
 
 /**
@@ -41,7 +44,7 @@ public class ViewFactura implements Serializable {
     @Getter
     @Setter
     private Integer idFac;
-    
+
     private final DecimalFormat df = new DecimalFormat("0.00");
     private final SimpleDateFormat sdDate = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat sdTime = new SimpleDateFormat("HH:mm:ss");
@@ -55,6 +58,12 @@ public class ViewFactura implements Serializable {
     @Getter
     private String responseMh = "";
     private String uuid = "";
+
+    @Inject
+    private ContribuyenteServices contribuyenteServices;
+    
+    @Inject
+    private ComprobanteCreditoFiscalServices comprobanteCreditoFiscalServices;
 
     public void addDetFact() {
         if (detFacturaDto.getCodigo() == null || detFacturaDto.getProducto() == null
@@ -89,48 +98,14 @@ public class ViewFactura implements Serializable {
         BigDecimal montoTotalAPagar = montoTotal.add(ivaMonto);
 
         JSONObject jsonRoot = new JSONObject();
-        JSONArray jsonCuerpoDoc = new JSONArray();
+        JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(lstDetFactura);
         JSONArray jsonTributos = new JSONArray();
-        JSONObject jsonReceptor = new JSONObject();
-        JSONObject jsonReceptorDireccion = new JSONObject();
-        JSONObject jsonEmisor = new JSONObject();
-        JSONObject jsonEmisorDireccion = new JSONObject();
+        JSONObject jsonReceptor = contribuyenteServices.getContribuyente("", true);
+        JSONObject jsonEmisor = contribuyenteServices.getContribuyente("", false);
+
         JSONObject jsonIdentificacion = new JSONObject();
         JSONObject jsonResumen = new JSONObject();
         JSONObject jsonTributo = new JSONObject();
-
-        jsonReceptorDireccion.put("departamento", "06");
-        jsonReceptorDireccion.put("municipio", "14");
-        jsonReceptorDireccion.put("complemento", "1 AVENIDA SUR 630");
-
-        jsonReceptor.put("codActividad", "46298");
-        jsonReceptor.put("descActividad", "ESTA ES UNA PRUEBA");
-        jsonReceptor.put("correo", "sin_correo@dominio.com");
-        jsonReceptor.put("direccion", jsonReceptorDireccion);
-        jsonReceptor.put("nit", "06171402851016");
-        jsonReceptor.put("nombreComercial", null);
-        jsonReceptor.put("telefono", "2133-3600");
-        jsonReceptor.put("nrc", "2952842");
-        jsonReceptor.put("nombre", "VICE MINISTERIO DE TRANSPORTE");
-
-        jsonEmisorDireccion.put("departamento", "06");
-        jsonEmisorDireccion.put("municipio", "14");
-        jsonEmisorDireccion.put("complemento", "BLVD TUTUNICHAPA Y AV LEGAZPI #11 URB SIGLO XXI");
-
-        jsonEmisor.put("nit", "06140203981013");
-        jsonEmisor.put("nrc", "1047582");
-        jsonEmisor.put("correo", "prueba@prueba.com");
-        jsonEmisor.put("nombre", "SERTRACEN, S.A. DE C.V.");
-        jsonEmisor.put("telefono", "2261-7300");
-        jsonEmisor.put("direccion", jsonEmisorDireccion);
-        jsonEmisor.put("codEstable", "01");
-        jsonEmisor.put("codActividad", "94990");
-        jsonEmisor.put("codEstableMH", "m123");
-        jsonEmisor.put("codPuntoVenta", null);
-        jsonEmisor.put("descActividad", "Actividades de asociaciones n.c.p.");
-        jsonEmisor.put("codPuntoVentaMH", null);
-        jsonEmisor.put("nombreComercial", "SERTRACEN, S.A. DE C.V.");
-        jsonEmisor.put("tipoEstablecimiento", "01");
 
         jsonTributo.put("descripcion", "Impuesto al Valor Agregado 13%");
         jsonTributo.put("codigo", "20");
@@ -160,33 +135,6 @@ public class ViewFactura implements Serializable {
         jsonResumen.put("montoTotalOperacion", montoTotalAPagar.setScale(2, RoundingMode.UP));
         jsonResumen.put("porcentajeDescuento", 0);
 
-        JSONArray codsTributor = new JSONArray();
-        codsTributor.add(0, "20");
-
-        int i = 1;
-        for (DetFacturaDto detFac : lstDetFactura) {
-            JSONObject jsonDoc = new JSONObject();
-
-            jsonDoc.put("psv", 0);
-            jsonDoc.put("codigo", null);
-            jsonDoc.put("numItem", i);
-            jsonDoc.put("cantidad", detFac.getCantidad());
-            jsonDoc.put("tipoItem", 1);
-            jsonDoc.put("tributos", codsTributor);
-            jsonDoc.put("noGravado", 0);
-            jsonDoc.put("precioUni", detFac.getPrecioUnitario());
-            jsonDoc.put("uniMedida", 59);
-            jsonDoc.put("codTributo", null);
-            jsonDoc.put("montoDescu", 0);
-            jsonDoc.put("ventaNoSuj", 0);
-            jsonDoc.put("descripcion", detFac.getProducto());
-            jsonDoc.put("ventaExenta", 0);
-            jsonDoc.put("ventaGravada", detFac.getCantidad().multiply(detFac.getPrecioUnitario()).setScale(2, RoundingMode.UP));
-            jsonDoc.put("numeroDocumento", null);
-            jsonCuerpoDoc.add(jsonDoc);
-            i++;
-        }
-
         jsonIdentificacion.put("fecEmi", sdDate.format(new Date()));
         jsonIdentificacion.put("horEmi", sdTime.format(new Date()));
         jsonIdentificacion.put("tipoDte", "03");
@@ -195,7 +143,7 @@ public class ViewFactura implements Serializable {
         jsonIdentificacion.put("tipoModelo", 1);
         jsonIdentificacion.put("tipoMoneda", "USD");
         jsonIdentificacion.put("motivoContin", null);
-        jsonIdentificacion.put("numeroControl", "DTE-03-00230003-" + String.format("%0" + 15 + "d", idFac));
+        jsonIdentificacion.put("numeroControl", "DTE-03-00000000-" + String.format("%0" + 15 + "d", idFac));
         jsonIdentificacion.put("tipoOperacion", 1);
         jsonIdentificacion.put("codigoGeneracion", uuid);
         jsonIdentificacion.put("tipoContingencia", null);

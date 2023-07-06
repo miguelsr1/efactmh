@@ -6,112 +6,92 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
         <title>Facelet Title</title>
         <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
     </h:head>
     <h:body style="max-width: 1200px; margin: 0 auto;">
         <h:form prependId="false">
-            <p:growl id="growl" showDetail="true" >
-                <p:autoUpdate />
-            </p:growl>
             <div class="grid dashboard ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Receptorw   </h5>
+                            <h5>Receptor</h5>
                         </div>
 
-                        <div class="grid">
-                            <div class="col-12 md:col-4" >
+                        <div class="formgrid grid">
+                            <div class="field col-12 md:col-2">
                                 <p:outputLabel for="codRec" value="Código"/>
                                 <p:inputText id="codRec"  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
                             </div>
-                            <div class="col-12 md:col-8" >
+                            <div class="field col-12 md:col-10">
                                 <p:outputLabel for="nomRec" value="Nombre"/>
-                                <p:inputText id="nomRec"  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                                <p:inputText id="nomRec" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
                             </div>
-                            <div class="col-12 md:col-6" >
+                            <div class="field col-12 md:col-3" >
                                 <p:outputLabel for="nitRec" value="NIT"/>
                                 <p:inputText id="nitRec"  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
                             </div>
-                            <div class="col-12 md:col-6" >
+                            <div class="field col-12 md:col-3" >
                                 <p:outputLabel for="nrcRec" value="NRC"/>
                                 <p:inputText id="nrcRec"  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
                             </div>
-                            <div class="col-12" >
+                            <div class="field col-12 md:col-6" >
                                 <p:outputLabel for="cboTipoDte" value="Tipo DTE"/>
-                                <p:selectOneMenu id="cboTipoDte"  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true">
-                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DTE"/>
+                                <p:selectOneMenu id="cboTipoDte" class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto" required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DTE" />
+                                    <f:selectItem noSelectionOption="true" itemLabel="COMPROBANTE DE CREDITO FISCAL" itemValue="CCFE"/>
+                                    <f:selectItem noSelectionOption="true" itemLabel="CONSUMIDOR FINAL" itemValue="FE"/>
+                                    <f:selectItem noSelectionOption="true" itemLabel="NOTA DE CREDITO" itemValue="NDE"/>
                                 </p:selectOneMenu>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
 
-
             <div class="card" jsf:id="dvDetFac">
                 <h5>Detalle Factura</h5>
-                <div class="grid">
-                    <div class="col-12 md:col-1" >
-                        <p:outputLabel for="txtIdFac" value="Id"/>
-                        <p:inputText id="txtIdFac" value="#{viewFactura.idFac}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
-                    </div>
-                    <div class="col-12 md:col-4" >
+                <div class="formgrid grid">
+                    <div class="field col-12 md:col-2" >
                         <p:outputLabel for="txtCodigo" value="Código"/>
-                        <p:inputText id="txtCodigo" value="#{viewFactura.detFacturaDto.codigo}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                        <p:inputText id="txtCodigo" value="#{viewFactura.detFacturaDto.codigo}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                                     requiredMessage="Debe de ingresar el código del producto" required="true"/>
                     </div>
-                    <div class="col-12 md:col-7" >
+                    <div class="field col-12 md:col-10" >
                         <p:outputLabel for="firstname1" value="Producto o servicio"/>
                         <p:inputText id="firstname1" value="#{viewFactura.detFacturaDto.producto}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" />
                     </div>
                 </div>
-                <div class="grid">
-                    <div class="col-12 md:col-8" style="display: none;">
-                        <p:outputLabel for="txtDescripcion" value="Descripción"/>
-                        <p:inputText id="txtDescripcion" value="#{viewFactura.detFacturaDto.descripcion}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                    <div class="col-12 md:col-6">
+                <div class="formgrid grid">
+                    <div class="field col-12 md:col-4">
                         <p:outputLabel for="txtCantidad">Cantidad</p:outputLabel>
-                        <p:inputText id="txtCantidad" value="#{viewFactura.detFacturaDto.cantidad}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                        <p:inputText id="txtCantidad" value="#{viewFactura.detFacturaDto.cantidad}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" 
+                                     requiredMessage="Debe de ingresar cantidad a facturar" required="true"/>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div class="field col-12 md:col-4">
                         <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
-                        <p:inputText id="txtPU" value="#{viewFactura.detFacturaDto.precioUnitario}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                        <p:inputText id="txtPU" value="#{viewFactura.detFacturaDto.precioUnitario}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" 
+                                     requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
                     </div>
                 </div>
-                <div class="grid" style="display: none;">
-                    <div class="col-12 md:col-4">
-                        <label for="txtMD">Monto Descuento</label>
-                        <input id="txtMD" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                    <div class="col-12 md:col-4">
-                        <label for="txtMotivoDes">Motivo del Descuento</label>
-                        <input id="txtMotivoDes" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                </div>
-                <div class="grid" style="display: none;">
-                    <div class="col-12 md:col-4">
-                        <label for="txtRef">Referencia Línea</label>
-                        <input id="txtRef" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                    <div class="col-12 md:col-4">
-                        <label for="txtOtros">Otros Créditos/Cargos o Cobros</label>
-                        <input id="txtOtros" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                    <div class="col-12 md:col-4">
-                        <p:spacer width="10"/>
-                        <p:selectBooleanCheckbox id="chkSujeto" itemLabel="No Sujeto" class="text-base text-color surface-overlay p-2 surface-border appearance-none outline-none w-full"/>
-                    </div>
-                </div>
-                <div class="grid">
-                    <div class="col-12 md:col-4">
+
+                <div class="formgrid grid">
+                    <div class="field col-12 md:col-4">
                         <p:commandButton value="Agregar" update="dvDetFac tblDetFact" icon="pi pi-plus" action="#{viewFactura.addDetFact()}" validateClient="true"/>
                     </div>
                 </div>
             </div>
 
+            <p:messages showSummary="true" showIcon="false">
+                <p:autoUpdate />
+            </p:messages>
+            
             <div class="card">
                 <p:dataTable id="tblDetFact" widgetVar="tblDetFact" var="det" value="#{viewFactura.lstDetFactura}" >
                     <f:facet name="header">
