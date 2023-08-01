@@ -14,5 +14,11 @@
             <renderer-class>org.primefaces.paradise.component.ParadiseMenuRenderer</renderer-class>
         </renderer>
     </render-kit>
-
+    
+    <application>
+        <resource-bundle>
+            <base-name>variables.properties</base-name>
+            <var>variables</var>
+        </resource-bundle>
+    </application>
 </faces-config>

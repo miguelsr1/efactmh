@@ -1,0 +1,30 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pv="http://primefaces.org/paradise">
+
+    <div class="layout-menu-wrapper #{guestPreferences.darkMenu ? 'layout-menu-dark' : null}">
+        <div class="layout-menu-container">
+            <h:form id="menuform">
+                <div class="mobile-search">
+                    <i class="pi pi-fw pi-search topbar-search-icon"></i>
+                    <input type="text" class="topbar-search" placeholder="Type your search here"/>
+                </div>
+                <pv:menu widgetVar="ParadiseMenuWidget">
+                    <p:submenu label="Operaciones" icon="pi pi-fw pi-prime" >
+                        <p:menuitem value="Facturas" icon="pi pi-home" action="lstDtes"/>
+                        <p:menuitem value="Reimpresion" icon="pi pi-home"/>
+                    </p:submenu>
+                    <p:submenu label="Mantenimientos" icon="pi pi-home">
+                        <p:menuitem value="Items" icon="pi pi-home"/>
+                        <p:menuitem value="Receptores" icon="pi pi-home"/>
+                    </p:submenu>
+                </pv:menu>
+            </h:form>
+        </div>
+    </div>
+
+</ui:composition>

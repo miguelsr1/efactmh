@@ -16,24 +16,24 @@ public class ContribuyenteServices {
     private JSONObject getJsonEmisor(String nit) {
         JSONObject jsonDireccion = new JSONObject();
 
-        jsonDireccion.put("departamento", "06");
-        jsonDireccion.put("municipio", "14");
-        jsonDireccion.put("complemento", "BLVD TUTUNICHAPA Y AV LEGAZPI #11 URB SIGLO XXI");
+        jsonDireccion.put("departamento", "08");
+        jsonDireccion.put("municipio", "05");
+        jsonDireccion.put("complemento", "Barrio el centro, calle principal #5, Olocuilta, La Paz");
 
-        jsonEmisor.put("nit", "06140203981013");
-        jsonEmisor.put("nrc", "1047582");
-        jsonEmisor.put("correo", "prueba@prueba.com");
-        jsonEmisor.put("nombre", "SERTRACEN, S.A. DE C.V.");
-        jsonEmisor.put("telefono", "2261-7300");
+        jsonEmisor.put("nit", "08011403460017");
+        jsonEmisor.put("nrc", "91669");
+        jsonEmisor.put("correo", "stj.olocuilta@gmail.com");
+        jsonEmisor.put("nombre", "AGUILAR DE ARTIGA, MARIA JULIA");
+        jsonEmisor.put("telefono", "23306008");
         jsonEmisor.put("direccion", jsonDireccion);
         jsonEmisor.put("codEstable", "01");
-        jsonEmisor.put("codActividad", "94990");
-        jsonEmisor.put("codEstableMH", "m123");
-        jsonEmisor.put("codPuntoVenta", null);
-        jsonEmisor.put("descActividad", "Actividades de asociaciones n.c.p.");
+        jsonEmisor.put("codActividad", "46900");
+        jsonEmisor.put("codEstableMH", null);
+        jsonEmisor.put("codPuntoVenta", "6");
+        jsonEmisor.put("descActividad", "Venta al por mayor de otros productos");
         jsonEmisor.put("codPuntoVentaMH", null);
-        jsonEmisor.put("nombreComercial", "SERTRACEN, S.A. DE C.V.");
-        jsonEmisor.put("tipoEstablecimiento", "01");
+        jsonEmisor.put("nombreComercial", "SUPER TIENDA JULITA");
+        jsonEmisor.put("tipoEstablecimiento", "02");
 
         return jsonEmisor;
     }
@@ -42,17 +42,17 @@ public class ContribuyenteServices {
         JSONObject jsonDireccion = new JSONObject();
         jsonDireccion.put("departamento", "06");
         jsonDireccion.put("municipio", "14");
-        jsonDireccion.put("complemento", "1 AVENIDA SUR 630");
+        jsonDireccion.put("complemento", "ENTRE LA 83 Y LA 85 AV.");
 
-        jsonReceptor.put("codActividad", "46298");
-        jsonReceptor.put("descActividad", "ESTA ES UNA PRUEBA");
-        jsonReceptor.put("correo", "sin_correo@dominio.com");
-        jsonReceptor.put("direccion", jsonDireccion);
-        jsonReceptor.put("nit", "06171402851016");
+        jsonReceptor.put("nit", "06140107161013");
+        jsonReceptor.put("nrc", "2514445");
+        jsonReceptor.put("nombre", "TEC LOGISTICA, S.A DE C.V");
+        jsonReceptor.put("codActividad", "52240");
+        jsonReceptor.put("descActividad", "MANIPULACION DE CARGA");
         jsonReceptor.put("nombreComercial", null);
-        jsonReceptor.put("telefono", "2133-3600");
-        jsonReceptor.put("nrc", "2952842");
-        jsonReceptor.put("nombre", "VICE MINISTERIO DE TRANSPORTE");
+        jsonReceptor.put("direccion", jsonDireccion);
+        jsonReceptor.put("telefono", null);
+        jsonReceptor.put("correo", "stj.olocuilta@gmail.com");
 
         return jsonReceptor;
     }

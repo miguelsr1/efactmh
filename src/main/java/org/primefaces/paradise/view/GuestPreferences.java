@@ -28,7 +28,7 @@ public class GuestPreferences implements Serializable {
 
     private String layout = "default";
 
-    private String menuMode = "layout-menu-slim";
+    private String menuMode = "layout-menu-static";
 
     private boolean darkMenu = true;
 
