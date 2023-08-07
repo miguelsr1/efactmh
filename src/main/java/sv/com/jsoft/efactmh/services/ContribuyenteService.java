@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
  * @author msanchez
  */
 @ApplicationScoped
-public class ContribuyenteServices {
+public class ContribuyenteService {
 
     private JSONObject jsonEmisor = new JSONObject();
     private JSONObject jsonReceptor = new JSONObject();

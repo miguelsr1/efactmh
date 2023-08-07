@@ -12,7 +12,7 @@ import sv.com.jsoft.efactmh.util.CantidadALetras;
  * @author msanchez
  */
 @ApplicationScoped
-public class ResumenServices {
+public class ResumenService {
 
     private JSONObject jsonResumen;
 

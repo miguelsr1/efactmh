@@ -18,11 +18,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.DetFacturaDto;
-import sv.com.jsoft.efactmh.services.ComprobanteCreditoFiscalServices;
-import sv.com.jsoft.efactmh.services.ContribuyenteServices;
-import sv.com.jsoft.efactmh.services.DteServices;
-import sv.com.jsoft.efactmh.services.IdentificacionServices;
-import sv.com.jsoft.efactmh.services.ResumenServices;
+import sv.com.jsoft.efactmh.services.ComprobanteCreditoFiscalService;
+import sv.com.jsoft.efactmh.services.ContribuyenteService;
+import sv.com.jsoft.efactmh.services.DteService;
+import sv.com.jsoft.efactmh.services.IdentificacionService;
+import sv.com.jsoft.efactmh.services.ResumenService;
 
 /**
  *
@@ -55,19 +55,19 @@ public class ViewFactura implements Serializable {
     private String uuid = "";
 
     @Inject
-    private ContribuyenteServices contribuyenteServices;
+    private ContribuyenteService contribuyenteServices;
 
     @Inject
-    private ComprobanteCreditoFiscalServices comprobanteCreditoFiscalServices;
+    private ComprobanteCreditoFiscalService comprobanteCreditoFiscalServices;
 
     @Inject
-    private ResumenServices resumenServices;
+    private ResumenService resumenServices;
 
     @Inject
-    private IdentificacionServices identificacionServices;
+    private IdentificacionService identificacionServices;
 
     @Inject
-    private DteServices dteServices;
+    private DteService dteServices;
 
     @PostConstruct
     public void init() {

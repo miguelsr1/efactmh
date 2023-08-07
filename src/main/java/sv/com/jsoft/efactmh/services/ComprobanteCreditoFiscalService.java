@@ -12,7 +12,7 @@ import sv.com.jsoft.efactmh.model.DetFacturaDto;
  * @author msanchez
  */
 @ApplicationScoped
-public class ComprobanteCreditoFiscalServices {
+public class ComprobanteCreditoFiscalService {
 
     private int count;
 

@@ -26,7 +26,7 @@ import sv.com.jsoft.efactmh.view.ViewFactura;
  * @author migue
  */
 @ApplicationScoped
-public class DteServices {
+public class DteService {
 
     private final static ResourceBundle VARIABLES = ResourceBundle.getBundle("variables");
 

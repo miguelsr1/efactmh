@@ -11,7 +11,7 @@ import org.json.simple.JSONObject;
  * @author migue
  */
 @ApplicationScoped
-public class IdentificacionServices {
+public class IdentificacionService {
 
     private final SimpleDateFormat sdDate = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat sdTime = new SimpleDateFormat("HH:mm:ss");
