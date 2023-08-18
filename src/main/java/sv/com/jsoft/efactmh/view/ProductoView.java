@@ -10,10 +10,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import sv.com.jsoft.efactmh.model.Producto;
-import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
-import sv.com.jsoft.efactmh.repository.ProductoRepo;
 import sv.com.jsoft.efactmh.services.CatalogoService;
-import sv.com.jsoft.efactmh.util.JsfUtil;
 
 /**
  *
@@ -29,28 +26,20 @@ public class ProductoView implements Serializable {
     @Getter
     private List<Producto> lstProducto;
 
-    @Inject
-    private ProductoRepo productoRepo;
-    @Inject
-    private CatalogoService catalogoService;
-
     {
         producto = new Producto();
         lstProducto = new ArrayList<>();
     }
-
+    
+    @Inject
+    CatalogoService catalogoService;
+    
     @PostConstruct
-    public void init() {
-        lstProducto = productoRepo.findAll();
+    public void init(){
+        lstProducto = catalogoService.getLstProducto();
     }
 
     public void guardar() {
-        productoRepo.save(producto);
-        JsfUtil.mensajeInsert();
-        lstProducto = productoRepo.findAll();
-    }
-
-    public List<TipoUnidadMedida> getLstUnidadMedida() {
-        return catalogoService.getLstUnidadMedida();
+        
     }
 }

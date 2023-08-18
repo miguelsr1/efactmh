@@ -50,8 +50,21 @@
                 <div class="formgrid grid">
                     <div class="field col-12 md:col-2" >
                         <p:outputLabel for="txtCodigo" value="Código"/>
+                        
+                        <p:autoComplete id="pojoRest" widgetVar="countryPojoRest" value="#{viewFactura.producto}"
+                                        var="pro" itemLabel="#{pro.nombre}" itemValue="#{pro}"
+                                converter="#{countryConverter}"
+                                completeEndpoint="#{request.contextPath}/rest/country/autocomplete"
+                                forceSelection="true" emptyMessage="sorry, no suggestions"
+                                scrollHeight="250"/>
+                        
+                        <p:autoComplete id="acSimple" value="#{viewFactura.detFacturaDto.codigo}" style="display: none"
+                                completeMethod="#{viewFactura.completeText}" scrollHeight="250"/>
+                        
                         <p:inputText id="txtCodigo" value="#{viewFactura.detFacturaDto.codigo}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-                                     requiredMessage="Debe de ingresar el código del producto" required="true"/>
+                                     requiredMessage="Debe de ingresar el código del producto" required="true" style="display: none"
+                                     onkeyup="return this.value.length >= 5">
+                        </p:inputText>
                     </div>
                     <div class="field col-12 md:col-10" >
                         <p:outputLabel for="firstname1" value="Producto o servicio"/>

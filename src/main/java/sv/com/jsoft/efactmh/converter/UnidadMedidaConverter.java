@@ -26,7 +26,7 @@ public class UnidadMedidaConverter implements Converter {
         }
         ProductoView controller = (ProductoView) fc.getApplication().getELResolver().
                 getValue(fc.getELContext(), null, "productoView");
-        return controller.getLstUnidadMedida().stream().filter(um -> um.getIdUnidadMedida().compareTo(Integer.valueOf(value)) == 0).findAny().orElse(null);
+        return null;
     }
 
     @Override

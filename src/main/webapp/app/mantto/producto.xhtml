@@ -37,7 +37,7 @@
                                         <p:selectOneMenu id="cboUni" value="#{productoView.producto.idUnidadMedida}" converter="unidadMedidaConverter"
                                                          class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UNA UNIDAD" />
-                                            <f:selectItems value="#{catalogoService.lstUnidadMedida}" var="uni" itemValue="#{uni}" itemLabel="#{uni.descripcion}" />
+                                            
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="field col-12">
@@ -57,7 +57,8 @@
             </p:messages>
 
             <div class="card">
-                <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" value="#{productoView.lstProducto}" >
+                <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" value="#{productoView.lstProducto}" 
+                             paginator="true" paginatorPosition="top" rows="10" reflow="true">
                     <p:column headerText="Borrar">
                         <p:selectBooleanCheckbox value="#{pro.eliminado}" />
                     </p:column>
@@ -67,13 +68,10 @@
                     <p:column headerText="Nombre">
                         <p:outputLabel value="#{pro.nombre}"/>
                     </p:column>
-                    <p:column headerText="Precio Unitario" style="text-align: right;">
-                        <p:outputLabel value="#{pro.precioUnitario}">
+                    <p:column headerText="Precio Unitario">
+                        <p:outputLabel value="#{pro.precioUnitario}" style="float: right;">
                             <f:convertNumber pattern="#,###.00"/>
                         </p:outputLabel>
-                    </p:column>
-                    <p:column headerText="Unidad Medida">
-                        <p:outputLabel value="#{pro.idUnidadMedida.descripcion}" />
                     </p:column>
 
                 </p:dataTable>

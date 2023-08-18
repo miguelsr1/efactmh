@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
@@ -18,6 +19,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.DetFacturaDto;
+import sv.com.jsoft.efactmh.model.Producto;
+import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.ComprobanteCreditoFiscalService;
 import sv.com.jsoft.efactmh.services.ContribuyenteService;
 import sv.com.jsoft.efactmh.services.DteService;
@@ -39,6 +42,10 @@ public class ViewFactura implements Serializable {
     private String AMBIENTE_MH;
     private String NIT;
     private String PASS_PRI;
+    
+    @Getter
+    @Setter
+    private Producto producto;
 
     @Getter
     @Setter
@@ -68,6 +75,9 @@ public class ViewFactura implements Serializable {
 
     @Inject
     private DteService dteServices;
+
+    @Inject
+    private CatalogoService catServices;
 
     @PostConstruct
     public void init() {
@@ -137,4 +147,11 @@ public class ViewFactura implements Serializable {
         return jsonRoot;
     }
 
+    
+    public List<Producto> completeText(String query) {
+        String queryLowerCase = query.toLowerCase();
+        List<Producto> lstProducto = catServices.getLstProducto();
+       
+        return lstProducto.stream().filter(t -> t.getCodigo().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+    }
 }
