@@ -51,9 +51,9 @@
                     <div class="field col-12 md:col-2" >
                         <p:outputLabel for="txtCodigo" value="Código"/>
                         
-                        <p:autoComplete id="pojoRest" widgetVar="countryPojoRest" value="#{viewFactura.producto.codigo}"
-                                        var="pro" itemLabel="#{pro.nombre}" itemValue="#{pro}"
-                                converter="#{unidadMedidaConverter}"
+                        <p:autoComplete id="pojoRest" widgetVar="countryPojoRest" value="#{viewFactura.producto}"
+                                        var="pro" itemLabel="#{pro.codigo}" itemValue="#{pro}"
+                                converter="#{productoConverter}"
                                 completeEndpoint="http://localhost:8090/hello/autocomplete"
                                 forceSelection="true" emptyMessage="sorry, no suggestions"
                                 scrollHeight="250">

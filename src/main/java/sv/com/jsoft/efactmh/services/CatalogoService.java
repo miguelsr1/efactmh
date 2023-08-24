@@ -60,4 +60,23 @@ public class CatalogoService {
             Logger.getLogger(CatalogoService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public Producto getProductoByCodigo(String codigo){
+        try {
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://localhost:8090/hello/producto/"+codigo+"/")).GET().build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            Gson gson = new Gson();
+
+            return gson.fromJson(response.body(), Producto.class);
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            Logger.getLogger(CatalogoService.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 }
