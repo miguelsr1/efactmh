@@ -25,12 +25,12 @@ public class UbicacionService {
 
     @PostConstruct
     public void init() {
-        RestUtil<Departamento> res = RestUtil.<Departamento>builder().endpoint("catalogos/departamento/").build();
+        RestUtil res = RestUtil.builder().endpoint("catalogos/departamento/").clazz(Departamento.class).build();
         lstDepartamento = res.callGet();
     }
 
     public List<Municipio> findMunicipioByDepa(String depa) {
-        RestUtil<Municipio> res = RestUtil.<Municipio>builder().endpoint("catalogos/municipio/" + depa).build();
+        RestUtil res = RestUtil.builder().endpoint("catalogos/municipio/" + depa).clazz(Municipio.class).build();
         return res.callGet();
     }
 

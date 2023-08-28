@@ -9,9 +9,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.Municipio;
 import sv.com.jsoft.efactmh.services.UbicacionService;
+import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
  *
@@ -34,7 +36,7 @@ public class ClienteView implements Serializable {
     @Getter
     @Setter
     private Integer idMuni;
-    
+
     private List<Municipio> lstMunicipio;
 
     @Getter
@@ -42,7 +44,7 @@ public class ClienteView implements Serializable {
     private Cliente cliente;
     @Getter
     private List<Cliente> lstCliente;
-    
+
     @Inject
     UbicacionService ubicacionService;
 
@@ -54,6 +56,12 @@ public class ClienteView implements Serializable {
 
     @PostConstruct
     public void init() {
+        RestUtil res = RestUtil
+                .builder()
+                .endpoint("cliente/")
+                .clazz(Cliente.class)
+                .build();
+        lstCliente = res.callGet();
     }
 
     public int getTipoDoc() {
@@ -66,8 +74,12 @@ public class ClienteView implements Serializable {
 
     public void guardar() {
     }
-    
-    public List<Municipio> getLstMunicipio(){
+
+    public List<Municipio> getLstMunicipio() {
         return ubicacionService.findMunicipioByDepa(codigoDepa);
+    }
+
+    public void onRowSelect(SelectEvent<Cliente> event) {
+        cliente = event.getObject();
     }
 }

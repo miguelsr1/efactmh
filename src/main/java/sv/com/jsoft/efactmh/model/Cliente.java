@@ -25,7 +25,7 @@ public class Cliente implements Serializable {
     private String nombreComercial;
     private Integer idMunicipio;
     private List<Pedido> pedidoList;
-    private short activo;
+    private Boolean activo;
     private Integer tipoDocumento;
 
     private Boolean eliminado;

@@ -12,20 +12,19 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lombok.Builder;
-import sv.com.jsoft.efactmh.model.Producto;
+import lombok.experimental.SuperBuilder;
 
 /**
  *
  * @author migue
  */
-@Builder
-public class RestUtil<T> {
+@SuperBuilder
+public class RestUtil {
 
     private String endpoint;
-    private Class<? super T> clazz;
+    private Class clazz;
 
-    public List<T> callGet() {
+    public List callGet() {
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://localhost:8090/" + endpoint))
@@ -37,8 +36,7 @@ public class RestUtil<T> {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            Type lst = new TypeToken<List<T>>() {
-            }.getType();
+            Type lst = TypeToken.getParameterized(List.class, clazz).getType();
 
             Gson gson = new Gson();
 

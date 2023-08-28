@@ -12,8 +12,9 @@
         <h:form prependId="false">
             <div class="grid dashboard ">
                 <div class="col-12">
-                    <div class="card">
-                        <h5>Datos Generales</h5>
+                    <div class="card" jsf:id="dvDatos">
+                        <h6>Datos Generales</h6>
+                        <p:separator/>
                         <div class="grid">
                             <div class="col-12 md:col-2">
                                 <div class="formgrid grid">
@@ -80,12 +81,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-12">
-                    <div class="card">
-                        <h5>Datos de contacto</h5>
+                        <h6>Datos de contacto</h6>
+                        <p:separator/>
                         <div class="formgrid grid">
                             <div class="field col-12 md:col-2" >
                                 <p:outputLabel for="rbnDoc" value="Tipo de Documento"/>
@@ -108,9 +106,11 @@
                                 <p:inputText id="txtNom" value="#{clienteView.cliente.nombreContacto}" maxlength="22" required="true"
                                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
                             </div>
-                            <div class="field">
-                                <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="tblCli"/>
-                            </div>
+                        </div>
+
+                        <div class="field col-12">
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="tblCli" style="float: right;"/>
+                            <p:spacer height="10px"/>
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,9 @@
             </p:messages>
 
             <div class="card">
-                <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" >
+                <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" selectionMode="single"
+                             rowKey="#{cli.idCliente}" rowIndexVar="rowId" selection="#{clienteView.cliente}">
+                    <p:ajax event="rowSelect" update="dvDatos" listener="#{clienteView.onRowSelect}"/>
                     <p:column headerText="Borrar">
                         <p:selectBooleanCheckbox value="#{cli.eliminado}" />
                     </p:column>
