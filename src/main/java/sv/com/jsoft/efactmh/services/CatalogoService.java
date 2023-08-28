@@ -1,7 +1,6 @@
 package sv.com.jsoft.efactmh.services;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -18,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import lombok.Getter;
+import sv.com.jsoft.efactmh.model.Departamento;
 import sv.com.jsoft.efactmh.model.Producto;
 
 /**
@@ -39,7 +39,7 @@ public class CatalogoService {
     public void init() {
         loadProduct();
     }
-
+    
     private void loadProduct() {
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
