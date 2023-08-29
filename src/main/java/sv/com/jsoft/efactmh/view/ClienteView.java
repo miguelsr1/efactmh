@@ -1,5 +1,6 @@
 package sv.com.jsoft.efactmh.view;
 
+import com.google.gson.Gson;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.Municipio;
 import sv.com.jsoft.efactmh.services.UbicacionService;
+import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -39,8 +41,6 @@ public class ClienteView implements Serializable {
 
     private List<Municipio> lstMunicipio;
 
-    @Getter
-    @Setter
     private Cliente cliente;
     @Getter
     private List<Cliente> lstCliente;
@@ -64,6 +64,16 @@ public class ClienteView implements Serializable {
         lstCliente = res.callGet();
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        if (cliente != null) {
+            this.cliente = cliente;
+        }
+    }
+
     public int getTipoDoc() {
         return tipoDoc;
     }
@@ -72,7 +82,39 @@ public class ClienteView implements Serializable {
         this.tipoDoc = tipoDoc;
     }
 
+    public void nuevo() {
+        cliente = new Cliente();
+    }
+
     public void guardar() {
+        if (cliente != null) {
+            cliente.setTipoDocumento(tipoDoc);
+            cliente.setDocumentoContacto(tipoDoc == 1 ? duiContacto : nitContacto);
+            cliente.setActivo(true);
+            RestUtil res = RestUtil
+                    .builder()
+                    .endpoint("cliente/")
+                    .build();
+            int codeResponse;
+            boolean nuevo = cliente.getIdCliente() == null;
+            if (nuevo) {
+                codeResponse = res.callPost(cliente);
+            } else {
+                codeResponse = res.callPut(cliente.getIdCliente(), cliente);
+            }
+
+            if (codeResponse == 200) {
+                if (nuevo) {
+                    JsfUtil.mensajeInsert();
+                } else {
+                    JsfUtil.mensajeUpdate();
+                }
+            } else {
+                JsfUtil.mensajeError("Ah ocurrido un error");
+            }
+        } else {
+
+        }
     }
 
     public List<Municipio> getLstMunicipio() {

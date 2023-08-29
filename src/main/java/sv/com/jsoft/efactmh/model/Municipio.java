@@ -14,7 +14,7 @@ public class Municipio implements Serializable {
     private Integer idMunicipio;
     private String codigo;
     private String nombre;
-    private Departamento codigoDepartamento;
+    private String codigoDepartamento;
 
     public Municipio() {
     }

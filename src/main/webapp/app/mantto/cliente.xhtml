@@ -86,7 +86,7 @@
                         <p:separator/>
                         <div class="formgrid grid">
                             <div class="field col-12 md:col-2" >
-                                <p:outputLabel for="rbnDoc" value="Tipo de Documento"/>
+                                <p:outputLabel value="Tipo de Documento"/>
                                 <p:selectOneRadio id="rbnDoc" value="#{clienteView.tipoDoc}" layout="lineDirection">
                                     <f:selectItem itemLabel="D.U.I." itemValue="1"/>
                                     <f:selectItem itemLabel="N.I.T." itemValue="2"/>
@@ -94,10 +94,10 @@
                                 </p:selectOneRadio>
                             </div>
                             <div class="field col-12 md:col-3" jsf:id="numDoc"> 
-                                <p:outputLabel for="txtDui" value="Número de D.U.I." rendered="#{clienteView.tipoDoc eq 1}"/>
+                                <p:outputLabel  value="Número de D.U.I." rendered="#{clienteView.tipoDoc eq 1}"/>
                                 <p:inputMask id="txtDui" value="#{clienteView.duiContacto}" size="12" mask="99999999-9" required="true" rendered="#{clienteView.tipoDoc eq 1}"
                                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                                <p:outputLabel for="txtDoc" value="Número Identidad Tributario (N.I.T.)" rendered="#{clienteView.tipoDoc eq 2}"/>
+                                <p:outputLabel value="Número Identidad Tributario (N.I.T.)" rendered="#{clienteView.tipoDoc eq 2}"/>
                                 <p:inputMask id="txtDoc" value="#{clienteView.nitContacto}" size="18" mask="9999-999999-999-9" required="true" rendered="#{clienteView.tipoDoc eq 2}"
                                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
                             </div>
@@ -109,7 +109,8 @@
                         </div>
 
                         <div class="field col-12">
-                            <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="tblCli" style="float: right;"/>
+                            <p:commandButton value="Nuevo" icon="pi pi-file" action="#{clienteView.nuevo()}" update="dvDatos tblCli" style="margin-right: 5px;" process="@this"/>
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos tblCli" />
                             <p:spacer height="10px"/>
                         </div>
                     </div>
