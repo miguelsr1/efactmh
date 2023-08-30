@@ -49,6 +49,28 @@ public class RestUtil {
         }
     }
 
+    public Object callGetById() {
+        try {
+            HttpClient httpClient = HttpClient.newHttpClient();
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://localhost:8090/" + endpoint))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            //Type lst = TypeToken.getParameterized(List.class, clazz).getType();
+            Gson gson = new Gson();
+
+            return gson.fromJson(response.body(), clazz);
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
     public int callPost(Object data) {
         try {
             HttpClient httpClient = HttpClient.newHttpClient();

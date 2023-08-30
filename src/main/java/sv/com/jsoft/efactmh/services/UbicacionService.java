@@ -30,7 +30,7 @@ public class UbicacionService {
     }
 
     public List<Municipio> findMunicipioByDepa(String depa) {
-        RestUtil res = RestUtil.builder().endpoint("catalogos/municipio/" + depa).clazz(Municipio.class).build();
+        RestUtil res = RestUtil.builder().endpoint("catalogos/municipios/" + depa).clazz(Municipio.class).build();
         return res.callGet();
     }
 

@@ -123,5 +123,21 @@ public class ClienteView implements Serializable {
 
     public void onRowSelect(SelectEvent<Cliente> event) {
         cliente = event.getObject();
+        idMuni = cliente.getIdMunicipio();
+        Municipio m = (Municipio) RestUtil.builder()
+                .clazz(Municipio.class)
+                .endpoint("catalogos/municipio/" + idMuni)
+                .build().callGetById();
+        codigoDepa = m.getCodigoDepartamento();
+        tipoDoc = cliente.getTipoDocumento();
+        switch (tipoDoc) {
+            case 1:
+                duiContacto = cliente.getDocumentoContacto();
+                break;
+            default:
+                nitContacto = cliente.getDocumentoContacto();
+                break;
+        }
+
     }
 }
