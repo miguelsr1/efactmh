@@ -15,7 +15,7 @@
                     <div class="card">
                         <h5>Datos Generales</h5>
                         <div class="grid">
-                            <div class="col-12 md:col-12">
+                            <div class="col-12 md:col-12" jsf:id="dvDatos">
                                 <div class="formgrid grid">
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtCod" value="Código"/>
@@ -34,14 +34,15 @@
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="cboUni" value="Unidad de Medida"/>
-                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.idUnidadMedida}" converter="unidadMedidaConverter"
+                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.idUnidadMedida}" 
                                                          class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UNA UNIDAD" />
-                                            
+                                            <f:selectItems value="#{catalogoService.lstTipoUnidadMedida}" var="uni" itemLabel="#{uni.descripcion}" itemValue="#{uni.idUnidadMedida}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="field col-12">
-                                        <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" update="tblPro"/>
+                                        <p:commandButton value="Nuevo" icon="pi pi-file" action="#{productoView.nuevo()}" update="dvDatos tblPro" style="margin-right: 5px;" process="@this"/>
+                                        <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" update="dvDatos tblPro"/>
                                     </div>
                                 </div>
                             </div>
@@ -52,16 +53,15 @@
 
             </div>
 
-            <p:messages showSummary="true" showIcon="false">
+            <p:messages showSummary="true" showIcon="false" showDetail="true">
                 <p:autoUpdate />
             </p:messages>
 
             <div class="card">
-                <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" value="#{productoView.lstProducto}" 
-                             paginator="true" paginatorPosition="top" rows="10" reflow="true">
-                    <p:column headerText="Borrar">
-                        <p:selectBooleanCheckbox value="#{pro.eliminado}" />
-                    </p:column>
+                <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" value="#{productoView.lstProducto}" rowKey="#{pro.idProducto}"
+                             rowIndexVar="rowId" selectionMode="single" selection="#{productoView.producto}"
+                             paginator="true" paginatorPosition="top" rows="10" reflow="true" >
+                    <p:ajax event="rowSelect" update="dvDatos" listener="#{productoView.onRowSelect}"/>
                     <p:column headerText="Código">
                         <p:outputLabel value="#{pro.codigo}"/>
                     </p:column>
@@ -72,6 +72,13 @@
                         <p:outputLabel value="#{pro.precioUnitario}" style="float: right;">
                             <f:convertNumber pattern="#,###.00"/>
                         </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Unidad Med.">
+                        <p:selectOneMenu value="#{pro.idUnidadMedida}" disabled="true"
+                                         class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UNA UNIDAD" />
+                            <f:selectItems value="#{catalogoService.lstTipoUnidadMedida}" var="uni" itemLabel="#{uni.descripcion}" itemValue="#{uni.idUnidadMedida}" />
+                        </p:selectOneMenu>
                     </p:column>
 
                 </p:dataTable>

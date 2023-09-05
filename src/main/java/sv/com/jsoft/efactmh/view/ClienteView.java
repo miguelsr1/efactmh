@@ -45,6 +45,8 @@ public class ClienteView implements Serializable {
     @Getter
     private List<Cliente> lstCliente;
 
+    private RestUtil res;
+
     @Inject
     UbicacionService ubicacionService;
 
@@ -56,11 +58,12 @@ public class ClienteView implements Serializable {
 
     @PostConstruct
     public void init() {
-        RestUtil res = RestUtil
+        res = RestUtil
                 .builder()
-                .endpoint("cliente/")
                 .clazz(Cliente.class)
+                .endpoint("cliente/")
                 .build();
+
         lstCliente = res.callGet();
     }
 
@@ -91,10 +94,7 @@ public class ClienteView implements Serializable {
             cliente.setTipoDocumento(tipoDoc);
             cliente.setDocumentoContacto(tipoDoc == 1 ? duiContacto : nitContacto);
             cliente.setActivo(true);
-            RestUtil res = RestUtil
-                    .builder()
-                    .endpoint("cliente/")
-                    .build();
+
             int codeResponse;
             boolean nuevo = cliente.getIdCliente() == null;
             if (nuevo) {
@@ -112,9 +112,7 @@ public class ClienteView implements Serializable {
             } else {
                 JsfUtil.mensajeError("Ah ocurrido un error");
             }
-        } else {
-
-        }
+        } 
     }
 
     public List<Municipio> getLstMunicipio() {

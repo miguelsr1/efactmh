@@ -15,13 +15,13 @@
                 </div>
                 <pv:menu widgetVar="ParadiseMenuWidget">
                     <p:submenu label="Operaciones" icon="pi pi-fw pi-prime" >
-                        <p:menuitem value="Pedido" icon="pi pi-book" action="lstPedido"/>
-                        <p:menuitem value="eFactura" icon="pi pi-file-import" action="factura"/>
-                        <p:menuitem value="Reimpresión" icon="pi pi-print"/>
+                        <p:menuitem value="Pedido" icon="pi pi-book" action="lstPedido" process="@this"/>
+                        <p:menuitem value="eFactura" icon="pi pi-file-import" action="factura" process="@this"/>
+                        <p:menuitem value="Reimpresión" icon="pi pi-print" process="@this"/>
                     </p:submenu>
                     <p:submenu label="Mantenimientos" icon="pi pi-home">
-                        <p:menuitem id="manttoCli" value="Items" icon="pi pi-th-large" action="mantto/producto.xhtml"/>
-                        <p:menuitem value="Receptores" icon="pi pi-briefcase" action="mantto/cliente.xhtml"/>
+                        <p:menuitem id="manttoCli" value="Items" icon="pi pi-th-large" outcome="/app/mantto/producto" process="@this"/>
+                        <p:menuitem value="Receptores" icon="pi pi-briefcase" outcome="/app/mantto/cliente" process="@this" />
                     </p:submenu>
                 </pv:menu>
             </h:form>

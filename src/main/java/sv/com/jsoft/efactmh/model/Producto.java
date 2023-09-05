@@ -17,8 +17,7 @@ public class Producto implements Serializable {
     private String nombre;
     private Double precioUnitario;
     private Boolean activo;
-    private List<DetallePedido> detallePedidoList;
-    private TipoUnidadMedida idUnidadMedida;
+    private Integer idUnidadMedida;
 
     private Boolean eliminado;
 

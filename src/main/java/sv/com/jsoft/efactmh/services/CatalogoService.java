@@ -17,8 +17,9 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import lombok.Getter;
-import sv.com.jsoft.efactmh.model.Departamento;
 import sv.com.jsoft.efactmh.model.Producto;
+import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
+import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
  *
@@ -30,14 +31,25 @@ public class CatalogoService {
 
     @Getter
     private List<Producto> lstProducto;
+    @Getter
+    private List<TipoUnidadMedida> lstTipoUnidadMedida;
 
     {
         lstProducto = new ArrayList<>();
+        lstTipoUnidadMedida = new ArrayList<>();
     }
 
     @PostConstruct
     public void init() {
         loadProduct();
+        loadTipoUnidadMedida();
+    }
+    
+    private void loadTipoUnidadMedida(){
+        lstTipoUnidadMedida = RestUtil.builder()
+                .endpoint("item")
+                .clazz(TipoUnidadMedida.class)
+                .build().callGet();
     }
     
     private void loadProduct() {
