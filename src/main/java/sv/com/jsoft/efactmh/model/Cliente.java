@@ -9,7 +9,7 @@ import lombok.Data;
  * @author migue
  */
 @Data
-public class Cliente implements Serializable {
+public class Cliente implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
     private Integer idCliente;
@@ -32,4 +32,15 @@ public class Cliente implements Serializable {
 
     public Cliente() {
     }
+
+    @Override
+    public Integer getId() {
+        return idCliente;
+    }
+
+    @Override
+    public boolean esNuevo() {
+        return idCliente == null;
+    }
+
 }

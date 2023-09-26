@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.MediaType;
 import lombok.experimental.SuperBuilder;
+import sv.com.jsoft.efactmh.model.EntityPk;
 
 /**
  *
@@ -71,10 +72,31 @@ public class RestUtil {
         }
     }
 
+    public int callPersistir(EntityPk data) {
+        try {
+            HttpRequest.Builder httpBuilder = HttpRequest.newBuilder()
+                    .uri(new URI("http://localhost:8090/" + endpoint + (data.esNuevo() ? "" : data.getId())))
+                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
+            httpBuilder = data.esNuevo()
+                    ? httpBuilder.POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
+                    : httpBuilder.PUT(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())));
+
+            HttpRequest httpRequest = httpBuilder.build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode();
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
+
     public int callPost(Object data) {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI("http://localhost:8090/" + endpoint))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -96,8 +118,6 @@ public class RestUtil {
 
     public int callPut(int id, Object data) {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI("http://localhost:8090/" + endpoint + "/" + id))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")

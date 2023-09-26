@@ -9,7 +9,7 @@ import lombok.Data;
  * @author migue
  */
 @Data
-public class Producto implements Serializable {
+public class Producto implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
     private Integer idProducto;
@@ -21,10 +21,24 @@ public class Producto implements Serializable {
 
     private Boolean eliminado;
 
+    {
+        precioUnitario = 0d;
+    }
+
     public Producto() {
     }
 
     public String toString() {
         return codigo + " - " + nombre;
+    }
+
+    @Override
+    public Integer getId() {
+        return idProducto;
+    }
+
+    @Override
+    public boolean esNuevo() {
+        return idProducto == null;
     }
 }

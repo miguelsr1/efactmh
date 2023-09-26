@@ -1,6 +1,7 @@
 package sv.com.jsoft.efactmh.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
@@ -21,5 +22,12 @@ public class Pedido implements Serializable {
     private Operador user;
 
     public Pedido() {
+    }
+
+    public List<DetallePedido> getDetallePedidoList() {
+        if (detallePedidoList == null) {
+            detallePedidoList = new ArrayList<>();
+        }
+        return detallePedidoList;
     }
 }

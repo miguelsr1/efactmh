@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Nueva factura</ui:define>
+    <ui:define name="head">
+        <style>
+            @media (max-width: 640px) {
+                .ui-datatable-reflow .ui-datatable-data td[role="gridcell"] .ui-column-title {
+                    font-weight: bold !important;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">   
+        <h:form prependId="false">
+            <div class="grid dashboard ">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Cliente</h5>
+                        </div>
+
+                        <div class="formgrid grid">
+                            <div class="field col-12 md:col-3" >
+                                <p:outputLabel for="nitRec" value="NIT"/>
+                                <p:inputText id="nitRec" value="#{pedidoView.nit}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                            </div>
+                            <div class="field col-12 md:col-9">
+                                <p:outputLabel for="nomRec" value="Nombre"/>
+                                <p:inputText id="nomRec" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card ui-fluid" jsf:id="dvDetFac">
+                <h5>Detalle Pedido</h5>
+                <div class="formgrid grid">
+                    <div class="field col-12 md:col-4" >
+                        <p:outputLabel for="txtCodigo" value="Código"/>
+
+                        <p:autoComplete id="txtCodigo" widgetVar="countryPojoRest" value="#{pedidoView.producto}"
+                                        var="pro" itemLabel="#{pro.codigo}" itemValue="#{pro}" converter="#{productoConverter}"
+                                        completeEndpoint="http://localhost:8090/hello/autocomplete" forceSelection="true" emptyMessage="No ha "
+                                        scrollHeight="250">
+                            <p:ajax listener="#{pedidoView.agregarProductoADetallePedido()}" update="txtPU txtCantidad"/>
+                        </p:autoComplete>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <p:outputLabel for="txtCantidad">Cantidad</p:outputLabel>
+                        <p:inputNumber id="txtCantidad" value="#{pedidoView.detPedido.cantidad}" inputStyle="text-align: right;"
+                                       decimalPlaces="2" decimalSeparator="." thousandSeparator=","
+                                       class="text-base text-color surface-overlay p-2 surface-border border-round appearance-none outline-none focus:border-primary w-full" 
+                                       requiredMessage="Debe de ingresar cantidad a facturar" required="true"/>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
+                        <p:inputNumber id="txtPU" value="#{pedidoView.producto.precioUnitario}" readonly="true" inputStyle="text-align: right;"
+                                       decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
+                                       class="text-base text-color surface-overlay p-2 surface-border border-round appearance-none outline-none focus:border-primary w-full" 
+                                       requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
+                    </div>
+                    <div class="field col-12 md:col-2">
+                        <p:spacer height="18"/>
+                        <p:commandButton value="Agregar" update="dvDetFac tblDetPedido lblSubTotal lblIva lblTotal" 
+                                         icon="pi pi-plus" action="#{pedidoView.agregarItem()}" 
+                                         validateClient="true" styleClass="rounded-button"/>
+                    </div>
+                </div>
+            </div>
+
+            <p:messages showSummary="true" showIcon="false">
+                <p:autoUpdate />
+            </p:messages>
+
+            <div class="card">
+                <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{pedidoView.pedido.detallePedidoList}" var="item" rowIndexVar="rowId"
+                             rowKey="#{item.idDetallePedido}" reflow="true" size="small" tableStyle="table-layout: auto;">
+
+                    <p:column headerText="Id">
+                        #{rowId + 1} 
+                    </p:column>
+                    <p:column headerText="Código">
+                        <p:outputLabel value="#{item.idProducto.codigo}" />
+                    </p:column>
+                    <p:column headerText="Descripción">
+                        <p:outputLabel value="#{item.idProducto.nombre}" />
+                    </p:column>
+                    <p:column headerText="Cantidad">
+                        <p:outputLabel value="#{item.cantidad}" />
+                    </p:column>
+                    <p:column headerText="Precio Unit.">
+                        <p:outputLabel value="#{item.idProducto.precioUnitario}" />
+                    </p:column>
+                    <p:column headerText="Total">
+                        <p:outputLabel value="#{item.cantidad * item.idProducto.precioUnitario }" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:outputPanel id="invoice-content">
+                    <div class="invoice">
+                        <div class="invoice-summary">
+                            <div class="invoice-notes">
+                                <b></b>
+                                <div>
+
+                                </div>
+                            </div>
+                            <div>
+                                <div class="invoice-details">
+                                    <div class="invoice-label">Sub-Total</div>
+                                    <div class="invoice-value">$ 
+                                        <p:outputLabel id="lblSubTotal" value="#{pedidoView.subTotal}">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:outputLabel>
+                                    </div>
+
+                                    <div class="invoice-label">IVA (13%)</div>
+                                    <div class="invoice-value">$ 
+                                        <p:outputLabel id="lblIva" value="#{pedidoView.iva}">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:outputLabel>
+                                    </div>
+
+                                    <div class="invoice-label">Total</div>
+                                    <div class="invoice-value">$ 
+                                        <p:outputLabel id="lblTotal" value="#{pedidoView.total}">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:outputLabel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </div>
+
+            <p:dialog id="dlgResponse" widgetVar="dlgResponse" modal="true" width="800" height="600" >
+                <p:panel header="RESPUESTA MH" id="pnlResponse">
+                    #{viewFactura.responseMh}
+                </p:panel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

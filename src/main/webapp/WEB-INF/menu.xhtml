@@ -15,7 +15,7 @@
                 </div>
                 <pv:menu widgetVar="ParadiseMenuWidget">
                     <p:submenu label="Operaciones" icon="pi pi-fw pi-prime" >
-                        <p:menuitem value="Pedido" icon="pi pi-book" action="lstPedido" process="@this"/>
+                        <p:menuitem value="Pedido" icon="pi pi-book" outcome="/app/process/pedido" process="@this"/>
                         <p:menuitem value="eFactura" icon="pi pi-file-import" action="factura" process="@this"/>
                         <p:menuitem value="Reimpresión" icon="pi pi-print" process="@this"/>
                     </p:submenu>

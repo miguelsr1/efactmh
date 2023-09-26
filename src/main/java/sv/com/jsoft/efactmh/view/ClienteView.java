@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.Municipio;
+import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 import sv.com.jsoft.efactmh.services.UbicacionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -90,29 +91,20 @@ public class ClienteView implements Serializable {
     }
 
     public void guardar() {
+
         if (cliente != null) {
+            tipoDoc = (duiContacto.length() == 10) ? 1 : 2;
             cliente.setTipoDocumento(tipoDoc);
-            cliente.setDocumentoContacto(tipoDoc == 1 ? duiContacto : nitContacto);
+            cliente.setDocumentoContacto(duiContacto);
             cliente.setActivo(true);
 
-            int codeResponse;
-            boolean nuevo = cliente.getIdCliente() == null;
-            if (nuevo) {
-                codeResponse = res.callPost(cliente);
-            } else {
-                codeResponse = res.callPut(cliente.getIdCliente(), cliente);
-            }
+            int codeResponse = res.callPersistir(cliente);
 
-            if (codeResponse == 200) {
-                if (nuevo) {
-                    JsfUtil.mensajeInsert();
-                } else {
-                    JsfUtil.mensajeUpdate();
-                }
-            } else {
-                JsfUtil.mensajeError("Ah ocurrido un error");
-            }
-        } 
+            JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (cliente.esNuevo() ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
+
+            cliente = new Cliente();
+            duiContacto = "";
+        }
     }
 
     public List<Municipio> getLstMunicipio() {
@@ -128,14 +120,6 @@ public class ClienteView implements Serializable {
                 .build().callGetById();
         codigoDepa = m.getCodigoDepartamento();
         tipoDoc = cliente.getTipoDocumento();
-        switch (tipoDoc) {
-            case 1:
-                duiContacto = cliente.getDocumentoContacto();
-                break;
-            default:
-                nitContacto = cliente.getDocumentoContacto();
-                break;
-        }
-
+        duiContacto = cliente.getDocumentoContacto();
     }
 }

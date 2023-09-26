@@ -3,6 +3,7 @@ package sv.com.jsoft.efactmh.util;
 import java.io.File;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 
 public class JsfUtil {
 
@@ -22,6 +23,11 @@ public class JsfUtil {
 
     public static void mensajeDelete() {
         msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Registro eliminado satisfactoriamente");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public static void mensajeFromEnum(TipoMensaje tipoMsj) {
+        msg = new FacesMessage(tipoMsj.getTipoMensaje(), tipoMsj.getTituloMensaje(), tipoMsj.getMensaje());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Producto;
+import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -51,8 +52,10 @@ public class ProductoView implements Serializable {
     }
 
     public void guardar() {
-        int codeResponse;
-        boolean nuevo = producto.getIdProducto() == null;
+        int codeResponse = res.callPersistir(producto);
+        JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (producto.esNuevo() ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
+
+        /*boolean nuevo = producto.getIdProducto() == null;
         if (nuevo) {
             codeResponse = res.callPost(producto);
         } else {
@@ -67,7 +70,7 @@ public class ProductoView implements Serializable {
             }
         } else {
             JsfUtil.mensajeError("Ah ocurrido un error");
-        }
+        }*/
     }
 
     public void nuevo() {

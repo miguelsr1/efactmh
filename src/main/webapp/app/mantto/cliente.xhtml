@@ -7,6 +7,9 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Cliente</ui:define>
+    <ui:define name="head">
+        <h:outputScript name="inputmask.js" library="js"/>
+    </ui:define>
 
     <ui:define name="content">   
         <h:form prependId="false">
@@ -85,23 +88,13 @@
                         <h6>Datos de contacto</h6>
                         <p:separator/>
                         <div class="formgrid grid">
-                            <div class="field col-12 md:col-2" >
-                                <p:outputLabel value="Tipo de Documento"/>
-                                <p:selectOneRadio id="rbnDoc" value="#{clienteView.tipoDoc}" layout="lineDirection">
-                                    <f:selectItem itemLabel="D.U.I." itemValue="1"/>
-                                    <f:selectItem itemLabel="N.I.T." itemValue="2"/>
-                                    <p:ajax update="numDoc" process="@this"/>
-                                </p:selectOneRadio>
-                            </div>
                             <div class="field col-12 md:col-3" jsf:id="numDoc"> 
-                                <p:outputLabel  value="Número de D.U.I." rendered="#{clienteView.tipoDoc eq 1}"/>
-                                <p:inputMask id="txtDui" value="#{clienteView.duiContacto}" size="12" mask="99999999-9" required="true" rendered="#{clienteView.tipoDoc eq 1}"
-                                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                                <p:outputLabel value="Número Identidad Tributario (N.I.T.)" rendered="#{clienteView.tipoDoc eq 2}"/>
-                                <p:inputMask id="txtDoc" value="#{clienteView.nitContacto}" size="18" mask="9999-999999-999-9" required="true" rendered="#{clienteView.tipoDoc eq 2}"
+                                <p:outputLabel  value="Número de DUI/NIT" />
+
+                                <p:inputMask id="txtDoc" value="#{clienteView.duiContacto}" size="18" required="true" onkeyup="nitDuiMask(this)"
                                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
                             </div>
-                            <div class="field col-12 md:col-7" >
+                            <div class="field col-12 md:col-9" >
                                 <p:outputLabel for="txtNom" value="Nombre contacto"/>
                                 <p:inputText id="txtNom" value="#{clienteView.cliente.nombreContacto}" maxlength="22" required="true"
                                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
@@ -125,9 +118,7 @@
                 <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" selectionMode="single"
                              rowKey="#{cli.idCliente}" rowIndexVar="rowId" selection="#{clienteView.cliente}">
                     <p:ajax event="rowSelect" update="dvDatos" listener="#{clienteView.onRowSelect}"/>
-                    <p:column headerText="Borrar">
-                        <p:selectBooleanCheckbox value="#{cli.eliminado}" />
-                    </p:column>
+                    
                     <p:column headerText="Código">
                         <p:outputLabel value="#{cli.codigo}"/>
                     </p:column>

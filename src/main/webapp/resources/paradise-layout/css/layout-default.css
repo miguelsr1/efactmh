@@ -2436,7 +2436,6 @@ body a {
 }
 .invoice .invoice-to {
     margin-top: 1.5rem;
-    padding-top: 2rem;
     border-top: 1px solid #dee4e9;
 }
 .invoice .invoice-to .bill-to {
@@ -2473,8 +2472,8 @@ body a {
     display: flex;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    margin-top: 2.5rem;
-    padding-top: 2.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
 }
 .invoice .invoice-summary .invoice-value {
     font-weight: 700;
