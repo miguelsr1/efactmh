@@ -2,18 +2,15 @@ package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.security.enterprise.AuthenticationStatus;
-import javax.security.enterprise.SecurityContext;
-import javax.security.enterprise.authentication.mechanism.http.AuthenticationParameters;
-import javax.security.enterprise.credential.UsernamePasswordCredential;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import sv.com.jsoft.efactmh.model.dto.LoginDto;
+import sv.com.jsoft.efactmh.model.dto.ResponseDto;
+import sv.com.jsoft.efactmh.services.LoginServices;
+import sv.com.jsoft.efactmh.services.SecurityService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 
 /**
@@ -23,7 +20,7 @@ import sv.com.jsoft.efactmh.util.JsfUtil;
 @Named
 @RequestScoped
 public class LoginView implements Serializable {
-
+    
     @Getter
     @Setter
     @NotEmpty
@@ -32,38 +29,31 @@ public class LoginView implements Serializable {
     @Setter
     @NotEmpty
     private String claveAcceso;
-
-
-    @Inject
-    SecurityContext securityContext;
     
-
+    @Inject
+    LoginServices loginServices;
+    @Inject
+    SecurityService securityService;
+    
     public String validarProveedor() {
-        return validarLogin(usuario, claveAcceso, "app/home");
+        return validarLogin("app/home");
     }
-
-    private String validarLogin(String usuario, String clave, String urlWelcome) {
-        switch (processAuthentication(usuario, clave)) {
-            case SEND_CONTINUE:
-                break;
-            case SEND_FAILURE:
+    
+    private String validarLogin(String urlWelcome) {
+        LoginDto loginDto = new LoginDto(usuario, claveAcceso);
+        
+        ResponseDto response = loginServices.login(loginDto);
+        switch (response.getStatusCode()) {
+            case 401:
                 JsfUtil.mensajeError("Usuario/Clave de acceso incorrectos!");
                 break;
-            case SUCCESS:
+            case 200:
+                securityService.setToken(loginServices.getToken(response));
                 return urlWelcome + "?faces-redirect=true";
             default:
                 break;
         }
         return null;
     }
-
-    private AuthenticationStatus processAuthentication(String user, String pass) {
-        return securityContext.authenticate(
-                (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
-                (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse(),
-                AuthenticationParameters.withParams().credential(
-                        new UsernamePasswordCredential(user, pass))
-        );
-    }
-
+    
 }

@@ -13,14 +13,14 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
  */
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "java:/FacturaDS",
-        callerQuery = "select password from operador where user = ?",
-        groupsQuery = "select rol from operador where user = ?",
-        hashAlgorithm = Pbkdf2PasswordHash.class,
-        priorityExpression = "#{100}",
-        hashAlgorithmParameters = {
+        callerQuery = "select password from usuario where correo_electronico = ?",
+        //groupsQuery = "select rol from operador where user = ?",
+        //hashAlgorithm = Pbkdf2PasswordHash.class,
+        priorityExpression = "#{100}"/*,
+        /*hashAlgorithmParameters = {
             "Pbkdf2PasswordHash.Iterations=3072",
             "${applicationConfig.dyna}"
-        } // just for test / example
+        }*/ // just for test / example
 )
 @CustomFormAuthenticationMechanismDefinition(
         loginToContinue = @LoginToContinue(
@@ -30,12 +30,11 @@ import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
                 useForwardToLoginExpression = ""
         )
 )
-@ApplicationScoped
-@Named
+
 public class ApplicationConfig {
 
-    public String[] getDyna() {
+    /*public String[] getDyna() {
         return new String[]{"Pbkdf2PasswordHash.Algorithm=PBKDF2WithHmacSHA512", "Pbkdf2PasswordHash.SaltSizeBytes=64"};
-    }
+    }*/
 
 }

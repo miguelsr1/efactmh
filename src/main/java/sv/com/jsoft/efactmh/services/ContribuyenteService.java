@@ -64,4 +64,8 @@ public class ContribuyenteService {
             return getJsonReceptor(nit);
         }
     }
+    
+    public void actualizar(){
+        
+    }
 }

@@ -21,11 +21,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.servlet.http.HttpServletRequest;
+
 import org.primefaces.component.api.AjaxSource;
 import org.primefaces.component.api.UIOutcomeTarget;
 import org.primefaces.component.menu.AbstractMenu;
@@ -39,7 +40,6 @@ import org.primefaces.model.menu.Separator;
 import org.primefaces.model.menu.Submenu;
 import org.primefaces.util.AjaxRequestBuilder;
 import org.primefaces.util.ComponentTraversalUtils;
-import org.primefaces.util.WidgetBuilder;
 
 public class ParadiseMenuRenderer extends BaseMenuRenderer {
 
@@ -344,33 +344,10 @@ public class ParadiseMenuRenderer extends BaseMenuRenderer {
     protected void encodeScript(FacesContext context, AbstractMenu abstractMenu) throws IOException {
         ParadiseMenu menu = (ParadiseMenu) abstractMenu;
         String clientId = menu.getClientId(context);
-        WidgetBuilder wb = getWidgetBuilder(context);
-        wb.init("Paradise", menu.resolveWidgetVar(), clientId)
+        LayoutWidgetBuilder wb = new LayoutWidgetBuilder(context);
+        wb.ready("Paradise", menu.resolveWidgetVar(), clientId)
                 .attr("statefulScroll", menu.isStatefulScroll());
         wb.finish();
-
-        HttpServletRequest req = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String pathname = req.getContextPath() + req.getServletPath();
-
-        ResponseWriter rw = context.getResponseWriter();
-        rw.startElement("script", null);
-        rw.writeAttribute("id", clientId + "_s", null);
-        rw.writeAttribute("type", "text/javascript", null);
-        rw.write("PrimeFaces.cw(\"Paradise\",\"");
-        rw.write(menu.resolveWidgetVar());
-        rw.write("\",{id:\"");
-        rw.write(clientId);
-        rw.write("\",");
-        // attrs
-        rw.write("statefulScroll:");
-        rw.write(String.valueOf(menu.isStatefulScroll()));
-        rw.write(",");
-        rw.write("pathname:\"");
-        rw.write(pathname);
-        rw.write("\"");
-
-        rw.write("});");
-        rw.endElement("script");
     }
     
     protected String createAjaxRequest(FacesContext context, AjaxSource source, UIComponent form) {

@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Cliente</ui:define>
+    <ui:define name="head">
+        <h:outputScript name="inputmask.js" library="js"/>
+    </ui:define>
+
+    <ui:define name="content">   
+        <h:form prependId="false">
+            <div class="grid dashboard ">
+                <div class="col-12">
+                    <div class="card" jsf:id="dvDatos">
+                        <h6>Datos Generales</h6>
+                        <p:separator/>
+                        <div class="grid">
+                            <ui:include src="fragmento/emisor/frag-emisor.xhtml"/>
+                        </div>
+
+                        <!--h6>Datos de contacto</h6>
+                        <p:separator/>
+                        <div class="grid">
+                            <ui:include src="fragmento/emisor/frag-responsable-dte.xhtml"/>
+                        </div>
+                        
+                        <h6>Estructura empresa</h6>
+                        <p:separator/>
+                        <div class="grid">
+                            <ui:include src="fragmento/emisor/frag-estructura.xhtml"/>
+                        </div-->
+
+                        <div class="field col-12">
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.guardar()}" update="dvDatos" style="margin-right: 5px;" process="@this"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" action="#{emisorView.cancelar()}" update="dvDatos" />
+                            <p:spacer height="10px"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p:messages showSummary="true" showIcon="false" showDetail="true">
+                <p:autoUpdate />
+            </p:messages>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

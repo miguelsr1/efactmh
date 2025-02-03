@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Form Layout</ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false" enctype="multipart/form-data">
+            <div class="grid">
+                <div class="col-12 md:col-6">
+                    <div class="card ui-fluid">
+                        <h5>Vertical</h5>
+                        <div class="field">
+                            <p:outputLabel for="name1">Password privador</p:outputLabel>
+                            <p:inputText type="password" id="name1" />
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="email1">Usuario API - MH</p:outputLabel>
+                            <p:inputText id="email1" />
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="age1">Clave de acceso API - MH</p:outputLabel>
+                            <p:inputText id="age1" />
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="age1">Certificado para el firmador</p:outputLabel>
+                            <br/>
+                            <p:fileUpload  mode="simple" skinSimple="true" allowTypes="/(\.|\/)(crt)$/" label="Seleccionar"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel for="age1">Ambiente de MH</p:outputLabel>
+                            <p:selectOneRadio id="line" layout="lineDirection">
+                                <f:selectItem itemLabel="PRODUCCIÓN" itemValue="00"/>
+                                <f:selectItem itemLabel="PRUEBAS" itemValue="01"/>
+                            </p:selectOneRadio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,38 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <div class="col-12 md:col-12">
+        <div class="formgrid grid">
+            <div class="field col-12">
+                <p:outputLabel for="txtSucu" value="Nombre Sucursal"/>
+                <p:inputText id="txtSucu" value="#{emisorView.estable.nombreSucursal}"
+                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+            </div>
+            <div class="field col-12">
+                <p:outputLabel for="txtCodEst" value="Codigo Estable"/>
+                <p:inputText id="txtCodEst" value="#{emisorView.estable.codigoEstable}"
+                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+            </div>
+            <div class="field col-12">
+                <p:outputLabel for="txtCodEstMh" value="Codigo Estable MH"/>
+                <p:inputText id="txtCodEstMh" value="#{emisorView.estable.codigoEstableMh}"
+                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+            </div>
+            <div class="field col-12" >
+                <p:outputLabel for="tsActivo" value="Activo"/>
+                <br/>
+                <p:toggleSwitch id="tsActivo" value="#{emisorView.estable.activo}"/>
+            </div>
+
+        </div>
+        <div class="field col-12">
+            <p:commandButton value="Nuevo" icon="pi pi-file" update="dvDatos" style="margin-right: 5px;" process="@this"/>
+            <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.agregarEstablecimiento()}" update="solEstable" process="@this, txtSucu, txtCodEst, txtCodEstMh, " />
+            <p:spacer height="10px"/>
+        </div>
+    </div>
+</ui:component>

@@ -10,15 +10,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import lombok.Getter;
+import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
+import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -34,6 +39,13 @@ public class CatalogoService {
     @Getter
     private List<TipoUnidadMedida> lstTipoUnidadMedida;
 
+    @Getter
+    private List<CatalogoDto> lstDepartamentos;
+    @Getter
+    private List<MunicipioDto> lstMunicipios;
+    @Getter
+    private List<CatalogoDto> lstGiros;
+
     {
         lstProducto = new ArrayList<>();
         lstTipoUnidadMedida = new ArrayList<>();
@@ -41,20 +53,52 @@ public class CatalogoService {
 
     @PostConstruct
     public void init() {
-        loadProduct();
-        loadTipoUnidadMedida();
+        //loadProduct();
+        //loadTipoUnidadMedida();
+        loadDatosUbicacion();
+        loadGiros();
     }
-    
-    private void loadTipoUnidadMedida(){
+
+    private void loadTipoUnidadMedida() {
         lstTipoUnidadMedida = RestUtil.builder()
                 .endpoint("item")
                 .clazz(TipoUnidadMedida.class)
                 .build().callGet();
     }
+
+    private void loadDatosUbicacion() {
+        lstDepartamentos = RestUtil.builder()
+                .endpoint("/api/catalogo/departamento")
+                .clazz(CatalogoDto.class)
+                .build().callGet();
+
+        lstMunicipios = RestUtil.builder()
+                .endpoint("/api/catalogo/municipio")
+                .clazz(MunicipioDto.class)
+                .build().callGet();
+    }
+
+    public MunicipioDto getMunicipioDtoById(Integer idMunicipio) {
+        return lstMunicipios.stream().filter(mun -> mun.getId().compareTo(idMunicipio) == 0).findFirst().orElse(null);
+    }
     
+    public List<MunicipioDto> getMunicipioDtoByCodDepa(String codDepa) {
+        return lstMunicipios
+                .stream()
+                .filter(mun -> mun.getCodDepartamento().compareTo(codDepa) == 0)
+                .sorted(Comparator.comparing(MunicipioDto::getNombre))
+                .collect(Collectors.toList());
+    }
+
+    private void loadGiros() {
+        lstGiros = RestUtil.builder()
+                .endpoint("/api/catalogo/giro")
+                .clazz(CatalogoDto.class)
+                .build().callGet();
+    }
+
     private void loadProduct() {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://localhost:8090/hello/all")).GET().build();
 
             HttpResponse<String> response = HttpClient
@@ -72,11 +116,10 @@ public class CatalogoService {
             Logger.getLogger(CatalogoService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public Producto getProductoByCodigo(String codigo){
+
+    public Producto getProductoByCodigo(String codigo) {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://localhost:8090/hello/producto/"+codigo+"/")).GET().build();
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://localhost:8090/hello/producto/" + codigo + "/")).GET().build();
 
             HttpResponse<String> response = HttpClient
                     .newBuilder()

@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Cliente;
-import sv.com.jsoft.efactmh.model.Municipio;
+import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 import sv.com.jsoft.efactmh.services.UbicacionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
@@ -40,7 +40,7 @@ public class ClienteView implements Serializable {
     @Setter
     private Integer idMuni;
 
-    private List<Municipio> lstMunicipio;
+    private List<MunicipioDto> lstMunicipio;
 
     private Cliente cliente;
     @Getter
@@ -59,13 +59,13 @@ public class ClienteView implements Serializable {
 
     @PostConstruct
     public void init() {
-        res = RestUtil
+        /*res = RestUtil
                 .builder()
                 .clazz(Cliente.class)
                 .endpoint("cliente/")
                 .build();
 
-        lstCliente = res.callGet();
+        lstCliente = res.callGet();*/
     }
 
     public Cliente getCliente() {
@@ -107,18 +107,17 @@ public class ClienteView implements Serializable {
         }
     }
 
-    public List<Municipio> getLstMunicipio() {
+    public List<MunicipioDto> getLstMunicipio() {
         return ubicacionService.findMunicipioByDepa(codigoDepa);
     }
 
     public void onRowSelect(SelectEvent<Cliente> event) {
         cliente = event.getObject();
         idMuni = cliente.getIdMunicipio();
-        Municipio m = (Municipio) RestUtil.builder()
-                .clazz(Municipio.class)
+        MunicipioDto m = (MunicipioDto) RestUtil.builder()
+                .clazz(MunicipioDto.class)
                 .endpoint("catalogos/municipio/" + idMuni)
                 .build().callGetById();
-        codigoDepa = m.getCodigoDepartamento();
         tipoDoc = cliente.getTipoDocumento();
         duiContacto = cliente.getDocumentoContacto();
     }

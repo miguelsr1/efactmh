@@ -6,8 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.Departamento;
-import sv.com.jsoft.efactmh.model.Municipio;
-import sv.com.jsoft.efactmh.util.RestUtil;
+import sv.com.jsoft.efactmh.model.MunicipioDto;
 
 /**
  *
@@ -21,17 +20,17 @@ public class UbicacionService {
     List<Departamento> lstDepartamento;
 
     @Getter
-    List<Municipio> lstMunicipio;
+    List<MunicipioDto> lstMunicipio;
 
     @PostConstruct
     public void init() {
-        RestUtil res = RestUtil.builder().endpoint("catalogos/departamento/").clazz(Departamento.class).build();
-        lstDepartamento = res.callGet();
+        /*RestUtil res = RestUtil.builder().endpoint("catalogos/departamento/").clazz(Departamento.class).build();
+        lstDepartamento = res.callGet();*/
     }
 
-    public List<Municipio> findMunicipioByDepa(String depa) {
-        RestUtil res = RestUtil.builder().endpoint("catalogos/municipios/" + depa).clazz(Municipio.class).build();
-        return res.callGet();
+    public List<MunicipioDto> findMunicipioByDepa(String depa) {
+        //RestUtil res = RestUtil.builder().endpoint("catalogos/municipios/" + depa).clazz(Municipio.class).build();
+        return null;
     }
 
 }

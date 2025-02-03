@@ -28,7 +28,7 @@ public class GuestPreferences implements Serializable {
 
     private String layout = "default";
 
-    private String menuMode = "layout-menu-static";
+    private String menuMode = "layout-menu-slim";
 
     private boolean darkMenu = true;
 
@@ -101,7 +101,7 @@ public class GuestPreferences implements Serializable {
         this.menuMode = menuMode;
     }
 
-    public boolean getDarkMenu() {
+    public boolean isDarkMenu() {
         return this.darkMenu;
     }
 
