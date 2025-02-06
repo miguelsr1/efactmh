@@ -35,7 +35,7 @@
                         </div-->
 
                         <div class="field col-12">
-                            <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.guardar()}" update="dvDatos" style="margin-right: 5px;" process="@this"/>
+                            <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.guardar()}" update="dvDatos" style="margin-right: 5px;" process="@this,divDatos"/>
                             <p:commandButton value="Cancelar" icon="pi pi-times" action="#{emisorView.cancelar()}" update="dvDatos" />
                             <p:spacer height="10px"/>
                         </div>

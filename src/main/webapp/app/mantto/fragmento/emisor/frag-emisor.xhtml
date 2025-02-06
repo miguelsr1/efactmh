@@ -6,7 +6,7 @@
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <div class="col-12 md:col-12">
-        <div class="formgrid grid">
+        <div class="formgrid grid" jsf:id="divDatos">
             <div class="field col-12">
                 <p:outputLabel for="nomComer" value="Nombre Comercial"/>
                 <p:inputText id="nomComer" value="#{emisorView.emisor.nombreComercial}"
@@ -19,7 +19,7 @@
             </div>
             <div class="field col-12" >
                 <p:outputLabel for="tel" value="Teléfono"/>
-                <p:inputMask id="tel" maxlength="8" value="#{emisorView.emisor.telefono}" required="true" mask="9999-9999"
+                <p:inputMask id="tel" maxlength="9" value="#{emisorView.emisor.telefono}" required="true" mask="9999-9999"
                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
             </div>
             <div class="field col-12" >

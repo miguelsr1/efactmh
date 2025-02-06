@@ -12,12 +12,18 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.model.EntityPk;
+import sv.com.jsoft.efactmh.model.dto.ErrorResponseDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 
@@ -26,6 +32,7 @@ import sv.com.jsoft.efactmh.model.dto.ResponseDto;
  * @author migue
  */
 @SuperBuilder
+@Slf4j
 public class RestUtil {
 
     private String endpoint;
@@ -73,7 +80,7 @@ public class RestUtil {
             return null;
         }
     }
-    
+
     public Object callGetOne(JwtDto jwtDto) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
@@ -85,7 +92,75 @@ public class RestUtil {
                     .newBuilder()
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            
+
+            return gson.fromJson(response.body(), clazz);
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public Object callPostAuth(JwtDto jwtDto, Object body) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+                    .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                    .POST(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
+                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            return gson.fromJson(response.body(), clazz);
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public Object callPutAuth(JwtDto jwtDto, Object body) {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+                    .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                    .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
+                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            log.info("response: " + response.body());
+
+            switch (response.statusCode()) {
+                case 200:
+                    MessageUtil.builder()
+                            .severity(FacesMessage.SEVERITY_INFO)
+                            .title("Información")
+                            .message("Emisor actualizado")
+                            .build()
+                            .showMessage();
+                    break;
+                case 400:
+                    ErrorResponseDto errorResponse = new Gson().fromJson(response.body(), ErrorResponseDto.class);
+                    
+                    List<String> messages = errorResponse.getViolations().stream()
+                            .map(ErrorResponseDto.Violation::getMessage) // Mapeamos cada Violation a su mensaje
+                            .collect(Collectors.toList());
+
+                    String result = String.join("\n", messages);
+
+                    MessageUtil.builder()
+                            .severity(FacesMessage.SEVERITY_WARN)
+                            .title("Alerta")
+                            .message(result)
+                            .build()
+                            .showMessage();
+                    break;
+            }
             return gson.fromJson(response.body(), clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);

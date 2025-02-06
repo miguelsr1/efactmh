@@ -1,26 +1,17 @@
 package sv.com.jsoft.efactmh.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import sv.com.jsoft.efactmh.model.dto.EmisorDto;
 
 /**
  *
  * @author migue
  */
 @Data
-public class Emisor {
+@EqualsAndHashCode(callSuper=false)
+public class Emisor extends EmisorDto{
 
+    private String codigoDepartamento;
     private Long idContribuyente;
-    private String codigoActividad;
-    private Integer idMunicipio;
-    private String nit;
-    private String nrc;
-    private String nombreComercial;
-    private String razonSocial;
-    private String telefono;
-    private String correo;
-    private boolean estado;
-    private String direccion;
-    private Boolean activo;
-    private String codigoEstablecimiento;
-    private String usuario;
 }

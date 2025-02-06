@@ -12,7 +12,9 @@ import lombok.Setter;
 import sv.com.jsoft.efactmh.model.Emisor;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
+import sv.com.jsoft.efactmh.model.dto.EmisorDto;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
+import sv.com.jsoft.efactmh.model.mapper.EmisorMapper;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.SecurityService;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -64,10 +66,8 @@ public class EmisorView implements Serializable {
         emisor = (Emisor) rest
                 .callGetOne(securityService.getToken());
 
-        idMunicipio = emisor.getIdMunicipio();
-        MunicipioDto municipioDto = catalogoService.getMunicipioDtoById(emisor.getIdMunicipio());
-        codDepa = municipioDto.getCodDepartamento();
-        lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(municipioDto.getCodDepartamento());
+        codDepa = emisor.getCodigoDepartamento();
+        lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(emisor.getCodigoDepartamento());
         lstDepartamentos = catalogoService.getLstDepartamentos();
     }
     
@@ -81,7 +81,24 @@ public class EmisorView implements Serializable {
     }
     
     public void guardar(){
+        EmisorDto emisorDto = EmisorMapper.INSTANCE.toDto(emisor);
+        RestUtil rest = RestUtil
+                .builder()
+                .endpoint("/api/secured/emisor/"+emisor.getIdContribuyente()).build();
         
+        rest.callPutAuth(securityService.getToken(), emisorDto);
+        /*emisorDto.setActivo(emisor.getActivo());
+        emisorDto.setCodigoActividad(emisor.getCodigoActividad());
+        emisorDto.setCodigoEstablecimiento(emisor.getCodigoEstablecimiento());
+        emisorDto.setCorreo(emisor.getCorreo());
+        emisorDto.setDireccion(emisor.getDireccion());
+        emisorDto.setIdMunicipio(emisor.getIdMunicipio());
+        emisorDto.setNit(emisor.getNit());
+        emisorDto.setNombreComercial(emisor.getNombreComercial());
+        emisorDto.setNrc(emisor.getNrc());
+        emisorDto.setRazonSocial(emisor.getRazonSocial());
+        emisorDto.setTelefono(emisor.getTelefono());
+        emisorDto.setUsuario(emisor.getUsuario());*/
     }
     
     public String cancelar(){
