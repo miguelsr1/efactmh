@@ -13,5 +13,5 @@ import sv.com.jsoft.efactmh.model.dto.EmisorDto;
 public class Emisor extends EmisorDto{
 
     private String codigoDepartamento;
-    private Long idContribuyente;
+    private String codigoMunicipio;
 }

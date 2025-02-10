@@ -10,7 +10,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
@@ -78,9 +77,9 @@ public class CatalogoService {
                 .build().callGet();
     }
 
-    public MunicipioDto getMunicipioDtoById(Integer idMunicipio) {
+    /*public MunicipioDto getMunicipioDtoById(Integer idMunicipio) {
         return lstMunicipios.stream().filter(mun -> mun.getId().compareTo(idMunicipio) == 0).findFirst().orElse(null);
-    }
+    }*/
     
     public List<MunicipioDto> getMunicipioDtoByCodDepa(String codDepa) {
         return lstMunicipios

@@ -12,13 +12,11 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -37,12 +35,17 @@ public class RestUtil {
 
     private String endpoint;
     private Class clazz;
+    private JwtDto jwtDto;
+    private Object body;
     private final Gson gson = new Gson();
+    private final static String HOST = "http://localhost:8081";
+    //private final static String HOST = "http://34.225.63.188:8080";
 
     public List callGet() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .GET()
+                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -61,7 +64,7 @@ public class RestUtil {
 
     public List callGet(JwtDto jwtDto) {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .build();
@@ -81,9 +84,9 @@ public class RestUtil {
         }
     }
 
-    public Object callGetOne(JwtDto jwtDto) {
+    public Object callGetOne() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .build();
@@ -100,9 +103,9 @@ public class RestUtil {
         }
     }
 
-    public Object callPostAuth(JwtDto jwtDto, Object body) {
+    public Object callPostAuth() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
@@ -120,9 +123,9 @@ public class RestUtil {
         }
     }
 
-    public Object callPutAuth(JwtDto jwtDto, Object body) {
+    public void callPutAuth() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
@@ -146,7 +149,7 @@ public class RestUtil {
                     break;
                 case 400:
                     ErrorResponseDto errorResponse = new Gson().fromJson(response.body(), ErrorResponseDto.class);
-                    
+
                     List<String> messages = errorResponse.getViolations().stream()
                             .map(ErrorResponseDto.Violation::getMessage) // Mapeamos cada Violation a su mensaje
                             .collect(Collectors.toList());
@@ -161,16 +164,16 @@ public class RestUtil {
                             .showMessage();
                     break;
             }
-            return gson.fromJson(response.body(), clazz);
+            //return gson.fromJson(response.body(), clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            //return null;
         }
     }
 
     public Object callGetById() {
         try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI("http://34.225.63.188:8080" + endpoint))
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .GET()
                     .build();
 
@@ -192,7 +195,7 @@ public class RestUtil {
     public int callPersistir(EntityPk data) {
         try {
             HttpRequest.Builder httpBuilder = HttpRequest.newBuilder()
-                    .uri(new URI("http://34.225.63.188:8080" + endpoint + (data.esNuevo() ? "" : data.getId())))
+                    .uri(new URI(HOST + endpoint + (data.esNuevo() ? "" : data.getId())))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
             httpBuilder = data.esNuevo()
                     ? httpBuilder.POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
@@ -215,7 +218,7 @@ public class RestUtil {
     public int callPost(Object data) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI("http://34.225.63.188:8080" + endpoint))
+                    .uri(new URI(HOST + endpoint))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers
                             .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
@@ -236,7 +239,7 @@ public class RestUtil {
     public <T> T callPost(Object data, Class<T> clazz, FieldNamingPolicy namingConvention) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI("http://34.225.63.188:8080" + endpoint))
+                    .uri(new URI(HOST + endpoint))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers
                             .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
@@ -259,7 +262,7 @@ public class RestUtil {
     public ResponseDto callPostV2(Object data) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI("http://34.225.63.188:8080" + endpoint))
+                    .uri(new URI(HOST + endpoint))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers
                             .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))

@@ -10,7 +10,6 @@ import lombok.Data;
 public class EmisorDto {
 
     private String codigoActividad;
-    private Integer idMunicipio;
     private String nit;
     private String nrc;
     private String nombreComercial;

@@ -29,7 +29,7 @@
             </div>
             <div class="field col-12" >
                 <p:outputLabel for="cboDepa" value="Departamento"/>
-                <p:selectOneMenu id="cboDepa" value="#{emisorView.codDepa}"
+                <p:selectOneMenu id="cboDepa" value="#{emisorView.emisor.codigoDepartamento}"
                                  class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                     <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
                     <f:selectItems value="#{emisorView.lstDepartamentos}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
@@ -38,18 +38,10 @@
             </div>
             <div class="field col-12" >
                 <p:outputLabel for="cboMuni" value="Municipio"/>
-                <p:selectOneMenu id="cboMuni" value="#{emisorView.emisor.idMunicipio}"
+                <p:selectOneMenu id="cboMuni" value="#{emisorView.emisor.codigoMunicipio}"
                                  class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                     <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
-                    <f:selectItems value="#{emisorView.lstMunicipios}" var="muni" itemValue="#{muni.id}" itemLabel="#{muni.nombre}"/>
-                </p:selectOneMenu>
-            </div>
-            <div class="field col-12" >
-                <p:outputLabel for="cboDis" value="Distrito"/>
-                <p:selectOneMenu id="cboDis" 
-                                 class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
-                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DISTRITO" />
-                    <f:selectItems value="#{emisorView.lstMunicipios}" var="muni" itemValue="#{muni.id}" itemLabel="#{muni.nombre}"/>
+                    <f:selectItems value="#{emisorView.lstMunicipios}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
                 </p:selectOneMenu>
             </div>
             <div class="field col-12">

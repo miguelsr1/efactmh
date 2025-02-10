@@ -12,9 +12,7 @@ import lombok.Setter;
 import sv.com.jsoft.efactmh.model.Emisor;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
-import sv.com.jsoft.efactmh.model.dto.EmisorDto;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
-import sv.com.jsoft.efactmh.model.mapper.EmisorMapper;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.SecurityService;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -39,10 +37,7 @@ public class EmisorView implements Serializable {
     private Emisor emisor;
     @Getter
     @Setter
-    private String codDepa;
-    @Getter
-    @Setter
-    private Integer idMunicipio;
+    private String municipio;
     @Getter
     private List<CatalogoDto> lstDepartamentos;
     @Getter
@@ -62,17 +57,23 @@ public class EmisorView implements Serializable {
     }
 
     private void loadDataEmisor() {
-        RestUtil rest = RestUtil.builder().clazz(Emisor.class).endpoint("/api/secured/emisor").build();
+        RestUtil rest = RestUtil
+                .builder()
+                .clazz(Emisor.class)
+                .jwtDto(securityService.getToken())
+                .endpoint("/api/secured/emisor")
+                .build();
+        
         emisor = (Emisor) rest
-                .callGetOne(securityService.getToken());
+                .callGetOne();
 
-        codDepa = emisor.getCodigoDepartamento();
+        municipio = emisor.getCodigoDepartamento().concat(emisor.getCodigoMunicipio());
         lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(emisor.getCodigoDepartamento());
         lstDepartamentos = catalogoService.getLstDepartamentos();
     }
     
     public void updateListaMunicipios(){
-        lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(codDepa);
+        lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(emisor.getCodigoDepartamento());
     }
 
     public void agregarEstablecimiento() {
@@ -80,25 +81,14 @@ public class EmisorView implements Serializable {
         estable = new EstablecimientoDto();
     }
     
-    public void guardar(){
-        EmisorDto emisorDto = EmisorMapper.INSTANCE.toDto(emisor);
+    public void guardar(){        
         RestUtil rest = RestUtil
                 .builder()
-                .endpoint("/api/secured/emisor/"+emisor.getIdContribuyente()).build();
+                .jwtDto(securityService.getToken())
+                .body(emisor)
+                .endpoint("/api/secured/emisor/").build();
         
-        rest.callPutAuth(securityService.getToken(), emisorDto);
-        /*emisorDto.setActivo(emisor.getActivo());
-        emisorDto.setCodigoActividad(emisor.getCodigoActividad());
-        emisorDto.setCodigoEstablecimiento(emisor.getCodigoEstablecimiento());
-        emisorDto.setCorreo(emisor.getCorreo());
-        emisorDto.setDireccion(emisor.getDireccion());
-        emisorDto.setIdMunicipio(emisor.getIdMunicipio());
-        emisorDto.setNit(emisor.getNit());
-        emisorDto.setNombreComercial(emisor.getNombreComercial());
-        emisorDto.setNrc(emisor.getNrc());
-        emisorDto.setRazonSocial(emisor.getRazonSocial());
-        emisorDto.setTelefono(emisor.getTelefono());
-        emisorDto.setUsuario(emisor.getUsuario());*/
+        rest.callPutAuth();
     }
     
     public String cancelar(){
