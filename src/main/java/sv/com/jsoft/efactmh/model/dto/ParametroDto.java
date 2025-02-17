@@ -19,6 +19,6 @@ public class ParametroDto {
     private Boolean test;
     
     public Boolean getTest(){
-        return ambiente.compareTo("01") == 0;
+        return ambiente.compareTo("00") == 0;
     }
 }

@@ -9,44 +9,65 @@
     <ui:define name="title">Cliente</ui:define>
     <ui:define name="head">
         <h:outputScript name="inputmask.js" library="js"/>
+        <style>
+            body .ui-wizard .ui-wizard-step-titles .ui-wizard-step-title {
+                padding: 0.5rem !important;
+            }
+            .ui-wizard-step-title {
+                font-size: 1.1rem;
+            }
+        </style>
     </ui:define>
 
     <ui:define name="content">   
-        <h:form prependId="false">
-            <div class="grid dashboard ">
-                <div class="col-12">
-                    <div class="card" jsf:id="dvDatos">
-                        <h6>Datos Generales</h6>
-                        <p:separator/>
-                        <div class="grid">
-                            <ui:include src="fragmento/emisor/frag-emisor.xhtml"/>
-                        </div>
 
-                        <!--h6>Datos de contacto</h6>
-                        <p:separator/>
-                        <div class="grid">
-                            <ui:include src="fragmento/emisor/frag-responsable-dte.xhtml"/>
-                        </div>
-                        
-                        <h6>Estructura empresa</h6>
-                        <p:separator/>
-                        <div class="grid">
-                            <ui:include src="fragmento/emisor/frag-estructura.xhtml"/>
-                        </div-->
+        <div class="grid dashboard ">
+            <div class="col-12">                    
+                <div class="card" jsf:id="dvDatos">
 
-                        <div class="field col-12">
-                            <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.guardar()}" update="dvDatos" style="margin-right: 5px;" process="@this,divDatos"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" action="#{emisorView.cancelar()}" update="dvDatos" />
-                            <p:spacer height="10px"/>
-                        </div>
+                    <p:tabView dynamic="true" cache="true" prependId="false">
+                        <p:tab title="Datos Generales">
+                            <div class="grid">
+                                <ui:include src="fragmento/emisor/frag-emisor.xhtml"/>
+                            </div>
+                        </p:tab>
+                        <p:tab title="Establecimiento">
+                            <div class="grid">
+                                <ui:include src="fragmento/emisor/frag-estructura.xhtml"/>
+                            </div>
+                        </p:tab>
+                        <p:tab title="Parametros MH">
+                            <div class="grid">
+                                <ui:include src="fragmento/emisor/frag-parametro.xhtml"/>
+                            </div>
+                        </p:tab>
+                    </p:tabView>
+
+
+                    <!--h6>Datos de contacto</h6>
+                    <p:separator/>
+                    <div class="grid">
+                        <ui:include src="fragmento/emisor/frag-responsable-dte.xhtml"/>
                     </div>
+                    
+                    <h6>Estructura empresa</h6>
+                    <p:separator/>
+                    <div class="grid">
+                        <ui:include src="fragmento/emisor/frag-estructura.xhtml"/>
+                    </div-->
+
+                    <!-- div class="field col-12">
+                        <p:commandButton value="Guardar" icon="pi pi-save" action="{emisorView.guardar()}" update="dvDatos" style="margin-right: 5px;" process="@this,divDatos"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" action="{emisorView.cancelar()}" update="dvDatos" />
+                        <p:spacer height="10px"/>
+                    </div -->
                 </div>
             </div>
+        </div>
 
-            <p:messages showSummary="true" showIcon="false" showDetail="true">
-                <p:autoUpdate />
-            </p:messages>
+        <p:messages showSummary="true" showIcon="false" showDetail="true">
+            <p:autoUpdate />
+        </p:messages>
 
-        </h:form>
     </ui:define>
 </ui:composition>

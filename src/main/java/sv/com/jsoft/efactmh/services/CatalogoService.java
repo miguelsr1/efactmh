@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
@@ -44,6 +45,9 @@ public class CatalogoService {
     private List<MunicipioDto> lstMunicipios;
     @Getter
     private List<CatalogoDto> lstGiros;
+    
+    @Inject
+    SecurityService securityService;
 
     {
         lstProducto = new ArrayList<>();
@@ -62,19 +66,25 @@ public class CatalogoService {
         lstTipoUnidadMedida = RestUtil.builder()
                 .endpoint("item")
                 .clazz(TipoUnidadMedida.class)
-                .build().callGet();
+                .jwtDto(securityService.getToken())
+                .build()
+                .callGet();
     }
 
     private void loadDatosUbicacion() {
         lstDepartamentos = RestUtil.builder()
                 .endpoint("/api/catalogo/departamento")
                 .clazz(CatalogoDto.class)
-                .build().callGet();
+                .jwtDto(securityService.getToken())
+                .build()
+                .callGet();
 
         lstMunicipios = RestUtil.builder()
                 .endpoint("/api/catalogo/municipio")
                 .clazz(MunicipioDto.class)
-                .build().callGet();
+                .jwtDto(securityService.getToken())
+                .build()
+                .callGet();
     }
 
     /*public MunicipioDto getMunicipioDtoById(Integer idMunicipio) {
@@ -93,7 +103,9 @@ public class CatalogoService {
         lstGiros = RestUtil.builder()
                 .endpoint("/api/catalogo/giro")
                 .clazz(CatalogoDto.class)
-                .build().callGet();
+                .jwtDto(securityService.getToken())
+                .build()
+                .callGet();
     }
 
     private void loadProduct() {

@@ -5,37 +5,40 @@
               xmlns:p="http://primefaces.org/ui"
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <div class="col-12 md:col-12">
-        <div class="formgrid grid">
-            <div class="field col-12" >
-                <p:outputLabel for="cboTipoEst" value="Tipo establecimiento"/>
-                <p:selectOneMenu id="cboTipoEst" 
-                                 class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
-                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN TIPO" />
-                </p:selectOneMenu>
-            </div>
-            <div class="field col-12" >
-                <div class="ui-inputgroup" style="margin-bottom: 10px">
-                    <p:inputText placeholder="AGREGAR ESTABLECIMIENTO" class="w-full"/>
-                    <p:commandButton id="btnAdd" icon="pi pi-plus" styleClass="ui-button-warning" onclick="PF('dlgEstable').show();" process="@this"/>
+    <h:form prependId="false">
+        <div class="col-12 md:col-12">
+            <div class="formgrid grid">
+                <div class="field col-12" >
+                    <p:outputLabel for="cboTipoEst" value="Tipo establecimiento"/>
+                    <p:selectOneMenu id="cboTipoEst" 
+                                     class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                        <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN TIPO" />
+                    </p:selectOneMenu>
                 </div>
-                <p:selectOneListbox id="solEstable" >
-                    <f:selectItems value="#{emisorView.lstEstable}" var="estable" itemLabel="#{estable.nombreSucursal}" itemValue="#{estable.codigoEstable}"/>
-                </p:selectOneListbox>
-            </div>
-            <div class="field col-12" >
-                <div class="ui-inputgroup" style="margin-bottom: 10px">
-                    <p:inputText placeholder="AGREGAR PUNTO DE VENTA" class="w-full"/>
-                    <p:commandButton icon="pi pi-plus" styleClass="ui-button-warning" />
+                <div class="field col-12" >
+                    <div class="ui-inputgroup" style="margin-bottom: 10px">
+                        <p:inputText placeholder="AGREGAR ESTABLECIMIENTO" class="w-full"/>
+                        <p:commandButton id="btnAdd" icon="pi pi-plus" styleClass="ui-button-warning" onclick="PF('dlgEstable').show();" process="@this"/>
+                    </div>
+                    <p:selectOneListbox id="solEstable" >
+                        <f:selectItems value="#{emisorView.lstEstable}" var="estable" itemLabel="#{estable.nombreSucursal}" itemValue="#{estable.codigoEstable}"/>
+                    </p:selectOneListbox>
                 </div>
-                <p:selectOneListbox id="solPunto" >
-                </p:selectOneListbox>
+                <div class="field col-12" >
+                    <div class="ui-inputgroup" style="margin-bottom: 10px">
+                        <p:inputText placeholder="AGREGAR PUNTO DE VENTA" class="w-full"/>
+                        <p:commandButton icon="pi pi-plus" styleClass="ui-button-warning" />
+                    </div>
+                    <p:selectOneListbox id="solPunto" >
+                    </p:selectOneListbox>
+                </div>
             </div>
-
         </div>
-    </div>
-    
-    <p:dialog id="dlgEstable" widgetVar="dlgEstable">
-        <ui:include src="../establecimiento/frag-establecimiento.xhtml" />
-    </p:dialog>
+    </h:form>
+
+    <h:form prependId="falsew">
+        <p:dialog id="dlgEstable" widgetVar="dlgEstable">
+            <ui:include src="../establecimiento/frag-establecimiento.xhtml" />
+        </p:dialog>
+    </h:form>
 </ui:component>
