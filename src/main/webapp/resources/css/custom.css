@@ -1,0 +1,5 @@
+@media screen and (min-width: 992px) {
+    .lg\:w-6 {
+        width: 123% !important;
+    }
+}

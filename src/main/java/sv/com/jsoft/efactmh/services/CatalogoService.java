@@ -47,7 +47,7 @@ public class CatalogoService {
     private List<CatalogoDto> lstGiros;
     
     @Inject
-    SecurityService securityService;
+    SessionService securityService;
 
     {
         lstProducto = new ArrayList<>();

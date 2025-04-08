@@ -10,7 +10,7 @@ import lombok.Setter;
 import sv.com.jsoft.efactmh.model.dto.LoginDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 import sv.com.jsoft.efactmh.services.LoginServices;
-import sv.com.jsoft.efactmh.services.SecurityService;
+import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 
 /**
@@ -33,7 +33,7 @@ public class LoginView implements Serializable {
     @Inject
     LoginServices loginServices;
     @Inject
-    SecurityService securityService;
+    SessionService securityService;
     
     public String validarProveedor() {
         return validarLogin("app/home");

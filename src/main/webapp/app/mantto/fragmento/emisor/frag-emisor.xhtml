@@ -68,6 +68,12 @@
                     <p:inputMask id="txtNrc" value="#{emisorView.emisor.nrc}" mask="999999-9" required="true"
                                  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
                 </div>
+
+                <div class="field col-12">
+                    <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.guardar()}" update="dvDatos" style="margin-right: 5px;" process="@this,divDatos"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" action="#{emisorView.cancelar()}" update="dvDatos" />
+                    <p:spacer height="10px"/>
+                </div>
             </div>
         </div>
     </h:form>

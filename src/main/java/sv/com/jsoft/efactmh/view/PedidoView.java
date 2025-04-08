@@ -1,16 +1,20 @@
 package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import sv.com.jsoft.efactmh.model.Cliente;
-import sv.com.jsoft.efactmh.model.DetallePedido;
+import lombok.extern.slf4j.Slf4j;
+import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.Pedido;
 import sv.com.jsoft.efactmh.model.Producto;
+import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
+import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
  *
@@ -18,29 +22,40 @@ import sv.com.jsoft.efactmh.model.Producto;
  */
 @ViewScoped
 @Named
+@Slf4j
 public class PedidoView implements Serializable {
 
     @Getter
     @Setter
-    private String nit;
-    private Integer numeroPedido;
-
-    private Date fechaPedido;
-    private Cliente cliente;
-    private Pedido pedido;
+    private String tipoDte;
     @Getter
     @Setter
-    private DetallePedido detPedido;
+    private String numeroDocumento;
+    @Getter
+    @Setter
+    private DetalleFacturaDto detFactura;
     @Getter
     @Setter
     private Producto producto;
+    @Getter
+    private boolean existeCliente = false;
+    @Getter
+    private String nombreCliente;
+
+    private Integer numeroPedido;
+    private Date fechaPedido;
+    private ClienteResponse cliente;
+    private Pedido pedido;
+    
+    @Inject
+    SessionService securityService;
 
     {
         fechaPedido = new Date();
-        cliente = new Cliente();
+        cliente = new ClienteResponse();
         pedido = new Pedido();
         numeroPedido = 0;
-        detPedido = new DetallePedido();
+        detFactura = new DetalleFacturaDto();
     }
 
     //==========================================================================
@@ -52,7 +67,7 @@ public class PedidoView implements Serializable {
         return numeroPedido;
     }
 
-    public Cliente getCliente() {
+    public ClienteResponse getCliente() {
         return cliente;
     }
 
@@ -61,29 +76,48 @@ public class PedidoView implements Serializable {
     }
 
     //==========================================================================
-    public void agregarProductoADetallePedido() {
-        detPedido.setIdProducto(producto);
+    public void buscarCliente() {
+        RestUtil rest = RestUtil
+                .builder()
+                .clazz(ClienteResponse.class)
+                .jwtDto(securityService.getToken())
+                .endpoint("/api/secured/client/" + numeroDocumento)
+                .build();
+        Object obj = rest.callGetOne();
+        existeCliente = (obj != null);
+
+        if (existeCliente) {
+            cliente = (ClienteResponse) rest.callGetOne();
+            nombreCliente = (cliente.getTipoPersoneria() == 1)
+                    ? cliente.getNombreCompleto()
+                    : cliente.getRazonSocial();
+        }
+        log.info(cliente.toString());
     }
+
+    /*public void agregarProductoADetallePedido() {
+        detPedido.setIdProducto(producto);
+    }*/
 
     public void agregarItem() {
-        pedido.getDetallePedidoList().add(detPedido);
+        pedido.getDetalleFacturaList().add(detFactura);
 
-        detPedido = new DetallePedido();
+        detFactura = new DetalleFacturaDto();
     }
 
-    public Double getSubTotal() {
-        return pedido.getDetallePedidoList().stream()
-                .mapToDouble(d -> d.getSubTotal())
-                .sum();
+    public BigDecimal getSubTotal() {
+        return pedido.getDetalleFacturaList().stream()
+                .map(DetalleFacturaDto::getSubTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Double getIva() {
-        return 0d;
+    public BigDecimal getIva() {
+        return BigDecimal.ZERO;
     }
 
-    public Double getTotal() {
-        return pedido.getDetallePedidoList().stream()
-                .mapToDouble(d -> d.getSubTotal())
-                .sum();
+    public BigDecimal getTotal() {
+        return pedido.getDetalleFacturaList().stream()
+                .map(DetalleFacturaDto::getSubTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

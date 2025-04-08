@@ -9,7 +9,7 @@
             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta name="apple-mobile-web-app-capable" content="yes" />   
         </f:facet>
         <title>PrimeFaces Poseidon</title>
     </h:head>
@@ -21,25 +21,40 @@
                 <p:autoUpdate />
             </p:growl>
 
-            <div class="login-wrapper">
-                <div class="login-panel">
-                    <h:link styleClass="logo">
+                <div class="flex align-items-center justify-content-center">
+                    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+                        <div class="text-center mb-5">
+                            <p:graphicImage name="login.png" library="images" alt="Image"
+                                            height="50" styleClass="mb-3"/>
+                            <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
+                            <span class="text-600 font-medium line-height-3">Don't have an account?</span>
+                            <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
+                        </div>
 
-                    </h:link>
-                    <div class="login-form">
-                        <p:graphicImage name="login.png" library="images" width="90"/>
-                        <p></p>
-                        <p:inputText id="email" placeholder="Usuario" value="#{loginView.usuario}" />
-                        <p:password id="password" placeholder="Clave de acceso" value="#{loginView.claveAcceso}"/>
-                        <p:commandButton value="Ingresar" styleClass="ui-button-info rounded-button"
-                                         action="#{loginView.validarProveedor()}" />
+                        <div>
+                            <label for="email1" class="block text-900 font-medium mb-2">Email</label>
+                            <p:inputText id="email" styleClass="w-full mb-3" placeholder="Email address" value="#{loginView.usuario}"/>
+                            <label for="password1" class="block text-900 font-medium mb-2">Password</label>
+                            <p:inputText id="password" type="password" styleClass="w-full mb-3" placeholder="Password" value="#{loginView.claveAcceso}"/>
+
+                            <div class="flex align-items-center justify-content-between mb-6">
+                                <div class="flex align-items-center">
+                                    <p:selectBooleanCheckbox id="rememberme" styleClass="mr-2"/>
+                                    <label for="rememberme">Remember me</label>
+                                </div>
+                                <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot your password?</a>
+                            </div>
+
+                            <p:commandButton value="Sign In" icon="pi pi-user" styleClass="w-full" action="#{loginView.validarProveedor()}"/>
+                        </div>
                     </div>
-
-                    <p> <a href="#">¿Olvidó contraseña?</a></p>
                 </div>
-            </div>
+
+
         </h:form>
-        <h:outputStylesheet name="css/layout-light.css" library="poseidon-layout" />
+        <h:outputStylesheet name="css/layout-default.css" library="paradise-layout" />
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout" />
+
     </h:body>
 
 </html>

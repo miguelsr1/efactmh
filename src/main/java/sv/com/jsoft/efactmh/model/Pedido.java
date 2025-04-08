@@ -16,18 +16,11 @@ public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer idPedido;
     private Date fechaRegistro;
-    private List<DetallePedido> detallePedidoList;
+    private List<DetalleFacturaDto> detalleFacturaList;
     private Cliente idCliente;
     private EstadoPedido idEstadoPedido;
-    private Operador user;
 
     public Pedido() {
-    }
-
-    public List<DetallePedido> getDetallePedidoList() {
-        if (detallePedidoList == null) {
-            detallePedidoList = new ArrayList<>();
-        }
-        return detallePedidoList;
+        detalleFacturaList = new ArrayList<>();
     }
 }

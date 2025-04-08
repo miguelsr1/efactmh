@@ -8,9 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import sv.com.jsoft.efactmh.model.Emisor;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
-import sv.com.jsoft.efactmh.services.SecurityService;
+import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -22,7 +21,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 public class ParametrosView implements Serializable {
     
     @Inject
-    SecurityService securityService;
+    SessionService securityService;
     
     private List<ParametroDto> lstParametros;;
     @Getter

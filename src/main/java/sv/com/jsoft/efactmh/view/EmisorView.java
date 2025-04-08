@@ -14,7 +14,7 @@ import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
 import sv.com.jsoft.efactmh.services.CatalogoService;
-import sv.com.jsoft.efactmh.services.SecurityService;
+import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -48,7 +48,7 @@ public class EmisorView implements Serializable {
     @Inject
     CatalogoService catalogoService;
     @Inject
-    SecurityService securityService;
+    SessionService securityService;
 
     @PostConstruct
     public void init() {

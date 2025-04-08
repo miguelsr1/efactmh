@@ -80,7 +80,7 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin: 1.5rem 0 1rem 0;
+    margin: 1.5rem 0 0.5rem 0;
     font-family: inherit;
     font-weight: 500;
     line-height: 1.2;
@@ -309,6 +309,7 @@ p:last-child {
     color: #757575;
 }
 .topbar .topbar-wrapper .topbar-right #user-display {
+    display: flex;
     text-align: right;
     margin-top: 2px;
 }
@@ -386,9 +387,23 @@ p:last-child {
     color: #3984b8;
 }
 
+.titulo{
+    margin-top: 5px;
+    margin-left: 2rem;
+}
+
 @media (max-width: 991px) {
+    .titulo{
+        margin-left: 8rem;
+    }
+
+    .topbar .topbar-wrapper .topbar-left .topbar-logo img {
+        display: none;
+    }
+
     .topbar .topbar-wrapper .topbar-left {
         width: 100%;
+        display: block;
     }
     .topbar .topbar-wrapper .topbar-left .topbar-logo {
         width: 144px;
@@ -408,6 +423,10 @@ p:last-child {
         align-items: center;
         display: flex;
     }
+    .topbar .topbar-wrapper .topbar-right .profile-info{
+        display: none;
+    }
+
     .topbar #user-display {
         position: absolute;
         top: 0;

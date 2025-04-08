@@ -5,9 +5,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.security.enterprise.SecurityContext;
-import lombok.Getter;
-import sv.com.jsoft.efactmh.model.Operador;
+import sv.com.jsoft.efactmh.services.SessionService;
 
 /**
  *
@@ -15,13 +13,14 @@ import sv.com.jsoft.efactmh.model.Operador;
  */
 @Named
 @SessionScoped
-public class SessionView implements Serializable {
+public class SessionView implements Serializable{
     
-    @Getter
-    private Operador usuario;
-
     @Inject
-    SecurityContext securityContext;
+    SessionService sessionService;
+    
+    public String userName(){
+        return sessionService.getUserName();
+    }
     
     public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -29,5 +28,4 @@ public class SessionView implements Serializable {
         context.getExternalContext().invalidateSession();
         return "/index.xhtml?faces-redirect=true";
     }
-
 }

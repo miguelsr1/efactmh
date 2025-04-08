@@ -26,81 +26,98 @@
                             <h5>Cliente</h5>
                         </div>
 
-                        <div class="formgrid grid">
-                            <div class="field col-12 md:col-3" >
-                                <p:outputLabel for="nitRec" value="NIT"/>
-                                <p:inputText id="nitRec" value="#{pedidoView.nit}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                        <div class="ui-fluid formgrid grid" jsf:id="dvCliente">
+                            <div class="field col-12" >
+                                <p:outputLabel for="txtDte" value="Tipo de documento"/>
+                                <p:selectOneMenu id="txtDte" value="#{pedidoView.tipoDte}" required="true" requiredMessage="ES NECESARIO SELECCIONAR UN TIPO DE DTE">
+                                    <f:selectItem itemLabel="SELECCIONE UN DTE" noSelectionOption="true"/>
+                                    <f:selectItem itemValue="01" itemLabel="FACTURA" />
+                                    <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL" />
+                                </p:selectOneMenu>
                             </div>
-                            <div class="field col-12 md:col-9">
+                            <div class="field col-12" >
+                                <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
+                                <p:inputMask id="txtNumDoc" value="#{pedidoView.numeroDocumento}" onkeyup="nitDuiMask(this)"
+                                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true">
+                                    <p:ajax event="blur" listener="#{pedidoView.buscarCliente()}" update="dvCliente"/>
+                                </p:inputMask>
+                            </div>
+                            <div class="field col-12">
                                 <p:outputLabel for="nomRec" value="Nombre"/>
-                                <p:inputText id="nomRec" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                                <p:inputText id="nomRec" value="#{pedidoView.nombreCliente}" style="display: #{pedidoView.existeCliente ? 'block': 'none'}"
+                                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card ui-fluid" jsf:id="dvDetFac">
-                <h5>Detalle Pedido</h5>
-                <div class="formgrid grid">
-                    <div class="field col-12 md:col-4" >
+            <p:dialog id="pnlDetalle" widgetVar="pnlDetalle" visible="false" style="max-width: 500px;"
+                      responsive="true" draggable="false" resizable="false" maximizable="false" header="Detalle Factura" modal="true">
+                <div class="ui-fluid formgrid grid" jsf:id="dvDetFac">
+                    <div class="field col-12" >
                         <p:outputLabel for="txtCodigo" value="Código"/>
-
-                        <p:autoComplete id="txtCodigo" widgetVar="countryPojoRest" value="#{pedidoView.producto}"
-                                        var="pro" itemLabel="#{pro.codigo}" itemValue="#{pro}" converter="#{productoConverter}"
-                                        completeEndpoint="http://localhost:8090/hello/autocomplete" forceSelection="true" emptyMessage="No ha "
-                                        scrollHeight="250">
-                            <p:ajax listener="#{pedidoView.agregarProductoADetallePedido()}" update="txtPU txtCantidad"/>
-                        </p:autoComplete>
+                        <p:inputText id="txtCodigo" value="#{pedidoView.detFactura.codigo}" />
                     </div>
-                    <div class="field col-12 md:col-3">
+                    <div class="field col-12" >
+                        <p:outputLabel for="txtDescripcion" value="Descripción"/>
+                        <p:inputTextarea id="txtDescripcion" value="#{pedidoView.detFactura.descripcion}" rows="2" maxlength="900" />
+                    </div>
+                    <div class="field col-12">
                         <p:outputLabel for="txtCantidad">Cantidad</p:outputLabel>
-                        <p:inputNumber id="txtCantidad" value="#{pedidoView.detPedido.cantidad}" inputStyle="text-align: right;"
+                        <p:inputNumber id="txtCantidad" value="#{pedidoView.detFactura.cantidad}" inputStyle="text-align: right;"
                                        decimalPlaces="2" decimalSeparator="." thousandSeparator=","
                                        class="text-base text-color surface-overlay p-2 surface-border border-round appearance-none outline-none focus:border-primary w-full" 
                                        requiredMessage="Debe de ingresar cantidad a facturar" required="true"/>
                     </div>
-                    <div class="field col-12 md:col-3">
+                    <div class="field col-12">
                         <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
-                        <p:inputNumber id="txtPU" value="#{pedidoView.producto.precioUnitario}" readonly="true" inputStyle="text-align: right;"
+                        <p:inputNumber id="txtPU" value="#{pedidoView.detFactura.precioUni}" inputStyle="text-align: right;"
                                        decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
                                        class="text-base text-color surface-overlay p-2 surface-border border-round appearance-none outline-none focus:border-primary w-full" 
                                        requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
                     </div>
-                    <div class="field col-12 md:col-2">
+                    <div class="field col-12">
                         <p:spacer height="18"/>
                         <p:commandButton value="Agregar" update="dvDetFac tblDetPedido lblSubTotal lblIva lblTotal" 
+                                         process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU"
                                          icon="pi pi-plus" action="#{pedidoView.agregarItem()}" 
                                          validateClient="true" styleClass="rounded-button"/>
                     </div>
                 </div>
-            </div>
+            </p:dialog>
 
             <p:messages showSummary="true" showIcon="false">
                 <p:autoUpdate />
             </p:messages>
 
             <div class="card">
-                <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{pedidoView.pedido.detallePedidoList}" var="item" rowIndexVar="rowId"
-                             rowKey="#{item.idDetallePedido}" reflow="true" size="small" tableStyle="table-layout: auto;">
+                <div class="card-header">
+                    <p:commandButton value="Agregar" onclick="PF('pnlDetalle').show()"
+                                     process="@this"
+                                     icon="pi pi-plus" action="#{pedidoView.agregarItem()}" 
+                                     validateClient="true" styleClass="rounded-button"/>
+                </div>
+                <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{pedidoView.pedido.detalleFacturaList}" var="item" rowIndexVar="rowId"
+                             reflow="true" size="small" tableStyle="table-layout: auto;">
 
                     <p:column headerText="Id">
                         #{rowId + 1} 
                     </p:column>
                     <p:column headerText="Código">
-                        <p:outputLabel value="#{item.idProducto.codigo}" />
+                        <p:outputLabel value="#{item.codigo}" />
                     </p:column>
                     <p:column headerText="Descripción">
-                        <p:outputLabel value="#{item.idProducto.nombre}" />
+                        <p:outputLabel value="#{item.descripcion}" />
                     </p:column>
                     <p:column headerText="Cantidad">
                         <p:outputLabel value="#{item.cantidad}" />
                     </p:column>
                     <p:column headerText="Precio Unit.">
-                        <p:outputLabel value="#{item.idProducto.precioUnitario}" />
+                        <p:outputLabel value="#{item.precioUni}" />
                     </p:column>
                     <p:column headerText="Total">
-                        <p:outputLabel value="#{item.cantidad * item.idProducto.precioUnitario }" />
+                        <p:outputLabel value="#{item.subTotal}" />
                     </p:column>
                 </p:dataTable>
 
@@ -140,6 +157,8 @@
                         </div>
                     </div>
                 </p:outputPanel>
+
+                <p:commandButton value="Guardar" styleClass="mr-2" icon="pi pi-check"/>
             </div>
 
             <p:dialog id="dlgResponse" widgetVar="dlgResponse" modal="true" width="800" height="600" >
