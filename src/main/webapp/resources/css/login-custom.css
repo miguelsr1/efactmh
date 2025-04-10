@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center;     /* Centra verticalmente */
+    height: 100vh;           /* Ocupa el 100% del alto de la pantalla (viewport) */
+}
+
+.ml-9 {
+    margin-left: 7rem !important
+}
+body .ui-inputfield {
+    text-align: center;
+}
