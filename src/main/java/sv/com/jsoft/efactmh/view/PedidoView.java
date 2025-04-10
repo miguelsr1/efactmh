@@ -9,6 +9,9 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.Pedido;
 import sv.com.jsoft.efactmh.model.Producto;
@@ -31,9 +34,7 @@ public class PedidoView implements Serializable {
     @Getter
     @Setter
     private String numeroDocumento;
-    @Getter
-    @Setter
-    private DetalleFacturaDto detFactura;
+
     @Getter
     @Setter
     private Producto producto;
@@ -46,7 +47,7 @@ public class PedidoView implements Serializable {
     private Date fechaPedido;
     private ClienteResponse cliente;
     private Pedido pedido;
-    
+
     @Inject
     SessionService securityService;
 
@@ -55,7 +56,6 @@ public class PedidoView implements Serializable {
         cliente = new ClienteResponse();
         pedido = new Pedido();
         numeroPedido = 0;
-        detFactura = new DetalleFacturaDto();
     }
 
     //==========================================================================
@@ -95,16 +95,6 @@ public class PedidoView implements Serializable {
         log.info(cliente.toString());
     }
 
-    /*public void agregarProductoADetallePedido() {
-        detPedido.setIdProducto(producto);
-    }*/
-
-    public void agregarItem() {
-        pedido.getDetalleFacturaList().add(detFactura);
-
-        detFactura = new DetalleFacturaDto();
-    }
-
     public BigDecimal getSubTotal() {
         return pedido.getDetalleFacturaList().stream()
                 .map(DetalleFacturaDto::getSubTotal)
@@ -119,5 +109,25 @@ public class PedidoView implements Serializable {
         return pedido.getDetalleFacturaList().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void showDlgDetFactura() {
+
+        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+                .draggable(false)
+                .resizable(false)
+                .maximizable(false)
+                .responsive(true)
+                .modal(true)
+                .width("650px")
+                .height("400px")
+                .build();
+
+        PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);
+    }
+
+    public void onDetFactura(SelectEvent event) {
+        DetalleFacturaDto detFactura = (DetalleFacturaDto) event.getObject();
+        pedido.getDetalleFacturaList().add(detFactura);
     }
 }

@@ -15,8 +15,6 @@
                 }
             }
         </style>
-
-        <h:outputStylesheet name="det-factura.css" library="css" />
     </ui:define>
 
     <ui:define name="content">   
@@ -52,9 +50,11 @@
                             <p:commandButton value="Aceptar" styleClass="mr-2 rounded-button ui-button-info"  icon="pi pi-check" process="@this,cboDte,txtNumDoc,nomRec"  onclick="PF('basic').select(1)" />
                         </p:tab>
                         <p:tab title="Productos">
-                            <p:commandButton value="Agregar" onclick="PF('pnlDetalle').show()"
+                            <p:commandButton value="Agregar" action="#{pedidoView.showDlgDetFactura()}"
                                              process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
-                                             validateClient="true" styleClass="rounded-button ui-button-info"/>
+                                             validateClient="true" styleClass="rounded-button ui-button-info">
+                                <p:ajax event="dialogReturn" listener="#{pedidoView.onDetFactura}" />
+                            </p:commandButton>
                             <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{pedidoView.pedido.detalleFacturaList}" var="item" rowIndexVar="rowId"
                                          reflow="true" size="small" tableStyle="table-layout: auto;">
 
@@ -126,44 +126,9 @@
                 </div>
             </div>
 
-            <p:dialog id="pnlDetalle" widgetVar="pnlDetalle" visible="true" style="max-width: 500px;" responsive="true" 
+            <p:dialog id="pnlDetalle" widgetVar="pnlDetalle" visible="false" style="max-width: 500px;" responsive="true" 
                       draggable="false" resizable="false" maximizable="false" header="Detalle Factura" modal="true">
-                <div class="ui-fluid formgrid grid" jsf:id="dvDetFac">
-                    <div class="field col-12" >
-                        <p:outputLabel for="txtCodigo" value="Código"/>
-                        <p:inputText id="txtCodigo" value="#{pedidoView.detFactura.codigo}" />
-                    </div>
-                    <div class="field col-12" >
-                        <p:outputLabel for="txtDescripcion" value="Descripción"/>
-                        <p:inputTextarea id="txtDescripcion" value="#{pedidoView.detFactura.descripcion}" rows="2" maxlength="900" />
-                    </div>
 
-                    <div class="formgrid grid">
-                        <div class="field col">
-                            <p:outputLabel for="txtCantidad">Cantidad</p:outputLabel>
-                            <p:inputNumber id="txtCantidad" value="#{pedidoView.detFactura.cantidad}" inputStyle="text-align: right;"
-                                           decimalPlaces="2" decimalSeparator="." thousandSeparator=","
-                                           class="w-full" 
-                                           requiredMessage="Debe de ingresar cantidad a facturar" required="true"/>
-                        </div>
-                        <div class="field col">
-                            <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
-                            <p:inputNumber id="txtPU" value="#{pedidoView.detFactura.precioUni}" inputStyle="text-align: right;"
-                                           decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
-                                           class="w-full" 
-                                           requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
-                        </div>
-                    </div>
-
-
-                    <div class="field col-12">
-                        <p:spacer height="18"/>
-                        <p:commandButton value="Agregar" update="dvDetFac tblDetPedido lblSubTotal lblIva lblTotal" 
-                                         process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU"
-                                         icon="pi pi-plus" action="#{pedidoView.agregarItem()}" style="max-width: 150px"
-                                         validateClient="true" styleClass="rounded-button ui-button-info"/>
-                    </div>
-                </div>
             </p:dialog>
 
             <p:messages showSummary="true" showIcon="false">
