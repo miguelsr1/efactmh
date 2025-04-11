@@ -2,7 +2,9 @@ package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -13,6 +15,7 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
+import sv.com.jsoft.efactmh.model.DetallePago;
 import sv.com.jsoft.efactmh.model.Pedido;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
@@ -34,6 +37,15 @@ public class PedidoView implements Serializable {
     @Getter
     @Setter
     private String numeroDocumento;
+    @Getter
+    @Setter
+    private String tipoPago;
+    @Getter
+    @Setter
+    private List<DetallePago> lstDetPago;
+    @Getter
+    @Setter
+    private DetallePago detPago;
 
     @Getter
     @Setter
@@ -56,6 +68,7 @@ public class PedidoView implements Serializable {
         cliente = new ClienteResponse();
         pedido = new Pedido();
         numeroPedido = 0;
+        lstDetPago = new ArrayList<>();
     }
 
     //==========================================================================
@@ -126,8 +139,8 @@ public class PedidoView implements Serializable {
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);
     }
 
-    public void onDetFactura(SelectEvent event) {
-        DetalleFacturaDto detFactura = (DetalleFacturaDto) event.getObject();
+    public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {
+        DetalleFacturaDto detFactura = event.getObject();
         pedido.getDetalleFacturaList().add(detFactura);
     }
 }
