@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
@@ -90,7 +91,6 @@ public class ClienteView implements Serializable {
     }
 
     public void guardar() {
-
         if (cliente != null) {
             tipoDoc = (duiContacto.length() == 10) ? 1 : 2;
             cliente.setTipoDocumento(tipoDoc);
@@ -103,6 +103,8 @@ public class ClienteView implements Serializable {
 
             cliente = new Cliente();
             duiContacto = "";
+            
+            PrimeFaces.current().ajax().update("tblCli");
         }
     }
 

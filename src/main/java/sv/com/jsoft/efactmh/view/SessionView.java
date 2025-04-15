@@ -5,6 +5,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Getter;
 import sv.com.jsoft.efactmh.services.SessionService;
 
 /**
@@ -17,6 +18,9 @@ public class SessionView implements Serializable{
     
     @Inject
     SessionService sessionService;
+    
+    @Getter
+    private Boolean aceptaPagoPlazo = true;
     
     public String userName(){
         return sessionService.getUserName();

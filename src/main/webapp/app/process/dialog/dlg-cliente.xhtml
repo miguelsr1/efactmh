@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <title>Nuevo Cliente</title>
+
+        <h:outputScript name="js/prism.js" library="paradise-layout"/>
+        <h:outputStylesheet name="det-factura.css" library="css" />
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+
+        <style>
+            h6 {
+                font-size: 1rem;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                margin: 1.5rem 0 0.5rem 0;
+                font-family: inherit;
+                font-weight: 500;
+                line-height: 1.2;
+                color: inherit;
+            }
+            h6 {
+                display: block;
+                font-weight: bold;
+                unicode-bidi: isolate;
+            }
+            body .ui-widget {
+                font-family: "Roboto", "Helvetica Neue", sans-serif;
+                font-size: 1rem;
+                text-decoration: none;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form prependId="false">
+            <ui:include src="../../mantto/fragmento/cliente/frag-cliente.xhtml"/>
+        </h:form>
+    </h:body>
+</html>

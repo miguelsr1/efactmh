@@ -47,6 +47,8 @@ public class PedidoView implements Serializable {
     @Setter
     private DetallePago detPago;
 
+    private BigDecimal totalPagos;
+
     @Getter
     @Setter
     private Producto producto;
@@ -63,12 +65,16 @@ public class PedidoView implements Serializable {
     @Inject
     SessionService securityService;
 
+    @Inject
+    SessionView sessionView;
+
     {
         fechaPedido = new Date();
         cliente = new ClienteResponse();
         pedido = new Pedido();
         numeroPedido = 0;
         lstDetPago = new ArrayList<>();
+        detPago = new DetallePago();
     }
 
     //==========================================================================
@@ -88,6 +94,11 @@ public class PedidoView implements Serializable {
         return pedido;
     }
 
+    //metodo que valida si el establecimiento permite pago a plazo en modalida credito
+    public boolean getAceptaPagoPlazo() {
+        return sessionView.getAceptaPagoPlazo();
+    }
+
     //==========================================================================
     public void buscarCliente() {
         RestUtil rest = RestUtil
@@ -104,6 +115,8 @@ public class PedidoView implements Serializable {
             nombreCliente = (cliente.getTipoPersoneria() == 1)
                     ? cliente.getNombreCompleto()
                     : cliente.getRazonSocial();
+        } else {
+            PrimeFaces.current().executeScript("PF('dlgAddCustomer').show()");
         }
         log.info(cliente.toString());
     }
@@ -142,5 +155,23 @@ public class PedidoView implements Serializable {
     public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {
         DetalleFacturaDto detFactura = event.getObject();
         pedido.getDetalleFacturaList().add(detFactura);
+    }
+
+    public void addPaymentMethod() {
+        lstDetPago.add(detPago);
+        detPago = new DetallePago();
+    }
+
+    public BigDecimal getTotalPagos() {
+        totalPagos = BigDecimal.ZERO;
+        lstDetPago.forEach(pago -> {
+            totalPagos = totalPagos.add(pago.getMonto());
+        }
+        );
+        return totalPagos;
+    }
+    
+    public String showAddCustomerDialog(){
+        return "/app/mantto/cliente.xhtml";
     }
 }

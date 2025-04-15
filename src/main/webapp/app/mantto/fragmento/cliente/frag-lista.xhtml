@@ -1,0 +1,33 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <h:form prependId="false">
+        <div class="card">
+            <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" selectionMode="single"
+                         rowKey="#{cli.idCliente}" rowIndexVar="rowId" selection="#{clienteView.cliente}">
+                <p:ajax event="rowSelect" update="dvDatos" listener="#{clienteView.onRowSelect}"/>
+
+                <p:column headerText="Código">
+                    <p:outputLabel value="#{cli.codigo}"/>
+                </p:column>
+                <p:column headerText="NIT">
+                    <p:outputLabel value="#{cli.nit}"/>
+                </p:column>
+                <p:column headerText="NRC">
+                    <p:outputLabel value="#{cli.nrc}"/>
+                </p:column>
+                <p:column headerText="Razon Social">
+                    <p:outputLabel value="#{cli.razonSocial}" />
+                </p:column>
+                <p:column headerText="email" >
+                    <p:outputLabel value="#{cli.email}" />
+                </p:column>
+
+            </p:dataTable>
+        </div>
+    </h:form>
+</ui:component>
