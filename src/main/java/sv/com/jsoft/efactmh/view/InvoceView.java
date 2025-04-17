@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,7 +30,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @ViewScoped
 @Named
 @Slf4j
-public class PedidoView implements Serializable {
+public class InvoceView implements Serializable {
 
     @Getter
     @Setter
@@ -68,7 +69,8 @@ public class PedidoView implements Serializable {
     @Inject
     SessionView sessionView;
 
-    {
+    @PostConstruct
+    public void init() {
         fechaPedido = new Date();
         cliente = new ClienteResponse();
         pedido = new Pedido();
@@ -100,7 +102,7 @@ public class PedidoView implements Serializable {
     }
 
     //==========================================================================
-    public void buscarCliente() {
+    public void findClient() {
         RestUtil rest = RestUtil
                 .builder()
                 .clazz(ClienteResponse.class)
@@ -170,8 +172,16 @@ public class PedidoView implements Serializable {
         );
         return totalPagos;
     }
-    
-    public String showAddCustomerDialog(){
+
+    public String showAddCustomerDialog() {
         return "/app/mantto/cliente.xhtml";
+    }
+
+    public void removePaymentMethod(int index) {
+        lstDetPago.remove(index);
+    }
+
+    public void removeDetInvoce(int index) {
+        pedido.getDetalleFacturaList().remove(index);
     }
 }
