@@ -3,9 +3,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+
         <title>Detalle Factura</title>
 
         <h:outputScript name="js/prism.js" library="paradise-layout"/>
@@ -25,35 +33,34 @@
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtDescripcion" value="Descripción"/>
-                            <p:inputTextarea id="txtDescripcion" value="#{dlgDetFactura.detFactura.descripcion}" rows="2" maxlength="900" 
+                            <p:inputTextarea id="txtDescripcion" value="#{dlgDetFactura.detFactura.nombre}" rows="2" maxlength="900" 
                                              required="true"
                                              requiredMessage="Debe de ingresar una descripción del bien/servicio"/>
                         </div>
 
-                        <div class="formgrid grid w-full">
-                            <div class="field col">
-                                <p:outputLabel for="txtCantidad">Cantidad</p:outputLabel>
-                                <p:inputNumber id="txtCantidad" value="#{dlgDetFactura.detFactura.cantidad}" inputStyle="text-align: right;"
-                                               decimalPlaces="2" decimalSeparator="." thousandSeparator=","
-                                               class="w-full" 
-                                               requiredMessage="Debe de ingresar cantidad a facturar" required="true"/>
-                            </div>
-                            <div class="field col">
-                                <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
-                                <p:inputNumber id="txtPU" value="#{dlgDetFactura.detFactura.precioUni}" inputStyle="text-align: right;"
-                                               decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
-                                               class="w-full" 
-                                               requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
-                            </div>
+                        <div class="field col-12">
+                            <p:outputLabel for="txtCantidad">Cantidad</p:outputLabel>
+                            <p:inputNumber id="txtCantidad" value="#{dlgDetFactura.detFactura.cantidad}" inputStyle="text-align: right;"
+                                           decimalPlaces="2" decimalSeparator="." thousandSeparator=","
+                                           requiredMessage="Debe de ingresar cantidad a facturar" required="true"/>
+                        </div>
+                        <div class="field col-12">
+                            <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
+                            <p:inputNumber id="txtPU" value="#{dlgDetFactura.detFactura.precioUni}" inputStyle="text-align: right;"
+                                           decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
+                                           requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
                         </div>
 
                         <div class="field col-12">
                             <p><small>* son campos obligatorios</small></p>
-                            <p:spacer height="18"/>
+                            <p:spacer height="10"/>
+
+                            <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
+                                             icon="pi pi-times" action="#{dlgDetFactura.closeDgl()}" style="max-width: 110px"/>
                             <p:commandButton value="Agregar" update="dvDetFac" 
                                              process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU"
-                                             icon="pi pi-plus" action="#{dlgDetFactura.agregarItem()}" style="max-width: 150px"
-                                             validateClient="true" styleClass="rounded-button ui-button-info"/>
+                                             icon="pi pi-plus" action="#{dlgDetFactura.addItem()}" style="max-width: 110px"
+                                             validateClient="true" styleClass="ui-button-primary"/>
                         </div>
 
                     </div>

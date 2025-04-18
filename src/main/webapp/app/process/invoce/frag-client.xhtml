@@ -1,0 +1,38 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <p:outputPanel id="dvClient" style="display: #{invoceView.activeStep eq 0? 'block':'none'}">
+        <div class="ui-fluid formgrid grid" jsf:id="dvCliente">
+            <div class="field col-12" >
+                <p:outputLabel for="cboDte" value="Tipo de documento"/>
+                <p:selectOneMenu id="cboDte" value="#{invoceView.tipoDte}" required="true" requiredMessage="ES NECESARIO SELECCIONAR UN TIPO DE DTE">
+                    <f:selectItem itemLabel="SELECCIONE UN DTE" noSelectionOption="true"/>
+                    <f:selectItem itemValue="01" itemLabel="FACTURA" />
+                    <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL" />
+                    <p:ajax process="@this,cboDte" />
+                </p:selectOneMenu>
+            </div>
+            <div class="field col-12" >
+                <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
+                <p:inputMask id="txtNumDoc" value="#{invoceView.numeroDocumento}" onkeyup="nitDuiMask(this)"
+                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true">
+                    <p:ajax event="blur" listener="#{invoceView.findClient()}" update="dvCliente"/>
+                </p:inputMask>
+            </div>
+            <div class="field col-12">
+                <p:outputLabel for="nomRec" value="Nombre"/>
+                <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}"
+                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+            </div>
+        </div>
+
+        <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" 
+                         icon="pi pi-angle-left" disabled="false" />
+        <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary" update="step, dvClient, dvDetInvoce, dvDetPayment"
+                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.nextStep()}" />
+    </p:outputPanel>
+</ui:component>

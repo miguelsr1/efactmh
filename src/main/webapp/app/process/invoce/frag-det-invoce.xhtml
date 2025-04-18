@@ -1,0 +1,99 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <p:outputPanel id="dvDetInvoce" style="display: #{invoceView.activeStep eq 1 ? 'block':'none'}">
+
+        <p:commandButton value="Agregar" action="#{invoceView.showDlgDetFactura()}"
+                         process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
+                         validateClient="true" styleClass="ui-button-outlined ui-button-success">
+            <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSubTotal,lblIva,lblTotal"/>
+        </p:commandButton>
+
+        <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.pedido.detalleFacturaList}" var="item" 
+                     rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
+                     emptyMessage="No se han agregado items">
+
+            <p:column headerText="Id">
+                #{rowId + 1} 
+            </p:column>
+            <p:column headerText="Código">
+                <p:outputLabel value="#{item.codigo}" />
+            </p:column>
+            <p:column headerText="Descripción">
+                <p:outputLabel value="#{item.nombre}" />
+            </p:column>
+            <p:column headerText="Cantidad" style="text-align: right;">
+                <p:outputLabel value="#{item.cantidad}">
+                    <f:convertNumber pattern="#,##0"/>
+                </p:outputLabel>
+            </p:column>
+            <p:column headerText="Precio Unit." style="text-align: right;">
+                <p:outputLabel value="#{item.precioUni}">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </p:outputLabel>
+            </p:column>
+            <p:column headerText="Total" style="text-align: right;">
+                <p:outputLabel value="#{item.subTotal}">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </p:outputLabel>
+            </p:column>
+            <p:column headerText="Borrar" style="text-align: center;">
+                <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
+                                 action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido" process="@this">
+                    <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat" process="@this"/>
+            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" process="@this"/>
+        </p:confirmDialog>
+
+        <p:outputPanel id="invoice-content" style="margin-right: 8rem">
+            <div class="invoice">
+                <div class="invoice-summary">
+                    <div class="invoice-notes">
+                        <b></b>
+                        <div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <div class="invoice-details">
+                            <div class="invoice-label">Sub-Total</div>
+                            <div class="invoice-value">$ 
+                                <p:outputLabel id="lblSubTotal" value="#{invoceView.subTotal}">
+                                    <f:convertNumber pattern="#,##0.00"/>
+                                </p:outputLabel>
+                            </div>
+
+                            <div class="invoice-label">IVA (13%)</div>
+                            <div class="invoice-value">$ 
+                                <p:outputLabel id="lblIva" value="#{invoceView.iva}">
+                                    <f:convertNumber pattern="#,##0.00"/>
+                                </p:outputLabel>
+                            </div>
+
+                            <div class="invoice-label">Total</div>
+                            <div class="invoice-value">$ 
+                                <p:outputLabel id="lblTotal" value="#{invoceView.total}">
+                                    <f:convertNumber pattern="#,##0.00"/>
+                                </p:outputLabel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p:outputPanel>
+
+        <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" process="@this"
+                         update="step, dvClient, dvDetInvoce, dvDetPayment" icon="pi pi-angle-left" action="#{invoceView.backStep()}" />
+        <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary" update="step, dvClient, dvDetInvoce, dvDetPayment"
+                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.nextStep()}" />
+    </p:outputPanel>
+</ui:component>

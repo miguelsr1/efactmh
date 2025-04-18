@@ -13,8 +13,8 @@ import lombok.Data;
 public class DetalleFacturaDto implements Serializable {
 
     private String codigo;
+    private String nombre;
     private BigDecimal cantidad;
-    private String descripcion;
     private BigDecimal precioUni;
 
     public BigDecimal getSubTotal() {

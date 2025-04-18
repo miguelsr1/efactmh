@@ -56,7 +56,12 @@ public class InvoceView implements Serializable {
     @Getter
     private boolean existeCliente = false;
     @Getter
+    @Setter
     private String nombreCliente;
+
+    @Getter
+    @Setter
+    private Integer activeStep = 0;
 
     private Integer numeroPedido;
     private Date fechaPedido;
@@ -134,6 +139,10 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getTotal() {
+        if (pedido.getDetalleFacturaList().isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
         return pedido.getDetalleFacturaList().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -145,18 +154,19 @@ public class InvoceView implements Serializable {
                 .draggable(false)
                 .resizable(false)
                 .maximizable(false)
-                .responsive(true)
                 .modal(true)
-                .width("650px")
-                .height("400px")
+                .width("350px")
+                .height("460px")
                 .build();
 
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);
     }
 
     public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {
-        DetalleFacturaDto detFactura = event.getObject();
-        pedido.getDetalleFacturaList().add(detFactura);
+        if (event.getObject() != null) {
+            DetalleFacturaDto detFactura = event.getObject();
+            pedido.getDetalleFacturaList().add(detFactura);
+        }
     }
 
     public void addPaymentMethod() {
@@ -183,5 +193,52 @@ public class InvoceView implements Serializable {
 
     public void removeDetInvoce(int index) {
         pedido.getDetalleFacturaList().remove(index);
+    }
+
+    public void backStep() {
+        switch (activeStep) {
+            case 0:
+
+                break;
+            case 1:
+            case 2:
+                activeStep--;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void nextStep() {
+        switch (activeStep) {
+            case 0:
+
+                activeStep++;
+                break;
+            case 1:
+
+                activeStep++;
+                break;
+            case 2:
+
+                activeStep++;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void save() {
+        RestUtil rest = RestUtil
+                .builder()
+                .clazz(Pedido.class)
+                .jwtDto(securityService.getToken())
+                .endpoint("/api/invoce")
+                .build();
+        
+        pedido.setDetallePagoList(lstDetPago);
+
+        int idPedido = rest.callPersistir(pedido);
+        System.out.println("");
     }
 }

@@ -28,7 +28,11 @@ public class DlgDetFactura implements Serializable {
         detFactura = new DetalleFacturaDto();
     }
 
-    public void agregarItem() {
+    public void addItem() {
         PrimeFaces.current().dialog().closeDynamic(detFactura);
+    }
+    
+    public void closeDgl() {
+        PrimeFaces.current().dialog().closeDynamic(null);
     }
 }

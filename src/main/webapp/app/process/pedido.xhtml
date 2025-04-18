@@ -14,243 +14,44 @@
                     font-weight: bold !important;
                 }
             }
+            .total {
+                font-size: 1.1rem !important;
+                color: #3984b8;
+                font-weight: bold;
+            }
+
+            body .ui-breadcrumb {
+                background: transparent !important;
+                border: 0px solid;
+                padding: 0.5rem;
+            }
+            iframe{
+                width: 350px !important;
+            }
         </style>
     </ui:define>
 
     <ui:define name="content">   
         <h:form prependId="false">
             <div class="grid dashboard">
+                <p:breadCrumb>
+                    <p:menuitem value="Operaciones"/>
+                    <p:menuitem value="Factura"/>
+                </p:breadCrumb>
+
                 <div class="col-12">
                     <div class="card">
-                        <p:steps>
-                            <p:menuitem value="Cliente"/>
+                        <h5>Proceso de emisión de factura electrónica</h5>
+                        <p:steps id="step" widgetVar="step" activeIndex="#{invoceView.activeStep}" style="margin-bottom: 2rem;" >
+                            <p:menuitem value="Cliente" />
                             <p:menuitem value="Detalle de factura"/>
-                            <p:menuitem value="Detalle de pago"/>
+                            <p:menuitem value="Pago"/>
                         </p:steps>
+
+                        <ui:include src="invoce/frag-client.xhtml"/>
+                        <ui:include src="invoce/frag-det-invoce.xhtml"/>
+                        <ui:include src="invoce/frag-det-payment.xhtml"/>
                     </div>
-                    <p:accordionPanel widgetVar="basic" prependId="false"  >
-                        <p:tab title="1. Cliente">
-                            <div class="ui-fluid formgrid grid" jsf:id="dvCliente">
-                                <div class="field col-12" >
-                                    <p:outputLabel for="cboDte" value="Tipo de documento"/>
-                                    <p:selectOneMenu id="cboDte" value="#{invoceView.tipoDte}" required="true" requiredMessage="ES NECESARIO SELECCIONAR UN TIPO DE DTE">
-                                        <f:selectItem itemLabel="SELECCIONE UN DTE" noSelectionOption="true"/>
-                                        <f:selectItem itemValue="01" itemLabel="FACTURA" />
-                                        <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL" />
-                                        <p:ajax process="@this,cboDte" />
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="field col-12" >
-                                    <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
-                                    <p:inputMask id="txtNumDoc" value="#{invoceView.numeroDocumento}" onkeyup="nitDuiMask(this)"
-                                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true">
-                                        <p:ajax event="blur" listener="#{invoceView.findClient()}" update="dvCliente"/>
-                                    </p:inputMask>
-                                </div>
-                                <div class="field col-12">
-                                    <p:outputLabel for="nomRec" value="Nombre"/>
-                                    <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" style="display: #{invoceView.existeCliente ? 'block': 'none'}"
-                                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
-                                </div>
-                            </div>
-
-                            <p:commandButton value="Aceptar" styleClass="mr-2 rounded-button ui-button-info"  icon="pi pi-check" process="@this,cboDte,txtNumDoc,nomRec"  onclick="PF('basic').select(1)" />
-                        </p:tab>
-                        <p:tab title="2. Detalle" menuTitle="actions">
-                            <f:facet name="actions">
-                                <p:outputLabel value="Total: "/>
-                                <p:outputLabel id="total" value="#{invoceView.total}">
-                                    <f:convertNumber pattern="#,##0.00"/>
-                                </p:outputLabel>
-                            </f:facet>
-
-                            <p:commandButton value="Agregar" action="#{invoceView.showDlgDetFactura()}"
-                                             process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
-                                             validateClient="true" styleClass="rounded-button ui-button-info">
-                                <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSubTotal,lblIva,lblTotal,total"/>
-                            </p:commandButton>
-
-                            <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.pedido.detalleFacturaList}" var="item" 
-                                         rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
-                                         emptyMessage="No se han agregado items">
-
-                                <p:column headerText="Id">
-                                    #{rowId + 1} 
-                                </p:column>
-                                <p:column headerText="Código">
-                                    <p:outputLabel value="#{item.codigo}" />
-                                </p:column>
-                                <p:column headerText="Descripción">
-                                    <p:outputLabel value="#{item.descripcion}" />
-                                </p:column>
-                                <p:column headerText="Cantidad" style="text-align: right;">
-                                    <p:outputLabel value="#{item.cantidad}">
-                                        <f:convertNumber pattern="#,##0"/>
-                                    </p:outputLabel>
-                                </p:column>
-                                <p:column headerText="Precio Unit." style="text-align: right;">
-                                    <p:outputLabel value="#{item.precioUni}">
-                                        <f:convertNumber pattern="#,##0.00"/>
-                                    </p:outputLabel>
-                                </p:column>
-                                <p:column headerText="Total" style="text-align: right;">
-                                    <p:outputLabel value="#{item.subTotal}">
-                                        <f:convertNumber pattern="#,##0.00"/>
-                                    </p:outputLabel>
-                                </p:column>
-                                <p:column headerText="Borrar" style="text-align: center;">
-                                    <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
-                                                     action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido" process="@this">
-                                        <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-
-                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat" process="@this"/>
-                                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" process="@this"/>
-                            </p:confirmDialog>
-
-                            <p:outputPanel id="invoice-content" style="margin-right: 8rem">
-                                <div class="invoice">
-                                    <div class="invoice-summary">
-                                        <div class="invoice-notes">
-                                            <b></b>
-                                            <div>
-
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="invoice-details">
-                                                <div class="invoice-label">Sub-Total</div>
-                                                <div class="invoice-value">$ 
-                                                    <p:outputLabel id="lblSubTotal" value="#{invoceView.subTotal}">
-                                                        <f:convertNumber pattern="#,##0.00"/>
-                                                    </p:outputLabel>
-                                                </div>
-
-                                                <div class="invoice-label">IVA (13%)</div>
-                                                <div class="invoice-value">$ 
-                                                    <p:outputLabel id="lblIva" value="#{invoceView.iva}">
-                                                        <f:convertNumber pattern="#,##0.00"/>
-                                                    </p:outputLabel>
-                                                </div>
-
-                                                <div class="invoice-label">Total</div>
-                                                <div class="invoice-value">$ 
-                                                    <p:outputLabel id="lblTotal" value="#{invoceView.total}">
-                                                        <f:convertNumber pattern="#,##0.00"/>
-                                                    </p:outputLabel>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p:outputPanel>
-
-                            <p:commandButton value="Aceptar" styleClass="mr-2 rounded-button ui-button-success"  icon="pi pi-check"/>
-
-                        </p:tab>
-                        <p:tab title="3. Pagos">
-                            <div class="ui-fluid formgrid grid" jsf:id="dvPago">
-                                <div class="field col-12 md:col-4 sm:col-6" >
-                                    <p:outputLabel for="cboTipoPago" value="Tipo de pago"/>
-                                    <p:selectOneMenu id="cboTipoPago" value="#{invoceView.detPago.tipoPago}" required="true" requiredMessage="DEBE DE SELECCIONAR UN MÉTODO DE PAGO">
-                                        <f:selectItem itemLabel="SELECCIONE" noSelectionOption="true"/>
-                                        <f:selectItem itemValue="01" itemLabel="EFECTIVO" />
-                                        <f:selectItem itemValue="02" itemLabel="TARJETA DEBITO" />
-                                        <f:selectItem itemValue="03" itemLabel="TARJETA CREDITO" />
-                                        <f:selectItem itemValue="04" itemLabel="CHEQUE" />
-                                        <f:selectItem itemValue="05" itemLabel="TRANSFERENCIA-DEPOSITO BANCARIO" />
-                                        <p:ajax process="@this,cboTipoPago" update="txtNumRef,cboPlazo,txtPeriod"/>
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="field col-12 md:col-2 sm:col-6" >
-                                    <p:outputLabel for="txtMontoPago" value="Monto"/>
-                                    <p:inputNumber id="txtMontoPago" value="#{invoceView.detPago.monto}" inputStyle="text-align: right;"
-                                                   decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
-                                                   class="w-full" required="true" requiredMessage="EL MONTO ES UN VALOR REQUERIDO"/>
-                                </div>
-                                <div class="field col-12 md:col-2 sm:col-6" >
-                                    <p:outputLabel for="txtNumRef" value="Núm. de Referencia"/>
-                                    <p:inputText id="txtNumRef" value="#{invoceView.detPago.numeroReferencia}" 
-                                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" 
-                                                 required="#{invoceView.detPago.tipoPago ne '01'}" 
-                                                 disabled="#{invoceView.detPago.tipoPago eq '01'}"/>
-                                </div>
-                                <div class="field col-12 md:col-2 sm:col-6" style="display: #{invoceView.aceptaPagoPlazo ? 'block':'none'}" >
-                                    <p:outputLabel for="cboPlazo" value="Plazo"/>
-                                    <p:selectOneMenu id="cboPlazo" value="#{invoceView.detPago.plazo}" 
-                                                     required="#{invoceView.detPago.tipoPago eq '03'}" 
-                                                     disabled="#{invoceView.detPago.tipoPago ne '03'}"
-                                                     requiredMessage="EL PLAZO DE COMPRA AL CREDITO ES REQUERIDO">
-                                        <f:selectItem itemLabel="SELECCIONE" noSelectionOption="true"/>
-                                        <f:selectItem itemValue="01" itemLabel="DÍAS" />
-                                        <f:selectItem itemValue="02" itemLabel="MESES" />
-                                        <f:selectItem itemValue="03" itemLabel="AÑOS" />
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="field col-12 md:col-1 sm:col-6" style="display: #{invoceView.aceptaPagoPlazo ? 'block':'none'}">
-                                    <p:outputLabel for="txtPeriod" value="Periodo"/>
-                                    <p:inputNumber id="txtPeriod" value="#{invoceView.detPago.periodoPlazo}" inputStyle="text-align: right;"
-                                                   decimalPlaces="0" thousandSeparator="," maxValue="36"  class="w-full" 
-                                                   required="#{invoceView.detPago.tipoPago eq '03'}" 
-                                                   requiredMessage="EL NUMERO DE PAGOS A PLAZO ES REQUERIDO"
-                                                   disabled="#{invoceView.detPago.tipoPago ne '03'}"/>
-                                </div>
-                                <div class="field col-12 md:col-1 sm:col-6" style="align-content: end" >
-                                    <p:commandButton id="btnAdd" icon="pi pi-plus" action="#{invoceView.addPaymentMethod()}" 
-                                                     process="@this,cboTipoPago,txtMontoPago,txtNumRef,cboPlazo,txtPeriod"
-                                                     update="dvPago,tblPagos,tblPagos:lblTotal"/>
-                                </div>
-                            </div>
-
-                            <p:separator />
-
-                            <p:dataTable id="tblPagos" value="#{invoceView.lstDetPago}" var="pago" rowIndexVar="id" reflow="true" size="small"
-                                         emptyMessage="No se han agregado detalle de pagos" tableStyle="table-layout: auto;">
-                                <p:column headerText="Forma de pago">
-                                    <p:outputLabel value="#{pago.tipoPagoStr}" />
-                                </p:column>
-                                <p:column headerText="Monto" style="text-align:right">
-                                    <p:outputLabel value="#{pago.monto}">
-                                        <f:convertNumber pattern="$ ###.00"/>
-                                    </p:outputLabel>
-                                </p:column>
-                                <p:column headerText="No Referencia">
-                                    <p:outputLabel value="#{pago.numeroReferencia}" />
-                                </p:column>
-                                <p:column headerText="Plazo" visible="#{invoceView.aceptaPagoPlazo}">
-                                    <p:outputLabel value="#{pago.tipoPlazoStr}" />
-                                </p:column>
-                                <p:column headerText="Periodo" visible="#{invoceView.aceptaPagoPlazo}" style="text-align:right">
-                                    <p:outputLabel value="#{pago.periodoPlazo}" />
-                                </p:column>
-                                <p:column headerText="" style="text-align: center">
-                                    <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat" process="@this" 
-                                                     update="tblPagos" action="#{invoceView.removePaymentMethod(id)}" style="width: 22px; height: 22px"/>
-                                </p:column>
-
-                                <p:columnGroup type="footer">
-                                    <p:row>
-                                        <p:column colspan="1" style="text-align:right" footerText="Total:"/>
-                                        <p:column style="text-align: right;">
-                                            <f:facet name="footer">
-                                                <h:outputText id="lblTotal" value="#{invoceView.totalPagos}">
-                                                    <f:convertNumber type="currency" currencySymbol="$"/>
-                                                </h:outputText>
-                                            </f:facet>
-                                        </p:column>
-                                        <p:column colspan="4" style="text-align:right"/>
-                                    </p:row>
-                                </p:columnGroup>
-                            </p:dataTable>
-
-                            <p:commandButton value="Generar DTE" styleClass="mr-2 rounded-button ui-button-info"  icon="pi pi-file-export" 
-                                             process="@this,cboDte,txtNumDoc,nomRec"  onclick="PF('basic').select(1)" style="margin-top: 1rem" />
-                        </p:tab>
-                    </p:accordionPanel>
-
                 </div>
             </div>
 

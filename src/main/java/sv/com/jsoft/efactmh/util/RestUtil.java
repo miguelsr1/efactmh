@@ -196,7 +196,9 @@ public class RestUtil {
         try {
             HttpRequest.Builder httpBuilder = HttpRequest.newBuilder()
                     .uri(new URI(HOST + endpoint + (data.esNuevo() ? "" : data.getId())))
+                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
+            
             httpBuilder = data.esNuevo()
                     ? httpBuilder.POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
                     : httpBuilder.PUT(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())));
