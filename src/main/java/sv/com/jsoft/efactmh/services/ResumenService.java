@@ -2,9 +2,11 @@ package sv.com.jsoft.efactmh.services;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import sv.com.jsoft.efactmh.model.DetallePago;
 import sv.com.jsoft.efactmh.util.CantidadALetras;
 
 /**
@@ -15,8 +17,9 @@ import sv.com.jsoft.efactmh.util.CantidadALetras;
 public class ResumenService {
 
     private JSONObject jsonResumen;
+    private JSONArray jsonPagos;
 
-    public JSONObject getResumen(BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal ivaMonto) {
+    public JSONObject getResumen(BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal ivaMonto, List<DetallePago> lstPagos) {
         jsonResumen = new JSONObject();
         JSONObject jsonTributo = new JSONObject();
         JSONArray jsonTributos = new JSONArray();
@@ -26,7 +29,7 @@ public class ResumenService {
         jsonTributo.put("valor", ivaMonto.setScale(2, RoundingMode.UP));
         jsonTributos.add(jsonTributo);
 
-        jsonResumen.put("pagos", null);
+        jsonResumen.put("pagos", getPagos(lstPagos));
         jsonResumen.put("ivaRete1", 0);
         jsonResumen.put("subTotal", montoTotal);
         jsonResumen.put("tributos", jsonTributos);
@@ -50,5 +53,22 @@ public class ResumenService {
         jsonResumen.put("porcentajeDescuento", 0);
 
         return jsonResumen;
+    }
+    
+    private JSONArray getPagos(List<DetallePago> lstPagos){
+        JSONArray jsonPagos = new JSONArray();
+        
+        lstPagos.forEach(det->{
+            JSONObject jsonPago = new JSONObject();
+            jsonPago.put("codigo", det.getTipoPago());
+            jsonPago.put("montoPago", det.getMonto());
+            jsonPago.put("referencia", det.getNumeroReferencia());
+            jsonPago.put("periodo", det.getPeriodoPlazo());
+            jsonPago.put("plazo", det.getPlazo());
+            
+            jsonPagos.add(jsonPago);
+        });
+        
+        return jsonPagos;
     }
 }

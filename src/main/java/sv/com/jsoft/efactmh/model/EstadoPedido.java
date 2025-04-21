@@ -14,7 +14,7 @@ public class EstadoPedido implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer idEstadoPedido;
     private String descripcion;
-    private List<Pedido> pedidoList;
+    private List<InvoceDto> pedidoList;
 
     public EstadoPedido() {
     }

@@ -24,7 +24,7 @@ public class Cliente implements Serializable, EntityPk {
     private String razonSocial;
     private String nombreComercial;
     private Integer idMunicipio;
-    private List<Pedido> pedidoList;
+    private List<InvoceDto> pedidoList;
     private Boolean activo;
     private Integer tipoDocumento;
 

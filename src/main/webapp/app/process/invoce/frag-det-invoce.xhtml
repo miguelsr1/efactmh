@@ -13,7 +13,7 @@
             <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSubTotal,lblIva,lblTotal"/>
         </p:commandButton>
 
-        <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.pedido.detalleFacturaList}" var="item" 
+        <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.pedido.detailInvoce}" var="item" 
                      rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
                      emptyMessage="No se han agregado items">
 
@@ -32,7 +32,7 @@
                 </p:outputLabel>
             </p:column>
             <p:column headerText="Precio Unit." style="text-align: right;">
-                <p:outputLabel value="#{item.precioUni}">
+                <p:outputLabel value="#{item.precioUnitario}">
                     <f:convertNumber pattern="#,##0.00"/>
                 </p:outputLabel>
             </p:column>

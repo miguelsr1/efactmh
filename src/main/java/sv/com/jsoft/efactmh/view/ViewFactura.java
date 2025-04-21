@@ -114,7 +114,7 @@ public class ViewFactura implements Serializable {
         idFac = 101;
         JSONObject jsonDte = getDteJsonCCFE(idFac);
         System.out.println(jsonDte.toJSONString());
-        JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte);
+        JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, null);
         JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(), token, 3, "03", uuid);
         responseMh = jsonResponse.toJSONString();
     }
@@ -129,9 +129,10 @@ public class ViewFactura implements Serializable {
         JSONObject jsonEmisor = contribuyenteServices.getContribuyente("", true);
         JSONObject jsonReceptor = contribuyenteServices.getContribuyente("", false);
 
-        JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, "03", idFac, 3, "00");
-        JSONObject jsonResumen = resumenServices.getResumen(montoTotalAPagar, montoTotal, ivaMonto);
-        JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(lstDetFactura);
+        JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, "03", 0l, 3, "00");
+        JSONObject jsonResumen = resumenServices.getResumen(montoTotalAPagar, montoTotal, ivaMonto, null);
+        //esto es funcional para el tipo de dato DetFacturaDto.class
+        //JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(lstDetFactura);
 
         jsonRoot.put("emisor", jsonEmisor);
         jsonRoot.put("resumen", jsonResumen);
@@ -140,7 +141,7 @@ public class ViewFactura implements Serializable {
         jsonRoot.put("extension", null);
         jsonRoot.put("ventaTercero", null);
         jsonRoot.put("identificacion", jsonIdentificacion);
-        jsonRoot.put("cuerpoDocumento", jsonCuerpoDoc); //ARRAY
+        //jsonRoot.put("cuerpoDocumento", jsonCuerpoDoc); //ARRAY
         jsonRoot.put("otrosDocumentos", null);
         jsonRoot.put("documentoRelacionado", null);
 

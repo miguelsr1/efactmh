@@ -17,7 +17,7 @@ public class IdentificacionService {
     private final SimpleDateFormat sdTime = new SimpleDateFormat("HH:mm:ss");
     private JSONObject jsonIdentificacion;
 
-    public JSONObject getIdentificacion(String uuid, String codigoDte, Integer idFactura, Integer idVersion, String ambiente) {
+    public JSONObject getIdentificacion(String uuid, String codigoDte, Long idFactura, Integer idVersion, String ambiente) {
         jsonIdentificacion = new JSONObject();
         String numeroControl;
         numeroControl = MessageFormat.format("DTE-{0}-{1}-{2}", codigoDte, String.format("%0" + 8 + "d", 0), String.format("%0" + 15 + "d", idFactura));

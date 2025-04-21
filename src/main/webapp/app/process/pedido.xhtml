@@ -4,6 +4,8 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Nueva factura</ui:define>
@@ -28,10 +30,52 @@
             iframe{
                 width: 350px !important;
             }
+            .taskPending {
+                color: #64686A !important;
+            }
+            .taskComplete {
+                color: var(--green-500) !important;
+                font-weight: bold;
+            }
         </style>
     </ui:define>
 
-    <ui:define name="content">   
+    <ui:define name="content">
+
+        <o:socket channel="chatChannel" onmessage="recibirMensaje" />
+
+        <p:dialog header="Espere por favor" widgetVar="chatDialog" modal="false" closable="false" maximizable="false" draggable="false" visible="false">
+            <h:panelGroup id="mensajesPanel">
+                <ul class="list-none p-0 m-0 flex-grow-1" style="margin-bottom: 2rem !important;">
+                    <li class="flex align-items-center mb-3">
+                        <i class="pi pi-check-circle mr-2 #{invoceView.taskSave}"/>
+                        <span>Guardado factura</span>
+                    </li>
+                    <li class="flex align-items-center mb-3">
+                        <i class="pi pi-check-circle mr-2 #{invoceView.taskDte}"/>
+                        <span>Creando DTE</span>
+                    </li>
+                    <li class="flex align-items-center mb-3">
+                        <i class="pi pi-check-circle mr-2 #{invoceView.taskSendDte}"/>
+                        <span>Enviando DTE a MH</span>
+                    </li>
+                    <li class="flex align-items-center mb-3">
+                        <i class="pi pi-check-circle mr-2 #{invoceView.taskComplete}"/>
+                        <span>Proceso completado</span>
+                    </li>
+                </ul>
+                <p:progressBar id="progressBarIndeterminate" style="height:6px" mode="indeterminate"/>
+            </h:panelGroup>
+        </p:dialog>
+
+        <!-- JS que actualiza el contenido del diálogo cuando llega un mensaje -->
+        <script>
+            function recibirMensaje(message) {
+                console.log(message);
+                PrimeFaces.ajax.AjaxRequest.resolve('mensajesPanel').update();
+            }
+        </script>
+
         <h:form prependId="false">
             <div class="grid dashboard">
                 <p:breadCrumb>
@@ -54,11 +98,6 @@
                     </div>
                 </div>
             </div>
-
-            <p:dialog id="pnlDetalle" widgetVar="pnlDetalle" visible="false" style="max-width: 500px;" responsive="true" 
-                      draggable="false" resizable="false" maximizable="false" header="Detalle Factura" modal="true">
-
-            </p:dialog>
 
             <p:messages showSummary="true" showIcon="false">
                 <p:autoUpdate />

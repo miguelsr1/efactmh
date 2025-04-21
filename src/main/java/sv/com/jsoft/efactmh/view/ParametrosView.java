@@ -23,7 +23,7 @@ public class ParametrosView implements Serializable {
     @Inject
     SessionService securityService;
     
-    private List<ParametroDto> lstParametros;;
+    private List<ParametroDto> lstParametros;
     @Getter
     @Setter
     private ParametroDto parametroDto;

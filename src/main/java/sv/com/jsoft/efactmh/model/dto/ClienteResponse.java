@@ -8,7 +8,7 @@ import lombok.Data;
  */
 @Data
 public class ClienteResponse {
-
+    private Long idCliente;
     private String nit;
     private String nrc;
     private String codigoActividad;

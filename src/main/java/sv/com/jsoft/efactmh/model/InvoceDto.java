@@ -10,27 +10,28 @@ import lombok.Data;
  * @author migue
  */
 @Data
-public class Pedido implements Serializable, EntityPk {
+public class InvoceDto implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
-    private Integer idPedido;
+    
+    private Integer idFactura;
     private Long idCliente;
     private Long numeroFactura;
     private String codigoDte;
-    private List<DetalleFacturaDto> detalleFacturaList;
-    private List<DetallePago> detallePagoList;
+    private List<DetalleFacturaDto> detailInvoce;
+    private List<DetallePago> detailPayments;
 
-    public Pedido() {
-        detalleFacturaList = new ArrayList<>();
+    public InvoceDto() {
+        detailInvoce = new ArrayList<>();
     }
 
     @Override
     public Integer getId() {
-        return idPedido;
+        return idFactura;
     }
 
     @Override
     public boolean esNuevo() {
-        return idPedido == null;
+        return idFactura == null;
     }
 }

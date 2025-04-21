@@ -116,11 +116,17 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            return gson.fromJson(response.body(), clazz);
+            if(response.statusCode() == 201){
+                if(response.body() != null){
+                    return gson.fromJson(response.body(), clazz);
+                }
+            }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+        
+        return null;
     }
 
     public void callPutAuth() {

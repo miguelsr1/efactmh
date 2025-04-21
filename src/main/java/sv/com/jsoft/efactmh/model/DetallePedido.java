@@ -13,7 +13,7 @@ public class DetallePedido implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer idDetallePedido;
     private Boolean activo;
-    private Pedido idPedido;
+    private InvoceDto idPedido;
     private Producto idProducto;
     private Double cantidad;
 

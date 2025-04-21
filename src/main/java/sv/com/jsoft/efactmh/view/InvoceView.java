@@ -5,21 +5,33 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
+import javax.faces.push.Push;
+import javax.faces.push.PushContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.DetallePago;
-import sv.com.jsoft.efactmh.model.Pedido;
+import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
+import sv.com.jsoft.efactmh.model.dto.IdDto;
+import sv.com.jsoft.efactmh.services.ComprobanteCreditoFiscalService;
+import sv.com.jsoft.efactmh.services.ContribuyenteService;
+import sv.com.jsoft.efactmh.services.DteService;
+import sv.com.jsoft.efactmh.services.IdentificacionService;
+import sv.com.jsoft.efactmh.services.ResumenService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -32,9 +44,20 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @Slf4j
 public class InvoceView implements Serializable {
 
+    private final static ResourceBundle VARIABLES = ResourceBundle.getBundle("variables");
+
+    private BigDecimal totalPagos;
+
     @Getter
-    @Setter
-    private String tipoDte;
+    private boolean existeCliente = false;
+    @Getter
+    private String taskSave;
+    @Getter
+    private String taskDte;
+    @Getter
+    private String taskSendDte;
+    @Getter
+    private String taskComplete;
     @Getter
     @Setter
     private String numeroDocumento;
@@ -43,45 +66,76 @@ public class InvoceView implements Serializable {
     private String tipoPago;
     @Getter
     @Setter
-    private List<DetallePago> lstDetPago;
+    private String nombreCliente;
     @Getter
     @Setter
-    private DetallePago detPago;
-
-    private BigDecimal totalPagos;
+    private String mensaje = "";
+    @Getter
+    @Setter
+    private Integer activeStep = 0;
 
     @Getter
     @Setter
     private Producto producto;
     @Getter
-    private boolean existeCliente = false;
+    @Setter
+    private DetallePago detPago;
     @Getter
     @Setter
-    private String nombreCliente;
-
-    @Getter
-    @Setter
-    private Integer activeStep = 0;
+    private List<DetallePago> lstDetPago;
 
     private Integer numeroPedido;
     private Date fechaPedido;
     private ClienteResponse cliente;
-    private Pedido pedido;
+    private InvoceDto pedido;
+
+    @Inject
+    SessionView sessionView;
 
     @Inject
     SessionService securityService;
 
     @Inject
-    SessionView sessionView;
+    DteService dteServices;
+
+    @Inject
+    private ContribuyenteService contribuyenteServices;
+    @Inject
+    private IdentificacionService identificacionServices;
+    @Inject
+    private ComprobanteCreditoFiscalService comprobanteCreditoFiscalServices;
+    @Inject
+    private ResumenService resumenServices;
+    @Inject
+    private SessionService sessionService;
+
+    @Inject
+    @Push(channel = "chatChannel")
+    private PushContext push;
+
+    private BigDecimal IVA;
+    private String AMBIENTE_MH;
+    private String NIT;
+    private String PASS_PRI;
 
     @PostConstruct
     public void init() {
         fechaPedido = new Date();
         cliente = new ClienteResponse();
-        pedido = new Pedido();
+        pedido = new InvoceDto();
         numeroPedido = 0;
         lstDetPago = new ArrayList<>();
         detPago = new DetallePago();
+
+        taskSave = "taskPending";
+        taskDte = "taskPending";
+        taskSendDte = "taskPending";
+        taskComplete = "taskPending";
+
+        IVA = new BigDecimal(VARIABLES.getString("mh.iva")).divide(new BigDecimal(100));
+        AMBIENTE_MH = sessionService.getParametroDto().getAmbiente();
+        NIT = sessionService.getParametroDto().getUserJwt();
+        PASS_PRI = sessionService.getParametroDto().getPasswordPrivado();
     }
 
     //==========================================================================
@@ -97,13 +151,43 @@ public class InvoceView implements Serializable {
         return cliente;
     }
 
-    public Pedido getPedido() {
+    public InvoceDto getPedido() {
         return pedido;
     }
 
     //metodo que valida si el establecimiento permite pago a plazo en modalida credito
     public boolean getAceptaPagoPlazo() {
         return sessionView.getAceptaPagoPlazo();
+    }
+
+    int var = 0;
+
+    public void enviar() throws InterruptedException {
+        push.send("ok");
+        switch (var) {
+            case 0:
+                Thread.sleep(2000);
+                taskSave = "taskComplete";
+                push.send("ok");
+                break;
+            case 1:
+                taskDte = "taskComplete";
+                push.send("ok");
+                break;
+            case 2:
+                taskSendDte = "taskComplete";
+                push.send("ok");
+                break;
+            case 3:
+                taskComplete = "taskComplete";
+                push.send("ok");
+                break;
+            default:
+                break;
+        }
+        var++;
+
+        mensaje = "";
     }
 
     //==========================================================================
@@ -122,6 +206,7 @@ public class InvoceView implements Serializable {
             nombreCliente = (cliente.getTipoPersoneria() == 1)
                     ? cliente.getNombreCompleto()
                     : cliente.getRazonSocial();
+            pedido.setIdCliente(cliente.getIdCliente());
         } else {
             PrimeFaces.current().executeScript("PF('dlgAddCustomer').show()");
         }
@@ -129,7 +214,7 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getSubTotal() {
-        return pedido.getDetalleFacturaList().stream()
+        return pedido.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -139,11 +224,11 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getTotal() {
-        if (pedido.getDetalleFacturaList().isEmpty()) {
+        if (pedido.getDetailInvoce().isEmpty()) {
             return BigDecimal.ZERO;
         }
 
-        return pedido.getDetalleFacturaList().stream()
+        return pedido.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -165,7 +250,7 @@ public class InvoceView implements Serializable {
     public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {
         if (event.getObject() != null) {
             DetalleFacturaDto detFactura = event.getObject();
-            pedido.getDetalleFacturaList().add(detFactura);
+            pedido.getDetailInvoce().add(detFactura);
         }
     }
 
@@ -192,7 +277,7 @@ public class InvoceView implements Serializable {
     }
 
     public void removeDetInvoce(int index) {
-        pedido.getDetalleFacturaList().remove(index);
+        pedido.getDetailInvoce().remove(index);
     }
 
     public void backStep() {
@@ -227,18 +312,78 @@ public class InvoceView implements Serializable {
                 break;
         }
     }
+    
+    private String uuid;
+    private Long idFac;
 
     public void save() {
+        pedido.setDetailPayments(lstDetPago);
+
+        push.send("ok");
+
         RestUtil rest = RestUtil
                 .builder()
-                .clazz(Pedido.class)
+                .clazz(IdDto.class)
                 .jwtDto(securityService.getToken())
-                .endpoint("/api/invoce")
-                .build();
-        
-        pedido.setDetallePagoList(lstDetPago);
+                .body(pedido)
+                .endpoint("/api/invoce").build();
 
-        int idPedido = rest.callPersistir(pedido);
-        System.out.println("");
+        IdDto newInvoce = (IdDto) rest.callPostAuth();
+        idFac = newInvoce.getId();
+
+        taskSave = "taskComplete";
+
+        mensaje = "Se almacena factura e inicia emision de DTE";
+        push.send(mensaje);
+
+        taskDte = "taskComplete";
+        mensaje = "";
+
+        JSONObject jsonDte = getDteJson();
+
+        log.info(jsonDte.toJSONString());
+        
+        uuid = UUID.randomUUID().toString().toUpperCase();
+
+        JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, sessionService.getParametroDto());
+        JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(),
+                securityService.getToken().getAccessToken(),
+                3,
+                pedido.getCodigoDte(),
+                uuid);
+
+        log.info(jsonResponse.toJSONString());
+    }
+
+    private void enviar(String mensaje) {
+        push.send(mensaje); // Notifica al cliente vía WebSocket
+    }
+
+    private JSONObject getDteJson() {
+        BigDecimal montoTotal = getTotal();
+        BigDecimal ivaMonto = montoTotal.multiply(IVA);
+        BigDecimal montoTotalAPagar = montoTotal.add(ivaMonto);
+
+        JSONObject jsonRoot = new JSONObject();
+
+        JSONObject jsonEmisor = contribuyenteServices.getContribuyente("", true);
+        JSONObject jsonReceptor = contribuyenteServices.getContribuyente("", false);
+
+        JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, pedido.getCodigoDte(), idFac, 3, "00");
+        JSONObject jsonResumen = resumenServices.getResumen(montoTotalAPagar, montoTotal, ivaMonto, pedido.getDetailPayments());
+        JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(pedido.getDetailInvoce());
+
+        jsonRoot.put("emisor", jsonEmisor);
+        jsonRoot.put("resumen", jsonResumen);
+        jsonRoot.put("apendice", null);
+        jsonRoot.put("receptor", jsonReceptor);
+        jsonRoot.put("extension", null);
+        jsonRoot.put("ventaTercero", null);
+        jsonRoot.put("identificacion", jsonIdentificacion);
+        jsonRoot.put("cuerpoDocumento", jsonCuerpoDoc); //ARRAY
+        jsonRoot.put("otrosDocumentos", null);
+        jsonRoot.put("documentoRelacionado", null);
+
+        return jsonRoot;
     }
 }

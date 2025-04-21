@@ -18,7 +18,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import sv.com.jsoft.efactmh.model.DetFacturaDto;
+import sv.com.jsoft.efactmh.model.dto.ParametroDto;
 import sv.com.jsoft.efactmh.view.ViewFactura;
 
 /**
@@ -36,15 +36,15 @@ public class DteService {
      * @param jsonDte
      * @return
      */
-    public JSONObject getFirmarDocumento(JSONObject jsonDte) {
+    public JSONObject getFirmarDocumento(JSONObject jsonDte, ParametroDto parametroDto) {
         try {
             JSONParser parser = new JSONParser();
 
             JSONObject jsonFirmador = new JSONObject();
 
-            jsonFirmador.put("nit", "08011403460017");
+            jsonFirmador.put("nit", parametroDto.getUserJwt());
             jsonFirmador.put("activo", true);
-            jsonFirmador.put("passwordPri", VARIABLES.getString("pass.pri"));
+            jsonFirmador.put("passwordPri", parametroDto.getPasswordPrivado());
             jsonFirmador.put("dteJson", jsonDte);
 
             HttpRequest request = HttpRequest.newBuilder()

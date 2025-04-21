@@ -14,7 +14,7 @@ public class DetallePago {
     private BigDecimal monto;
     private String numeroReferencia;
     private String plazo;
-    private int periodoPlazo;
+    private Integer periodoPlazo;
     
     public String getTipoPagoStr(){
         if(tipoPago == null){

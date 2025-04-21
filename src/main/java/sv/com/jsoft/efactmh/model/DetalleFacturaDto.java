@@ -15,9 +15,9 @@ public class DetalleFacturaDto implements Serializable {
     private String codigo;
     private String nombre;
     private BigDecimal cantidad;
-    private BigDecimal precioUni;
+    private BigDecimal precioUnitario;
 
     public BigDecimal getSubTotal() {
-        return cantidad.multiply(precioUni).setScale(2, RoundingMode.HALF_UP);
+        return cantidad.multiply(precioUnitario).setScale(2, RoundingMode.HALF_UP);
     }
 }

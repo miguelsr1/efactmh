@@ -6,6 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import sv.com.jsoft.efactmh.model.DetFacturaDto;
+import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 
 /**
  *
@@ -16,7 +17,7 @@ public class ComprobanteCreditoFiscalService {
 
     private int count;
 
-    public JSONArray getCuerpoDocumento(List<DetFacturaDto> lstDetFactura) {
+    public JSONArray getCuerpoDocumento(List<DetalleFacturaDto> lstDetFactura) {
         count = 1;
 
         JSONArray jsonCuerpoDoc = new JSONArray();
@@ -37,7 +38,7 @@ public class ComprobanteCreditoFiscalService {
             jsonDoc.put("codTributo", null);
             jsonDoc.put("montoDescu", 0);
             jsonDoc.put("ventaNoSuj", 0);
-            jsonDoc.put("descripcion", detFac.getProducto());
+            jsonDoc.put("descripcion", detFac.getNombre());
             jsonDoc.put("ventaExenta", 0);
             jsonDoc.put("ventaGravada", detFac.getCantidad().multiply(detFac.getPrecioUnitario()).setScale(2, RoundingMode.UP));
             jsonDoc.put("numeroDocumento", null);
