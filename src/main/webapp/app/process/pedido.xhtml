@@ -38,43 +38,56 @@
                 font-weight: bold;
             }
         </style>
+        <!-- JS que actualiza el contenido del diálogo cuando llega un mensaje -->
+        <script>
+            function recibirMensaje(message) {
+                console.log('Mensaje recibido Omnifaces o:socket:', message);
+                ejecutarGrowl([{name: 'data', value: message}]);
+            }
+        </script>
     </ui:define>
 
     <ui:define name="content">
 
-        <o:socket channel="chatChannel" onmessage="recibirMensaje" />
+        <h:form prependId="false">
+            <o:socket channel="chatChannel" 
+                      onmessage="recibirMensaje"
+                      scope="view"/>
 
-        <p:dialog header="Espere por favor" widgetVar="chatDialog" modal="false" closable="false" maximizable="false" draggable="false" visible="false">
-            <h:panelGroup id="mensajesPanel">
-                <ul class="list-none p-0 m-0 flex-grow-1" style="margin-bottom: 2rem !important;">
-                    <li class="flex align-items-center mb-3">
-                        <i class="pi pi-check-circle mr-2 #{invoceView.taskSave}"/>
-                        <span>Guardado factura</span>
-                    </li>
-                    <li class="flex align-items-center mb-3">
-                        <i class="pi pi-check-circle mr-2 #{invoceView.taskDte}"/>
-                        <span>Creando DTE</span>
-                    </li>
-                    <li class="flex align-items-center mb-3">
-                        <i class="pi pi-check-circle mr-2 #{invoceView.taskSendDte}"/>
-                        <span>Enviando DTE a MH</span>
-                    </li>
-                    <li class="flex align-items-center mb-3">
-                        <i class="pi pi-check-circle mr-2 #{invoceView.taskComplete}"/>
-                        <span>Proceso completado</span>
-                    </li>
-                </ul>
-                <p:progressBar id="progressBarIndeterminate" style="height:6px" mode="indeterminate"/>
-            </h:panelGroup>
-        </p:dialog>
+            <p:remoteCommand name="ejecutarGrowl" 
+                             actionListener="#{invoceView.showActiveStep()}" 
+                             update="mensajesPanel"/>
 
-        <!-- JS que actualiza el contenido del diálogo cuando llega un mensaje -->
-        <script>
-            function recibirMensaje(message) {
-                console.log(message);
-                PrimeFaces.ajax.AjaxRequest.resolve('mensajesPanel').update();
-            }
-        </script>
+            <p:dialog header="Espere por favor" widgetVar="chatDialog" modal="false" closable="false" maximizable="false" draggable="false">
+                <div jsf:id="mensajesPanel" style="text-align: center;">
+                    <p:outputLabel >
+                        <ul class="list-none p-0 m-0 flex-grow-1" style="margin-bottom: 2rem !important;">
+                            <li class="flex align-items-center mb-3">
+                                <i class="pi pi-check-circle mr-2 #{invoceView.taskSave}"/>
+                                <span style="#{invoceView.fontWeightSave}">Guardado factura</span>
+                            </li>
+                            <li class="flex align-items-center mb-3">
+                                <i class="pi pi-check-circle mr-2 #{invoceView.taskDte}"/>
+                                <span style="#{invoceView.fontWeightDte}">Creando DTE</span>
+                            </li>
+                            <li class="flex align-items-center mb-3">
+                                <i class="pi pi-check-circle mr-2 #{invoceView.taskSendDte}"/>
+                                <span style="#{invoceView.fontWeightSendDte}">Enviando DTE a MH</span>
+                            </li>
+                            <li class="flex align-items-center mb-3">
+                                <i class="pi pi-check-circle mr-2 #{invoceView.taskComplete}"/>
+                                <span style="#{invoceView.fontWeightComplete}">Proceso completado</span>
+                            </li>
+                        </ul>
+                    </p:outputLabel>
+                    <p:progressBar id="progressBarIndeterminate" value="#{invoceView.advance}" style="height:6px; margin-bottom: 1rem" />
+                    <p:commandButton value="Aceptar" onclick="PF('chatDialog').hide();" update="mensajesPanel"
+                                     action="#{invoceView.clearStatus}" process="@this"
+                                     disabled="#{invoceView.advance ne 100}"/>
+                </div>
+            </p:dialog>
+        </h:form>
+
 
         <h:form prependId="false">
             <div class="grid dashboard">

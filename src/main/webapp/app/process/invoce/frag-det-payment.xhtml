@@ -116,6 +116,7 @@
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" process="@this"
                          update="step, dvClient, dvDetInvoce, dvDetPayment" icon="pi pi-angle-left" action="#{invoceView.backStep()}" />
         <p:commandButton value="Generar DTE" styleClass="mr-2 ui-button-info"  icon="pi pi-file-export"
-                         process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.save()}"  style="margin-top: 1rem" />
+                         process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.save()}" 
+                         onclick="PF('chatDialog').show()" style="margin-top: 1rem" />
     </p:outputPanel>
 </ui:component>

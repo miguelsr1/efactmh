@@ -7,9 +7,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.push.Push;
-import javax.faces.push.PushContext;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,6 +19,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.omnifaces.cdi.Push;
+import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
@@ -50,6 +53,7 @@ public class InvoceView implements Serializable {
 
     @Getter
     private boolean existeCliente = false;
+    private int var = 1;
     @Getter
     private String taskSave;
     @Getter
@@ -58,6 +62,14 @@ public class InvoceView implements Serializable {
     private String taskSendDte;
     @Getter
     private String taskComplete;
+    @Getter
+    private String fontWeightSave;
+    @Getter
+    private String fontWeightDte;
+    @Getter
+    private String fontWeightSendDte;
+    @Getter
+    private String fontWeightComplete;
     @Getter
     @Setter
     private String numeroDocumento;
@@ -73,6 +85,8 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private Integer activeStep = 0;
+    @Getter
+    private Integer advance = 0;
 
     @Getter
     @Setter
@@ -132,6 +146,11 @@ public class InvoceView implements Serializable {
         taskSendDte = "taskPending";
         taskComplete = "taskPending";
 
+        fontWeightSave = "";
+        fontWeightDte = "";
+        fontWeightSendDte = "";
+        fontWeightComplete = "";
+
         IVA = new BigDecimal(VARIABLES.getString("mh.iva")).divide(new BigDecimal(100));
         AMBIENTE_MH = sessionService.getParametroDto().getAmbiente();
         NIT = sessionService.getParametroDto().getUserJwt();
@@ -158,36 +177,6 @@ public class InvoceView implements Serializable {
     //metodo que valida si el establecimiento permite pago a plazo en modalida credito
     public boolean getAceptaPagoPlazo() {
         return sessionView.getAceptaPagoPlazo();
-    }
-
-    int var = 0;
-
-    public void enviar() throws InterruptedException {
-        push.send("ok");
-        switch (var) {
-            case 0:
-                Thread.sleep(2000);
-                taskSave = "taskComplete";
-                push.send("ok");
-                break;
-            case 1:
-                taskDte = "taskComplete";
-                push.send("ok");
-                break;
-            case 2:
-                taskSendDte = "taskComplete";
-                push.send("ok");
-                break;
-            case 3:
-                taskComplete = "taskComplete";
-                push.send("ok");
-                break;
-            default:
-                break;
-        }
-        var++;
-
-        mensaje = "";
     }
 
     //==========================================================================
@@ -312,47 +301,64 @@ public class InvoceView implements Serializable {
                 break;
         }
     }
-    
+
     private String uuid;
     private Long idFac;
 
     public void save() {
-        pedido.setDetailPayments(lstDetPago);
-
-        push.send("ok");
-
-        RestUtil rest = RestUtil
-                .builder()
-                .clazz(IdDto.class)
-                .jwtDto(securityService.getToken())
-                .body(pedido)
-                .endpoint("/api/invoce").build();
-
-        IdDto newInvoce = (IdDto) rest.callPostAuth();
-        idFac = newInvoce.getId();
-
-        taskSave = "taskComplete";
-
-        mensaje = "Se almacena factura e inicia emision de DTE";
-        push.send(mensaje);
-
-        taskDte = "taskComplete";
-        mensaje = "";
-
-        JSONObject jsonDte = getDteJson();
-
-        log.info(jsonDte.toJSONString());
+        clearStatus();
         
-        uuid = UUID.randomUUID().toString().toUpperCase();
-
-        JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, sessionService.getParametroDto());
-        JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(),
-                securityService.getToken().getAccessToken(),
-                3,
-                pedido.getCodigoDte(),
-                uuid);
-
-        log.info(jsonResponse.toJSONString());
+        try {
+            pedido.setDetailPayments(lstDetPago);
+            
+            RestUtil rest = RestUtil
+                    .builder()
+                    .clazz(IdDto.class)
+                    .jwtDto(securityService.getToken())
+                    .body(pedido)
+                    .endpoint("/api/invoce").build();
+            
+            IdDto newInvoce = (IdDto) rest.callPostAuth();
+            idFac = newInvoce.getId();
+            
+            push.send("" + var);
+            var++;
+            advance += 25;
+            Thread.sleep(1000);
+                        
+            
+            JSONObject jsonDte = getDteJson();
+            
+            push.send("" + var);
+            var++;
+            advance += 25;
+            Thread.sleep(1000);
+            
+            log.info(jsonDte.toJSONString());
+            uuid = UUID.randomUUID().toString().toUpperCase();
+            
+            JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, sessionService.getParametroDto());
+            
+            push.send("" + var);
+            var++;
+            advance += 25;
+            Thread.sleep(1000);
+            
+            JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(),
+                    securityService.getToken().getAccessToken(),
+                    3,
+                    pedido.getCodigoDte(),
+                    uuid);
+            
+            push.send("" + var);
+            var++;
+            advance += 25;
+            Thread.sleep(1000);
+            
+            log.info(jsonResponse.toJSONString());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(InvoceView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void enviar(String mensaje) {
@@ -385,5 +391,71 @@ public class InvoceView implements Serializable {
         jsonRoot.put("documentoRelacionado", null);
 
         return jsonRoot;
+    }
+
+    public void enviar() {
+        try {
+            push.send("" + var);
+            var++;
+            advance = 25;
+            Thread.sleep(2000);
+            push.send("" + var);
+            var++;
+            advance = 50;
+            Thread.sleep(2000);
+            push.send("" + var);
+            var++;
+            advance = 75;
+            Thread.sleep(2000);
+            push.send("" + var);
+            var++;
+            advance = 100;
+        } catch (InterruptedException ex) {
+            log.error("error enviarMensaje", ex);
+        }
+
+    }
+
+    public void showActiveStep() {
+        // Obtener el mensaje recibido del socket
+        String message = FacesContext.getCurrentInstance()
+                .getExternalContext()
+                .getRequestParameterMap()
+                .get("data");
+
+        switch (message) {
+            case "1":
+                taskSave = "taskComplete";
+                fontWeightSave = "font-weight: bold";
+                break;
+            case "2":
+                taskDte = "taskComplete";
+                fontWeightDte = "font-weight: bold;";
+                break;
+            case "3":
+                taskSendDte = "taskComplete";
+                fontWeightSendDte = "font-weight: bold;";
+                break;
+            case "4":
+                taskComplete = "taskComplete";
+                fontWeightComplete = "font-weight: bold;";
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void clearStatus() {
+        taskSave = "taskPending";
+        taskDte = "taskPending";
+        taskSendDte = "taskPending";
+        taskComplete = "taskPending";
+
+        fontWeightSave = "";
+        fontWeightDte = "";
+        fontWeightSendDte = "";
+        fontWeightComplete = "";
+
+        var = 1;
     }
 }

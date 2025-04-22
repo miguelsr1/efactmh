@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Nueva factura</ui:define>
+    <ui:define name="head">
+        <style>
+            @media (max-width: 640px) {
+                .ui-datatable-reflow .ui-datatable-data td[role="gridcell"] .ui-column-title {
+                    font-weight: bold !important;
+                }
+            }
+            .total {
+                font-size: 1.1rem !important;
+                color: #3984b8;
+                font-weight: bold;
+            }
+
+            body .ui-breadcrumb {
+                background: transparent !important;
+                border: 0px solid;
+                padding: 0.5rem;
+            }
+            iframe{
+                width: 350px !important;
+            }
+            .taskPending {
+                color: #64686A !important;
+            }
+            .taskComplete {
+                color: var(--green-500) !important;
+                font-weight: bold;
+            }
+        </style>
+
+        <script>
+            function handlePushNotification(message) {
+                console.log('Mensaje recibido Omnifaces o:socket:', message);
+                ejecutarGrowl([{name: 'data', value: message}]);
+            }
+        </script>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false">
+
+
+            <p:commandButton value="Test o:socket" action="#{testOmnifacesPushView.enviarMensajePush()}" async="true" onclick="PF('dlgMens').show()"/>
+
+            <o:socket channel="notificaciones" 
+                      onmessage="handlePushNotification" 
+                      scope="view"/>
+
+            <p:remoteCommand name="ejecutarGrowl" 
+                             actionListener="#{testOmnifacesPushView.mostrarMensajeOS()}" 
+                             update="growl"/>
+
+            <p:dialog widgetVar="dlgMens" width="150" height="150">
+                <p:outputPanel>
+                    <p:outputLabel  id="growl" value="#{testOmnifacesPushView.texto}"/>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import java.io.Serializable;
 import java.util.Base64;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import lombok.Getter;
