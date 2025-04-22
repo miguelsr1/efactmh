@@ -17,7 +17,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
@@ -30,11 +29,7 @@ import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
-import sv.com.jsoft.efactmh.services.ComprobanteCreditoFiscalService;
-import sv.com.jsoft.efactmh.services.ContribuyenteService;
 import sv.com.jsoft.efactmh.services.DteService;
-import sv.com.jsoft.efactmh.services.IdentificacionService;
-import sv.com.jsoft.efactmh.services.ResumenService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -113,24 +108,11 @@ public class InvoceView implements Serializable {
     DteService dteServices;
 
     @Inject
-    private ContribuyenteService contribuyenteServices;
-    @Inject
-    private IdentificacionService identificacionServices;
-    @Inject
-    private ComprobanteCreditoFiscalService comprobanteCreditoFiscalServices;
-    @Inject
-    private ResumenService resumenServices;
-    @Inject
     private SessionService sessionService;
 
     @Inject
     @Push(channel = "chatChannel")
     private PushContext push;
-
-    private BigDecimal IVA;
-    private String AMBIENTE_MH;
-    private String NIT;
-    private String PASS_PRI;
 
     @PostConstruct
     public void init() {
@@ -150,11 +132,6 @@ public class InvoceView implements Serializable {
         fontWeightDte = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
-
-        IVA = new BigDecimal(VARIABLES.getString("mh.iva")).divide(new BigDecimal(100));
-        AMBIENTE_MH = sessionService.getParametroDto().getAmbiente();
-        NIT = sessionService.getParametroDto().getUserJwt();
-        PASS_PRI = sessionService.getParametroDto().getPasswordPrivado();
     }
 
     //==========================================================================
@@ -286,15 +263,12 @@ public class InvoceView implements Serializable {
     public void nextStep() {
         switch (activeStep) {
             case 0:
-
                 activeStep++;
                 break;
             case 1:
-
                 activeStep++;
                 break;
             case 2:
-
                 activeStep++;
                 break;
             default:
@@ -307,90 +281,56 @@ public class InvoceView implements Serializable {
 
     public void save() {
         clearStatus();
-        
+
         try {
             pedido.setDetailPayments(lstDetPago);
-            
+
             RestUtil rest = RestUtil
                     .builder()
                     .clazz(IdDto.class)
                     .jwtDto(securityService.getToken())
                     .body(pedido)
                     .endpoint("/api/invoce").build();
-            
+
             IdDto newInvoce = (IdDto) rest.callPostAuth();
             idFac = newInvoce.getId();
-            
-            push.send("" + var);
-            var++;
-            advance += 25;
-            Thread.sleep(1000);
-                        
-            
-            JSONObject jsonDte = getDteJson();
-            
-            push.send("" + var);
-            var++;
-            advance += 25;
-            Thread.sleep(1000);
-            
-            log.info(jsonDte.toJSONString());
-            uuid = UUID.randomUUID().toString().toUpperCase();
-            
+
+            pedido.setIdFactura(idFac);
+
+            //advance 25%
+            addProgressAvance();
+
+            JSONObject jsonDte = dteServices.getDteJson(pedido, cliente);
+
+            //advance 50%
+            addProgressAvance();
+
+            log.info("DTE: " + jsonDte.toJSONString());
+
             JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, sessionService.getParametroDto());
-            
-            push.send("" + var);
-            var++;
-            advance += 25;
-            Thread.sleep(1000);
-            
+
+            //advance 75%
+            addProgressAvance();
+
             JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(),
                     securityService.getToken().getAccessToken(),
-                    3,
                     pedido.getCodigoDte(),
-                    uuid);
-            
-            push.send("" + var);
-            var++;
-            advance += 25;
-            Thread.sleep(1000);
-            
+                    ((JSONObject) jsonDte.get("identificacion")).get("codigoGeneracion").toString());
+
+            //advance 100%
+            addProgressAvance();
+
             log.info(jsonResponse.toJSONString());
         } catch (InterruptedException ex) {
             Logger.getLogger(InvoceView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void enviar(String mensaje) {
-        push.send(mensaje); // Notifica al cliente vía WebSocket
-    }
-
-    private JSONObject getDteJson() {
-        BigDecimal montoTotal = getTotal();
-        BigDecimal ivaMonto = montoTotal.multiply(IVA);
-        BigDecimal montoTotalAPagar = montoTotal.add(ivaMonto);
-
-        JSONObject jsonRoot = new JSONObject();
-
-        JSONObject jsonEmisor = contribuyenteServices.getContribuyente("", true);
-        JSONObject jsonReceptor = contribuyenteServices.getContribuyente("", false);
-
-        JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, pedido.getCodigoDte(), idFac, 3, "00");
-        JSONObject jsonResumen = resumenServices.getResumen(montoTotalAPagar, montoTotal, ivaMonto, pedido.getDetailPayments());
-        JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(pedido.getDetailInvoce());
-
-        jsonRoot.put("emisor", jsonEmisor);
-        jsonRoot.put("resumen", jsonResumen);
-        jsonRoot.put("apendice", null);
-        jsonRoot.put("receptor", jsonReceptor);
-        jsonRoot.put("extension", null);
-        jsonRoot.put("ventaTercero", null);
-        jsonRoot.put("identificacion", jsonIdentificacion);
-        jsonRoot.put("cuerpoDocumento", jsonCuerpoDoc); //ARRAY
-        jsonRoot.put("otrosDocumentos", null);
-        jsonRoot.put("documentoRelacionado", null);
-
-        return jsonRoot;
+    private void addProgressAvance() throws InterruptedException {
+        push.send("" + var);
+        var++;
+        advance += 25;
+        Thread.sleep(1000);
     }
 
     public void enviar() {

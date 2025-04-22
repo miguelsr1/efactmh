@@ -6,6 +6,6 @@ package sv.com.jsoft.efactmh.model;
  */
 public interface EntityPk {
 
-    public Integer getId();
+    public Long getId();
     public boolean esNuevo();
 }

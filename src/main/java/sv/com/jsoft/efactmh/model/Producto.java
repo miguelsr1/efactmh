@@ -1,7 +1,6 @@
 package sv.com.jsoft.efactmh.model;
 
 import java.io.Serializable;
-import java.util.List;
 import lombok.Data;
 
 /**
@@ -12,7 +11,7 @@ import lombok.Data;
 public class Producto implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
-    private Integer idProducto;
+    private Long idProducto;
     private String codigo;
     private String nombre;
     private Double precioUnitario;
@@ -33,7 +32,7 @@ public class Producto implements Serializable, EntityPk {
     }
 
     @Override
-    public Integer getId() {
+    public Long getId() {
         return idProducto;
     }
 

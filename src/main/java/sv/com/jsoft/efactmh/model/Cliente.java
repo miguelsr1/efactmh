@@ -12,7 +12,7 @@ import lombok.Data;
 public class Cliente implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
-    private Integer idCliente;
+    private Long idCliente;
     private String codigo;
     private String nit;
     private String nrc;
@@ -34,7 +34,7 @@ public class Cliente implements Serializable, EntityPk {
     }
 
     @Override
-    public Integer getId() {
+    public Long getId() {
         return idCliente;
     }
 

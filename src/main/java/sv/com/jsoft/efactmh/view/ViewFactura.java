@@ -115,7 +115,7 @@ public class ViewFactura implements Serializable {
         JSONObject jsonDte = getDteJsonCCFE(idFac);
         System.out.println(jsonDte.toJSONString());
         JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, null);
-        JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(), token, 3, "03", uuid);
+        JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(), token, "03", uuid);
         responseMh = jsonResponse.toJSONString();
     }
 
@@ -126,8 +126,8 @@ public class ViewFactura implements Serializable {
 
         JSONObject jsonRoot = new JSONObject();
 
-        JSONObject jsonEmisor = contribuyenteServices.getContribuyente("", true);
-        JSONObject jsonReceptor = contribuyenteServices.getContribuyente("", false);
+        JSONObject jsonEmisor = null; // contribuyenteServices.getContribuyente("", true);
+        JSONObject jsonReceptor = null; //contribuyenteServices.getContribuyente("",  false);
 
         JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, "03", 0l, 3, "00");
         JSONObject jsonResumen = resumenServices.getResumen(montoTotalAPagar, montoTotal, ivaMonto, null);

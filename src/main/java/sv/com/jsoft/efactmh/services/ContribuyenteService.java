@@ -2,6 +2,7 @@ package sv.com.jsoft.efactmh.services;
 
 import javax.enterprise.context.ApplicationScoped;
 import org.json.simple.JSONObject;
+import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 
 /**
  *
@@ -20,10 +21,10 @@ public class ContribuyenteService {
         jsonDireccion.put("municipio", "05");
         jsonDireccion.put("complemento", "Barrio el centro, calle principal #5, Olocuilta, La Paz");
 
-        jsonEmisor.put("nit", "08011403460017");
+        jsonEmisor.put("nit", "06141204841181W");
         jsonEmisor.put("nrc", "91669");
-        jsonEmisor.put("correo", "stj.olocuilta@gmail.com");
-        jsonEmisor.put("nombre", "AGUILAR DE ARTIGA, MARIA JULIA");
+        jsonEmisor.put("correo", "miguelsr1@gmail.com");
+        jsonEmisor.put("nombre", "MIGUEL ISAAC SANCHEZ RAMOS");
         jsonEmisor.put("telefono", "23306008");
         jsonEmisor.put("direccion", jsonDireccion);
         jsonEmisor.put("codEstable", "01");
@@ -38,30 +39,30 @@ public class ContribuyenteService {
         return jsonEmisor;
     }
 
-    private JSONObject getJsonReceptor(String nit) {
+    private JSONObject getJsonReceptor(ClienteResponse client) {
         JSONObject jsonDireccion = new JSONObject();
-        jsonDireccion.put("departamento", "06");
-        jsonDireccion.put("municipio", "14");
-        jsonDireccion.put("complemento", "ENTRE LA 83 Y LA 85 AV.");
+        jsonDireccion.put("departamento", client.getDepartamento());
+        jsonDireccion.put("municipio", client.getMunicipio());
+        jsonDireccion.put("complemento", client.getDireccion());
 
-        jsonReceptor.put("nit", "06140107161013");
-        jsonReceptor.put("nrc", "2514445");
-        jsonReceptor.put("nombre", "TEC LOGISTICA, S.A DE C.V");
-        jsonReceptor.put("codActividad", "52240");
+        jsonReceptor.put("nit", client.getNit());
+        jsonReceptor.put("nrc", client.getNrc());
+        jsonReceptor.put("nombre", client.getNombreCompleto());
+        jsonReceptor.put("codActividad", client.getCodigoActividad());
         jsonReceptor.put("descActividad", "MANIPULACION DE CARGA");
-        jsonReceptor.put("nombreComercial", null);
+        jsonReceptor.put("nombreComercial", client.getNombreComercial());
         jsonReceptor.put("direccion", jsonDireccion);
-        jsonReceptor.put("telefono", null);
-        jsonReceptor.put("correo", "stj.olocuilta@gmail.com");
+        jsonReceptor.put("telefono", client.getTelefono());
+        jsonReceptor.put("correo", client.getCorreo());
 
         return jsonReceptor;
     }
 
-    public JSONObject getContribuyente(String nit, boolean isEmisor) {
+    public JSONObject getContribuyente(String nit, ClienteResponse client, boolean isEmisor) {
         if (isEmisor) {
             return getJsonEmisor(nit);
         } else {
-            return getJsonReceptor(nit);
+            return getJsonReceptor(client);
         }
     }
     

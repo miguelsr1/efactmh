@@ -14,7 +14,7 @@ public class InvoceDto implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
     
-    private Integer idFactura;
+    private Long idFactura;
     private Long idCliente;
     private Long numeroFactura;
     private String codigoDte;
@@ -26,7 +26,7 @@ public class InvoceDto implements Serializable, EntityPk {
     }
 
     @Override
-    public Integer getId() {
+    public Long getId() {
         return idFactura;
     }
 
