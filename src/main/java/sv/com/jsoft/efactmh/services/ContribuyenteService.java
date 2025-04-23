@@ -2,7 +2,9 @@ package sv.com.jsoft.efactmh.services;
 
 import javax.enterprise.context.ApplicationScoped;
 import org.json.simple.JSONObject;
-import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
+import sv.com.jsoft.efactmh.model.dto.JwtDto;
+import sv.com.jsoft.efactmh.model.dto.ReceptorDto;
+import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
  *
@@ -39,34 +41,45 @@ public class ContribuyenteService {
         return jsonEmisor;
     }
 
-    private JSONObject getJsonReceptor(ClienteResponse client) {
-        JSONObject jsonDireccion = new JSONObject();
-        jsonDireccion.put("departamento", client.getDepartamento());
-        jsonDireccion.put("municipio", client.getMunicipio());
-        jsonDireccion.put("complemento", client.getDireccion());
+    private JSONObject getJsonReceptor(String numeroDocumento, JwtDto token) {
 
-        jsonReceptor.put("nit", client.getNit());
-        jsonReceptor.put("nrc", client.getNrc());
-        jsonReceptor.put("nombre", client.getNombreCompleto());
-        jsonReceptor.put("codActividad", client.getCodigoActividad());
-        jsonReceptor.put("descActividad", "MANIPULACION DE CARGA");
-        jsonReceptor.put("nombreComercial", client.getNombreComercial());
+        RestUtil rest = RestUtil
+                .builder()
+                .clazz(ReceptorDto.class)
+                .jwtDto(token)
+                .endpoint("/api/dte/receptor/" + numeroDocumento)
+                .build();
+
+        ReceptorDto receptor = (ReceptorDto) rest
+                .callGetOne();
+
+        JSONObject jsonDireccion = new JSONObject();
+        jsonDireccion.put("departamento", receptor.getDireccion().getDepartamento());
+        jsonDireccion.put("municipio", receptor.getDireccion().getMunicipio());
+        jsonDireccion.put("complemento", receptor.getDireccion().getComplemento());
+
+        jsonReceptor.put("nit", receptor.getNit());
+        jsonReceptor.put("nrc", receptor.getNrc());
+        jsonReceptor.put("nombre", receptor.getNombre());
+        jsonReceptor.put("codActividad", receptor.getCodActividad());
+        jsonReceptor.put("descActividad", receptor.getDescActividad());
+        jsonReceptor.put("nombreComercial", receptor.getNombreComercial());
         jsonReceptor.put("direccion", jsonDireccion);
-        jsonReceptor.put("telefono", client.getTelefono());
-        jsonReceptor.put("correo", client.getCorreo());
+        jsonReceptor.put("telefono", receptor.getTelefono());
+        jsonReceptor.put("correo", receptor.getCorreo());
 
         return jsonReceptor;
     }
 
-    public JSONObject getContribuyente(String nit, ClienteResponse client, boolean isEmisor) {
+    public JSONObject getContribuyente(String numDocumentoEmisor, String numDocumentoReceptor, JwtDto token, boolean isEmisor) {
         if (isEmisor) {
-            return getJsonEmisor(nit);
+            return getJsonEmisor(numDocumentoEmisor);
         } else {
-            return getJsonReceptor(client);
+            return getJsonReceptor(numDocumentoReceptor, token);
         }
     }
-    
-    public void actualizar(){
-        
+
+    public void actualizar() {
+
     }
 }

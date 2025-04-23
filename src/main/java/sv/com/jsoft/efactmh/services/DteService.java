@@ -26,6 +26,7 @@ import org.json.simple.parser.ParseException;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
+import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
 import sv.com.jsoft.efactmh.view.ViewFactura;
 
@@ -54,7 +55,7 @@ public class DteService {
         IVA = new BigDecimal(VARIABLES.getString("mh.iva")).divide(new BigDecimal(100));
     }
 
-    public JSONObject getDteJson(InvoceDto invoce, ClienteResponse client) {
+    public JSONObject getDteJson(InvoceDto invoce, String numDocEmisor, String numDocReceptor, JwtDto token) {
         String uuid = UUID.randomUUID().toString().toUpperCase();
 
         BigDecimal montoTotal = getTotal(invoce);
@@ -63,8 +64,8 @@ public class DteService {
 
         JSONObject jsonRoot = new JSONObject();
 
-        JSONObject jsonEmisor = contribuyenteServices.getContribuyente("", null, true);
-        JSONObject jsonReceptor = contribuyenteServices.getContribuyente("", client, false);
+        JSONObject jsonEmisor = contribuyenteServices.getContribuyente("", "", token, true);
+        JSONObject jsonReceptor = contribuyenteServices.getContribuyente("", "", token, false);
 
         JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, 
                 invoce.getCodigoDte(), 

@@ -300,7 +300,10 @@ public class InvoceView implements Serializable {
             //advance 25%
             addProgressAvance();
 
-            JSONObject jsonDte = dteServices.getDteJson(pedido, cliente);
+            JSONObject jsonDte = dteServices.getDteJson(pedido,
+                    "", 
+                    "", 
+                    securityService.getToken());
 
             //advance 50%
             addProgressAvance();

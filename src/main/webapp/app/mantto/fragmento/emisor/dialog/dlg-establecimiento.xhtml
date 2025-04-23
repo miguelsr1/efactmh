@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <h:head>
+        <title>Nuevo Establecimiento</title>
+
+        <h:outputScript name="js/prism.js" library="paradise-layout"/>
+        <h:outputStylesheet name="det-factura.css" library="css" />
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+
+        <style>
+            h6 {
+                font-size: 1rem;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                margin: 1.5rem 0 0.5rem 0;
+                font-family: inherit;
+                font-weight: 500;
+                line-height: 1.2;
+                color: inherit;
+            }
+            h6 {
+                display: block;
+                font-weight: bold;
+                unicode-bidi: isolate;
+            }
+            body .ui-widget {
+                font-family: "Roboto", "Helvetica Neue", sans-serif;
+                font-size: 1rem;
+                text-decoration: none;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form prependId="false">
+            <div class="layout-main">
+                <div style="width: 100%; padding: 1rem 1rem 1rem 1rem;">
+                    <div class="ui-fluid formgrid grid" jsf:id="dvDatos">
+                        <div class="field col-12" >
+                            <p:outputLabel for="cboTipoEst" value="Tipo establecimiento"/>
+                            <p:selectOneMenu id="cboTipoEst"  class="w-full">
+                                <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN TIPO" />
+                                <f:selectItem itemValue="01" itemLabel="SUCURSAL" />
+                                <f:selectItem itemValue="02" itemLabel="CASA MATRIZ" />
+                                <f:selectItem itemValue="04" itemLabel="BODEGA" />
+                                <f:selectItem itemValue="07" itemLabel="PATIO" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="field col-12" >
+                            <p:outputLabel for="txtNombre" value="Nombre"/>
+                            <p:inputText id="txtNombre" />
+                        </div>
+                        <div class="field col-12" >
+                            <p:outputLabel for="txtCod" value="Código"/>
+                            <p:inputText id="txtCod" />
+                        </div>
+                        <div class="field col-12" >
+                            <p:outputLabel for="txtCodMh" value="Código MH"/>
+                            <p:inputText id="txtCodMh" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field col-12">
+                <p:commandButton value="Nuevo" icon="pi pi-file" action="#{clienteView.nuevo()}" update="dvDatos" style="margin-right: 5px;" process="@this"/>
+                <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos" />
+                <p:spacer height="10px"/>
+            </div>
+        </h:form>
+    </h:body>
+</html>

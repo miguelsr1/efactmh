@@ -9,6 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
+import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.Emisor;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
@@ -53,7 +55,8 @@ public class EmisorView implements Serializable {
     @PostConstruct
     public void init() {
         lstGiros = catalogoService.getLstGiros();
-        loadDataEmisor();
+        loadEstablecimientos();
+        loadDataEmisor();        
     }
 
     private void loadDataEmisor() {
@@ -70,6 +73,17 @@ public class EmisorView implements Serializable {
         municipio = emisor.getCodigoDepartamento().concat(emisor.getCodigoMunicipio());
         lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(emisor.getCodigoDepartamento());
         lstDepartamentos = catalogoService.getLstDepartamentos();
+    }
+    
+    private void loadEstablecimientos(){
+        RestUtil rest = RestUtil
+                .builder()
+                .clazz(EstablecimientoDto.class)
+                .jwtDto(securityService.getToken())
+                .endpoint("/api/establecimiento")
+                .build();
+        
+        lstEstable = rest.callGet();
     }
     
     public void updateListaMunicipios(){
@@ -93,5 +107,19 @@ public class EmisorView implements Serializable {
     
     public String cancelar(){
         return "/app/home";
+    }
+    
+     public void showDlgEstablecimiento() {
+
+        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+                .draggable(false)
+                .resizable(false)
+                .maximizable(false)
+                .modal(true)
+                .width("350px")
+                .height("460px")
+                .build();
+
+        PrimeFaces.current().dialog().openDynamic("dialog/dlg-establecimiento", options, null);
     }
 }
