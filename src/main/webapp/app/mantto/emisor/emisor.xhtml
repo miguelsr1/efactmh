@@ -16,6 +16,16 @@
             .ui-wizard-step-title {
                 font-size: 1.1rem;
             }
+            iframe{
+                width: 400px !important;
+            }
+
+            body .ui-datatable.ui-datatable-gridlines .ui-datatable-data > tr > td {
+                border-width: 0px !important;
+            }
+            body .ui-datatable.ui-datatable-sm .ui-datatable-data > tr > td {
+                padding: 0.2rem 0.5rem;
+            }
         </style>
     </ui:define>
 
@@ -28,17 +38,17 @@
                     <p:tabView dynamic="true" cache="true" prependId="false">
                         <p:tab title="Datos Generales">
                             <div class="grid">
-                                <ui:include src="fragmento/emisor/frag-emisor.xhtml"/>
+                                <ui:include src="fragmento/frag-emisor.xhtml"/>
                             </div>
                         </p:tab>
                         <p:tab title="Establecimiento">
                             <div class="grid">
-                                <ui:include src="fragmento/emisor/frag-estructura.xhtml"/>
+                                <ui:include src="fragmento/frag-estructura.xhtml"/>
                             </div>
                         </p:tab>
                         <p:tab title="Parametros MH">
                             <div class="grid">
-                                <ui:include src="fragmento/emisor/frag-parametro.xhtml"/>
+                                <ui:include src="fragmento/frag-parametro.xhtml"/>
                             </div>
                         </p:tab>
                     </p:tabView>

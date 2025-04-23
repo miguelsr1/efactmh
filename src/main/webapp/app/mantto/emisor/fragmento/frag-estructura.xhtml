@@ -1,0 +1,85 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <h:form prependId="false" style="width: 100%;">
+        <div class="col-12">
+            <p:commandButton value="Agregar" action="#{emisorView.showDlgEstablecimiento()}"
+                             process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
+                             validateClient="true" styleClass="ui-button-outlined ui-button-success">
+                <p:ajax event="dialogReturn" listener="#{emisorView.onEstablecimiento}" update="tblEstablecimientos" />
+            </p:commandButton>
+
+            <p:dataTable id="tblEstablecimientos" value="#{emisorView.lstEstable}" var="est"
+                         reflow="true" size="small" tableStyle="table-layout: auto;" rowKey="#{est.nombreSucursal}"
+                         emptyMessage="No se han agregado establecimientos" lazy="false" rowExpandMode="single"  
+                         styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+
+
+                <p:column style="width:2rem" ariaHeaderText="Row Toggler">
+                    <p:rowToggler />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <p:outputLabel value="#{est.nombreSucursal}"/>
+                </p:column>
+                <p:column headerText="Código">
+                    <p:outputLabel value="#{est.codigoEstable}"/>
+                </p:column>
+                <p:column headerText="Código MH">
+                    <p:outputLabel value="#{est.codigoEstableMh}"/>
+                </p:column>
+                <p:column headerText="Tipo establecimiento">
+                    <p:outputLabel value="#{est.strTipoEstable}"/>
+                </p:column>
+                <p:column headerText="Activo">
+                    <p:selectBooleanCheckbox value="#{est.activo}"/>
+                </p:column>
+                <p:column style="text-align: center">
+                    <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-outlined"
+                                     update="tblEstablecimientos" process="@this">
+                        <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="Punto de venta" style="text-align: center">
+                    <p:commandButton icon="pi pi-plus" styleClass="rounded-button ui-button-success ui-button-outlined"
+                                     update="tblEstablecimientos" process="@this" style="margin-right: 1rem"
+                                     action="#{emisorView.showDlgPuntoVenta(est.idEstablecimiento, est.nombreSucursal)}">
+                    </p:commandButton>
+                </p:column>
+
+                <p:rowExpansion >
+                    <div class="col-12" style="margin: 1rem 0 0 1rem;">
+                        <h6>Puntos de venta</h6>
+
+                        <p:dataTable id="tblPuntos" lazy="false"
+                                     reflow="true" size="small" tableStyle="table-layout: auto;"
+                                     emptyMessage="No se han agregado puntos de venta">
+                            <p:column headerText="Nombre">
+                                <p:outputLabel value="#{est.nombreSucursal}"/>
+                            </p:column>
+                            <p:column headerText="Código">
+
+                            </p:column>
+                            <p:column headerText="Código MH">
+
+                            </p:column>
+                            <p:column headerText="Activo">
+                                <p:selectBooleanCheckbox />
+                            </p:column>
+                            <p:column>
+                                <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
+                                                 update="tblPuntos" process="@this">
+                                    <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </p:rowExpansion>
+            </p:dataTable>
+        </div>
+    </h:form>
+</ui:component>

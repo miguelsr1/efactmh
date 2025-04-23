@@ -6,7 +6,7 @@
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <div class="col-12 md:col-12">
-        <div class="formgrid grid">
+        <div class="formgrid grid" jsf:id="dvDatos2">
             <div class="field col-12">
                 <p:outputLabel for="txtSucu" value="Nombre Sucursal"/>
                 <p:inputText id="txtSucu" value="#{emisorView.estable.nombreSucursal}"
@@ -27,12 +27,11 @@
                 <br/>
                 <p:toggleSwitch id="tsActivo" value="#{emisorView.estable.activo}"/>
             </div>
-
-        </div>
-        <div class="field col-12">
-            <p:commandButton value="Nuevo" icon="pi pi-file" update="dvDatos" style="margin-right: 5px;" process="@this"/>
-            <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.agregarEstablecimiento()}" process="@this, txtSucu, txtCodEst, txtCodEstMh, " />
-            <p:spacer height="10px"/>
+            <div class="field col-12">
+                <p:commandButton value="Nuevo" icon="pi pi-file" update="dvDatos2" style="margin-right: 5px;" process="@this"/>
+                <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.agregarEstablecimiento()}" process="@this, txtSucu, txtCodEst, txtCodEstMh, " />
+                <p:spacer height="10px"/>
+            </div>
         </div>
     </div>
 </ui:component>
