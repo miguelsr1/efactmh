@@ -7,13 +7,13 @@
 
     <h:form prependId="false" style="width: 100%;">
         <div class="col-12">
-            <p:commandButton value="Agregar" action="#{emisorView.showDlgEstablecimiento()}"
+            <p:commandButton value="Agregar" action="#{estructuraView.showDlgEstablecimiento()}"
                              process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
                              validateClient="true" styleClass="ui-button-outlined ui-button-success">
-                <p:ajax event="dialogReturn" listener="#{emisorView.onEstablecimiento}" update="tblEstablecimientos" />
+                <p:ajax event="dialogReturn" listener="#{estructuraView.onEstablecimiento}" update="tblEstablecimientos" />
             </p:commandButton>
 
-            <p:dataTable id="tblEstablecimientos" value="#{emisorView.lstEstable}" var="est"
+            <p:dataTable id="tblEstablecimientos" value="#{estructuraView.lstEstable}" var="est"
                          reflow="true" size="small" tableStyle="table-layout: auto;" rowKey="#{est.nombreSucursal}"
                          emptyMessage="No se han agregado establecimientos" lazy="false" rowExpandMode="single"  
                          styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
@@ -46,8 +46,8 @@
                 </p:column>
                 <p:column headerText="Punto de venta" style="text-align: center">
                     <p:commandButton icon="pi pi-plus" styleClass="rounded-button ui-button-success ui-button-outlined"
-                                     update="tblEstablecimientos" process="@this" style="margin-right: 1rem"
-                                     action="#{emisorView.showDlgPuntoVenta(est.idEstablecimiento, est.nombreSucursal)}">
+                                     update="tblEstablecimientos" style="margin-right: 1rem"
+                                     action="#{estructuraView.showDlgPuntoVenta(est.idEstablecimiento, est.nombreSucursal)}">
                     </p:commandButton>
                 </p:column>
 

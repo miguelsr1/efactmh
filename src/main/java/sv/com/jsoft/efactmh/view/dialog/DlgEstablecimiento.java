@@ -2,7 +2,7 @@ package sv.com.jsoft.efactmh.view.dialog;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  *
  * @author msanchez
  */
-@ViewScoped
+@RequestScoped
 @Named
 @Slf4j
 public class DlgEstablecimiento implements Serializable {

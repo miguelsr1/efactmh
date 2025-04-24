@@ -35,8 +35,11 @@ public class DlgPuntoVenta implements Serializable {
 
     @PostConstruct
     public void init() {
-        nombreEstable = (String) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("nombreEstable");
-        idEstablecimiento = (Long) FacesContext.getCurrentInstance().getExternalContext().getFlash().get("idEstablecimiento");
+        nombreEstable = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("nombreEstable");
+        idEstablecimiento = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idEstablecimiento");
+        
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("nombreEstable");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idEstablecimiento");
         
         puntoVentaDto = new PuntoVentaDto();
         puntoVentaDto.setIdEstablecimiento(idEstablecimiento);
