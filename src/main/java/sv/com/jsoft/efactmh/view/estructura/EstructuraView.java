@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -13,12 +14,14 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.omnifaces.util.Faces;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
 import sv.com.jsoft.efactmh.model.dto.PuntoVentaDto;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.RestUtil;
 import sv.com.jsoft.efactmh.view.estructura.service.EstablecimientoService;
 
@@ -30,7 +33,7 @@ import sv.com.jsoft.efactmh.view.estructura.service.EstablecimientoService;
 @Named
 @Slf4j
 public class EstructuraView implements Serializable {
-    
+
     private Long idEstablecimiento;
 
     @Getter
@@ -51,14 +54,14 @@ public class EstructuraView implements Serializable {
         lstPuntosVentas = new ArrayList();
         loadEstablecimientos();
     }
-    
+
     public void onRowSelect(SelectEvent<EstablecimientoDto> event) {
         estable = event.getObject();
         idEstablecimiento = estable.getIdEstablecimiento();
         loadPuntosVenta();
     }
-    
-    public void loadPuntosVenta(){
+
+    public void loadPuntosVenta() {
         lstPuntosVentas = estableService.getLstPuntosVentas(securityService.getToken(), idEstablecimiento);
     }
 
@@ -81,8 +84,18 @@ public class EstructuraView implements Serializable {
     }
 
     public void showDlgPuntoVenta() {
-        this.idEstablecimiento = estable.getIdEstablecimiento();
+        if (estable == null) {
+            MessageUtil.builder()
+                    .message("DEBE SELECCIONAR UN ESTABLECIMIENTO")
+                    .severity(FacesMessage.SEVERITY_WARN)
+                    .title("ERROR")
+                    .build()
+                    .showMessage();
+            return;
+        }
         
+        this.idEstablecimiento = estable.getIdEstablecimiento();
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idEstablecimiento", idEstablecimiento);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("nombreEstable", estable.getNombreSucursal());
 

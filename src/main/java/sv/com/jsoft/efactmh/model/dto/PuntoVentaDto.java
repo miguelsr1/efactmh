@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class PuntoVentaDto implements Serializable {
-
+    private Long idPuntoVenta;
     private Long idEstablecimiento;
     private String nombrePuntoVenta;
     private String codigoPuntoVenta;

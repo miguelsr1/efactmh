@@ -24,6 +24,7 @@ import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
+import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -45,7 +46,7 @@ public class CatalogoService {
     private List<MunicipioDto> lstMunicipios;
     @Getter
     private List<CatalogoDto> lstGiros;
-    
+
     @Inject
     SessionService securityService;
 
@@ -87,10 +88,6 @@ public class CatalogoService {
                 .callGet();
     }
 
-    /*public MunicipioDto getMunicipioDtoById(Integer idMunicipio) {
-        return lstMunicipios.stream().filter(mun -> mun.getId().compareTo(idMunicipio) == 0).findFirst().orElse(null);
-    }*/
-    
     public List<MunicipioDto> getMunicipioDtoByCodDepa(String codDepa) {
         return lstMunicipios
                 .stream()
@@ -144,5 +141,23 @@ public class CatalogoService {
             Logger.getLogger(CatalogoService.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+
+    public List<CatalogoDto> getLstEstablecimiento(JwtDto token) {
+        return RestUtil.builder()
+                .endpoint("/api/catalogo/establecimiento")
+                .clazz(CatalogoDto.class)
+                .jwtDto(securityService.getToken())
+                .build()
+                .callGet();
+    }
+
+    public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(JwtDto token, Long idEstablecimiento) {
+        return RestUtil.builder()
+                .endpoint("/api/catalogo/punto-venta/" + idEstablecimiento)
+                .clazz(CatalogoDto.class)
+                .jwtDto(securityService.getToken())
+                .build()
+                .callGet();
     }
 }
