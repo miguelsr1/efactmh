@@ -7,20 +7,28 @@
 
     <h:form prependId="false" style="width: 100%;">
         <div class="col-12">
-            <p:commandButton value="Agregar" action="#{estructuraView.showDlgEstablecimiento()}"
-                             process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
-                             validateClient="true" styleClass="ui-button-outlined ui-button-success">
-                <p:ajax event="dialogReturn" listener="#{estructuraView.onEstablecimiento}" update="tblEstablecimientos" />
-            </p:commandButton>
-
             <p:dataTable id="tblEstablecimientos" value="#{estructuraView.lstEstable}" var="est"
-                         reflow="true" size="small" tableStyle="table-layout: auto;" rowKey="#{est.nombreSucursal}"
-                         emptyMessage="No se han agregado establecimientos" lazy="false" rowExpandMode="single"  
+                         reflow="true" size="small" tableStyle="table-layout: auto;" rowKey="#{est.idEstablecimiento}"
+                         selectionMode="single" selection="#{estructuraView.estable}" 
+                         emptyMessage="No se han agregado establecimientos" lazy="false"
                          styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
 
-                <p:column style="width:2rem" ariaHeaderText="Row Toggler">
-                    <p:rowToggler />
-                </p:column>
+                <f:facet name="header">
+                    <div class="flex justify-content-between align-items-center">
+                        <h5><span style="margin-right: 1rem"><i class="pi pi-sitemap"></i></span>Establecimientos</h5>
+
+                        <div>
+                            <p:commandButton action="#{estructuraView.showDlgEstablecimiento()}"
+                                             process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
+                                             validateClient="true" styleClass="ui-button-outlined ui-button-success">
+                                <p:ajax event="dialogReturn" listener="#{estructuraView.onEstablecimiento}" update="tblEstablecimientos" />
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </f:facet>
+
+                <p:ajax event="rowSelect" listener="#{estructuraView.onRowSelect}" update="tblPuntos"/>
+
                 <p:column headerText="Nombre">
                     <p:outputLabel value="#{est.nombreSucursal}"/>
                 </p:column>
@@ -33,7 +41,7 @@
                 <p:column headerText="Tipo establecimiento">
                     <p:outputLabel value="#{est.strTipoEstable}"/>
                 </p:column>
-                <p:column headerText="Activo">
+                <p:column headerText="Activo" style="text-align: center">
                     <p:selectBooleanCheckbox value="#{est.activo}"/>
                 </p:column>
                 <p:column style="text-align: center">
@@ -42,42 +50,49 @@
                         <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
                     </p:commandButton>
                 </p:column>
-                <p:column headerText="Punto de venta" style="text-align: center">
-                    <p:commandButton icon="pi pi-plus" styleClass="rounded-button ui-button-success ui-button-outlined"
-                                     update="tblEstablecimientos" style="margin-right: 1rem"
-                                     action="#{estructuraView.showDlgPuntoVenta(est.idEstablecimiento, est.nombreSucursal)}">
+            </p:dataTable>
+        </div>
+
+        <p:separator />
+
+        <div class="col-12">
+            <p:dataTable id="tblPuntos" lazy="false" var="punto" value="#{estructuraView.lstPuntosVentas}"
+                         reflow="true" size="small" tableStyle="table-layout: auto;"
+                         emptyMessage="No se han agregado puntos de venta"
+                         styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+                <f:facet name="header">
+                    <div class="flex justify-content-between align-items-center">
+                        <h5><span style="margin-right: 1rem"><i class="pi pi-map-marker"></i></span>Puntos de Venta</h5>
+
+                        <div>
+                            <p:commandButton icon="pi pi-plus" styleClass="ui-button-outlined ui-button-success"
+                                             update="tblEstablecimientos" style="margin-right: 1rem"
+                                             action="#{estructuraView.showDlgPuntoVenta}">
+                                <p:ajax event="dialogReturn" listener="#{estructuraView.loadPuntosVenta}" update="tblPuntos"/>
+                            </p:commandButton>
+                        </div>
+                    </div>
+                </f:facet>
+
+                <p:column headerText="Nombre" style="display: block">
+                    <p:outputLabel value="#{punto.nombrePuntoVenta}"/>
+                </p:column>
+                <p:column headerText="Código">
+                    <p:outputLabel value="#{punto.codigoPuntoVenta}"/>
+                </p:column>
+                <p:column headerText="Código MH">
+                    <p:outputLabel value="#{punto.codigoPuntoVentaMh}"/>
+                </p:column>
+                <p:column headerText="Activo" style="text-align: center">
+                    <p:selectBooleanCheckbox value="#{punto.activo}"/>
+                </p:column>
+                <p:column style="text-align: center">
+                    <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
+                                     update="tblPuntos" process="@this">
+                        <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
                     </p:commandButton>
                 </p:column>
-
-                <p:rowExpansion >
-                    <div class="col-12" style="margin: 1rem 0 0 1rem;">
-                        <h6>Puntos de venta</h6>
-                        <p:outputLabel>
-                            <p:dataTable id="tblPuntos" lazy="false" value="#{estructuraView.lstPuntosVentas}" var="punto"
-                                         reflow="true" size="small" tableStyle="table-layout: auto;"
-                                         emptyMessage="No se han agregado puntos de venta">
-                                <p:column headerText="Nombre" style="display: block">
-                                    <p:outputLabel value="#{punto.nombrePuntoVenta}"/>
-                                </p:column>
-                                <p:column headerText="Código">
-                                    <p:outputLabel value="#{punto.codigoPuntoVenta}"/>
-                                </p:column>
-                                <p:column headerText="Código MH">
-                                    <p:outputLabel value="#{punto.codigoPuntoVentaMh}"/>
-                                </p:column>
-                                <p:column headerText="Activo">
-                                    <p:selectBooleanCheckbox value="#{punto.activo}"/>
-                                </p:column>
-                                <p:column>
-                                    <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
-                                                     update="tblPuntos" process="@this">
-                                        <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </p:outputLabel>
-                    </div>
-                </p:rowExpansion>
             </p:dataTable>
         </div>
     </h:form>

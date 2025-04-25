@@ -51,6 +51,16 @@ public class EstructuraView implements Serializable {
         lstPuntosVentas = new ArrayList();
         loadEstablecimientos();
     }
+    
+    public void onRowSelect(SelectEvent<EstablecimientoDto> event) {
+        estable = event.getObject();
+        idEstablecimiento = estable.getIdEstablecimiento();
+        loadPuntosVenta();
+    }
+    
+    public void loadPuntosVenta(){
+        lstPuntosVentas = estableService.getLstPuntosVentas(securityService.getToken(), idEstablecimiento);
+    }
 
     private void loadEstablecimientos() {
         lstEstable = estableService.getLstEstablecimiento(securityService.getToken());
@@ -70,20 +80,20 @@ public class EstructuraView implements Serializable {
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-establecimiento", options, null);
     }
 
-    public void showDlgPuntoVenta(Long idEstablecimiento, String nombreEstable) {
-        this.idEstablecimiento = idEstablecimiento;
+    public void showDlgPuntoVenta() {
+        this.idEstablecimiento = estable.getIdEstablecimiento();
         
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idEstablecimiento", idEstablecimiento);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("nombreEstable", nombreEstable);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("nombreEstable", estable.getNombreSucursal());
 
-        Map<String, Object> options = new HashMap<>();
-        options.put("modal", true);
-        options.put("draggable", false);
-        options.put("resizable", false);
-        options.put("maximizable", false);
-        options.put("modal", true);
-        options.put("width", "400px");
-        options.put("height", "460px");
+        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+                .draggable(false)
+                .resizable(false)
+                .maximizable(false)
+                .modal(true)
+                .width("400px")
+                .height("460px")
+                .build();
 
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-punto-venta", options, null);
     }
@@ -101,7 +111,6 @@ public class EstructuraView implements Serializable {
     }
 
     public List<PuntoVentaDto> getLstPuntosVentas() {
-        lstPuntosVentas = estableService.getLstPuntosVentas(securityService.getToken(), idEstablecimiento);
         return lstPuntosVentas;
     }
 }
