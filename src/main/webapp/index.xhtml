@@ -14,7 +14,7 @@
         <title>FacturaMe</title>
     </h:head>
 
-    <h:body styleClass="login-body">
+    <h:body styleClass="login-body" style="background-color: white !important">
         <h:form prependId="false">
             <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
                 <p:autoUpdate />
@@ -49,6 +49,15 @@
                     </div>
                 </div>
             </div>
+
+
+            <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
+
+            <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px" onShow="document.location.href = document.location.href;">
+                <h3>Reloading page</h3>
+                Message: #{pfExceptionHandler.message} <br/>
+                StackTrace: <h:outputText value="#{pfExceptionHandler.formattedStackTrace}" escape="false" />
+            </p:dialog>
 
         </h:form>
         <h:outputStylesheet name="css/layout-default.css" library="paradise-layout" />

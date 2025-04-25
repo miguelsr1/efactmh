@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -31,6 +30,7 @@ import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -292,38 +292,42 @@ public class InvoceView implements Serializable {
                     .body(pedido)
                     .endpoint("/api/invoce").build();
 
-            IdDto newInvoce = (IdDto) rest.callPostAuth();
-            idFac = newInvoce.getId();
+            ResponseRestApi response = rest.callPostAuth();
 
-            pedido.setIdFactura(idFac);
+            if (response.getCodeHttp() == 201) {
+                IdDto newInvoce = (IdDto) response.getBody();
+                idFac = newInvoce.getId();
 
-            //advance 25%
-            addProgressAvance();
+                pedido.setIdFactura(idFac);
 
-            JSONObject jsonDte = dteServices.getDteJson(pedido,
-                    "", 
-                    "", 
-                    securityService.getToken());
+                //advance 25%
+                addProgressAvance();
 
-            //advance 50%
-            addProgressAvance();
+                JSONObject jsonDte = dteServices.getDteJson(pedido,
+                        "",
+                        "",
+                        securityService.getToken());
 
-            log.info("DTE: " + jsonDte.toJSONString());
+                //advance 50%
+                addProgressAvance();
 
-            JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, sessionService.getParametroDto());
+                log.info("DTE: " + jsonDte.toJSONString());
 
-            //advance 75%
-            addProgressAvance();
+                JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, sessionService.getParametroDto());
 
-            JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(),
-                    securityService.getToken().getAccessToken(),
-                    pedido.getCodigoDte(),
-                    ((JSONObject) jsonDte.get("identificacion")).get("codigoGeneracion").toString());
+                //advance 75%
+                addProgressAvance();
 
-            //advance 100%
-            addProgressAvance();
+                JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(),
+                        securityService.getToken().getAccessToken(),
+                        pedido.getCodigoDte(),
+                        ((JSONObject) jsonDte.get("identificacion")).get("codigoGeneracion").toString());
 
-            log.info(jsonResponse.toJSONString());
+                //advance 100%
+                addProgressAvance();
+
+                log.info(jsonResponse.toJSONString());
+            }
         } catch (InterruptedException ex) {
             Logger.getLogger(InvoceView.class.getName()).log(Level.SEVERE, null, ex);
         }

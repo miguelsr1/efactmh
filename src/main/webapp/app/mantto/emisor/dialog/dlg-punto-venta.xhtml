@@ -29,19 +29,19 @@
                     <div class="ui-fluid formgrid grid">
                         <div class="field col-12" >
                             <p:outputLabel for="txtNombre" value="Nombre"/>
-                            <p:inputText id="txtNombre" value="#{dlgEstablecimiento.establecimientoDto.nombreSucursal}"/>
+                            <p:inputText id="txtNombre" value="#{dlgPuntoVenta.puntoVentaDto.nombrePuntoVenta}"/>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtCod" value="Código"/>
-                            <p:inputText id="txtCod" value="#{dlgEstablecimiento.establecimientoDto.codigoEstable}" maxlength="4"/>
+                            <p:inputText id="txtCod" value="#{dlgPuntoVenta.puntoVentaDto.codigoPuntoVenta}" maxlength="4"/>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtCodMh" value="Código MH"/>
-                            <p:inputText id="txtCodMh" value="#{dlgEstablecimiento.establecimientoDto.codigoEstableMh}"
+                            <p:inputText id="txtCodMh" value="#{dlgPuntoVenta.puntoVentaDto.codigoPuntoVentaMh}"
                                          maxlength="4"/>
                         </div>
                         <div class="field col-12">
-                            <p:selectBooleanCheckbox id="chActivo" itemLabel="Activo" value="#{dlgEstablecimiento.establecimientoDto.activo}"/>
+                            <p:selectBooleanCheckbox id="chActivo" itemLabel="Activo" value="#{dlgPuntoVenta.puntoVentaDto.activo}"/>
                         </div>
 
                         <div class="field col-12">
@@ -49,10 +49,10 @@
                             <p:spacer height="10"/>
 
                             <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
-                                             icon="pi pi-times" action="#{dlgEstablecimiento.closeDgl()}" style="max-width: 110px"/>
+                                             icon="pi pi-times" action="#{dlgPuntoVenta.closeDgl()}" style="max-width: 110px"/>
                             <p:commandButton value="Agregar" 
                                              process="@this,txtNombre,txtCod,txtCodMh,chActivo"
-                                             icon="pi pi-plus" action="#{dlgEstablecimiento.addEstable()}" style="max-width: 110px"
+                                             icon="pi pi-plus" action="#{dlgPuntoVenta.add()}" style="max-width: 110px"
                                              validateClient="true" styleClass="ui-button-primary"/>
                         </div>
                     </div>

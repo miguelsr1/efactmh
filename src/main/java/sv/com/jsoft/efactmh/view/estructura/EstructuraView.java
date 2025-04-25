@@ -1,4 +1,4 @@
-package sv.com.jsoft.efactmh.view;
+package sv.com.jsoft.efactmh.view.estructura;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -17,46 +17,45 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
+import sv.com.jsoft.efactmh.model.dto.PuntoVentaDto;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.RestUtil;
+import sv.com.jsoft.efactmh.view.estructura.service.EstablecimientoService;
 
 /**
  *
  * @author migue
  */
-@RequestScoped
+@ViewScoped
 @Named
 @Slf4j
 public class EstructuraView implements Serializable {
     
+    private Long idEstablecimiento;
+
     @Getter
     @Setter
     private EstablecimientoDto estable;
     @Getter
     @Setter
     private List<EstablecimientoDto> lstEstable;
+    private List<PuntoVentaDto> lstPuntosVentas;
     @Inject
     SessionService securityService;
-    
+    @Inject
+    EstablecimientoService estableService;
+
     @PostConstruct
-    public void init(){
+    public void init() {
         estable = new EstablecimientoDto();
+        lstPuntosVentas = new ArrayList();
         loadEstablecimientos();
     }
 
     private void loadEstablecimientos() {
-        lstEstable = new ArrayList<>();
-
-        RestUtil rest = RestUtil
-                .builder()
-                .clazz(EstablecimientoDto.class)
-                .jwtDto(securityService.getToken())
-                .endpoint("/api/establecimiento")
-                .build();
-
-        lstEstable = rest.callGet();
+        lstEstable = estableService.getLstEstablecimiento(securityService.getToken());
     }
-    
+
     public void showDlgEstablecimiento() {
 
         DialogFrameworkOptions options = DialogFrameworkOptions.builder()
@@ -70,13 +69,13 @@ public class EstructuraView implements Serializable {
 
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-establecimiento", options, null);
     }
-    
-    public void showDlgPuntoVenta(Long idEstablecimiento, String nombreEstable) {
 
+    public void showDlgPuntoVenta(Long idEstablecimiento, String nombreEstable) {
+        this.idEstablecimiento = idEstablecimiento;
+        
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idEstablecimiento", idEstablecimiento);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("nombreEstable", nombreEstable);
 
-        //DialogFrameworkOptions options = DialogFrameworkOptions.builder()
         Map<String, Object> options = new HashMap<>();
         options.put("modal", true);
         options.put("draggable", false);
@@ -88,16 +87,21 @@ public class EstructuraView implements Serializable {
 
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-punto-venta", options, null);
     }
-    
+
     public void onEstablecimiento(SelectEvent<EstablecimientoDto> event) {
         if (event.getObject() != null) {
             EstablecimientoDto establecimientoDto = event.getObject();
             lstEstable.add(establecimientoDto);
         }
     }
-    
-     public void agregarEstablecimiento() {
+
+    public void agregarEstablecimiento() {
         lstEstable.add(estable);
         estable = new EstablecimientoDto();
+    }
+
+    public List<PuntoVentaDto> getLstPuntosVentas() {
+        lstPuntosVentas = estableService.getLstPuntosVentas(securityService.getToken(), idEstablecimiento);
+        return lstPuntosVentas;
     }
 }

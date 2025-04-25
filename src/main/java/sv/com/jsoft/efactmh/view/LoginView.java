@@ -20,7 +20,7 @@ import sv.com.jsoft.efactmh.util.JsfUtil;
 @Named
 @RequestScoped
 public class LoginView implements Serializable {
-    
+
     @Getter
     @Setter
     @NotEmpty
@@ -29,21 +29,23 @@ public class LoginView implements Serializable {
     @Setter
     @NotEmpty
     private String claveAcceso;
-    
+
     @Inject
     LoginServices loginServices;
     @Inject
     SessionService securityService;
-    
+
     public String validarProveedor() {
         return validarLogin("app/home");
     }
-    
+
     private String validarLogin(String urlWelcome) {
-        LoginDto loginDto = new LoginDto(usuario, claveAcceso);
-        
-        ResponseDto response = loginServices.login(loginDto);
+        ResponseDto response = loginServices.login(new LoginDto(usuario, claveAcceso));
+
         switch (response.getStatusCode()) {
+            case -1:
+                JsfUtil.mensajeError(response.getBody().toString());
+                break;
             case 401:
                 JsfUtil.mensajeError("Usuario/Clave de acceso incorrectos!");
                 break;
@@ -55,5 +57,5 @@ public class LoginView implements Serializable {
         }
         return null;
     }
-    
+
 }

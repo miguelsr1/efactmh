@@ -13,8 +13,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.faces.application.FacesMessage;
 import javax.ws.rs.core.MediaType;
@@ -57,7 +55,7 @@ public class RestUtil {
 
             return gson.fromJson(response.body(), lst);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR get - " + endpoint, ex);
             return null;
         }
     }
@@ -79,7 +77,7 @@ public class RestUtil {
             return gson.fromJson(response.body(), lst);
 
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR get - " + endpoint, ex);
             return null;
         }
     }
@@ -98,12 +96,12 @@ public class RestUtil {
 
             return gson.fromJson(response.body(), clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR getOne - " + endpoint, ex);
             return null;
         }
     }
 
-    public Object callPostAuth() {
+    public ResponseRestApi callPostAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
@@ -116,16 +114,17 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            if(response.statusCode() == 201){
-                if(response.body() != null){
-                    return gson.fromJson(response.body(), clazz);
+            if (response.statusCode() == 201) {
+                if (response.body() != null) {
+                    return new ResponseRestApi(response.statusCode(),
+                            gson.fromJson(response.body(), clazz));
                 }
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR postAuth - " + endpoint, ex);
             return null;
         }
-        
+
         return null;
     }
 
@@ -170,10 +169,8 @@ public class RestUtil {
                             .showMessage();
                     break;
             }
-            //return gson.fromJson(response.body(), clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
-            //return null;
+            log.error("ERROR putAuth - " + endpoint, ex);
         }
     }
 
@@ -193,7 +190,7 @@ public class RestUtil {
 
             return gson.fromJson(response.body(), clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR getById - " + endpoint, ex);
             return null;
         }
     }
@@ -204,7 +201,7 @@ public class RestUtil {
                     .uri(new URI(HOST + endpoint + (data.esNuevo() ? "" : data.getId())))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
-            
+
             httpBuilder = data.esNuevo()
                     ? httpBuilder.POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
                     : httpBuilder.PUT(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())));
@@ -218,7 +215,7 @@ public class RestUtil {
 
             return response.statusCode();
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR persistir - " + endpoint, ex);
             return 0;
         }
     }
@@ -239,7 +236,7 @@ public class RestUtil {
 
             return response.statusCode();
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR post - " + endpoint, ex);
             return 0;
         }
     }
@@ -262,7 +259,7 @@ public class RestUtil {
 
             return new GsonBuilder().setFieldNamingPolicy(namingConvention).create().fromJson(responseStr, clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR post - " + endpoint, ex);
             return null;
         }
     }
@@ -283,8 +280,8 @@ public class RestUtil {
 
             return new ResponseDto(response.statusCode(), response.body());
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            log.error("ERROR postV2 - " + endpoint, ex);
+            return new ResponseDto(-1, "ERROR DE CONEXION");
         }
     }
 
@@ -309,7 +306,7 @@ public class RestUtil {
 
             return response.statusCode();
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            Logger.getLogger(RestUtil.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR dataByTypeClass - " + endpoint, ex);
             return 0;
         }
     }

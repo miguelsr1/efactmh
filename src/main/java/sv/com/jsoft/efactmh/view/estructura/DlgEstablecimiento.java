@@ -1,4 +1,4 @@
-package sv.com.jsoft.efactmh.view.dialog;
+package sv.com.jsoft.efactmh.view.estructura;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -12,6 +12,7 @@ import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -22,38 +23,39 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @Named
 @Slf4j
 public class DlgEstablecimiento implements Serializable {
-    
+
     @Getter
     @Setter
     private EstablecimientoDto establecimientoDto;
     @Inject
     SessionService sessionService;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         establecimientoDto = new EstablecimientoDto();
         establecimientoDto.setActivo(Boolean.TRUE);
     }
-    
-    public void addEstable(){
-        
+
+    public void addEstable() {
         saveEstable();
-        
         PrimeFaces.current().dialog().closeDynamic(establecimientoDto);
     }
-    
-    private void saveEstable(){
-         RestUtil rest = RestUtil
-                    .builder()
-                    .clazz(IdDto.class)
-                    .jwtDto(sessionService.getToken())
-                    .body(establecimientoDto)
-                    .endpoint("/api/establecimiento").build();
-         
-         IdDto idDto = (IdDto) rest.callPostAuth();
-         log.info("ESTABLECIMIENTO CREADO:" + idDto);
+
+    private void saveEstable() {
+        RestUtil rest = RestUtil
+                .builder()
+                .clazz(IdDto.class)
+                .jwtDto(sessionService.getToken())
+                .body(establecimientoDto)
+                .endpoint("/api/establecimiento").build();
+
+        ResponseRestApi response = rest.callPostAuth();
+        if (response.getCodeHttp() == 201) {
+            IdDto idDto = (IdDto) response.getBody();
+            log.info("ESTABLECIMIENTO CREADO:" + idDto);
+        }
     }
-    
+
     public void closeDgl() {
         PrimeFaces.current().dialog().closeDynamic(null);
     }

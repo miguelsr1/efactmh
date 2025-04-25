@@ -18,8 +18,6 @@
                          emptyMessage="No se han agregado establecimientos" lazy="false" rowExpandMode="single"  
                          styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
 
-
-
                 <p:column style="width:2rem" ariaHeaderText="Row Toggler">
                     <p:rowToggler />
                 </p:column>
@@ -54,29 +52,30 @@
                 <p:rowExpansion >
                     <div class="col-12" style="margin: 1rem 0 0 1rem;">
                         <h6>Puntos de venta</h6>
-
-                        <p:dataTable id="tblPuntos" lazy="false"
-                                     reflow="true" size="small" tableStyle="table-layout: auto;"
-                                     emptyMessage="No se han agregado puntos de venta">
-                            <p:column headerText="Nombre">
-                                <p:outputLabel value="#{est.nombreSucursal}"/>
-                            </p:column>
-                            <p:column headerText="Código">
-
-                            </p:column>
-                            <p:column headerText="Código MH">
-
-                            </p:column>
-                            <p:column headerText="Activo">
-                                <p:selectBooleanCheckbox />
-                            </p:column>
-                            <p:column>
-                                <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
-                                                 update="tblPuntos" process="@this">
-                                    <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
+                        <p:outputLabel>
+                            <p:dataTable id="tblPuntos" lazy="false" value="#{estructuraView.lstPuntosVentas}" var="punto"
+                                         reflow="true" size="small" tableStyle="table-layout: auto;"
+                                         emptyMessage="No se han agregado puntos de venta">
+                                <p:column headerText="Nombre" style="display: block">
+                                    <p:outputLabel value="#{punto.nombrePuntoVenta}"/>
+                                </p:column>
+                                <p:column headerText="Código">
+                                    <p:outputLabel value="#{punto.codigoPuntoVenta}"/>
+                                </p:column>
+                                <p:column headerText="Código MH">
+                                    <p:outputLabel value="#{punto.codigoPuntoVentaMh}"/>
+                                </p:column>
+                                <p:column headerText="Activo">
+                                    <p:selectBooleanCheckbox value="#{punto.activo}"/>
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
+                                                     update="tblPuntos" process="@this">
+                                        <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:outputLabel>
                     </div>
                 </p:rowExpansion>
             </p:dataTable>

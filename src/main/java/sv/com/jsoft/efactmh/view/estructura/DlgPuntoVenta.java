@@ -1,9 +1,9 @@
-package sv.com.jsoft.efactmh.view.dialog;
+package sv.com.jsoft.efactmh.view.estructura;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -13,13 +13,14 @@ import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.PuntoVentaDto;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
  *
  * @author msanchez
  */
-@RequestScoped
+@ViewScoped
 @Named
 @Slf4j
 public class DlgPuntoVenta implements Serializable {
@@ -37,10 +38,10 @@ public class DlgPuntoVenta implements Serializable {
     public void init() {
         nombreEstable = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("nombreEstable");
         idEstablecimiento = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idEstablecimiento");
-        
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("nombreEstable");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idEstablecimiento");
-        
+
         puntoVentaDto = new PuntoVentaDto();
         puntoVentaDto.setIdEstablecimiento(idEstablecimiento);
         puntoVentaDto.setActivo(Boolean.TRUE);
@@ -61,8 +62,11 @@ public class DlgPuntoVenta implements Serializable {
                 .body(puntoVentaDto)
                 .endpoint("/api/punto-venta").build();
 
-        IdDto idDto = (IdDto) rest.callPostAuth();
-        log.info("PUNTO DE VENTA CREADO:" + idDto);
+        ResponseRestApi response = rest.callPostAuth();
+        if (response.getCodeHttp() == 201) {
+            IdDto idDto = (IdDto) response.getBody();
+            log.info("PUNTO DE VENTA CREADO:" + idDto);
+        }
     }
 
     public void closeDgl() {
