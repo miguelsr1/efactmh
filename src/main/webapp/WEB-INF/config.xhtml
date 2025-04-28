@@ -9,33 +9,42 @@
             <a href="#" id="layout-config-button" class="layout-config-button">
                 <i class="pi pi-cog"></i>
             </a>
-            <h:form prependId="false" styleClass="layout-config-form">
+            <h:form id="config-form" styleClass="layout-config-form">
                 <div class="layout-config-header">
                     <h3>Configuración</h3>
                     <span>de establecimiento y punto de venta.</span>
                 </div>
 
-                <p:outputPanel id="estable" styleClass="layout-config-section options">
+                <p:outputPanel id="menumodes-panel" styleClass="layout-config-section options">
                     <span class="section-name">Establecimiento</span>
-                    <div class="grid layout-config-options">
-                        <p:selectOneMenu id="cboEstable" value="#{configView.idEstablecimiento}">
+                    <div class="grid layout-config-options">                        
+                        <h:selectOneMenu value="#{sessionView.idEstablecimiento}" styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all"
+                                         onchange="PrimeFaces.ParadiseConfigurator.changeMenuMode(event.target.value)">
                             <f:selectItem noSelectionOption="true" itemLabel="-- SELECCIONE --" />
                             <f:selectItems value="#{sessionService.lstEstablecimiento}" var="est" itemValue="#{est.id}" itemLabel="#{est.nombre}"/>
-                            <p:ajax update="puntos"/>
-                        </p:selectOneMenu>
+                            <f:ajax render="menumodes-panel lightdark-panel"/>
+                        </h:selectOneMenu>
                     </div>
                 </p:outputPanel>
 
-                <p:outputPanel id="puntos" styleClass="layout-config-section options">
-                    <span class="section-name">Establecimiento</span>
+                <p:outputPanel id="lightdark-panel" styleClass="layout-config-section options">
+                    <span class="section-name">Punto de venta</span>
                     <div class="grid layout-config-options">
-                        <p:selectOneMenu value="#{configView.puntoVenta}">
+                        <h:selectOneMenu value="#{sessionView.idPuntoVenta}" styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all">
                             <f:selectItem noSelectionOption="true" itemLabel="-- SELECCIONE --" />
-                            <f:selectItems value="#{configView.lstPuntoVenta}" var="punto" itemLabel="#{punto.nombre}" itemValue="#{punto.id}" />
-                            <p:ajax update="puntos"/>
-                        </p:selectOneMenu>
+                            <f:selectItems value="#{sessionView.lstPuntoVenta}" var="punto" itemValue="#{punto.id}" itemLabel="#{punto.nombre}"/>
+                            <f:ajax render="lightdark-panel"/>
+                        </h:selectOneMenu>
                     </div>
                 </p:outputPanel>
+                
+                <p:outputPanel id="outlined-panel" styleClass="layout-config-section dark">
+                    <span class="section-name">Pagos en cuotas</span>
+                    <p:inputSwitch id="layout-switch-2" value="#{sessionView.aceptaPagoPlazo}">
+                        <p:ajax onstart="PrimeFaces.ParadiseConfigurator.beforeResourceChange()" />
+                    </p:inputSwitch>
+                </p:outputPanel>
+
             </h:form>
         </div>
     </div>

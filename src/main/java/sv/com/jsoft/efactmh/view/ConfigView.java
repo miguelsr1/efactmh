@@ -23,18 +23,8 @@ public class ConfigView implements Serializable {
     @Inject
     SessionService sessionService;
 
-    @Getter
-    @Setter
-    private String idEstablecimiento;
-    @Getter
-    @Setter
-    private CatalogoDto puntoVenta;
+    
 
-    public List<CatalogoDto> getLstPuntoVenta() {
-        if (idEstablecimiento == null) {
-            return new ArrayList<>();
-        }
-        return sessionService.getLstPuntoVenta(Long.valueOf(idEstablecimiento));
-    }
+    
 
 }
