@@ -67,7 +67,7 @@ public class InvoceView implements Serializable {
     private String fontWeightComplete;
     @Getter
     @Setter
-    private String numeroDocumento;
+    private String numDocumentoReceptor;
     @Getter
     @Setter
     private String tipoPago;
@@ -162,7 +162,7 @@ public class InvoceView implements Serializable {
                 .builder()
                 .clazz(ClienteResponse.class)
                 .jwtDto(securityService.getToken())
-                .endpoint("/api/secured/client/" + numeroDocumento)
+                .endpoint("/api/secured/client/" + numDocumentoReceptor)
                 .build();
         Object obj = rest.callGetOne();
         existeCliente = (obj != null);
@@ -304,8 +304,10 @@ public class InvoceView implements Serializable {
                 addProgressAvance();
 
                 JSONObject jsonDte = dteServices.getDteJson(pedido,
-                        "",
-                        "",
+                        "0614-120484-118-1",
+                        Long.valueOf(sessionView.getIdEstablecimiento()),
+                        sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()): 0l,
+                        numDocumentoReceptor,
                         securityService.getToken());
 
                 //advance 50%

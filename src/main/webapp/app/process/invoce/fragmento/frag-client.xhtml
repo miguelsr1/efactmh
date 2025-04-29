@@ -18,7 +18,7 @@
             </div>
             <div class="field col-12" >
                 <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
-                <p:inputMask id="txtNumDoc" value="#{invoceView.numeroDocumento}" onkeyup="nitDuiMask(this)"
+                <p:inputMask id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" onkeyup="nitDuiMask(this)"
                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true">
                     <p:ajax event="blur" listener="#{invoceView.findClient()}" update="dvCliente"/>
                 </p:inputMask>

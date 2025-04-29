@@ -9,8 +9,9 @@ import lombok.Data;
 @Data
 public class ReceptorDto {
 
-    private String nit;
     private String nrc;
+    private String tipoDocumento;
+    private String numDocumento;
     private String nombre;
     private String codActividad;
     private String descActividad;
