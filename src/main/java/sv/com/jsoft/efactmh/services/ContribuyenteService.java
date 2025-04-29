@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ReceptorDto;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -28,9 +29,9 @@ public class ContribuyenteService {
                     .endpoint("/api/secured/dte/emisor/" + nit + "/" + idEstablecimiento + "/" + idPuntoVenta)
                     .build();
 
-            String strEmisor = rest.callGetOne().toString();
+            ResponseRestApi strEmisor = rest.callGetOneAuth();
 
-            return (JSONObject) parser.parse(strEmisor);
+            return (JSONObject) parser.parse(strEmisor.getBody().toString());
         } catch (ParseException ex) {
             log.error("ERROR OBTENIENDO EMISOR: " + nit);
             return null;
@@ -43,14 +44,14 @@ public class ContribuyenteService {
 
             RestUtil rest = RestUtil
                     .builder()
-                    .clazz(ReceptorDto.class)
+                    .clazz(String.class)
                     .jwtDto(token)
                     .endpoint("/api/secured/dte/receptor/" + numDocumento)
                     .build();
 
-            String strEmisor = rest.callGetOne().toString();
+            ResponseRestApi strEmisor = rest.callGetOneAuth();
 
-            return (JSONObject) parser.parse(strEmisor);
+            return (JSONObject) parser.parse(strEmisor.getBody().toString());
         } catch (ParseException ex) {
             log.error("ERROR OBTENIENDO RECEPTOR: " + numDocumento);
             return null;

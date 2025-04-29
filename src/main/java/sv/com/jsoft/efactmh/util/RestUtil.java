@@ -101,6 +101,36 @@ public class RestUtil {
         }
     }
 
+    public ResponseRestApi callGetOneAuth() {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .GET()
+                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                if (response.body() != null) {
+                    if (clazz.equals(String.class)) {
+                        return new ResponseRestApi(response.statusCode(),
+                                response.body());
+                    }
+                    return new ResponseRestApi(response.statusCode(),
+                            gson.fromJson(response.body(), clazz));
+                }
+            }
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            log.error("ERROR postAuth - " + endpoint, ex);
+            return null;
+        }
+
+        return null;
+    }
+
     public ResponseRestApi callPostAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))

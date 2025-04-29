@@ -33,7 +33,8 @@ public class ResumenService {
         jsonResumen.put("ivaRete1", 0);
         jsonResumen.put("subTotal", montoTotal);
         jsonResumen.put("tributos", jsonTributos);
-        jsonResumen.put("ivaPerci1", 0);
+        //jsonResumen.put("ivaPerci1", 0); //ccfe, nce Y nde
+        jsonResumen.put("totalIva", ivaMonto.setScale(2, RoundingMode.UP)); //ccfe, nce Y nde
         jsonResumen.put("reteRenta", 0);
         jsonResumen.put("descuNoSuj", 0);
         jsonResumen.put("saldoFavor", 0);
