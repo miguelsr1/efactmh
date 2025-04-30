@@ -21,6 +21,18 @@
 
     <h:body styleClass="#{guestPreferences.inputStyleClass}">
 
+        <h:form>
+            <p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="2000" />
+
+            <p:dialog id="sessionTimeOutDialog" modal="true" closable="false"
+                      header="Sesión finalizada" widgetVar="sessionTimeOutDialog">
+                <p>La sesión a caducado por inactividad, por favor, pulse sobre el siguiente botón para volver a acceder a la aplicación</p> 
+                <p:commandButton id="Logout" value="Iniciar sesión"
+                                 icon="pi pi-sign-out" ajax="false" 
+                                 action="#{monitorDeSessionView.cerrarSession()}"/>
+            </p:dialog>
+        </h:form>
+
         <div class="layout-wrapper layout-menu-static ">
             <ui:include src="./topbar.xhtml"/>
             <ui:include src="./config.xhtml"/>
@@ -32,7 +44,7 @@
                     <ui:insert name="content"/>
 
                     <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
-                    
+
                     <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px" onShow="document.location.href = document.location.href;">
                         <h3>Reloading page</h3>
                         Message: #{pfExceptionHandler.message} <br/>
