@@ -6,7 +6,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
-import sv.com.jsoft.efactmh.model.dto.ReceptorDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -38,7 +37,7 @@ public class ContribuyenteService {
         }
     }
 
-    public JSONObject getJsonReceptor(String numDocumento, JwtDto token) {
+    public JSONObject getJsonReceptor(String codigoDte, String numDocumento, JwtDto token) {
         try {
             JSONParser parser = new JSONParser();
 
@@ -46,18 +45,17 @@ public class ContribuyenteService {
                     .builder()
                     .clazz(String.class)
                     .jwtDto(token)
-                    .endpoint("/api/secured/dte/receptor/" + numDocumento)
+                    .endpoint("/api/secured/dte/receptor/" + codigoDte + "/" + numDocumento)
                     .build();
 
-            ResponseRestApi strEmisor = rest.callGetOneAuth();
+            ResponseRestApi strReceptor = rest.callGetOneAuth();
 
-            return (JSONObject) parser.parse(strEmisor.getBody().toString());
+            return (JSONObject) parser.parse(strReceptor.getBody().toString());
         } catch (ParseException ex) {
             log.error("ERROR OBTENIENDO RECEPTOR: " + numDocumento);
             return null;
         }
     }
-
 
     public void actualizar() {
 

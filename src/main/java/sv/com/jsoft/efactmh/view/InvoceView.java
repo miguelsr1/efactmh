@@ -164,11 +164,10 @@ public class InvoceView implements Serializable {
                 .jwtDto(securityService.getToken())
                 .endpoint("/api/secured/client/" + numDocumentoReceptor)
                 .build();
-        Object obj = rest.callGetOne();
-        existeCliente = (obj != null);
+        ResponseRestApi obj = rest.callGetOneAuth();
 
-        if (existeCliente) {
-            cliente = (ClienteResponse) rest.callGetOne();
+        if (obj.getCodeHttp() == 200) {
+            cliente = (ClienteResponse) obj.getBody();
             nombreCliente = (cliente.getTipoPersoneria() == 1)
                     ? cliente.getNombreCompleto()
                     : cliente.getRazonSocial();
@@ -306,7 +305,7 @@ public class InvoceView implements Serializable {
                 JSONObject jsonDte = dteServices.getDteJson(pedido,
                         "0614-120484-118-1",
                         Long.valueOf(sessionView.getIdEstablecimiento()),
-                        sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()): 0l,
+                        sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : 0l,
                         numDocumentoReceptor,
                         securityService.getToken());
 

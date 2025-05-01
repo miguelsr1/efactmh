@@ -21,8 +21,10 @@ public class ComprobanteCreditoFiscalService {
         count = 1;
 
         JSONArray jsonCuerpoDoc = new JSONArray();
-        JSONArray codsTributor = new JSONArray();
-        codsTributor.add(0, "20");
+        JSONArray jsonCodsTributos = new JSONArray();
+        jsonCodsTributos.add(0, "20");
+        
+        JSONObject codsTributo = null;
 
         lstDetFactura.forEach(detFac -> {
             JSONObject jsonDoc = new JSONObject();
@@ -33,8 +35,14 @@ public class ComprobanteCreditoFiscalService {
             jsonDoc.put("ventaNoSuj", 0);
             jsonDoc.put("ventaExenta", 0);
             jsonDoc.put("ventaGravada", detFac.getCantidad().multiply(detFac.getPrecioUnitario()).setScale(2, RoundingMode.UP));
-            jsonDoc.put("ivaItem", getMontoIva(codigoDte, (BigDecimal) jsonDoc.get("ventaGravada"), iva));
-            jsonDoc.put("tributos", codsTributor);
+            
+            switch(codigoDte){
+                case "01":
+                    jsonDoc.put("ivaItem", getMontoIva(codigoDte, (BigDecimal) jsonDoc.get("ventaGravada"), iva));
+                    break;
+            }            
+            
+            jsonDoc.put("tributos", "01".equals(codigoDte) ? codsTributo : jsonCodsTributos);
             jsonDoc.put("numItem", count);
             jsonDoc.put("tipoItem", 1);
             jsonDoc.put("cantidad", detFac.getCantidad());

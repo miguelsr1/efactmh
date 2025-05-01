@@ -19,22 +19,30 @@ public class ResumenService {
     private JSONObject jsonResumen;
     private JSONArray jsonPagos;
 
-    public JSONObject getResumen(BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal ivaMonto, List<DetallePago> lstPagos) {
+    public JSONObject getResumen(String codigoDte, BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal ivaMonto, List<DetallePago> lstPagos) {
         jsonResumen = new JSONObject();
         JSONObject jsonTributo = new JSONObject();
-        JSONArray jsonTributos = new JSONArray();
+        JSONArray jsonTributos = null;
 
-        jsonTributo.put("descripcion", "Impuesto al Valor Agregado 13%");
-        jsonTributo.put("codigo", "20");
-        jsonTributo.put("valor", ivaMonto.setScale(2, RoundingMode.UP));
-        jsonTributos.add(jsonTributo);
+        switch (codigoDte) {
+            case "01":
+                jsonResumen.put("totalIva", ivaMonto.setScale(2, RoundingMode.UP)); //unicamente FE
+                break;
+            case "03":
+                jsonTributos = new JSONArray();
+                jsonTributo.put("descripcion", "Impuesto al Valor Agregado 13%");
+                jsonTributo.put("codigo", "20");
+                jsonTributo.put("valor", ivaMonto.setScale(2, RoundingMode.UP));
+                jsonTributos.add(jsonTributo);
+
+                jsonResumen.put("ivaPerci1", 0); //ccfe, nce Y nde
+                break;
+        }
+        jsonResumen.put("ivaRete1", 0); //fe, ccfe, nce, nde, y fsee
 
         jsonResumen.put("pagos", getPagos(lstPagos));
-        jsonResumen.put("ivaRete1", 0);
         jsonResumen.put("subTotal", montoTotal);
         jsonResumen.put("tributos", jsonTributos);
-        //jsonResumen.put("ivaPerci1", 0); //ccfe, nce Y nde
-        jsonResumen.put("totalIva", ivaMonto.setScale(2, RoundingMode.UP)); //ccfe, nce Y nde
         jsonResumen.put("reteRenta", 0);
         jsonResumen.put("descuNoSuj", 0);
         jsonResumen.put("saldoFavor", 0);
@@ -55,21 +63,21 @@ public class ResumenService {
 
         return jsonResumen;
     }
-    
-    private JSONArray getPagos(List<DetallePago> lstPagos){
+
+    private JSONArray getPagos(List<DetallePago> lstPagos) {
         JSONArray jsonPagos = new JSONArray();
-        
-        lstPagos.forEach(det->{
+
+        lstPagos.forEach(det -> {
             JSONObject jsonPago = new JSONObject();
             jsonPago.put("codigo", det.getTipoPago());
             jsonPago.put("montoPago", det.getMonto());
             jsonPago.put("referencia", det.getNumeroReferencia());
             jsonPago.put("periodo", det.getPeriodoPlazo());
             jsonPago.put("plazo", det.getPlazo());
-            
+
             jsonPagos.add(jsonPago);
         });
-        
+
         return jsonPagos;
     }
 }

@@ -64,15 +64,20 @@ public class DteService {
         JSONObject jsonRoot = new JSONObject();
 
         JSONObject jsonEmisor = contribuyenteServices.getJsonEmisor(numDocEmisor, idEstablecimiento, idPuntoVenta, token);
-        JSONObject jsonReceptor = contribuyenteServices.getJsonReceptor(numDocReceptor, token);
+        JSONObject jsonReceptor = contribuyenteServices.getJsonReceptor(invoce.getCodigoDte(), numDocReceptor, token);
 
-        JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, 
-                invoce.getCodigoDte(), 
-                invoce.getIdFactura(), 
-                getVesionDte(invoce.getCodigoDte()), 
+        JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid,
+                invoce.getCodigoDte(),
+                invoce.getIdFactura(),
+                getVesionDte(invoce.getCodigoDte()),
                 "00");
-        
-        JSONObject jsonResumen = resumenServices.getResumen(montoTotalAPagar, montoTotal, ivaMonto, invoce.getDetailPayments());
+
+        JSONObject jsonResumen = resumenServices.getResumen(invoce.getCodigoDte(),
+                montoTotalAPagar,
+                montoTotal,
+                ivaMonto,
+                invoce.getDetailPayments());
+
         JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(invoce.getDetailInvoce(),
                 invoce.getCodigoDte(),
                 IVA);
@@ -128,7 +133,7 @@ public class DteService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(VARIABLES.getString("url.mh.test.recepcion")))
                     .headers("Content-Type", "application/json")
-                    .headers("Authorization", ((JSONObject)getTokenMh().get("body")).get("token").toString())
+                    .headers("Authorization", ((JSONObject) getTokenMh().get("body")).get("token").toString())
                     .POST(HttpRequest.BodyPublishers.ofString(jsonRequest.toJSONString()))
                     .build();
 

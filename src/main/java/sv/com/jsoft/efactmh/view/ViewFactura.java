@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.DetFacturaDto;
@@ -130,7 +129,7 @@ public class ViewFactura implements Serializable {
         JSONObject jsonReceptor = null; //contribuyenteServices.getContribuyente("",  false);
 
         JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid, "03", 0l, 3, "00");
-        JSONObject jsonResumen = resumenServices.getResumen(montoTotalAPagar, montoTotal, ivaMonto, null);
+        JSONObject jsonResumen = resumenServices.getResumen(null, montoTotalAPagar, montoTotal, ivaMonto, null);
         //esto es funcional para el tipo de dato DetFacturaDto.class
         //JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(lstDetFactura);
 
