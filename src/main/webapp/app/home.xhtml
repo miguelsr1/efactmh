@@ -8,7 +8,9 @@
 
     <ui:define name="content">   
         <h:form prependId="false">
-           
+            <f:metadata>
+                <f:event type="preRenderView" listener="#{sessionView.validateParamInitial()}" />
+            </f:metadata>
         </h:form>
     </ui:define>
 </ui:composition>
