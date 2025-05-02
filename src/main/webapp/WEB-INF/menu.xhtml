@@ -15,15 +15,15 @@
                 </div>
                 <pv:menu widgetVar="ParadiseMenuWidget">
                     <p:submenu label="Operaciones" icon="pi pi-fw pi-prime" >
-                        <p:menuitem value="Pedido" icon="pi pi-book" outcome="/app/process/invoce/invoce" process="@this"/>
-                        <p:menuitem value="eFactura" icon="pi pi-file-import" action="factura" process="@this"/>
+                        <p:menuitem value="Factura" icon="pi pi-inbox" outcome="/app/process/invoce/invoce" process="@this"/>
+                        <p:menuitem value="DTE's" icon="pi pi-file-excel" outcome="/app/process/invoce/invoce" process="@this"/>
+                        <p:menuitem value="Anulaciones" icon="pi pi-file-excel" outcome="/app/process/invoce/invoce" process="@this"/>
                         <p:menuitem value="Reimpresión" icon="pi pi-print" process="@this"/>
                     </p:submenu>
                     <p:submenu label="Mantenimientos" icon="pi pi-home">
-                        <p:menuitem id="manttoCli" value="Items" icon="pi pi-th-large" outcome="/app/mantto/producto" process="@this"/>
+                        <p:menuitem value="Items" id="manttoCli" icon="pi pi-th-large" outcome="/app/mantto/items" process="@this"/>
                         <p:menuitem value="Mis Datos" icon="pi pi-briefcase" outcome="/app/mantto/emisor/emisor" process="@this" />
-                        <p:menuitem value="Parametros MH" icon="pi pi-briefcase" outcome="/app/mantto/parametros" process="@this" />
-                        <p:menuitem value="Receptores" icon="pi pi-briefcase" outcome="/app/mantto/cliente" process="@this" />
+                        <p:menuitem value="Clientes" icon="pi pi-id-card" outcome="/app/mantto/cliente" process="@this" />
                     </p:submenu>
                 </pv:menu>
             </h:form>

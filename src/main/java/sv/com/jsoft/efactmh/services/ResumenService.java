@@ -16,11 +16,8 @@ import sv.com.jsoft.efactmh.util.CantidadALetras;
 @ApplicationScoped
 public class ResumenService {
 
-    private JSONObject jsonResumen;
-    private JSONArray jsonPagos;
-
     public JSONObject getResumen(String codigoDte, BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal ivaMonto, List<DetallePago> lstPagos) {
-        jsonResumen = new JSONObject();
+        JSONObject jsonResumen = new JSONObject();
         JSONObject jsonTributo = new JSONObject();
         JSONArray jsonTributos = null;
 

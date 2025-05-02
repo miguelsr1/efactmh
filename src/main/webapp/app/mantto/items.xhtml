@@ -7,10 +7,24 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Cliente</ui:define>
+    <ui:define name="head">
+        <style>
+            body .ui-breadcrumb {
+                background: transparent !important;
+                border: 0px solid;
+                padding: 0.5rem;
+            }
+        </style>
+    </ui:define>
 
     <ui:define name="content">   
         <h:form prependId="false">
             <div class="grid dashboard ">
+                <p:breadCrumb>
+                    <p:menuitem value="Matenimientos" outcome="/app/home" />
+                    <p:menuitem value="Items"/>
+                </p:breadCrumb>
+
                 <div class="col-12">
                     <div class="card">
                         <h5>Datos Generales</h5>
@@ -19,38 +33,36 @@
                                 <div class="formgrid grid">
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtCod" value="Código"/>
-                                        <p:inputText id="txtCod" value="#{productoView.producto.codigo}"
+                                        <p:inputText id="txtCod" value="#{productoView.producto.codigo}" disabled="#{productoView.disabled}"
                                                      class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtNom" value="Nombre"/>
-                                        <p:inputText id="txtNom" value="#{productoView.producto.nombre}" required="true"
+                                        <p:inputText id="txtNom" value="#{productoView.producto.nombre}" required="true" disabled="#{productoView.disabled}"
                                                      class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtPu" value="Precio Unitario"/>
-                                        <p:inputText id="txtPu" value="#{productoView.producto.precioUnitario}" required="true" 
+                                        <p:inputText id="txtPu" value="#{productoView.producto.precioUnitario}" required="true" disabled="#{productoView.disabled}"
                                                      class="surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="cboUni" value="Unidad de Medida"/>
-                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.idUnidadMedida}" 
+                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.idUnidadMedida}" disabled="#{productoView.disabled}"
                                                          class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UNA UNIDAD" />
                                             <f:selectItems value="#{catalogoService.lstTipoUnidadMedida}" var="uni" itemLabel="#{uni.descripcion}" itemValue="#{uni.idUnidadMedida}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="field col-12">
-                                        <p:commandButton value="Nuevo" icon="pi pi-file" action="#{productoView.nuevo()}" update="dvDatos tblPro" style="margin-right: 5px;" process="@this"/>
-                                        <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" update="dvDatos tblPro"/>
+                                        <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" update="dvDatos tblPro" style="margin-right: 5px;"/>
+                                        <p:commandButton value="Cancelar" icon="pi pi-times" action="#{productoView.cancelar()}" update="dvDatos" process="@this" styleClass="ui-button-secondary"/>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <p:messages showSummary="true" showIcon="false" showDetail="true">
@@ -60,7 +72,19 @@
             <div class="card">
                 <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" value="#{productoView.lstProducto}" rowKey="#{pro.idProducto}"
                              rowIndexVar="rowId" selectionMode="single" selection="#{productoView.producto}"
-                             paginator="true" paginatorPosition="top" rows="10" reflow="true" >
+                             paginator="true" paginatorPosition="bottom" rows="10" reflow="true" >
+
+                    <f:facet name="header">
+                        <div class="flex justify-content-between align-items-center">
+                            <h5><span style="margin-right: 1rem"></span>Listado de Items</h5>
+
+                            <div>                            
+                                <p:commandButton action="#{productoView.nuevo()}" update="dvDatos tblPro" icon="pi pi-plus"
+                                                 validateClient="true" styleClass="ui-button-outlined ui-button-success" process="@this"/>
+                            </div>
+                        </div>
+                    </f:facet>
+
                     <p:ajax event="rowSelect" update="dvDatos" listener="#{productoView.onRowSelect}"/>
                     <p:column headerText="Código">
                         <p:outputLabel value="#{pro.codigo}"/>

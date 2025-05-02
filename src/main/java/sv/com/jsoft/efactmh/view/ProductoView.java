@@ -26,6 +26,9 @@ public class ProductoView implements Serializable {
 
     @Getter
     @Setter
+    private boolean disabled = true;
+    @Getter
+    @Setter
     private Producto producto;
     @Getter
     private List<Producto> lstProducto;
@@ -52,6 +55,7 @@ public class ProductoView implements Serializable {
     }
 
     public void guardar() {
+        disabled = true;
         int codeResponse = res.callPersistir(producto);
         JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (producto.esNuevo() ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
 
@@ -75,6 +79,12 @@ public class ProductoView implements Serializable {
 
     public void nuevo() {
         producto = new Producto();
+        disabled = false;
+    }
+    
+    public void cancelar() {
+        producto = new Producto();
+        disabled = true;
     }
 
     public void onRowSelect(SelectEvent<Producto> event) {

@@ -5,29 +5,45 @@
               xmlns:p="http://primefaces.org/ui"
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <h:form prependId="false">
-        <div class="card">
-            <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" selectionMode="single"
-                         rowKey="#{cli.idCliente}" rowIndexVar="rowId" selection="#{clienteView.cliente}">
-                <p:ajax event="rowSelect" update="dvDatos" listener="#{clienteView.onRowSelect}"/>
 
-                <p:column headerText="Código">
-                    <p:outputLabel value="#{cli.codigo}"/>
-                </p:column>
-                <p:column headerText="NIT">
-                    <p:outputLabel value="#{cli.nit}"/>
-                </p:column>
-                <p:column headerText="NRC">
-                    <p:outputLabel value="#{cli.nrc}"/>
-                </p:column>
-                <p:column headerText="Razon Social">
-                    <p:outputLabel value="#{cli.razonSocial}" />
-                </p:column>
-                <p:column headerText="email" >
-                    <p:outputLabel value="#{cli.email}" />
-                </p:column>
+    <div class="card">
+        <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" selectionMode="single"
+                     reflow="true" size="small" tableStyle="table-layout: auto;"
+                     rowKey="#{cli.idCliente}" rowIndexVar="rowId" selection="#{clienteView.clienteDto}">
+            <f:facet name="header">
+                <div class="flex justify-content-between align-items-center">
+                    <h5><span style="margin-right: 1rem"></span>Listado de Clientes</h5>
 
-            </p:dataTable>
-        </div>
-    </h:form>
+                    <div>                            
+                        <p:commandButton action="#{clienteView.nuevo()}" update="dvDatos" icon="pi pi-plus"
+                                         validateClient="true" styleClass="ui-button-outlined ui-button-success" process="@this"/>
+                    </div>
+                </div>
+            </f:facet>
+
+            <p:ajax event="rowSelect" update="dvDatos" listener="#{clienteView.onRowSelect}"/>
+
+            <p:column headerText="Tipo">
+                <p:outputLabel value="#{cli.tipoPersoneria}"/>
+            </p:column>
+            <p:column headerText="Nombre">
+                <p:outputLabel value="#{cli.nombre}"/>
+            </p:column>
+            <p:column headerText="Nombre Comercial">
+                <p:outputLabel value="#{cli.nombreComercial}"/>
+            </p:column>
+            <p:column headerText="Tipo Documento">
+                <p:outputLabel value="#{cli.tipoDocumento}" />
+            </p:column>
+            <p:column headerText="Num. Documento" >
+                <p:outputLabel value="#{cli.numeroDocumento}" />
+            </p:column>
+            <p:column headerText="N.R.C." >
+                <p:outputLabel value="#{cli.nrc}" />
+            </p:column>
+            <p:column headerText="Correo" >
+                <p:outputLabel value="#{cli.correo}" />
+            </p:column>
+        </p:dataTable>
+    </div>
 </ui:component>

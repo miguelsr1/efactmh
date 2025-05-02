@@ -1,5 +1,6 @@
 package sv.com.jsoft.efactmh.view;
 
+import com.google.gson.Gson;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import sv.com.jsoft.efactmh.model.DetallePago;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
+import sv.com.jsoft.efactmh.model.dto.DocumentoRespuestaDto;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.SessionService;
@@ -328,6 +330,17 @@ public class InvoceView implements Serializable {
                 addProgressAvance();
 
                 log.info(jsonResponse.toJSONString());
+                DocumentoRespuestaDto respuestaMh = new Gson().fromJson(jsonResponse.toJSONString(), DocumentoRespuestaDto.class);
+
+                PrimeFaces.current().executeScript("PF('chatDialog').hide()");
+                log.info(jsonResponse.toJSONString());
+
+                switch (respuestaMh.getEstado()) {
+                    case "RECHAZADO":
+                        break;
+                    default:
+                        break;
+                }
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(InvoceView.class.getName()).log(Level.SEVERE, null, ex);

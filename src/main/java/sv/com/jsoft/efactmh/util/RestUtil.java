@@ -12,6 +12,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.faces.application.FacesMessage;
@@ -39,7 +40,7 @@ public class RestUtil {
     private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
 
-    public List callGet() {
+    public ResponseRestApi callGet() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .GET()
@@ -51,16 +52,31 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            Type lst = TypeToken.getParameterized(List.class, clazz).getType();
-
-            return gson.fromJson(response.body(), lst);
+            if (response.statusCode() == 200) {
+                if (response.body() != null) {
+                    Type lst = TypeToken.getParameterized(List.class, clazz).getType();
+                    return new ResponseRestApi(response.statusCode(),
+                            gson.fromJson(response.body(), lst));
+                }
+            }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR get - " + endpoint, ex);
-            return null;
+
+            String mensajeError;
+            if (ex instanceof java.net.ConnectException) {
+                mensajeError = "ERROR DE CONEXION";
+            } else if (ex instanceof java.net.http.HttpTimeoutException) {
+                mensajeError = "TIEMPO DE ESPERA SUPERADO";
+            } else {
+                mensajeError = "ERROR INESPERADO";
+            }
+
+            return new ResponseRestApi(-1, mensajeError);
         }
+        return null;
     }
 
-    public List callGet(JwtDto jwtDto) {
+    /*public ResponseRestApi callGetAll() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .GET()
@@ -72,16 +88,19 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            Type lst = TypeToken.getParameterized(List.class, clazz).getType();
-
-            return gson.fromJson(response.body(), lst);
-
+            if (response.statusCode() == 200) {
+                if (response.body() != null) {
+                     Type lst = TypeToken.getParameterized(List.class, clazz).getType();
+                    return new ResponseRestApi(response.statusCode(),
+                             gson.fromJson(response.body(), lst));
+                }
+            }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR get - " + endpoint, ex);
             return null;
         }
-    }
-
+        return null;
+    }*/
     public Object callGetOne() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
@@ -298,6 +317,7 @@ public class RestUtil {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(HOST + endpoint))
+                    .timeout(Duration.ofSeconds(5))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers
                             .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
@@ -305,13 +325,24 @@ public class RestUtil {
 
             HttpResponse<String> response = HttpClient
                     .newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             return new ResponseDto(response.statusCode(), response.body());
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR postV2 - " + endpoint, ex);
-            return new ResponseDto(-1, "ERROR DE CONEXION");
+
+            String mensajeError;
+            if (ex instanceof java.net.ConnectException) {
+                mensajeError = "ERROR DE CONEXION";
+            } else if (ex instanceof java.net.http.HttpTimeoutException) {
+                mensajeError = "TIEMPO DE ESPERA SUPERADO";
+            } else {
+                mensajeError = "ERROR INESPERADO";
+            }
+
+            return new ResponseDto(-1, mensajeError);
         }
     }
 

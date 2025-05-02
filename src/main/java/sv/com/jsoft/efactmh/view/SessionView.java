@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Cookie;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.PrimeFaces;
@@ -44,10 +45,10 @@ public class SessionView implements Serializable {
     private void loadCookies() {
         Map<String, Object> requestCookieMap = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
         if (requestCookieMap.containsKey("idEstable")) {
-            idEstablecimiento = requestCookieMap.get("idEstable").toString();
+            idEstablecimiento = ((Cookie)requestCookieMap.get("idEstable")).getValue();
         }
         if (requestCookieMap.containsKey("idPuntoV")) {
-            idPuntoVenta = requestCookieMap.get("idPuntoV").toString();
+            idPuntoVenta = ((Cookie)requestCookieMap.get("idPuntoV")).getValue();
         }
 
         sinParametrosIniciales = (idEstablecimiento == null && idPuntoVenta == null);
@@ -62,15 +63,16 @@ public class SessionView implements Serializable {
     }
 
     public String getIdEstablecimiento() {
-        if (idPuntoVenta == null) {
-            JsfUtil.eliminarCookie("idEstable");
-        } else {
-            JsfUtil.crearCookie("idEstable", idEstablecimiento);
-        }
         return idEstablecimiento;
     }
 
     public void setIdEstablecimiento(String idEstablecimiento) {
+        if (idEstablecimiento == null) {
+            JsfUtil.eliminarCookie("idEstable");
+        } else {
+            JsfUtil.crearCookie("idEstable", idEstablecimiento);
+            sinParametrosIniciales = false;
+        }
         this.idEstablecimiento = idEstablecimiento;
     }
 
@@ -83,6 +85,7 @@ public class SessionView implements Serializable {
             JsfUtil.eliminarCookie("idPuntoV");
         } else {
             JsfUtil.crearCookie("idPuntoV", idPuntoVenta);
+            sinParametrosIniciales = false;
         }
         this.idPuntoVenta = idPuntoVenta;
     }

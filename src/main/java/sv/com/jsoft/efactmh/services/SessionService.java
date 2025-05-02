@@ -14,6 +14,7 @@ import lombok.Setter;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -28,11 +29,11 @@ public class SessionService implements Serializable {
     private ParametroDto parametroDto;
     @Getter
     private String userName;
-    
+
     @Getter
     private JwtDto token;
     private List<CatalogoDto> lstEstablecimiento;
-    
+
     @Inject
     CatalogoService catalogoService;
 
@@ -45,28 +46,30 @@ public class SessionService implements Serializable {
         loadEstablecimiento();
     }
 
-    private void loadEstablecimiento(){
+    private void loadEstablecimiento() {
         lstEstablecimiento = catalogoService.getLstEstablecimiento(token);
     }
-    
-    public List<CatalogoDto> getLstEstablecimiento(){
+
+    public List<CatalogoDto> getLstEstablecimiento() {
         return lstEstablecimiento;
     }
-    
-    public List<CatalogoDto> getLstPuntoVenta(Long idEstablecimiento){
+
+    public List<CatalogoDto> getLstPuntoVenta(Long idEstablecimiento) {
         return catalogoService.getLstPuntoVentaByEstablecimiento(token, idEstablecimiento);
     }
-    
+
     private void cargarParametrosMh() {
-        RestUtil rest = RestUtil
+        ResponseRestApi rest = RestUtil
                 .builder()
                 .clazz(ParametroDto.class)
                 .jwtDto(token)
                 .endpoint("/api/secured/emisor/parametro/all")
-                .build();
+                .build()
+                .callGet();
 
-        List<ParametroDto> lst = rest.callGet();
-
-        parametroDto = lst.stream().filter(param -> param.getActivo()).findFirst().orElse(null);
+        if (rest.getCodeHttp() == 200) {
+            List<ParametroDto> lst = (List<ParametroDto>) rest.getBody();
+            parametroDto = lst.stream().filter(param -> param.getActivo()).findFirst().orElse(null);
+        }
     }
 }

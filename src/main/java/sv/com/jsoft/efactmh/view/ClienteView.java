@@ -13,9 +13,12 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
+import sv.com.jsoft.efactmh.model.dto.ClienteDto;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
+import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.services.UbicacionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -29,6 +32,9 @@ public class ClienteView implements Serializable {
     private int tipoDoc;
     @Getter
     @Setter
+    private boolean disabled = true;
+    @Getter
+    @Setter
     private String codigoDepa;
     @Getter
     @Setter
@@ -38,18 +44,21 @@ public class ClienteView implements Serializable {
     private String nitContacto;
     @Getter
     @Setter
-    private Integer idMuni;
+    private Long idMuni;
 
     private List<MunicipioDto> lstMunicipio;
 
     private Cliente cliente;
+    private ClienteDto clienteDto;
     @Getter
-    private List<Cliente> lstCliente;
+    private List<ClienteDto> lstCliente;
 
     private RestUtil res;
 
     @Inject
     UbicacionService ubicacionService;
+    @Inject
+    SessionService sessionService;
 
     {
         tipoDoc = 1;
@@ -59,13 +68,25 @@ public class ClienteView implements Serializable {
 
     @PostConstruct
     public void init() {
-        /*res = RestUtil
+        res = RestUtil
                 .builder()
-                .clazz(Cliente.class)
-                .endpoint("cliente/")
+                .clazz(ClienteDto.class)
+                .jwtDto(sessionService.getToken())
+                .endpoint("/api/secured/client/")
                 .build();
 
-        lstCliente = res.callGet();*/
+        ResponseRestApi response = res.callGet();
+        if (response.getCodeHttp() == 200) {
+            lstCliente = (List<ClienteDto>) response.getBody();
+        }
+    }
+
+    public ClienteDto getClienteDto() {
+        return clienteDto;
+    }
+
+    public void setClienteDto(ClienteDto ClienteDto) {
+        this.clienteDto = ClienteDto;
     }
 
     public Cliente getCliente() {
@@ -88,6 +109,12 @@ public class ClienteView implements Serializable {
 
     public void nuevo() {
         cliente = new Cliente();
+        disabled = false;
+    }
+    
+    public void cancelar() {
+        cliente = new Cliente();
+        disabled = true;
     }
 
     public void guardar() {
@@ -103,7 +130,8 @@ public class ClienteView implements Serializable {
 
             cliente = new Cliente();
             duiContacto = "";
-            
+            disabled = true;
+
             PrimeFaces.current().ajax().update("tblCli");
         }
     }
@@ -112,9 +140,10 @@ public class ClienteView implements Serializable {
         return ubicacionService.findMunicipioByDepa(codigoDepa);
     }
 
-    public void onRowSelect(SelectEvent<Cliente> event) {
-        cliente = event.getObject();
-        idMuni = cliente.getIdMunicipio();
+    public void onRowSelect(SelectEvent<ClienteDto> event) {
+        disabled = false;
+        clienteDto = event.getObject();
+        idMuni = clienteDto.getIdMunicipio();
         MunicipioDto m = (MunicipioDto) RestUtil.builder()
                 .clazz(MunicipioDto.class)
                 .endpoint("catalogos/municipio/" + idMuni)

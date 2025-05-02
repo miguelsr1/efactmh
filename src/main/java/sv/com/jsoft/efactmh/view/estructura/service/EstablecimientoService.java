@@ -1,10 +1,12 @@
 package sv.com.jsoft.efactmh.view.estructura.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.PuntoVentaDto;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -15,24 +17,26 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 public class EstablecimientoService {
 
     public List<EstablecimientoDto> getLstEstablecimiento(JwtDto token) {
-        RestUtil rest = RestUtil
+        ResponseRestApi rest = RestUtil
                 .builder()
                 .clazz(EstablecimientoDto.class)
                 .jwtDto(token)
                 .endpoint("/api/establecimiento")
-                .build();
+                .build()
+                .callGet();
 
-        return rest.callGet();
+        return rest.getCodeHttp() == 200 ? (List<EstablecimientoDto>) rest.getBody() : new ArrayList<>();
     }
 
     public List<PuntoVentaDto> getLstPuntosVentas(JwtDto token, Long idEstablecimiento) {
-        RestUtil rest = RestUtil
+        ResponseRestApi rest = RestUtil
                 .builder()
                 .clazz(PuntoVentaDto.class)
                 .jwtDto(token)
                 .endpoint("/api/punto-venta/establecimiento/" + idEstablecimiento)
-                .build();
+                .build()
+                .callGet();
 
-        return rest.callGet();
+        return rest.getCodeHttp() == 200 ? (List<PuntoVentaDto>) rest.getBody() : new ArrayList<>();
     }
 }

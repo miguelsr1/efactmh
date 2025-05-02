@@ -1,16 +1,29 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="/WEB-INF/template.xhtml">
+                template="/WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="title">Cliente</ui:define>
     <ui:define name="head">
         <h:outputScript name="inputmask.js" library="js"/>
+        <style>
+            body .ui-breadcrumb {
+                background: transparent !important;
+                border: 0px solid;
+                padding: 0.5rem;
+            }
+        </style>
     </ui:define>
 
     <ui:define name="content">   
         <h:form prependId="false">
             <div class="grid dashboard ">
+                <p:breadCrumb>
+                    <p:menuitem value="Matenimientos" outcome="/app/home" />
+                    <p:menuitem value="Mis Clientes"/>
+                </p:breadCrumb>
+
                 <div class="col-12">
                     <ui:include src="fragmento/cliente/frag-cliente.xhtml"/>
                 </div>

@@ -9,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -233,7 +234,9 @@ public class DteService {
                     .POST(HttpRequest.BodyPublishers.ofString(jsonFirmador.toJSONString()))
                     .build();
 
-            HttpResponse<String> response = HttpClient.newHttpClient()
+            HttpResponse<String> response = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build()
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
             JSONObject jsonFirmado = (JSONObject) parser.parse(response.body());

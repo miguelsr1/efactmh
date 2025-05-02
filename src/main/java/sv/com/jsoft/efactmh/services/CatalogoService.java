@@ -25,6 +25,7 @@ import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -64,28 +65,40 @@ public class CatalogoService {
     }
 
     private void loadTipoUnidadMedida() {
-        lstTipoUnidadMedida = RestUtil.builder()
+        ResponseRestApi response = RestUtil.builder()
                 .endpoint("item")
                 .clazz(TipoUnidadMedida.class)
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGet();
+
+        if (response.getCodeHttp() == 200) {
+            lstTipoUnidadMedida = (List<TipoUnidadMedida>) response.getBody();
+        }
     }
 
     private void loadDatosUbicacion() {
-        lstDepartamentos = RestUtil.builder()
+        ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/catalogo/departamento")
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGet();
 
-        lstMunicipios = RestUtil.builder()
+        if (response.getCodeHttp() == 200) {
+            lstDepartamentos = (List<CatalogoDto>) response.getBody();
+        }
+
+        response = RestUtil.builder()
                 .endpoint("/api/catalogo/municipio")
                 .clazz(MunicipioDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGet();
+
+        if (response.getCodeHttp() == 200) {
+            lstMunicipios = (List<MunicipioDto>) response.getBody();
+        }
     }
 
     public List<MunicipioDto> getMunicipioDtoByCodDepa(String codDepa) {
@@ -97,12 +110,15 @@ public class CatalogoService {
     }
 
     private void loadGiros() {
-        lstGiros = RestUtil.builder()
+        ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/catalogo/giro")
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGet();
+        if (response.getCodeHttp() == 200) {
+            lstGiros = (List<CatalogoDto>) response.getBody();
+        }
     }
 
     private void loadProduct() {
@@ -144,20 +160,22 @@ public class CatalogoService {
     }
 
     public List<CatalogoDto> getLstEstablecimiento(JwtDto token) {
-        return RestUtil.builder()
+        ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/catalogo/establecimiento")
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGet();
+        return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 
     public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(JwtDto token, Long idEstablecimiento) {
-        return RestUtil.builder()
+        ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/catalogo/punto-venta/" + idEstablecimiento)
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGet();
+        return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 }

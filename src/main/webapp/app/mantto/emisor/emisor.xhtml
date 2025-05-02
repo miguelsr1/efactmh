@@ -26,15 +26,23 @@
             body .ui-datatable.ui-datatable-sm .ui-datatable-data > tr > td {
                 padding: 0.2rem 0.5rem;
             }
+            body .ui-breadcrumb {
+                background: transparent !important;
+                border: 0px solid;
+                padding: 0.5rem;
+            }
         </style>
     </ui:define>
 
     <ui:define name="content">
-
         <div class="grid dashboard ">
+            <p:breadCrumb>
+                <p:menuitem value="Matenimientos" outcome="/app/home" />
+                <p:menuitem value="Mis Datos"/>
+            </p:breadCrumb>
+
             <div class="col-12">                    
                 <div class="card" jsf:id="dvDatos">
-
                     <p:tabView dynamic="true" cache="true" prependId="false">
                         <p:tab title="Datos Generales">
                             <div class="grid">

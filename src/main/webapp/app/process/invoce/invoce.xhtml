@@ -58,7 +58,7 @@
                              actionListener="#{invoceView.showActiveStep()}" 
                              update="mensajesPanel"/>
 
-            <p:dialog header="Espere por favor" widgetVar="chatDialog" modal="false" closable="false" maximizable="false" draggable="false">
+            <p:dialog header="Espere por favor" widgetVar="chatDialog" modal="true" closable="false" maximizable="false" draggable="false">
                 <div jsf:id="mensajesPanel" style="text-align: center;">
                     <p:outputLabel >
                         <ul class="list-none p-0 m-0 flex-grow-1" style="margin-bottom: 2rem !important;">
@@ -92,7 +92,7 @@
         <h:form prependId="false">
             <div class="grid dashboard">
                 <p:breadCrumb>
-                    <p:menuitem value="Operaciones"/>
+                    <p:menuitem value="Operaciones" outcome="/app/home" />
                     <p:menuitem value="Factura"/>
                 </p:breadCrumb>
 
