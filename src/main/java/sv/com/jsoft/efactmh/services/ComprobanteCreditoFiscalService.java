@@ -61,7 +61,7 @@ public class ComprobanteCreditoFiscalService {
     private BigDecimal getMontoIva(String codigoDte, BigDecimal ventaGravada, BigDecimal iva) {
         switch (codigoDte) {
             case "01":
-                return ventaGravada.multiply(iva).setScale(2, RoundingMode.UP);
+                return ventaGravada.multiply(iva).divide(new BigDecimal("1.13"),2, RoundingMode.UP);
             default:
                 return BigDecimal.ZERO;
         }

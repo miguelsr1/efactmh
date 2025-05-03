@@ -60,7 +60,15 @@ public class DteService {
 
         BigDecimal montoTotal = getTotal(invoce);
         BigDecimal ivaMonto = montoTotal.multiply(IVA);
-        BigDecimal montoTotalAPagar = montoTotal.add(ivaMonto);
+        BigDecimal montoTotalAPagar = montoTotal;
+
+        switch (invoce.getCodigoDte()) {
+            case "01":
+                break;
+            case "03":
+                montoTotalAPagar = montoTotal.add(ivaMonto);
+                break;
+        }
 
         JSONObject jsonRoot = new JSONObject();
 
@@ -73,15 +81,21 @@ public class DteService {
                 getVesionDte(invoce.getCodigoDte()),
                 "00");
 
-        JSONObject jsonResumen = resumenServices.getResumen(invoce.getCodigoDte(),
-                montoTotalAPagar,
-                montoTotal,
-                ivaMonto,
-                invoce.getDetailPayments());
-
         JSONArray jsonCuerpoDoc = comprobanteCreditoFiscalServices.getCuerpoDocumento(invoce.getDetailInvoce(),
                 invoce.getCodigoDte(),
                 IVA);
+
+        BigDecimal totalIva = BigDecimal.ZERO;
+        for (Object obj : jsonCuerpoDoc) {
+            JSONObject item = (JSONObject) obj;
+            totalIva = totalIva.add((BigDecimal)item.get("ivaItem"));
+        }
+
+        JSONObject jsonResumen = resumenServices.getResumen(invoce.getCodigoDte(),
+                montoTotalAPagar,
+                montoTotal,
+                totalIva,
+                invoce.getDetailPayments());
 
         jsonRoot.put("emisor", jsonEmisor);
         jsonRoot.put("resumen", jsonResumen);

@@ -16,20 +16,20 @@ import sv.com.jsoft.efactmh.util.CantidadALetras;
 @ApplicationScoped
 public class ResumenService {
 
-    public JSONObject getResumen(String codigoDte, BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal ivaMonto, List<DetallePago> lstPagos) {
+    public JSONObject getResumen(String codigoDte, BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal totalIva, List<DetallePago> lstPagos) {
         JSONObject jsonResumen = new JSONObject();
         JSONObject jsonTributo = new JSONObject();
         JSONArray jsonTributos = null;
 
         switch (codigoDte) {
             case "01":
-                jsonResumen.put("totalIva", ivaMonto.setScale(2, RoundingMode.UP)); //unicamente FE
+                jsonResumen.put("totalIva", totalIva.setScale(2, RoundingMode.UP)); //unicamente FE
                 break;
             case "03":
                 jsonTributos = new JSONArray();
                 jsonTributo.put("descripcion", "Impuesto al Valor Agregado 13%");
                 jsonTributo.put("codigo", "20");
-                jsonTributo.put("valor", ivaMonto.setScale(2, RoundingMode.UP));
+                jsonTributo.put("valor", totalIva.setScale(2, RoundingMode.UP));
                 jsonTributos.add(jsonTributo);
 
                 jsonResumen.put("ivaPerci1", 0); //ccfe, nce Y nde
