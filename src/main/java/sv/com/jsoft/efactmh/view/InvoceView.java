@@ -1,6 +1,5 @@
 package sv.com.jsoft.efactmh.view;
 
-import com.google.gson.Gson;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
 import org.omnifaces.cdi.Push;
 import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
@@ -28,10 +26,11 @@ import sv.com.jsoft.efactmh.model.DetallePago;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
-import sv.com.jsoft.efactmh.model.dto.DocumentoRespuestaDto;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
+import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -54,15 +53,11 @@ public class InvoceView implements Serializable {
     @Getter
     private String taskSave;
     @Getter
-    private String taskDte;
-    @Getter
     private String taskSendDte;
     @Getter
     private String taskComplete;
     @Getter
     private String fontWeightSave;
-    @Getter
-    private String fontWeightDte;
     @Getter
     private String fontWeightSendDte;
     @Getter
@@ -116,6 +111,8 @@ public class InvoceView implements Serializable {
     @Push(channel = "chatChannel")
     private PushContext push;
 
+    private Long idFac;
+
     @PostConstruct
     public void init() {
         fechaPedido = new Date();
@@ -126,12 +123,10 @@ public class InvoceView implements Serializable {
         detPago = new DetallePago();
 
         taskSave = "taskPending";
-        taskDte = "taskPending";
         taskSendDte = "taskPending";
         taskComplete = "taskPending";
 
         fontWeightSave = "";
-        fontWeightDte = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
     }
@@ -277,15 +272,31 @@ public class InvoceView implements Serializable {
         }
     }
 
-    private String uuid;
-    private Long idFac;
-
     public void save() {
+        if (lstDetPago.isEmpty()) {
+            JsfUtil.mensajeAlerta("DEBE DE AGREGAR EL DETALLE DE PAGOS");
+            return;
+        }
+
+        BigDecimal total = lstDetPago.stream()
+                .map(DetallePago::getMonto)
+                .filter(monto -> monto != null) // Opcional, si puede haber montos nulos
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if(getTotal().compareTo(total) != 0){
+            JsfUtil.mensajeAlerta("DEBE DE REVISAR LA SUMATORIA DE LOS DETALLES DE PAGO");
+            return;
+        }
+        
+        lstDetPago.forEach(det -> det.getMonto());
+
         clearStatus();
 
         try {
             pedido.setDetailPayments(lstDetPago);
+            pedido.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
+            pedido.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
 
+            //Persistiendo factura
             RestUtil rest = RestUtil
                     .builder()
                     .clazz(IdDto.class)
@@ -299,48 +310,20 @@ public class InvoceView implements Serializable {
                 IdDto newInvoce = (IdDto) response.getBody();
                 idFac = newInvoce.getId();
 
+                //advance 30%
+                addProgressAvance();
+
                 pedido.setIdFactura(idFac);
 
-                //advance 25%
+                //advance 60%
                 addProgressAvance();
 
-                JSONObject jsonDte = dteServices.getDteJson(pedido,
-                        "0614-120484-118-1",
-                        Long.valueOf(sessionView.getIdEstablecimiento()),
-                        sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : 0l,
-                        numDocumentoReceptor,
-                        securityService.getToken());
-
-                //advance 50%
-                addProgressAvance();
-
-                log.info("DTE: " + jsonDte.toJSONString());
-
-                JSONObject jsonFirmado = dteServices.getFirmarDocumento(jsonDte, sessionService.getParametroDto());
-
-                //advance 75%
-                addProgressAvance();
-
-                JSONObject jsonResponse = dteServices.getProcesarMh(jsonFirmado.get("body").toString(),
-                        securityService.getToken().getAccessToken(),
-                        pedido.getCodigoDte(),
-                        ((JSONObject) jsonDte.get("identificacion")).get("codigoGeneracion").toString());
-
+                //enviando a MH
+                dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
                 //advance 100%
                 addProgressAvance();
 
-                log.info(jsonResponse.toJSONString());
-                DocumentoRespuestaDto respuestaMh = new Gson().fromJson(jsonResponse.toJSONString(), DocumentoRespuestaDto.class);
-
-                PrimeFaces.current().executeScript("PF('chatDialog').hide()");
-                log.info(jsonResponse.toJSONString());
-
-                switch (respuestaMh.getEstado()) {
-                    case "RECHAZADO":
-                        break;
-                    default:
-                        break;
-                }
+                log.info("Finalizando");
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(InvoceView.class.getName()).log(Level.SEVERE, null, ex);
@@ -350,31 +333,12 @@ public class InvoceView implements Serializable {
     private void addProgressAvance() throws InterruptedException {
         push.send("" + var);
         var++;
-        advance += 25;
-        Thread.sleep(1000);
-    }
-
-    public void enviar() {
-        try {
-            push.send("" + var);
-            var++;
-            advance = 25;
-            Thread.sleep(2000);
-            push.send("" + var);
-            var++;
-            advance = 50;
-            Thread.sleep(2000);
-            push.send("" + var);
-            var++;
-            advance = 75;
-            Thread.sleep(2000);
-            push.send("" + var);
-            var++;
+        if (advance < 60) {
+            advance += 30;
+        } else {
             advance = 100;
-        } catch (InterruptedException ex) {
-            log.error("error enviarMensaje", ex);
         }
-
+        Thread.sleep(1000);
     }
 
     public void showActiveStep() {
@@ -390,14 +354,10 @@ public class InvoceView implements Serializable {
                 fontWeightSave = "font-weight: bold";
                 break;
             case "2":
-                taskDte = "taskComplete";
-                fontWeightDte = "font-weight: bold;";
-                break;
-            case "3":
                 taskSendDte = "taskComplete";
                 fontWeightSendDte = "font-weight: bold;";
                 break;
-            case "4":
+            case "3":
                 taskComplete = "taskComplete";
                 fontWeightComplete = "font-weight: bold;";
                 break;
@@ -408,12 +368,10 @@ public class InvoceView implements Serializable {
 
     public void clearStatus() {
         taskSave = "taskPending";
-        taskDte = "taskPending";
         taskSendDte = "taskPending";
         taskComplete = "taskPending";
 
         fontWeightSave = "";
-        fontWeightDte = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
 

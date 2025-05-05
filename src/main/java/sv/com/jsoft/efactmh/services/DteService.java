@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,6 +29,10 @@ import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
+import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
+import sv.com.jsoft.efactmh.util.JsfUtil;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
+import sv.com.jsoft.efactmh.util.RestUtil;
 import sv.com.jsoft.efactmh.view.ViewFactura;
 
 /**
@@ -49,6 +54,8 @@ public class DteService {
     private ComprobanteCreditoFiscalService comprobanteCreditoFiscalServices;
     @Inject
     private ResumenService resumenServices;
+    @Inject
+    private SessionService sessionService;
 
     @PostConstruct
     public void init() {
@@ -198,8 +205,8 @@ public class DteService {
             JSONParser parser = new JSONParser();
 
             Map<String, String> parameters = new HashMap<>();
-            parameters.put("user", VARIABLES.getString("nit"));
-            parameters.put("pwd", VARIABLES.getString("pass.pub"));
+            parameters.put("user", sessionService.getParametroDto().getUserJwt());
+            parameters.put("pwd", sessionService.getParametroDto().getPwdJwt());
 
             String form = parameters.entrySet()
                     .stream()
@@ -260,4 +267,18 @@ public class DteService {
             return null;
         }
     }
+    
+     public void getSendMh(SendDteRequest send, JwtDto token) {
+         RestUtil restUtil = RestUtil.builder()
+                 .endpoint("/api/secured/dte/send")
+                 .jwtDto(token)
+                 .body(send)
+                 .build();
+         
+         ResponseRestApi responseApi = restUtil.callPostAuth();
+         
+         if(responseApi.getCodeHttp() == 200){
+             JsfUtil.mensajeInformacion("Factura enviada");
+         }
+     }
 }

@@ -25,6 +25,7 @@ import sv.com.jsoft.efactmh.services.ContribuyenteService;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.IdentificacionService;
 import sv.com.jsoft.efactmh.services.ResumenService;
+import sv.com.jsoft.efactmh.services.SessionService;
 
 /**
  *
@@ -77,13 +78,16 @@ public class ViewFactura implements Serializable {
 
     @Inject
     private CatalogoService catServices;
+    
+    @Inject
+    private SessionService sessionService;
 
     @PostConstruct
     public void init() {
         IVA = new BigDecimal(VARIABLES.getString("mh.iva")).divide(new BigDecimal(100));
         AMBIENTE_MH = VARIABLES.getString("mh.ambiente");
-        NIT = VARIABLES.getString("nit");
-        PASS_PRI = VARIABLES.getString("pass.pri");
+        NIT = sessionService.getParametroDto().getUserJwt();
+        PASS_PRI = sessionService.getParametroDto().getPwdJwt();
     }
 
     public void addDetFact() {

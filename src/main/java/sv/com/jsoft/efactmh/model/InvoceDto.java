@@ -13,10 +13,11 @@ import lombok.Data;
 public class InvoceDto implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Long idFactura;
     private Long idCliente;
-    private Long numeroFactura;
+    private Long idEstablecimiento;
+    private Long idPuntoVenta;
     private String codigoDte;
     private List<DetalleFacturaDto> detailInvoce;
     private List<DetallePago> detailPayments;

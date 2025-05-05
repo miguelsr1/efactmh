@@ -67,10 +67,6 @@
                                 <span style="#{invoceView.fontWeightSave}">Guardado factura</span>
                             </li>
                             <li class="flex align-items-center mb-3">
-                                <i class="pi pi-check-circle mr-2 #{invoceView.taskDte}"/>
-                                <span style="#{invoceView.fontWeightDte}">Creando DTE</span>
-                            </li>
-                            <li class="flex align-items-center mb-3">
                                 <i class="pi pi-check-circle mr-2 #{invoceView.taskSendDte}"/>
                                 <span style="#{invoceView.fontWeightSendDte}">Enviando DTE a MH</span>
                             </li>
@@ -81,8 +77,8 @@
                         </ul>
                     </p:outputLabel>
                     <p:progressBar id="progressBarIndeterminate" value="#{invoceView.advance}" style="height:6px; margin-bottom: 1rem" />
-                    <p:commandButton value="Aceptar" onclick="PF('chatDialog').hide();" update="mensajesPanel"
-                                     action="#{invoceView.clearStatus}" process="@this"
+                    <p:commandButton value="Aceptar" onclick="PF('chatDialog').hide();" update="mensajesPanel" style="margin-right: 1rem"
+                                     action="#{invoceView.clearStatus}" process="@this" icon="pi pi-check"
                                      disabled="#{invoceView.advance ne 100}"/>
                 </div>
             </p:dialog>
