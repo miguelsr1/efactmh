@@ -163,7 +163,8 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 201) {
+            if (response.statusCode() == 201 ||
+                    response.statusCode() == 200) {
                 if (response.body() != null) {
                     return new ResponseRestApi(response.statusCode(),
                             gson.fromJson(response.body(), clazz));
