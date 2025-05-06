@@ -271,6 +271,7 @@ public class DteService {
      public void getSendMh(SendDteRequest send, JwtDto token) {
          RestUtil restUtil = RestUtil.builder()
                  .endpoint("/api/secured/dte/send")
+                 .clazz(ResponseRestApi.class)
                  .jwtDto(token)
                  .body(send)
                  .build();

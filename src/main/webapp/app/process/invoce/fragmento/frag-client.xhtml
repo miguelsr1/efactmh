@@ -9,7 +9,7 @@
         <div class="ui-fluid formgrid grid" jsf:id="dvCliente">
             <div class="field col-12" >
                 <p:outputLabel for="cboDte" value="Tipo de documento"/>
-                <p:selectOneMenu id="cboDte" value="#{invoceView.pedido.codigoDte}" required="true" requiredMessage="ES NECESARIO SELECCIONAR UN TIPO DE DTE">
+                <p:selectOneMenu id="cboDte" value="#{invoceView.invoce.codigoDte}" required="true" requiredMessage="ES NECESARIO SELECCIONAR UN TIPO DE DTE">
                     <f:selectItem itemLabel="SELECCIONE UN DTE" noSelectionOption="true"/>
                     <f:selectItem itemValue="01" itemLabel="FACTURA" />
                     <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL" />

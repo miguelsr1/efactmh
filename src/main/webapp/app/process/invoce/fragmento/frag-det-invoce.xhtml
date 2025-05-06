@@ -7,7 +7,7 @@
 
     <p:outputPanel id="dvDetInvoce" style="display: #{invoceView.activeStep eq 1 ? 'block':'none'}">
 
-        <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.pedido.detailInvoce}" var="item" 
+        <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.invoce.detailInvoce}" var="item" 
                      rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
                      emptyMessage="No se han agregado items">
 

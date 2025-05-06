@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -90,10 +88,9 @@ public class InvoceView implements Serializable {
     @Setter
     private List<DetallePago> lstDetPago;
 
-    private Integer numeroPedido;
     private Date fechaPedido;
     private ClienteResponse cliente;
-    private InvoceDto pedido;
+    private InvoceDto invoceDto;
 
     @Inject
     SessionView sessionView;
@@ -105,9 +102,6 @@ public class InvoceView implements Serializable {
     DteService dteServices;
 
     @Inject
-    private SessionService sessionService;
-
-    @Inject
     @Push(channel = "chatChannel")
     private PushContext push;
 
@@ -117,8 +111,7 @@ public class InvoceView implements Serializable {
     public void init() {
         fechaPedido = new Date();
         cliente = new ClienteResponse();
-        pedido = new InvoceDto();
-        numeroPedido = 0;
+        invoceDto = new InvoceDto();
         lstDetPago = new ArrayList<>();
         detPago = new DetallePago();
 
@@ -136,16 +129,12 @@ public class InvoceView implements Serializable {
         return fechaPedido;
     }
 
-    public Integer getNumeroPedido() {
-        return numeroPedido;
-    }
-
     public ClienteResponse getCliente() {
         return cliente;
     }
 
-    public InvoceDto getPedido() {
-        return pedido;
+    public InvoceDto getInvoce() {
+        return invoceDto;
     }
 
     //metodo que valida si el establecimiento permite pago a plazo en modalida credito
@@ -168,7 +157,7 @@ public class InvoceView implements Serializable {
             nombreCliente = (cliente.getTipoPersoneria() == 1)
                     ? cliente.getNombreCompleto()
                     : cliente.getRazonSocial();
-            pedido.setIdCliente(cliente.getIdCliente());
+            invoceDto.setIdCliente(cliente.getIdCliente());
         } else {
             PrimeFaces.current().executeScript("PF('dlgAddCustomer').show()");
         }
@@ -176,7 +165,7 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getSubTotal() {
-        return pedido.getDetailInvoce().stream()
+        return invoceDto.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -186,11 +175,11 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getTotal() {
-        if (pedido.getDetailInvoce().isEmpty()) {
+        if (invoceDto.getDetailInvoce().isEmpty()) {
             return BigDecimal.ZERO;
         }
 
-        return pedido.getDetailInvoce().stream()
+        return invoceDto.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -212,7 +201,7 @@ public class InvoceView implements Serializable {
     public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {
         if (event.getObject() != null) {
             DetalleFacturaDto detFactura = event.getObject();
-            pedido.getDetailInvoce().add(detFactura);
+            invoceDto.getDetailInvoce().add(detFactura);
         }
     }
 
@@ -239,7 +228,7 @@ public class InvoceView implements Serializable {
     }
 
     public void removeDetInvoce(int index) {
-        pedido.getDetailInvoce().remove(index);
+        invoceDto.getDetailInvoce().remove(index);
     }
 
     public void backStep() {
@@ -282,26 +271,26 @@ public class InvoceView implements Serializable {
                 .map(DetallePago::getMonto)
                 .filter(monto -> monto != null) // Opcional, si puede haber montos nulos
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        if(getTotal().compareTo(total) != 0){
+        if (getTotal().compareTo(total) != 0) {
             JsfUtil.mensajeAlerta("DEBE DE REVISAR LA SUMATORIA DE LOS DETALLES DE PAGO");
             return;
         }
-        
+
         lstDetPago.forEach(det -> det.getMonto());
 
         clearStatus();
 
         try {
-            pedido.setDetailPayments(lstDetPago);
-            pedido.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
-            pedido.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
+            invoceDto.setDetailPayments(lstDetPago);
+            invoceDto.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
+            invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
 
             //Persistiendo factura
             RestUtil rest = RestUtil
                     .builder()
                     .clazz(IdDto.class)
                     .jwtDto(securityService.getToken())
-                    .body(pedido)
+                    .body(invoceDto)
                     .endpoint("/api/invoce").build();
 
             ResponseRestApi response = rest.callPostAuth();
@@ -313,7 +302,7 @@ public class InvoceView implements Serializable {
                 //advance 30%
                 addProgressAvance();
 
-                pedido.setIdFactura(idFac);
+                invoceDto.setIdFactura(idFac);
 
                 //advance 60%
                 addProgressAvance();
@@ -324,9 +313,11 @@ public class InvoceView implements Serializable {
                 addProgressAvance();
 
                 log.info("Finalizando");
+
+                clearStatus();
             }
         } catch (InterruptedException ex) {
-            Logger.getLogger(InvoceView.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR ENVIANDO DTE", ex);
         }
     }
 
@@ -376,5 +367,26 @@ public class InvoceView implements Serializable {
         fontWeightComplete = "";
 
         var = 1;
+    }
+
+    private void cleanFull() {
+        existeCliente = false;
+        
+        activeStep = 0;
+        advance = 0;
+
+        var = 1;
+
+        numDocumentoReceptor = "";
+        nombreCliente = "";
+
+        lstDetPago.clear();
+        totalPagos = BigDecimal.ZERO;
+
+        invoceDto = new InvoceDto();
+        detPago = new DetallePago();
+        cliente = new ClienteResponse();
+        
+        clearStatus();
     }
 }
