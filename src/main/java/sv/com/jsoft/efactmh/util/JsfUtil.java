@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 
 @Slf4j
@@ -86,5 +87,10 @@ public class JsfUtil {
         } catch (IOException ex) {
             log.error("Error redireccionando al Index", ex);
         }
+    }
+    
+    public static void showMessageDialog(FacesMessage.Severity severity, String title, String message){
+        msg = new FacesMessage(severity, title, message);
+        PrimeFaces.current().dialog().showMessageDynamic(msg);
     }
 }

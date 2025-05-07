@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +30,7 @@ import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -47,6 +50,7 @@ public class InvoceView implements Serializable {
 
     @Getter
     private boolean existeCliente = false;
+    private boolean makeInvoce = false;
     private int var = 1;
     @Getter
     private String taskSave;
@@ -246,25 +250,109 @@ public class InvoceView implements Serializable {
     }
 
     public void nextStep() {
-        switch (activeStep) {
-            case 0:
-                activeStep++;
-                break;
-            case 1:
-                activeStep++;
-                break;
-            case 2:
-                activeStep++;
-                break;
-            default:
-                break;
+        if (stepValidate()) {
+            switch (activeStep) {
+                case 0:
+                    activeStep++;
+                    break;
+                case 1:
+                    activeStep++;
+                    break;
+                case 2:
+                    activeStep++;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
+    private boolean stepValidate() {
+        switch (activeStep) {
+            case 0:
+                switch (invoceDto.getCodigoDte()) {
+                    case "01": //FE
+                        if (cliente.getIdCliente() == null) {
+                            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "POR FAVOR AGREGE UN CLIENTE");
+                            return false;
+                        }
+                        return true;
+                    case "03": //CCF
+                        return true;
+                    default:
+                        return true;
+                }
+            case 1:
+                //VALIDAR QUE EXISTA UN ITEM AGREGADO EN LA FACTURA
+                if (invoceDto.getDetailInvoce().isEmpty()) {
+                    JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "POR FAVOR AGREGE UN ITEM A LA FACTURA");
+                    return false;
+                }
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public void preSave() {
+        makeInvoce = validatePreSend();
+    }
+
     public void save() {
+        if (makeInvoce) {
+            lstDetPago.forEach(det -> det.getMonto());
+
+            try {
+                invoceDto.setDetailPayments(lstDetPago);
+                invoceDto.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
+                invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
+
+                //Persistiendo factura
+                RestUtil rest = RestUtil
+                        .builder()
+                        .clazz(IdDto.class)
+                        .jwtDto(securityService.getToken())
+                        .body(invoceDto)
+                        .endpoint("/api/invoce").build();
+
+                ResponseRestApi response = rest.callPostAuth();
+
+                if (response.getCodeHttp() == 201) {
+                    IdDto newInvoce = (IdDto) response.getBody();
+                    idFac = newInvoce.getId();
+
+                    //advance 30%
+                    addProgressAvance();
+
+                    invoceDto.setIdFactura(idFac);
+
+                    //advance 60%
+                    addProgressAvance();
+
+                    //enviando a MH
+                    dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
+                    //advance 100%
+                    addProgressAvance();
+
+                    log.info("Finalizando");
+
+                    clearStatus();
+                }
+            } catch (InterruptedException ex) {
+                log.error("ERROR ENVIANDO DTE", ex);
+            }
+        }
+    }
+
+    /**
+     * valida el detalle de pagos previo a la creacion de la FACTURA
+     *
+     * @return
+     */
+    private boolean validatePreSend() {
         if (lstDetPago.isEmpty()) {
-            JsfUtil.mensajeAlerta("DEBE DE AGREGAR EL DETALLE DE PAGOS");
-            return;
+            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "DEBE DE AGREGAR EL DETALLE DE PAGOS");
+            return false;
         }
 
         BigDecimal total = lstDetPago.stream()
@@ -272,53 +360,12 @@ public class InvoceView implements Serializable {
                 .filter(monto -> monto != null) // Opcional, si puede haber montos nulos
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         if (getTotal().compareTo(total) != 0) {
-            JsfUtil.mensajeAlerta("DEBE DE REVISAR LA SUMATORIA DE LOS DETALLES DE PAGO");
-            return;
+            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "DEBE DE REVISAR LA SUMATORIA DE LOS DETALLES DE PAGO");
+            return false;
         }
-
-        lstDetPago.forEach(det -> det.getMonto());
-
-        clearStatus();
-
-        try {
-            invoceDto.setDetailPayments(lstDetPago);
-            invoceDto.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
-            invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
-
-            //Persistiendo factura
-            RestUtil rest = RestUtil
-                    .builder()
-                    .clazz(IdDto.class)
-                    .jwtDto(securityService.getToken())
-                    .body(invoceDto)
-                    .endpoint("/api/invoce").build();
-
-            ResponseRestApi response = rest.callPostAuth();
-
-            if (response.getCodeHttp() == 201) {
-                IdDto newInvoce = (IdDto) response.getBody();
-                idFac = newInvoce.getId();
-
-                //advance 30%
-                addProgressAvance();
-
-                invoceDto.setIdFactura(idFac);
-
-                //advance 60%
-                addProgressAvance();
-
-                //enviando a MH
-                dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
-                //advance 100%
-                addProgressAvance();
-
-                log.info("Finalizando");
-
-                clearStatus();
-            }
-        } catch (InterruptedException ex) {
-            log.error("ERROR ENVIANDO DTE", ex);
-        }
+        
+        PrimeFaces.current().executeScript("PF('chatDialog').show()");
+        return true;
     }
 
     private void addProgressAvance() throws InterruptedException {
@@ -369,9 +416,9 @@ public class InvoceView implements Serializable {
         var = 1;
     }
 
-    private void cleanFull() {
+    public void cleanFull() {
         existeCliente = false;
-        
+
         activeStep = 0;
         advance = 0;
 
@@ -386,7 +433,7 @@ public class InvoceView implements Serializable {
         invoceDto = new InvoceDto();
         detPago = new DetallePago();
         cliente = new ClienteResponse();
-        
+
         clearStatus();
     }
 }

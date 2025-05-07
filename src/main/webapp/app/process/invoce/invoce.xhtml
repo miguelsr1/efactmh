@@ -10,6 +10,8 @@
 
     <ui:define name="title">Nueva factura</ui:define>
     <ui:define name="head">
+        <h:outputScript name="fn.js" library="js" />
+        <h:outputScript name="inputmask.js" library="js" />
         <style>
             @media (max-width: 640px) {
                 .ui-datatable-reflow .ui-datatable-data td[role="gridcell"] .ui-column-title {
@@ -78,7 +80,7 @@
                     </p:outputLabel>
                     <p:progressBar id="progressBarIndeterminate" value="#{invoceView.advance}" style="height:6px; margin-bottom: 1rem" />
                     <p:commandButton value="Aceptar" onclick="PF('chatDialog').hide();" style="margin-right: 1rem"
-                                     action="#{invoceView.clearStatus}" process="@this" icon="pi pi-check" update="mensajesPanel, step, dvClient, dvDetInvoce, dvDetPayment" 
+                                     action="#{invoceView.cleanFull}" process="@this" icon="pi pi-check" update="mensajesPanel, step, dvClient, dvDetInvoce, dvDetPayment" 
                                      disabled="#{invoceView.advance ne 100}"/>
                 </div>
             </p:dialog>
@@ -108,9 +110,9 @@
                 </div>
             </div>
 
-            <p:messages showSummary="true" showIcon="false">
+            <p:growl showSummary="true">
                 <p:autoUpdate />
-            </p:messages>
+            </p:growl>
 
 
             <p:dialog id="dlgAddCustomer" widgetVar="dlgAddCustomer" modal="true" 

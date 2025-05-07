@@ -6,22 +6,71 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Nueva factura</ui:define>
+    <ui:define name="head">
+        <style>
+            .dte-no-recibido{
+                background: #eef4fa;
+                color: #949aa6;
+            }
+            .dte-recibido{
+                background: #C8E6C9;
+                color: #256029;
+            }
+            .dte-rechazado {
+                background: #FFCDD2;
+                color: #C63737;
+            }
+            .dte-recibido-observado {
+                background: #FEEDAF;
+                color: #8A5340;
+            }
+            .dte-anulado{
+                background: #949aa6;
+                color: black;
+            }
+
+            .style-estado {
+                border-radius: 2px;
+                padding: 0.25em 0.5rem;
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: 12px;
+                letter-spacing: 0.3px;
+                width: 200px !important;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="title">LISTADO DTE</ui:define>
 
     <ui:define name="content">   
         <h:form prependId="false">
             <div class="grid dashboard ">
                 <div class="col-12">
                     <div class="card" jsf:id="dvFiltro">
-                        <div class="card-header">
+                        <div class="card-header" style="margin-bottom: 1rem">
                             <h5>Listado de DTE registrados</h5>
                         </div>
 
                         <div class="formgrid grid">
-
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="txtNom" value="Nombre Cliente"/>
+                                <p:inputText id="txtNom" class="w-full"/>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="txtNumDoc" value="Número de Documento cliente"/>
+                                <p:inputText id="txtNumDoc" class="w-full"/>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="txtCorreo" value="Correo cliente"/>
+                                <p:inputText id="txtCorreo" class="w-full"/>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="txtFecha" value="Fecha creación"/>
+                                <p:inputText id="txtFecha" class="w-full"/>
+                            </div>
                         </div>
                         <div class="card-header">
-                            <p:commandButton value="Buscar" update="tblDtes dvFiltro" icon="pi pi-plus" validateClient="true"/>
+                            <p:commandButton value="Buscar" action="#{dtesView.findDtes()}" update="tblDtes dvFiltro" icon="pi pi-plus"/>
                         </div>
                     </div>
                 </div>
@@ -32,30 +81,47 @@
             </p:messages>
 
             <div class="card">
-                <p:dataTable id="tblDtes" widgetVar="tblDtes" var="det" value="#{viewItem.lstItems}" >
+                <p:dataTable id="tblDtes" widgetVar="tblDtes" var="dte" value="#{dtesView.lstDtes}"
+                             reflow="true" size="small" tableStyle="table-layout: auto;"
+                             emptyMessage="No se han agregado DTES">
                     <f:facet name="header">
                         <div class="flex justify-content-between align-items-center">
                             <i class="pi pi-send"></i>
 
                             <div>
-                               
+
                             </div>
                         </div>
                     </f:facet>
-
-                    <p:column headerText="Anular">
-                        <p:selectBooleanCheckbox value="" />
-                    </p:column>
-                    <p:column headerText="Codigo">
-                        <p:outputLabel value="#{det.codigo}"/>
+                    
+                    <p:column headerText="Tipo">
+                        <p:outputLabel value="#{dte.tipoDte}"/>
                     </p:column>
                     <p:column headerText="Nombre" >
-                        <p:outputLabel value="#{det.nombre}">
-                            <f:convertNumber pattern="#,##0" />
-                        </p:outputLabel>
+                        <p:outputLabel value="#{dte.nombre}" />
                     </p:column>
-                    <p:column headerText="Unidad Medida" >
-                        <p:outputLabel value="#{det.unidadMedidad}"/>
+                    <p:column headerText="# Documento" >
+                        <p:outputLabel value="#{dte.numDocumento}"/>
+                    </p:column>
+                    <p:column headerText="Correo" >
+                        <p:outputLabel value="#{dte.correo}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Creación" >
+                        <p:outputLabel value="#{dte.fechaCreacion}"/>
+                    </p:column>
+                    <p:column headerText="Código Generación" >
+                        <p:outputLabel value="#{dte.codigoGeneracion}"/>
+                    </p:column>
+                    <p:column headerText="Estado" >
+                        <span class="style-estado #{dte.estado eq 0 ? 'dte-no-recibido' : 
+                                                    (dte.estado eq 1 ? 'dte-recibido' : 
+                                                    (dte.estado eq 2 ? 'dte-rechazado' :
+                                                    (dte.estado eq 3 ? 'dte-anulado' : 'dte-recibido-observado')))}">#{dte.estadoDescripcion}</span>
+                    </p:column>
+                    <p:column headerText="Operaciones" style="text-align: center" >
+                        <p:commandButton icon="pi pi-print" styleClass="mr-2" />
+                        <p:commandButton icon="pi pi-ban" styleClass="mr-2 ui-button-secondary"/>
+                        <p:commandButton icon="pi pi-download" styleClass="ui-button-success" />                        
                     </p:column>
                 </p:dataTable>
             </div>

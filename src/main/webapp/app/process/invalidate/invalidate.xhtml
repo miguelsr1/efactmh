@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Invalidar DTE</ui:define>
+    <ui:define name="head">
+        <h:outputScript name="fn.js" library="js" />
+        <h:outputScript name="inputmask.js" library="js" />
+        <style>
+            @media (max-width: 640px) {
+                .ui-datatable-reflow .ui-datatable-data td[role="gridcell"] .ui-column-title {
+                    font-weight: bold !important;
+                }
+            }
+            .total {
+                font-size: 1.1rem !important;
+                color: #3984b8;
+                font-weight: bold;
+            }
+
+            body .ui-breadcrumb {
+                background: transparent !important;
+                border: 0px solid;
+                padding: 0.5rem;
+            }
+            iframe{
+                width: 350px !important;
+            }
+            .taskPending {
+                color: #64686A !important;
+            }
+            .taskComplete {
+                color: var(--green-500) !important;
+                font-weight: bold;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <div class="grid dashboard">
+                <p:breadCrumb>
+                    <p:menuitem value="Operaciones" outcome="/app/home" />
+                    <p:menuitem value="Invalidar DTE"/>
+                </p:breadCrumb>
+
+                <div class="col-12">
+                    <div class="card">
+                        <h5>Invalidar DTE</h5>
+                        <div class="ui-fluid formgrid grid" jsf:id="dvCliente">
+                            <div class="field col-12" >
+                                <p:outputLabel for="txtDte" value="Código Generación"/>
+                                <p:inputText id="txtDte" 
+                                             class="w-full" required="true"
+                                             requiredMessage="DEBE DE INGRESAR EL CODIGO GENERACION DEL DTE"/>
+                            </div>
+                            <div class="field col-12" >
+                                <p:outputLabel for="cbTipoInva" value="Tipo de Invalidación"/>
+                                <p:selectOneMenu id="cbTipoInva" required="true" style="margin-bottom: 0.5rem"
+                                                 requiredMessage="DEBE DE SELECCIONAR UN TIPO DE INVALIDACION">
+                                    <f:selectItem itemLabel="SELECCIONE" noSelectionOption="true"/>
+                                    <f:selectItem itemValue="1" itemLabel="ERROR EN LA INFORMACION DEL DTE A INVALIDAR" />
+                                    <f:selectItem itemValue="2" itemLabel="RESCINDIR DE LA OPERACION" />
+                                    <f:selectItem itemValue="3" itemLabel="OTRO" />
+
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="field col-12" >
+                                <p:outputLabel for="txtMotivo" value="Motivo de Invalidación"/>
+                                <p:inputTextarea id="txtMotivo" required="true" requiredMessage="DEBE DE INGRESAR UN MOTIVO"/>
+                            </div>
+                            <div class="field col-12" >
+                                <p:outputLabel for="txtNombre" value="Nombre solicitante"/>
+                                <p:inputText id="txtNombre" required="true" requiredMessage="DEBE DE INGRESAR EL NOMBRE DEL SOLICITANTE"/>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="cbTipoDoc" value="Tipo Doc."/>
+                                <p:selectOneMenu id="cbTipoDoc" required="true" style="margin-bottom: 0.5rem"
+                                                 requiredMessage="DEBE DE SELECCIONAR UN TIPO DE INVALIDACION">
+                                    <f:selectItem itemLabel="SELECCIONE" noSelectionOption="true"/>                                    
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="txtNumDoc" value="Número de Doc."/>
+                                <p:inputText id="txtNumDoc" required="true" style="margin-bottom: 0.5rem"
+                                             requiredMessage="DEBE DE INGRESAR EL NÚMERO DEL DOCUMENTO"/>
+                            </div>
+                        </div>
+
+                        <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary mr-2" 
+                                         process="@this" icon="pi pi-times" style="max-width: 110px"/>
+                        <p:commandButton value="Agregar" process="@this"
+                                         icon="pi pi-plus" style="max-width: 110px"
+                                         validateClient="true" styleClass="ui-button-primary"/>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -149,6 +149,32 @@ public class RestUtil {
 
         return null;
     }
+    
+    public ResponseRestApi callGetAllAuth() {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .GET()
+                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                if (response.body() != null) {
+                     Type lst = TypeToken.getParameterized(List.class, clazz).getType();
+                    return new ResponseRestApi(response.statusCode(),
+                             gson.fromJson(response.body(), lst));
+                }
+            }
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            log.error("ERROR get - " + endpoint, ex);
+            return null;
+        }
+        return null;
+    }
 
     public ResponseRestApi callPostAuth() {
         try {
@@ -166,6 +192,8 @@ public class RestUtil {
             if (response.statusCode() == 201 ||
                     response.statusCode() == 200) {
                 if (response.body() != null) {
+                    log.info("RESPONSE " + endpoint + ": " + response.body());
+                    
                     return new ResponseRestApi(response.statusCode(),
                             gson.fromJson(response.body(), clazz));
                 }
