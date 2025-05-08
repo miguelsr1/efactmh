@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+
+        <title>Detalle Factura</title>
+
+        <h:outputScript name="js/prism.js" library="paradise-layout"/>
+        <h:outputStylesheet name="det-factura.css" library="css" />
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+    </h:head>
+
+    <h:body>
+        <h:form prependId="false">
+            <p:growl id="growl" showSummary="true">
+                <p:autoUpdate />
+            </p:growl>
+
+            <div class="layout-main">
+                <div style="width: 100%; padding: 1rem 1rem 1rem 1rem;">
+                    <div class="ui-fluid formgrid grid" jsf:id="dvDetFac">
+                        <div class="field col-12" >
+                            <p:outputLabel for="txtCod" value="Código generación"/>
+                            <p:inputText id="txtCod" />
+                        </div>
+                        <div class="field col-12" >
+                            <p:outputLabel for="txtSello" value="Sello recepción"/>
+                            <p:inputText id="txtSello" />
+                        </div>
+                        <div class="field col-12" >
+                            <p:outputLabel for="cbInva" value="Tipo invalidación"/>
+                            <p:selectOneMenu id="cbInva">
+                                <f:selectItem noSelectionOption="true" itemLabel="-----" />
+                                <f:selectItem itemValue="1" itemLabel="ERROR DE LA INFORMACION DEL DTE A INVALIDAR" />
+                                <f:selectItem itemValue="2" itemLabel="RESCINDIR DE LA OPERACION" />
+                                <f:selectItem itemValue="3" itemLabel="OTRO" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel value="Tipo DTE"/>
+                            <p:outputLabel value="" style="font-weight: bold"/>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel value="Monto operación"/>
+                            <p:outputLabel value="" style="font-weight: bold"/>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel value="Fecha generación"/>
+                            <p:outputLabel value="" style="font-weight: bold"/>
+                        </div>
+                        <div class="field col-12" >
+                            <p:outputLabel for="txtMotivo" value="Motivo invalidación"/>
+                            <p:inputTextarea id="txtMotivo" rows="2" maxlength="900" required="true"
+                                             requiredMessage="Debe de ingresar una descripción del bien/servicio"/>
+                        </div>
+
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel value="Responsable"/>
+                            <p:outputLabel value="" style="font-weight: bold"/>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel value="Tipo Doc."/>
+                            <p:outputLabel value="" style="font-weight: bold"/>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel value="Núm. Doc."/>
+                            <p:outputLabel value="" style="font-weight: bold"/>
+                        </div>
+                        
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel for="txtNombre" value="Solicitante"/>
+                            <p:inputText id="txtNombre" />
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel value="Tipo Doc."/>
+                            <p:selectOneMenu id="txtTipoDoc">
+                                <f:selectItem noSelectionOption="true" itemLabel="-----" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="field col-12 md:col-4">
+                            <p:outputLabel for="txtNumDoc" value="Num. Doc"/>
+                            <p:inputText id="txtNumDoc" />
+                        </div>
+                        
+                        <div class="field col-12">
+                            <p><small>* son campos obligatorios</small></p>
+                            <p:spacer height="10"/>
+
+                            <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
+                                             icon="pi pi-times" style="max-width: 110px"/>
+                            <p:commandButton value="Agregar" update="dvDetFac" 
+                                             process="@this,growl"
+                                             icon="pi pi-plus" style="max-width: 110px"
+                                             validateClient="true" styleClass="ui-button-primary"/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
