@@ -39,8 +39,43 @@ public class RestUtil {
     private final Gson gson = new Gson();
     private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
-
+    
     public ResponseRestApi callGet() {
+        try {
+            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                if (response.body() != null) {
+                    Type lst = TypeToken.getParameterized(List.class, clazz).getType();
+                    return new ResponseRestApi(response.statusCode(),
+                            gson.fromJson(response.body(), lst));
+                }
+            }
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            log.error("ERROR get - " + endpoint, ex);
+
+            String mensajeError;
+            if (ex instanceof java.net.ConnectException) {
+                mensajeError = "ERROR DE CONEXION";
+            } else if (ex instanceof java.net.http.HttpTimeoutException) {
+                mensajeError = "TIEMPO DE ESPERA SUPERADO";
+            } else {
+                mensajeError = "ERROR INESPERADO";
+            }
+
+            return new ResponseRestApi(-1, mensajeError);
+        }
+        return null;
+    }
+
+    public ResponseRestApi callGetAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .GET()

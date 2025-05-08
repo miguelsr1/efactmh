@@ -63,7 +63,7 @@ public class SessionService implements Serializable {
                 .jwtDto(token)
                 .endpoint("/api/secured/emisor/parametro/all")
                 .build()
-                .callGet();
+                .callGetAuth();
 
         if (rest.getCodeHttp() == 200) {
             List<ParametroDto> lst = (List<ParametroDto>) rest.getBody();

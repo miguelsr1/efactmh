@@ -58,7 +58,7 @@
                         <p:selectOneMenu id="cboDepa" value="#{clienteView.codigoDepa}" disabled="#{clienteView.disabled}"
                                          class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
-                            <f:selectItems value="#{ubicacionService.lstDepartamento}" var="depa" itemValue="#{depa.codigo}" itemLabel="#{depa.nombre}"/>
+                            <f:selectItems value="#{ubicacionService.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
                             <p:ajax update="cboMuni"/>
                         </p:selectOneMenu>
                     </div>
@@ -66,7 +66,7 @@
                         <p:outputLabel for="cboMuni" value="Municipio"/>
                         <p:selectOneMenu id="cboMuni" value="#{clienteView.cliente.idMunicipio}" disabled="#{clienteView.disabled}"
                                          class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
-                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
+                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
                             <f:selectItems value="#{clienteView.lstMunicipio}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
                         </p:selectOneMenu>
                     </div>

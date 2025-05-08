@@ -75,7 +75,7 @@ public class ClienteView implements Serializable {
                 .endpoint("/api/secured/client/")
                 .build();
 
-        ResponseRestApi response = res.callGet();
+        ResponseRestApi response = res.callGetAuth();
         if (response.getCodeHttp() == 200) {
             lstCliente = (List<ClienteDto>) response.getBody();
         }

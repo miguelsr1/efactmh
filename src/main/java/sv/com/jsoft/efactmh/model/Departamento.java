@@ -1,7 +1,6 @@
 package sv.com.jsoft.efactmh.model;
 
 import java.io.Serializable;
-import java.util.List;
 import lombok.Data;
 
 /**
@@ -11,10 +10,8 @@ import lombok.Data;
 @Data
 public class Departamento implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private String codigo;
+    private String id;
     private String nombre;
-    private List<MunicipioDto> municipioList;
 
     public Departamento() {
     }

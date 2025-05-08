@@ -47,7 +47,7 @@ public class ParametrosView implements Serializable {
                 .build();
 
         ResponseRestApi response = rest
-                .callGet();
+                .callGetAuth();
         if (response.getCodeHttp() == 200) {
             lstParametros = (List<ParametroDto>) response.getBody();
         }
