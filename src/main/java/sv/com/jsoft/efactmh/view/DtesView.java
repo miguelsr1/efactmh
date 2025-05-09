@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -67,7 +68,8 @@ public class DtesView implements Serializable {
                 .width("700")
                 //.height("600px")*/
                 .build();
-
+        
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
         PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
     }
 }

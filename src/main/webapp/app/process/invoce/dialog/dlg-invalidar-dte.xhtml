@@ -78,6 +78,7 @@
                         <div class="field col-12" >
                             <p:outputLabel for="txtMotivo" value="Motivo invalidación"/>
                             <p:inputTextarea id="txtMotivo" rows="3" required="true" maxlength="250" counterTemplate="{0} caracteres restantes."
+                                             value="#{dlgInvalidarDte.motivo}"
                                              requiredMessage="Debe de ingresar una descripción del bien/servicio" counter="display" style="margin-bottom: 0.5rem"/>
                             <h:outputText id="display" class="block" />
                         </div>
@@ -147,11 +148,11 @@
                             
 
                             <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
-                                             icon="pi pi-times" style="max-width: 110px" value="#{dlgInvalidarDte.closeDgl()}"/>
+                                             icon="pi pi-times" style="max-width: 110px" action="#{dlgInvalidarDte.closeDgl()}"/>
                             <p:commandButton value="Agregar" update="dvInvalidateDte" 
                                              process="@this,cbInva,txtMotivo,txtNomRes,txtTipoDocRes,txtNumDocRes,txtNomSol,txtTipoDocSol,txtNumDocSol"
                                              icon="pi pi-plus" style="max-width: 110px"
-                                             validateClient="true" styleClass="ui-button-primary" value="#{dlgInvalidarDte.sendDteInvalidate()}"/>
+                                             validateClient="true" styleClass="ui-button-primary" action="#{dlgInvalidarDte.sendDteInvalidate()}"/>
                         </div>
 
                     </div>
