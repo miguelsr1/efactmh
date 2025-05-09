@@ -64,10 +64,10 @@ public class DtesView implements Serializable {
                 .resizable(false)
                 .maximizable(false)
                 .modal(true)
-                .width("500px")
-                .height("600px")
+                .width("700")
+                //.height("600px")*/
                 .build();
 
-        PrimeFaces.current().dialog().openDynamic("invoce/dialog/dlg-invalidar-dte", options, null);
+        PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
     }
 }

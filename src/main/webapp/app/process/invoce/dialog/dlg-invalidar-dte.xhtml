@@ -14,12 +14,20 @@
             <meta name="apple-mobile-web-app-capable" content="yes"/>
         </f:facet>
 
-        <title>Detalle Factura</title>
+        <title>Invalidar DTE</title>
 
         <h:outputScript name="js/prism.js" library="paradise-layout"/>
         <h:outputStylesheet name="det-factura.css" library="css" />
         <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
         <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+
+        <style>
+            body .ui-card .ui-card-title {
+                font-size: 1.2rem;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+        </style>            
     </h:head>
 
     <h:body>
@@ -30,91 +38,120 @@
 
             <div class="layout-main">
                 <div style="width: 100%; padding: 1rem 1rem 1rem 1rem;">
-                    <div class="ui-fluid formgrid grid" jsf:id="dvDetFac">
+                    <div class="ui-fluid formgrid grid" jsf:id="dvInvalidateDte">
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="txtCod" value="Código generación"/>
-                            <p:inputText id="txtCod" value="#{dlgInvalidarDte.dte.codigoGeneracion}" style="font-weight: bold"/>
+                            <p:outputLabel value="Código generación" styleClass="mr-3"/>
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.codigoGeneracion}" style="font-weight: bold; text-decoration: underline;  "/>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <p:outputLabel for="txtSello" value="Sello recepción"/>
-                            <p:inputText id="txtSello" value="#{dlgInvalidarDte.dte.selloRecibido}" style="font-weight: bold"/>
-                        </div>
-                        <div class="field col-12" >
-                            <p:outputLabel for="cbInva" value="Tipo invalidación"/>
-                            <p:selectOneMenu id="cbInva">
-                                <f:selectItem noSelectionOption="true" itemLabel="-----" />
-                                <f:selectItem itemValue="1" itemLabel="ERROR DE LA INFORMACION DEL DTE A INVALIDAR" />
-                                <f:selectItem itemValue="2" itemLabel="RESCINDIR DE LA OPERACION" />
-                                <f:selectItem itemValue="3" itemLabel="OTRO" />
-                            </p:selectOneMenu>
-                        </div>
+                            <p:outputLabel value="Sello recepción"  styleClass="mr-3"/>
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.selloRecibido}" style="font-weight: bold; text-decoration: underline;  "/>
+                        </div>                        
                         <div class="field col-3 md:col-3">
                             <p:outputLabel value="Tipo DTE:" styleClass="mr-3"/>
-                            <p:outputLabel value="#{dlgInvalidarDte.dte.nombreDte}" style="font-weight: bold"/>
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.nombreDte}" style="font-weight: bold; text-decoration: underline;  "/>
                         </div>
                         <div class="field col-3 md:col-3">
                             <p:outputLabel value="Monto operación:" styleClass="mr-3"/>
-                            <p:outputLabel value="#{dlgInvalidarDte.dte.total}" style="font-weight: bold">
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.total}" style="font-weight: bold; text-decoration: underline;">
                                 <f:convertNumber pattern="#,##0.00"/>
                             </p:outputLabel>
                         </div>
                         <div class="field col-6 md:col-6">
                             <p:outputLabel value="Fecha generación:" styleClass="mr-3"/>
-                            <p:outputLabel value="#{dlgInvalidarDte.dte.fechaProcesamiento}" style="font-weight: bold"/>
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.fechaProcesamiento}" style="font-weight: bold; text-decoration: underline;"/>
+                        </div>
+                        <div class="field col-12" >
+                            <p:outputLabel for="cbInva" value="Tipo invalidación"/>
+                            <p:selectOneMenu id="cbInva" required="true" value="#{dlgInvalidarDte.tipoInvalidacion}">
+                                <f:selectItem noSelectionOption="true" itemLabel="-----" />
+                                <f:selectItem itemValue="1" itemLabel="ERROR DE LA INFORMACION DEL DTE A INVALIDAR" />
+                                <f:selectItem itemValue="2" itemLabel="RESCINDIR DE LA OPERACION" />
+                                <f:selectItem itemValue="3" itemLabel="OTRO" />
+                                <p:ajax update="dvInvalidateDte" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="field col-12 md:col-6" style="display: #{dlgInvalidarDte.tipoInvalidacion eq 1 ? 'block':'none'}">
+                            <p:outputLabel for="txtDteR" value="Código generación a reemplazar" styleClass="mr-3"/>
+                            <p:inputText id="txtDteR" value="#{dlgInvalidarDte.dteR}" />
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtMotivo" value="Motivo invalidación"/>
-                            <p:inputTextarea id="txtMotivo" rows="2" maxlength="900" required="true"
-                                             requiredMessage="Debe de ingresar una descripción del bien/servicio"/>
+                            <p:inputTextarea id="txtMotivo" rows="3" required="true" maxlength="250" counterTemplate="{0} caracteres restantes."
+                                             requiredMessage="Debe de ingresar una descripción del bien/servicio" counter="display" style="margin-bottom: 0.5rem"/>
+                            <h:outputText id="display" class="block" />
                         </div>
 
                         <div class="field col-6">
-                            <p:panel>
+                            <p:card style="width: 25rem; margin-bottom: 0.5em" >
+                                <f:facet name="title">
+                                    Responsable
+                                </f:facet>
                                 <div class="ui-fluid">
-                                    <div class="field">
-                                        <p:outputLabel value="Responsable"/>
-                                        <p:inputText value="" style="font-weight: bold"/>
+                                    <div class="field" style="margin-top: 0.5rem">
+                                        <span class="ui-float-label">
+                                            <p:inputText id="txtNomRes" value="#{dlgInvalidarDte.nomResponsable}" required="true" maxlength="100"/>
+                                            <p:outputLabel for="@previous" value="Nombre" />
+                                        </span>
                                     </div>
-                                    <div class="field">
-                                        <p:outputLabel value="Tipo Doc."/>
-                                        <p:inputText value="" style="font-weight: bold"/>
+                                    <div class="field" style="margin-top: 2rem">
+                                        <span class="ui-float-label">
+                                            <p:selectOneMenu id="txtTipoDocRes" value="#{dlgInvalidarDte.tipoDocResponsable}" required="true">
+                                                <f:selectItem noSelectionOption="true" itemLabel="" />
+                                                <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemValue="#{doc.id}" itemLabel="#{doc.nombre}" />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel for="@previous" value="Tipo Doc." />
+                                        </span>                                        
                                     </div>
-                                    <div class="field">
-                                        <p:outputLabel value="Núm. Doc."/>
-                                        <p:inputText value="" style="font-weight: bold"/>
+                                    <div class="field" style="margin-top: 2rem">
+                                        <span class="ui-float-label">
+                                            <p:inputText id="txtNumDocRes" value="#{dlgInvalidarDte.numDocResponsable}" required="true" maxlength="20"/>
+                                            <p:outputLabel for="@previous" value="Núm. Doc."/>
+                                        </span>
                                     </div>
                                 </div>
-                            </p:panel>
+                            </p:card>
                         </div>
                         <div class="field col-6">
-                            <div class="ui-fluid">
-                                <div class="field">
-                                    <p:outputLabel for="txtNombre" value="Solicitante"/>
-                                    <p:inputText id="txtNombre" />
+                            <p:card style="width: 25rem; margin-bottom: 0.5em" >
+                                <f:facet name="title">
+                                    Solicitante
+                                </f:facet>
+                                <div class="ui-fluid">
+                                    <div class="field" style="margin-top: 0.5rem">
+                                        <span class="ui-float-label">
+                                            <p:inputText id="txtNomSol" value="#{dlgInvalidarDte.nomSolicitante}" required="true" maxlength="100"/>
+                                            <p:outputLabel for="@previous" value="Nombre"/>
+                                        </span>
+                                    </div>
+                                    <div class="field" style="margin-top: 2rem">
+                                        <span class="ui-float-label">
+                                            <p:selectOneMenu id="txtTipoDocSol" value="#{dlgInvalidarDte.tipoDocSolicitante}" required="true">
+                                                <f:selectItem noSelectionOption="true" itemLabel="" />
+                                                <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemValue="#{doc.id}" itemLabel="#{doc.nombre}" />
+                                            </p:selectOneMenu>
+                                            <p:outputLabel for="@previous" value="Tipo Doc."/>
+                                        </span>
+                                    </div>
+                                    <div class="field" style="margin-top: 2rem">
+                                        <span class="ui-float-label">
+                                            <p:inputText id="txtNumDocSol" value="#{dlgInvalidarDte.numDocSolicitante}" required="true" maxlength="20"/>
+                                            <p:outputLabel for="@previous" value="Num. Doc"/>
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="field">
-                                    <p:outputLabel value="Tipo Doc."/>
-                                    <p:selectOneMenu id="txtTipoDoc">
-                                        <f:selectItem noSelectionOption="true" itemLabel="-----" />
-                                    </p:selectOneMenu>
-                                </div>
-                                <div class="field">
-                                    <p:outputLabel for="txtNumDoc" value="Num. Doc"/>
-                                    <p:inputText id="txtNumDoc" />
-                                </div>
-                            </div>
+                            </p:card>
                         </div>
-
-                        <div class="field col-12">
+                        <div class="col-12">
                             <p><small>* son campos obligatorios</small></p>
-                            <p:spacer height="10"/>
+                            
 
                             <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
-                                             icon="pi pi-times" style="max-width: 110px"/>
-                            <p:commandButton value="Agregar" update="dvDetFac" 
-                                             process="@this,growl"
+                                             icon="pi pi-times" style="max-width: 110px" value="#{dlgInvalidarDte.closeDgl()}"/>
+                            <p:commandButton value="Agregar" update="dvInvalidateDte" 
+                                             process="@this,cbInva,txtMotivo,txtNomRes,txtTipoDocRes,txtNumDocRes,txtNomSol,txtTipoDocSol,txtNumDocSol"
                                              icon="pi pi-plus" style="max-width: 110px"
-                                             validateClient="true" styleClass="ui-button-primary"/>
+                                             validateClient="true" styleClass="ui-button-primary" value="#{dlgInvalidarDte.sendDteInvalidate()}"/>
                         </div>
 
                     </div>

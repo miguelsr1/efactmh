@@ -44,9 +44,11 @@ public class CatalogoService {
     @Getter
     private List<CatalogoDto> lstDepartamentos;
     @Getter
-    private List<MunicipioDto> lstMunicipios;
-    @Getter
     private List<CatalogoDto> lstGiros;
+    @Getter
+    private List<CatalogoDto> lstTipoDocumentosId;
+    @Getter
+    private List<MunicipioDto> lstMunicipios;
 
     @Inject
     SessionService securityService;
@@ -62,8 +64,17 @@ public class CatalogoService {
         //loadTipoUnidadMedida();
         loadDatosUbicacion();
         loadGiros();
+        loadTipoDocumentosId();
     }
 
+    private void loadTipoDocumentosId(){
+        lstTipoDocumentosId = new ArrayList<>();
+        lstTipoDocumentosId.add(new CatalogoDto("13","DUI"));
+        lstTipoDocumentosId.add(new CatalogoDto("36","NIT"));
+        lstTipoDocumentosId.add(new CatalogoDto("37","OTRO"));
+        lstTipoDocumentosId.add(new CatalogoDto("03","PASAPORTE"));
+        lstTipoDocumentosId.add(new CatalogoDto("02","CARNET DE RESIDENTE"));
+    }
     private void loadTipoUnidadMedida() {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("item")
