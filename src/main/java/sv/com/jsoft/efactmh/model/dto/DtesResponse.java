@@ -1,7 +1,5 @@
 package sv.com.jsoft.efactmh.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 /**

@@ -93,7 +93,7 @@
                             </div>
                         </div>
                     </f:facet>
-                    
+
                     <p:column headerText="Tipo">
                         <p:outputLabel value="#{dte.tipoDte}"/>
                     </p:column>
@@ -120,7 +120,9 @@
                     </p:column>
                     <p:column headerText="Operaciones" style="text-align: center" >
                         <p:commandButton icon="pi pi-print" styleClass="mr-2" />
-                        <p:commandButton icon="pi pi-ban" styleClass="mr-2 ui-button-secondary"/>
+                        <p:commandButton icon="pi pi-ban" styleClass="mr-2 ui-button-secondary" action="#{dtesView.showDlgDetToInvalidate}">
+                            <f:setPropertyActionListener target="#{dtesView.idFactura}" value="#{dte.idFactura}"/>
+                        </p:commandButton>
                         <p:commandButton icon="pi pi-download" styleClass="ui-button-success" />                        
                     </p:column>
                 </p:dataTable>

@@ -31,13 +31,13 @@
             <div class="layout-main">
                 <div style="width: 100%; padding: 1rem 1rem 1rem 1rem;">
                     <div class="ui-fluid formgrid grid" jsf:id="dvDetFac">
-                        <div class="field col-12" >
+                        <div class="field col-12 md:col-6">
                             <p:outputLabel for="txtCod" value="Código generación"/>
-                            <p:inputText id="txtCod" />
+                            <p:inputText id="txtCod" value="#{dlgInvalidarDte.dte.codigoGeneracion}" style="font-weight: bold"/>
                         </div>
-                        <div class="field col-12" >
+                        <div class="field col-12 md:col-6">
                             <p:outputLabel for="txtSello" value="Sello recepción"/>
-                            <p:inputText id="txtSello" />
+                            <p:inputText id="txtSello" value="#{dlgInvalidarDte.dte.selloRecibido}" style="font-weight: bold"/>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="cbInva" value="Tipo invalidación"/>
@@ -48,17 +48,19 @@
                                 <f:selectItem itemValue="3" itemLabel="OTRO" />
                             </p:selectOneMenu>
                         </div>
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel value="Tipo DTE"/>
-                            <p:outputLabel value="" style="font-weight: bold"/>
+                        <div class="field col-3 md:col-3">
+                            <p:outputLabel value="Tipo DTE:" styleClass="mr-3"/>
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.nombreDte}" style="font-weight: bold"/>
                         </div>
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel value="Monto operación"/>
-                            <p:outputLabel value="" style="font-weight: bold"/>
+                        <div class="field col-3 md:col-3">
+                            <p:outputLabel value="Monto operación:" styleClass="mr-3"/>
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.total}" style="font-weight: bold">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </p:outputLabel>
                         </div>
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel value="Fecha generación"/>
-                            <p:outputLabel value="" style="font-weight: bold"/>
+                        <div class="field col-6 md:col-6">
+                            <p:outputLabel value="Fecha generación:" styleClass="mr-3"/>
+                            <p:outputLabel value="#{dlgInvalidarDte.dte.fechaProcesamiento}" style="font-weight: bold"/>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtMotivo" value="Motivo invalidación"/>
@@ -66,34 +68,43 @@
                                              requiredMessage="Debe de ingresar una descripción del bien/servicio"/>
                         </div>
 
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel value="Responsable"/>
-                            <p:outputLabel value="" style="font-weight: bold"/>
+                        <div class="field col-6">
+                            <p:panel>
+                                <div class="ui-fluid">
+                                    <div class="field">
+                                        <p:outputLabel value="Responsable"/>
+                                        <p:inputText value="" style="font-weight: bold"/>
+                                    </div>
+                                    <div class="field">
+                                        <p:outputLabel value="Tipo Doc."/>
+                                        <p:inputText value="" style="font-weight: bold"/>
+                                    </div>
+                                    <div class="field">
+                                        <p:outputLabel value="Núm. Doc."/>
+                                        <p:inputText value="" style="font-weight: bold"/>
+                                    </div>
+                                </div>
+                            </p:panel>
                         </div>
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel value="Tipo Doc."/>
-                            <p:outputLabel value="" style="font-weight: bold"/>
+                        <div class="field col-6">
+                            <div class="ui-fluid">
+                                <div class="field">
+                                    <p:outputLabel for="txtNombre" value="Solicitante"/>
+                                    <p:inputText id="txtNombre" />
+                                </div>
+                                <div class="field">
+                                    <p:outputLabel value="Tipo Doc."/>
+                                    <p:selectOneMenu id="txtTipoDoc">
+                                        <f:selectItem noSelectionOption="true" itemLabel="-----" />
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="field">
+                                    <p:outputLabel for="txtNumDoc" value="Num. Doc"/>
+                                    <p:inputText id="txtNumDoc" />
+                                </div>
+                            </div>
                         </div>
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel value="Núm. Doc."/>
-                            <p:outputLabel value="" style="font-weight: bold"/>
-                        </div>
-                        
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel for="txtNombre" value="Solicitante"/>
-                            <p:inputText id="txtNombre" />
-                        </div>
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel value="Tipo Doc."/>
-                            <p:selectOneMenu id="txtTipoDoc">
-                                <f:selectItem noSelectionOption="true" itemLabel="-----" />
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="field col-12 md:col-4">
-                            <p:outputLabel for="txtNumDoc" value="Num. Doc"/>
-                            <p:inputText id="txtNumDoc" />
-                        </div>
-                        
+
                         <div class="field col-12">
                             <p><small>* son campos obligatorios</small></p>
                             <p:spacer height="10"/>

@@ -27,6 +27,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.InvoceDto;
+import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
@@ -282,4 +283,18 @@ public class DteService {
              JsfUtil.mensajeInformacion("Factura enviada");
          }
      }
+     
+     public DteToInvalidate findDteToInvalidate(Long idFactura, JwtDto token) {
+        RestUtil rest = RestUtil.builder()
+                .endpoint("/api/secured/dte/invalidate/" + idFactura)
+                .clazz(DteToInvalidate.class)
+                .jwtDto(token)
+                .build();
+        ResponseRestApi response = rest.callGetOneAuth();
+        if (response.getCodeHttp() == 200) {
+            return (DteToInvalidate) response.getBody();
+        } else {
+            return null;
+        }
+    }
 }
