@@ -176,7 +176,7 @@ public class CatalogoService {
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGet();
+                .callGetAuth();
         return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 
@@ -186,7 +186,7 @@ public class CatalogoService {
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGet();
+                .callGetAuth();
         return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 }
