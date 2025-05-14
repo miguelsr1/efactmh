@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,7 +28,9 @@ import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
 import sv.com.jsoft.efactmh.services.DteService;
+import sv.com.jsoft.efactmh.services.InvoceService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.Constantes;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -98,12 +99,12 @@ public class InvoceView implements Serializable {
 
     @Inject
     SessionView sessionView;
-
     @Inject
     SessionService securityService;
-
     @Inject
     DteService dteServices;
+    @Inject
+    InvoceService invoceService;
 
     @Inject
     @Push(channel = "chatChannel")
@@ -308,14 +309,7 @@ public class InvoceView implements Serializable {
                 invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
 
                 //Persistiendo factura
-                RestUtil rest = RestUtil
-                        .builder()
-                        .clazz(IdDto.class)
-                        .jwtDto(securityService.getToken())
-                        .body(invoceDto)
-                        .endpoint("/api/invoce").build();
-
-                ResponseRestApi response = rest.callPostAuth();
+                ResponseRestApi response = invoceService.saveInvoce(securityService.getToken(), invoceDto);
 
                 if (response.getCodeHttp() == 201) {
                     IdDto newInvoce = (IdDto) response.getBody();
@@ -330,18 +324,72 @@ public class InvoceView implements Serializable {
                     addProgressAvance();
 
                     //enviando a MH
-                    dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
-                    //advance 100%
-                    addProgressAvance();
+                    response = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
 
-                    log.info("Finalizando");
+                    if (response == null) {
+                        log.error("ERROR ENVIANDO DTE: " + idFac);
+                        log.error("API: /api/secured/dte/send");
+                        log.error("CODIGO ERROR: " + Constantes.COD_ERROR_NULL_RESPONSE);
 
-                    clearStatus();
+                        showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_NULL_RESPONSE);
+                        return;
+                    }
+
+                    switch (response.getCodeHttp()) {
+                        case 200:
+                            //advance 100%
+                            addProgressAvance();
+
+                            log.info("Finalizando");
+
+                            clearStatus();
+                            break;
+                        case 504:
+                            /*
+                            reintento despues de 8 segundos:
+                            1. hacer consulta del estado del dte.
+                            2. si no ha sido recibido, enviarlo nuevamente
+                            esto hacerlo dos veces máximo
+                            */
+                            
+                            break;
+                        default:
+                            /*
+                            si falla el envio, reintentar:
+                            1. hacer consulta del estado del dte.
+                            2. si no ha sido recibido, enviarlo nuevamente
+                            esto hacerlo dos veces máximo
+                            */
+                            
+                            log.error("ERROR ENVIANDO DTE: " + idFac);
+                            log.error("CODIGO HTTP: " + response.getCodeHttp());
+                            log.error("MENSAJE ERROR: " + response.getBody());
+
+                            showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
+                            break;
+                    }
+                } else {
+                    log.error("ERROR CREANDO FACTURA: " + invoceDto.toString());
+                    log.error("CODIGO HTTP: " + response.getCodeHttp());
+                    log.error("MENSAJE ERROR: " + response.getBody());
+
+                    showMessageSaveInvoce("OCURRIO UN ERROR EN LA CREACION DE LA FACTURA");
                 }
             } catch (InterruptedException ex) {
                 log.error("ERROR ENVIANDO DTE", ex);
             }
         }
+    }
+
+    private void showMessageSaveInvoce(String msg) {
+        JsfUtil.showMessageDialog(FacesMessage.SEVERITY_ERROR,
+                Constantes.MSG_ERROR,
+                msg);
+
+        cleanFull();
+
+        PrimeFaces.current().executeScript("PF('chatDialog').hide()");
+        PrimeFaces.current().ajax().update("mensajesPanel", "step", "dvClient", "dvDetInvoce", "dvDetPayment");
     }
 
     /**
@@ -363,7 +411,7 @@ public class InvoceView implements Serializable {
             JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "DEBE DE REVISAR LA SUMATORIA DE LOS DETALLES DE PAGO");
             return false;
         }
-        
+
         PrimeFaces.current().executeScript("PF('chatDialog').show()");
         return true;
     }

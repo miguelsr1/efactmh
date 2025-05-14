@@ -36,7 +36,7 @@
                 font-weight: 700;
                 font-size: 12px;
                 letter-spacing: 0.3px;
-                width: 200px !important;
+                width: 150px !important;
             }
             
             iframe{
@@ -99,8 +99,8 @@
                         </div>
                     </f:facet>
 
-                    <p:column headerText="Tipo">
-                        <p:outputLabel value="#{dte.tipoDte}"/>
+                    <p:column headerText="DTE">
+                        <p:outputLabel value="#{dte.abrevDte}"/>
                     </p:column>
                     <p:column headerText="Nombre" >
                         <p:outputLabel value="#{dte.nombre}" />
@@ -117,8 +117,8 @@
                     <p:column headerText="Código Generación" >
                         <p:outputLabel value="#{dte.codigoGeneracion}"/>
                     </p:column>
-                    <p:column headerText="Estado" >
-                        <span class="style-estado #{dte.estado eq 0 ? 'dte-no-recibido' : 
+                    <p:column headerText="Estado" style="text-align: center" width="150">
+                        <span style="display: inline-block" class="style-estado #{dte.estado eq 0 ? 'dte-no-recibido' : 
                                                     (dte.estado eq 1 ? 'dte-recibido' : 
                                                     (dte.estado eq 2 ? 'dte-rechazado' :
                                                     (dte.estado eq 3 ? 'dte-anulado' : 'dte-recibido-observado')))}">#{dte.estadoDescripcion}</span>

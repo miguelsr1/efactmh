@@ -10,6 +10,7 @@ import lombok.Data;
 public class DtesResponse {
 
     private Long idFactura;
+    private String abrevDte;
     private String tipoDte;
     private String numDocumento;
     private String nombre;

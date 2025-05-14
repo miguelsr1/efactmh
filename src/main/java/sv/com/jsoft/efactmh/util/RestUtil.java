@@ -39,7 +39,7 @@ public class RestUtil {
     private final Gson gson = new Gson();
     private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
-    
+
     public ResponseRestApi callGet() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
@@ -184,7 +184,7 @@ public class RestUtil {
 
         return null;
     }
-    
+
     public ResponseRestApi callGetAllAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
@@ -199,9 +199,9 @@ public class RestUtil {
 
             if (response.statusCode() == 200) {
                 if (response.body() != null) {
-                     Type lst = TypeToken.getParameterized(List.class, clazz).getType();
+                    Type lst = TypeToken.getParameterized(List.class, clazz).getType();
                     return new ResponseRestApi(response.statusCode(),
-                             gson.fromJson(response.body(), lst));
+                            gson.fromJson(response.body(), lst));
                 }
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
@@ -211,6 +211,11 @@ public class RestUtil {
         return null;
     }
 
+    /**
+     * LISTO
+     *
+     * @return
+     */
     public ResponseRestApi callPostAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
@@ -224,14 +229,19 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 201 ||
-                    response.statusCode() == 200) {
+            if (response.statusCode() == 201
+                    || response.statusCode() == 200) {
                 if (response.body() != null) {
                     log.info("RESPONSE " + endpoint + ": " + response.body());
-                    
+
                     return new ResponseRestApi(response.statusCode(),
                             gson.fromJson(response.body(), clazz));
                 }
+            } else if (response.statusCode() == 401) {
+                //RENOVAR JWT KEYCLOAK
+
+            } else {
+                return new ResponseRestApi(response.statusCode(), response.body());
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR postAuth - " + endpoint, ex);

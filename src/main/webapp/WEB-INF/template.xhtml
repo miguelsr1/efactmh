@@ -43,12 +43,11 @@
                 <div class="layout-content">
                     <ui:insert name="content"/>
 
-                    <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
+                    <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" 
+                                            update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
 
-                    <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px" onShow="document.location.href = document.location.href;">
+                    <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px">
                         <h3>Reloading page</h3>
-                        Message: #{pfExceptionHandler.message} <br/>
-                        StackTrace: <h:outputText value="#{pfExceptionHandler.formattedStackTrace}" escape="false" />
                     </p:dialog>
                 </div>
             </div>

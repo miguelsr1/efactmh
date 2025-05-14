@@ -268,7 +268,7 @@ public class DteService {
         }
     }
     
-     public void getSendMh(SendDteRequest send, JwtDto token) {
+     public ResponseRestApi getSendMh(SendDteRequest send, JwtDto token) {
          RestUtil restUtil = RestUtil.builder()
                  .endpoint("/api/secured/dte/send")
                  .clazz(ResponseRestApi.class)
@@ -276,11 +276,7 @@ public class DteService {
                  .body(send)
                  .build();
          
-         ResponseRestApi responseApi = restUtil.callPostAuth();
-         
-         if(responseApi.getCodeHttp() == 200){
-             JsfUtil.mensajeInformacion("Factura enviada");
-         }
+         return restUtil.callPostAuth();
      }
      
      public DteToInvalidate findDteToInvalidate(Long idFactura, JwtDto token) {
