@@ -11,6 +11,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.ItemDto;
 import sv.com.jsoft.efactmh.model.dto.DtesResponse;
@@ -33,20 +34,20 @@ public class DtesView implements Serializable {
     @Setter
     private ItemDto itemDto;
     private List<DtesResponse> lstDtes;
-    
+
     @Inject
     SessionService sessionService;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         lstDtes = new ArrayList<>();
     }
 
     public List<DtesResponse> getLstDtes() {
         return lstDtes;
     }
-    
-    public void findDtes(){
+
+    public void findDtes() {
         RestUtil rest = RestUtil.builder()
                 .clazz(DtesResponse.class)
                 .jwtDto(sessionService.getToken())
@@ -57,7 +58,7 @@ public class DtesView implements Serializable {
             lstDtes = (List<DtesResponse>) obj.getBody();
         }
     }
-    
+
     public void showDlgDetToInvalidate() {
 
         DialogFrameworkOptions options = DialogFrameworkOptions.builder()
@@ -68,8 +69,12 @@ public class DtesView implements Serializable {
                 .width("700")
                 //.height("600px")*/
                 .build();
-        
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
         PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
+    }
+
+    public void onDteInvalidate(SelectEvent event) {
+        findDtes();
     }
 }

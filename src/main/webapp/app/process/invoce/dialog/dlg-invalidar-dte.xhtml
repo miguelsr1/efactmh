@@ -147,11 +147,11 @@
                             <p><small>* son campos obligatorios</small></p>
                             
 
-                            <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
+                            <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary mr-2" process="@this"
                                              icon="pi pi-times" style="max-width: 110px" action="#{dlgInvalidarDte.closeDgl()}"/>
-                            <p:commandButton value="Agregar" update="dvInvalidateDte" 
+                            <p:commandButton value="Anular" update="dvInvalidateDte" 
                                              process="@this,cbInva,txtMotivo,txtNomRes,txtTipoDocRes,txtNumDocRes,txtNomSol,txtTipoDocSol,txtNumDocSol"
-                                             icon="pi pi-plus" style="max-width: 110px"
+                                             icon="pi pi-ban" style="max-width: 110px"
                                              validateClient="true" styleClass="ui-button-primary" action="#{dlgInvalidarDte.sendDteInvalidate()}"/>
                         </div>
 

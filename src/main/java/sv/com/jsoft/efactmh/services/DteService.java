@@ -95,7 +95,7 @@ public class DteService {
         BigDecimal totalIva = BigDecimal.ZERO;
         for (Object obj : jsonCuerpoDoc) {
             JSONObject item = (JSONObject) obj;
-            totalIva = totalIva.add((BigDecimal)item.get("ivaItem"));
+            totalIva = totalIva.add((BigDecimal) item.get("ivaItem"));
         }
 
         JSONObject jsonResumen = resumenServices.getResumen(invoce.getCodigoDte(),
@@ -267,29 +267,15 @@ public class DteService {
             return null;
         }
     }
-    
-     public ResponseRestApi getSendMh(SendDteRequest send, JwtDto token) {
-         RestUtil restUtil = RestUtil.builder()
-                 .endpoint("/api/secured/dte/send")
-                 .clazz(ResponseRestApi.class)
-                 .jwtDto(token)
-                 .body(send)
-                 .build();
-         
-         return restUtil.callPostAuth();
-     }
-     
-     public DteToInvalidate findDteToInvalidate(Long idFactura, JwtDto token) {
-        RestUtil rest = RestUtil.builder()
-                .endpoint("/api/secured/dte/invalidate/" + idFactura)
-                .clazz(DteToInvalidate.class)
+
+    public ResponseRestApi getSendMh(SendDteRequest send, JwtDto token) {
+        RestUtil restUtil = RestUtil.builder()
+                .endpoint("/api/secured/dte/send")
+                .clazz(ResponseRestApi.class)
                 .jwtDto(token)
+                .body(send)
                 .build();
-        ResponseRestApi response = rest.callGetOneAuth();
-        if (response.getCodeHttp() == 200) {
-            return (DteToInvalidate) response.getBody();
-        } else {
-            return null;
-        }
+
+        return restUtil.callPostAuth();
     }
 }

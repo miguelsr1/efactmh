@@ -61,8 +61,6 @@ public class DlgInvalidarDte implements Serializable {
     private String dteR;
 
     @Inject
-    DteService dteService;
-    @Inject
     SessionService sessionService;
     @Inject
     InvalidateService invalidateService;
@@ -72,14 +70,12 @@ public class DlgInvalidarDte implements Serializable {
     @PostConstruct
     public void init() {
         idFactura = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idFactura");
-        //idFactura = 151l;
-        dte = new DteToInvalidate();
-        loadDte();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idFactura");
+        loadDte();
     }
 
     public void loadDte() {
-        dte = dteService.findDteToInvalidate(idFactura, sessionService.getToken());
+        dte = invalidateService.findDteToInvalidate(idFactura, sessionService.getToken());
     }
     
     public void closeDgl() {
@@ -104,6 +100,8 @@ public class DlgInvalidarDte implements Serializable {
         
         ResponseRestApi response = invalidateService.createInvalidate(request, sessionService.getToken());
         
+        PrimeFaces.current().dialog().closeDynamic(null);
+        
         switch (response.getCodeHttp()) {
             case 200:
                 JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO, "INFORMACION", "DTE ANULADO");
@@ -112,7 +110,5 @@ public class DlgInvalidarDte implements Serializable {
                 JsfUtil.showMessageDialog(FacesMessage.SEVERITY_ERROR, "ERROR", "OCURRIO UN ERROR EN LA ANULACION");
                 break;
         }
-        
-        PrimeFaces.current().dialog().closeDynamic(null);
     }
 }

@@ -127,6 +127,7 @@
                         <p:commandButton icon="pi pi-print" styleClass="mr-2" />
                         <p:commandButton icon="pi pi-ban" styleClass="mr-2 ui-button-secondary" disabled="#{dte.estado ne 1 and dte.estado ne 4}"
                                          action="#{dtesView.showDlgDetToInvalidate}">
+                            <p:ajax event="dialogReturn" listener="#{dtesView.onDteInvalidate}" update="tblDtes"/>
                             <f:setPropertyActionListener target="#{dtesView.idFactura}" value="#{dte.idFactura}"/>
                         </p:commandButton>
                         <p:commandButton icon="pi pi-download" styleClass="ui-button-success" />                        
