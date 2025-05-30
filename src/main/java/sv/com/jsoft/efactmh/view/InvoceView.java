@@ -24,6 +24,7 @@ import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.DetallePago;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.Producto;
+import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
@@ -92,6 +93,9 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private List<DetallePago> lstDetPago;
+    @Getter
+    @Setter
+    private List<CatalogoDto> lstMetodoPago;
 
     private Date fechaPedido;
     private ClienteResponse cliente;
@@ -117,6 +121,9 @@ public class InvoceView implements Serializable {
         fechaPedido = new Date();
         cliente = new ClienteResponse();
         invoceDto = new InvoceDto();
+
+        invoceDto.setCondicionOperacion("1"); //CONTADO POR DEFECTO
+
         lstDetPago = new ArrayList<>();
         detPago = new DetallePago();
 
@@ -127,6 +134,29 @@ public class InvoceView implements Serializable {
         fontWeightSave = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
+        
+        loadMetodoPago();
+    }
+
+    public void loadMetodoPago() {
+        lstMetodoPago = new ArrayList<>();
+        switch (invoceDto.getCondicionOperacion()) {
+            case "1":
+                lstMetodoPago.add(new CatalogoDto("01", "EFECTIVO"));
+                break;
+            case "2":
+                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
+                lstMetodoPago.add(new CatalogoDto("03", "TARJETA DE CREDITO"));
+                lstMetodoPago.add(new CatalogoDto("04", "CHEQUE"));
+                lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
+                break;
+            case "3":
+                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
+                lstMetodoPago.add(new CatalogoDto("03", "TARJETA DE CREDITO"));
+                lstMetodoPago.add(new CatalogoDto("04", "CHEQUE"));
+                lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
+                break;
+        }
     }
 
     //==========================================================================
@@ -350,8 +380,8 @@ public class InvoceView implements Serializable {
                             1. hacer consulta del estado del dte.
                             2. si no ha sido recibido, enviarlo nuevamente
                             esto hacerlo dos veces máximo
-                            */
-                            
+                             */
+
                             break;
                         default:
                             /*
@@ -359,8 +389,8 @@ public class InvoceView implements Serializable {
                             1. hacer consulta del estado del dte.
                             2. si no ha sido recibido, enviarlo nuevamente
                             esto hacerlo dos veces máximo
-                            */
-                            
+                             */
+
                             log.error("ERROR ENVIANDO DTE: " + idFac);
                             log.error("CODIGO HTTP: " + response.getCodeHttp());
                             log.error("MENSAJE ERROR: " + response.getBody());

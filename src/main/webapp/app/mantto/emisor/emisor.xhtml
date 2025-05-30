@@ -36,10 +36,12 @@
 
     <ui:define name="content">
         <div class="grid dashboard ">
-            <p:breadCrumb>
-                <p:menuitem value="Matenimientos" outcome="/app/home" />
-                <p:menuitem value="Mis Datos"/>
-            </p:breadCrumb>
+            <h:form prependId="false">
+                <p:breadCrumb>
+                    <p:menuitem value="Matenimientos" outcome="/app/home" />
+                    <p:menuitem value="Mis Datos"/>
+                </p:breadCrumb>
+            </h:form>
 
             <div class="col-12">                    
                 <div class="card" jsf:id="dvDatos">

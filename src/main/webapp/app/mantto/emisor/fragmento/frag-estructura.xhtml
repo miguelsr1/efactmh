@@ -6,7 +6,7 @@
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <h:form prependId="false" style="width: 100%;">
-        <div class="col-12">
+        <div class="col-12 md:col-12">
             <p:dataTable id="tblEstablecimientos" value="#{estructuraView.lstEstable}" var="est"
                          reflow="true" size="small" tableStyle="table-layout: auto;" rowKey="#{est.idEstablecimiento}"
                          selectionMode="single" selection="#{estructuraView.estable}" 

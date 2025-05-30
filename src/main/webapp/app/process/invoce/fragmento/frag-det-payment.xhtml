@@ -17,16 +17,23 @@
         </div>
 
         <div class="ui-fluid formgrid grid" jsf:id="dvPago">
-            <div class="field col-12 md:col-4 sm:col-6" >
+            <div class="field col-12 md:col-4 sm:col-3" >
+                <p:outputLabel for="cboCondicionOpe" value="Condición de Operación"/>
+                <p:selectOneMenu id="cboCondicionOpe" value="#{invoceView.invoce.condicionOperacion}" required="true" style="margin-bottom: 0.5rem"
+                                 requiredMessage="DEBE DE SELECCIONAR UNA CONDICION DE LA OPERACION">
+                    <f:selectItem itemValue="1" itemLabel="CONTADO" />
+                    <f:selectItem itemValue="2" itemLabel="A CRÉDITO" />
+                    <f:selectItem itemValue="3" itemLabel="OTRO" />
+                    <p:ajax process="@this,cboCondicionOpe" listener="#{invoceView.loadMetodoPago}" update="cboTipoPago"/>
+                </p:selectOneMenu>
+                <small jsf:id="chkCompra" style="display: #{invoceView.detPago.tipoPago eq 3 ? 'block':'none'}"><p:selectBooleanCheckbox itemLabel="Compra a plazos"/> </small>
+            </div>
+            <div class="field col-12 md:col-4 sm:col-3" >
                 <p:outputLabel for="cboTipoPago" value="Tipo de pago"/>
                 <p:selectOneMenu id="cboTipoPago" value="#{invoceView.detPago.tipoPago}" required="true" style="margin-bottom: 0.5rem"
                                  requiredMessage="DEBE DE SELECCIONAR UN MÉTODO DE PAGO">
                     <f:selectItem itemLabel="SELECCIONE" noSelectionOption="true"/>
-                    <f:selectItem itemValue="01" itemLabel="EFECTIVO" />
-                    <f:selectItem itemValue="02" itemLabel="TARJETA DEBITO" />
-                    <f:selectItem itemValue="03" itemLabel="TARJETA CREDITO" />
-                    <f:selectItem itemValue="04" itemLabel="CHEQUE" />
-                    <f:selectItem itemValue="05" itemLabel="TRANSFERENCIA-DEPOSITO BANCARIO" />
+                    <f:selectItems value="#{invoceView.lstMetodoPago}" var="met" itemLabel="#{met.nombre}" itemValue="#{met.id}" />
                     <p:ajax process="@this,cboTipoPago" update="txtNumRef,cboPlazo,txtPeriod, chkCompra"/>
                 </p:selectOneMenu>
                 <small jsf:id="chkCompra" style="display: #{invoceView.detPago.tipoPago eq 3 ? 'block':'none'}"><p:selectBooleanCheckbox itemLabel="Compra a plazos"/> </small>
