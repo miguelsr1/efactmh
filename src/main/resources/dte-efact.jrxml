@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dte-efact" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6bbe36ef-b3cb-422a-b8bc-725e29e80b35">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="post"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="151"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="843"/>
+	<parameter name="PID_FACTURA" class="java.lang.Long"/>
+	<queryString language="SQL">
+		<![CDATA[select 
+	UPPER(c.nombre_comercial) nombre,
+	c.nit,
+	c.nrc,
+	ae.actividad_economica,
+	UPPER(c.direccion) direccion, 
+	m.nombre_municipio, 
+	d.nombre_departamento,
+	c.telefono,
+	c.correo,
+	ctd.nombre_dte,
+	f.codigo_generacion,
+	f.numero_control,
+	cmf.descripcion,
+	ctt.descirpionc,
+	TO_CHAR(f.fecha_creacion,'dd/MM/yyyy') fecha,
+	TO_CHAR(f.fecha_creacion,'HH:mm:ss') hora,
+	monto_a_letras(f.monto_operacion) valor_letras,
+	vw.recep_nombre,
+	vw.recep_actividad,
+	vw.recep_direccion,
+	vw.recep_municipio,
+	vw.recep_departamento,
+	vw.recep_tipo_documento,
+	vw.recep_numero_documento,
+	vw.recep_nrc,
+	vw.recep_telefono,
+	vw.recep_correo,
+	vw.id_cliente
+from 
+	contribuyente c 
+	inner join factura f on c.id_contribuyente  = f.id_contribuyente
+	inner join cat_002_tipo_documentos ctd on ctd.codigo_dte = f.codigo_dte
+	inner join cat_003_modelo_facturacion cmf on f.codigo_facturacion = cmf.codigo_facturacion
+	inner join cat_004_tipo_transmicion ctt on f.codigo_transmision = ctt.codigo_transmision
+	inner join actividad_economica ae on c.codigo_actividad = ae.codigo_actividad
+	inner join usuario u on c.usuario = u.correo_electronico
+	inner join municipio m on c.id_municipio = m.id_municipio
+	inner join departamento d on m.codigo_departamento = d.codigo_departamento
+	inner join vw_receptor_dte vw on f.id_cliente = vw.id_cliente
+where 
+	f.id_factura = $P{PID_FACTURA} ]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+	</field>
+	<field name="nit" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nit"/>
+		<property name="com.jaspersoft.studio.field.label" value="nit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="contribuyente"/>
+	</field>
+	<field name="nrc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nrc"/>
+		<property name="com.jaspersoft.studio.field.label" value="nrc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="contribuyente"/>
+	</field>
+	<field name="actividad_economica" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="actividad_economica"/>
+		<property name="com.jaspersoft.studio.field.label" value="actividad_economica"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="actividad_economica"/>
+	</field>
+	<field name="direccion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="direccion"/>
+	</field>
+	<field name="nombre_municipio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_municipio"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_municipio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="municipio"/>
+	</field>
+	<field name="nombre_departamento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_departamento"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_departamento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="departamento"/>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="telefono"/>
+		<property name="com.jaspersoft.studio.field.label" value="telefono"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="contribuyente"/>
+	</field>
+	<field name="correo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="correo"/>
+		<property name="com.jaspersoft.studio.field.label" value="correo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="contribuyente"/>
+	</field>
+	<field name="nombre_dte" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_dte"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_dte"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cat_002_tipo_documentos"/>
+	</field>
+	<field name="codigo_generacion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="codigo_generacion"/>
+		<property name="com.jaspersoft.studio.field.label" value="codigo_generacion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="numero_control" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="numero_control"/>
+		<property name="com.jaspersoft.studio.field.label" value="numero_control"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="factura"/>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="descripcion"/>
+		<property name="com.jaspersoft.studio.field.label" value="descripcion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cat_003_modelo_facturacion"/>
+	</field>
+	<field name="descirpionc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="descirpionc"/>
+		<property name="com.jaspersoft.studio.field.label" value="descirpionc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cat_004_tipo_transmicion"/>
+	</field>
+	<field name="fecha" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha"/>
+	</field>
+	<field name="hora" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="hora"/>
+		<property name="com.jaspersoft.studio.field.label" value="hora"/>
+	</field>
+	<field name="valor_letras" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="valor_letras"/>
+		<property name="com.jaspersoft.studio.field.label" value="valor_letras"/>
+	</field>
+	<field name="recep_nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_actividad" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_actividad"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_actividad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_direccion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_direccion"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_direccion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_municipio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_municipio"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_municipio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_departamento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_departamento"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_departamento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_tipo_documento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_tipo_documento"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_tipo_documento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_numero_documento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_numero_documento"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_numero_documento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_nrc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_nrc"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_nrc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_telefono" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_telefono"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_telefono"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="recep_correo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="recep_correo"/>
+		<property name="com.jaspersoft.studio.field.label" value="recep_correo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<field name="id_cliente" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.name" value="id_cliente"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_cliente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="183" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="5" width="330" height="88" uuid="58f25d18-fe7f-42b8-bb81-d2eeb607981d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement markup="html">
+					<font size="6"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<i><span style='font-size:7px;'><b>EMISOR:</b> " + $F{nombre} + " </span></i><br/>"+
+"<b>N.I.T.: </b>" + $F{nit} + "<br/>"+
+"<b>N.R.C.: </b>" + $F{nrc} + "<br/>"+
+"<b>Act. Económica: </b>" +$F{actividad_economica} + "<br/>"+
+"<b>Dirección: </b>" +$F{direccion}+ "<br/>"+
+"<b>Municipio: </b>" +$F{nombre_municipio}+ "<br/>"+
+"<b>Departamento: </b>" + $F{nombre_departamento}+ "<br/>"+
+"<b>Teléfono: </b>" + $F{telefono}+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+"<b>Correo: </b>" + $F{correo}
+]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="103" width="222" height="80" uuid="e06ea01a-544d-48e5-92d4-076cb48de94f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement markup="html">
+					<font size="6"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<i><span style='font-size:7px;'><b>Tipo D.T.E.:</b> " + $F{nombre_dte} + " </span></i><br/>"+
+"<b>Código de generación: </b>" + $F{codigo_generacion} + "<br/>"+
+"<b>Número de control: </b>" +$F{numero_control} + "<br/>"+
+"<b>Modelo de facturación </b>" +$F{descripcion} + "<br/>"+
+"<b>Tipo transmisión: </b>" +$F{descirpionc}+ "<br/>"+
+"<b>Fecha: </b>" + $F{fecha} + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hora: </b>"+$F{hora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="103" width="330" height="80" uuid="8fb8f8a8-f3ef-46f6-beee-e1c945401657">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement markup="html">
+					<font size="6"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<i><span style='font-size:7px;'><b>RECEPTOR:</b> " + $F{recep_nombre} + " </span></i><br/>"+
+"<b>Tipo documento: </b>" + $F{recep_tipo_documento}+ "<br/>"+
+"<b>Número documento: </b>" + $F{recep_numero_documento}+ "<br/>"+
+"<b>Dirección: </b>" + $F{recep_direccion} + "<br/>"+
+"<b>Municipio: </b>" +$F{recep_municipio}+ "<br/>"+
+"<b>Departamento: </b>" + $F{recep_departamento}+ "<br/>"+
+"<b>Teléfono: </b>" + $F{telefono}+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+"<b>Correo: </b>" + $F{correo}
+]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="420" y="5" width="75" height="75" uuid="f04118eb-1ecf-42a9-8929-7197e871a4f1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA["123456789"]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="50" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
