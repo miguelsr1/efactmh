@@ -12,4 +12,5 @@ public class ClienteResponse {
     private String razonSocial;
     private String nombreCompleto;
     private int tipoPersoneria;
+    private Boolean inscritoIva;
 }

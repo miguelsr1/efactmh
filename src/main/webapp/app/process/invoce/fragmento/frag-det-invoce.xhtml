@@ -19,7 +19,7 @@
                         <p:commandButton action="#{invoceView.showDlgDetFactura()}"
                                          process="@this" icon="pi pi-plus"
                                          validateClient="true" styleClass="ui-button-outlined ui-button-success">
-                            <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSubTotal,lblIva,lblTotal"/>
+                            <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSumas,lblIva,lblSubTotal,lblIvaRet,lblTotal"/>
                         </p:commandButton>
                     </div>
                 </div>
@@ -73,16 +73,31 @@
                     </div>
                     <div>
                         <div class="invoice-details">
+                            <div class="invoice-label">Sumas</div>
+                            <div class="invoice-value">$ 
+                                <p:outputLabel id="lblSumas" value="#{invoceView.sumas}">
+                                    <f:convertNumber pattern="#,##0.00"/>
+                                </p:outputLabel>
+                            </div>
+                            
+                            <div class="invoice-label">IVA (13%)</div>
+                            <div class="invoice-value">$ 
+                                <p:outputLabel id="lblIva" value="#{invoceView.iva}">
+                                    <f:convertNumber pattern="#,##0.00"/>
+                                </p:outputLabel>
+                            </div>
+                            
                             <div class="invoice-label">Sub-Total</div>
                             <div class="invoice-value">$ 
                                 <p:outputLabel id="lblSubTotal" value="#{invoceView.subTotal}">
                                     <f:convertNumber pattern="#,##0.00"/>
                                 </p:outputLabel>
                             </div>
-
-                            <div class="invoice-label">IVA (13%)</div>
+                            
+                            
+                            <div class="invoice-label">IVA Retenido(1%)</div>
                             <div class="invoice-value">$ 
-                                <p:outputLabel id="lblIva" value="#{invoceView.iva}">
+                                <p:outputLabel id="lblIvaRet" value="#{invoceView.ivaRetenido}">
                                     <f:convertNumber pattern="#,##0.00"/>
                                 </p:outputLabel>
                             </div>

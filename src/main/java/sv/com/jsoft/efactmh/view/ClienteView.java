@@ -60,14 +60,13 @@ public class ClienteView implements Serializable {
     @Inject
     SessionService sessionService;
 
-    {
-        tipoDoc = 1;
-        cliente = new Cliente();
-        lstMunicipio = new ArrayList<>();
-    }
-
     @PostConstruct
     public void init() {
+        tipoDoc = 1;
+        cliente = new Cliente();
+        cliente.setTipoPersoneria(1);
+        lstMunicipio = new ArrayList<>();
+
         res = RestUtil
                 .builder()
                 .clazz(ClienteDto.class)
@@ -109,9 +108,10 @@ public class ClienteView implements Serializable {
 
     public void nuevo() {
         cliente = new Cliente();
+        cliente.setTipoPersoneria(1);
         disabled = false;
     }
-    
+
     public void cancelar() {
         cliente = new Cliente();
         disabled = true;
@@ -146,9 +146,22 @@ public class ClienteView implements Serializable {
         idMuni = clienteDto.getIdMunicipio();
         MunicipioDto m = (MunicipioDto) RestUtil.builder()
                 .clazz(MunicipioDto.class)
-                .endpoint("catalogos/municipio/" + idMuni)
+                .endpoint("/api/catalogo/municipio/" + idMuni)
                 .build().callGetById();
-        tipoDoc = cliente.getTipoDocumento();
-        duiContacto = cliente.getDocumentoContacto();
+        codigoDepa = m.getCodDepartamento();
+        
+        ResponseRestApi response = RestUtil.builder()
+                .clazz(Cliente.class)
+                .jwtDto(sessionService.getToken())
+                .endpoint("/api/secured/client/update/" + clienteDto.getIdCliente())
+                .build()
+                .callGetOneAuth();
+        
+        if (response.getCodeHttp() == 200) {
+            cliente = (Cliente) response.getBody();
+        }
+        
+        /*tipoDoc = cliente.getTipoDocumento();
+        duiContacto = cliente.getDocumentoContacto();*/
     }
 }

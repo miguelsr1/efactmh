@@ -13,87 +13,38 @@
         <h6>Datos Generales</h6>
         <p:separator/>
         <div class="grid">
-            <div class="col-12 md:col-2">
-                <div class="formgrid grid">
-                    <div class="field col-12" >
-                        <p:outputLabel for="txtCod" value="Código"/>
-                        <p:inputText id="txtCod" value="#{clienteView.cliente.codigo}" disabled="#{clienteView.disabled}"
-                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
-                    </div>
-                    <div class="field col-12" >
-                        <p:outputLabel for="txtNit" value="NIT"/>
-                        <p:inputMask id="txtNit" value="#{clienteView.cliente.nit}" size="18" mask="9999-999999-999-9" required="true" disabled="#{clienteView.disabled}"
-                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                    <div class="field col-12" >
-                        <p:outputLabel for="txtNrc" value="NRC"/>
-                        <p:inputText id="txtNrc" value="#{clienteView.cliente.nrc}" maxlength="22" required="true" disabled="#{clienteView.disabled}"
-                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                </div>
+            <div class="field col-12" >
+                <p:outputLabel for="cboTipoPer" value="Tipo de Personeria"/>
+                <p:selectOneMenu id="cboTipoPer" value="#{clienteView.cliente.tipoPersoneria}" disabled="#{clienteView.disabled}"  class="w-full">
+                    <f:selectItem itemValue="1" itemLabel="PERSONERIA NATURAL" />
+                    <f:selectItem itemValue="2" itemLabel="PERSONERIA JURIDICA" />
+                    <p:ajax update="dvDatos" />
+                </p:selectOneMenu>
             </div>
-            <div class="col-12 md:col-5">
-                <div class="formgrid grid">
-                    <div class="field col-12">
-                        <p:outputLabel for="razSoc" value="Razon Social"/>
-                        <p:inputText id="razSoc" value="#{clienteView.cliente.razonSocial}" disabled="#{clienteView.disabled}"
-                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
-                    </div>
-                    <div class="field col-12">
-                        <p:outputLabel for="nomComer" value="Nombre Comercial"/>
-                        <p:inputText id="nomComer" value="#{clienteView.cliente.nombreComercial}" disabled="#{clienteView.disabled}"
-                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
-                    </div>
-                    <div class="field col-12" >
-                        <p:outputLabel for="email" value="Correo electrónico"/>
-                        <p:inputText id="email" value="#{clienteView.cliente.email}" maxlength="22" required="true" disabled="#{clienteView.disabled}"
-                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-                    </div>
-                </div>
+            <div class="col-12" jsf:id="dvPn" style="display: #{clienteView.cliente.tipoPersoneria eq 1 ? 'block' : 'none'}">
+                <ui:include src="frag-pn.xhtml"/>
             </div>
-            <div class="col-12 md:col-5">
-                <div class="formgrid grid">
-                    <div class="field col-12" >
-                        <p:outputLabel for="cboDepa" value="Departamento"/>
-                        <p:selectOneMenu id="cboDepa" value="#{clienteView.codigoDepa}" disabled="#{clienteView.disabled}"
-                                         class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
-                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
-                            <f:selectItems value="#{ubicacionService.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
-                            <p:ajax update="cboMuni"/>
-                        </p:selectOneMenu>
-                    </div>
-                    <div class="field col-12" >
-                        <p:outputLabel for="cboMuni" value="Municipio"/>
-                        <p:selectOneMenu id="cboMuni" value="#{clienteView.cliente.idMunicipio}" disabled="#{clienteView.disabled}"
-                                         class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
-                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
-                            <f:selectItems value="#{clienteView.lstMunicipio}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
-                        </p:selectOneMenu>
-                    </div>
-                    <div class="field col-12">
-                        <p:outputLabel for="txtDir" value="Dirección"/>
-                        <p:inputTextarea id="txtDir" value="#{clienteView.cliente.direccion}" disabled="#{clienteView.disabled}"
-                                         class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" rows="3"/>
-                    </div>
-                </div>
+            
+            <div class="col-12" jsf:id="dvPj" style="display: #{clienteView.cliente.tipoPersoneria eq 2 ? 'block' : 'none'}">
+                <ui:include src="frag-pj.xhtml"/>
             </div>
         </div>
 
-        <h6>Datos de contacto</h6>
+        <!--h6>Datos de contacto</h6>
         <p:separator/>
         <div class="formgrid grid">
             <div class="field col-12 md:col-3" jsf:id="numDoc"> 
                 <p:outputLabel  value="Número de DUI/NIT" />
 
-                <p:inputMask id="txtDoc" value="#{clienteView.duiContacto}" size="18" required="true" onkeyup="nitDuiMask(this)" disabled="#{clienteView.disabled}"
+                <p:inputMask id="txtDoc" value="{clienteView.duiContacto}" size="18" required="true" onkeyup="nitDuiMask(this)" disabled="{clienteView.disabled}"
                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
             </div>
             <div class="field col-12 md:col-9" >
                 <p:outputLabel for="txtNom" value="Nombre contacto"/>
-                <p:inputText id="txtNom" value="#{clienteView.cliente.nombreContacto}" maxlength="22" required="true" disabled="#{clienteView.disabled}"
+                <p:inputText id="txtNom" value="{clienteView.cliente.nombreContacto}" maxlength="22" required="true" disabled="{clienteView.disabled}"
                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
             </div>
-        </div>
+        </div-->
 
         <div class="field col-12">
             <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos" style="margin-right: 5px;" disabled="#{clienteView.disabled}"/>

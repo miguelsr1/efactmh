@@ -41,7 +41,7 @@ public class UbicacionService {
             return new ArrayList<>();
         }
         
-        RestUtil res = RestUtil.builder().endpoint("/api/catalogo/municipio/" + depa).clazz(MunicipioDto.class).build();
+        RestUtil res = RestUtil.builder().endpoint("/api/catalogo/municipio/departamento/" + depa).clazz(MunicipioDto.class).build();
         ResponseRestApi rest = res.callGet();
         if (rest.getCodeHttp() == 200) {
             return (List<MunicipioDto>) rest.getBody();

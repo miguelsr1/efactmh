@@ -20,6 +20,7 @@ public class InvoceDto implements Serializable, EntityPk {
     private Long idPuntoVenta;
     private String condicionOperacion;
     private String codigoDte;
+    private int retencionIsr;
     private List<DetalleFacturaDto> detailInvoce;
     private List<DetallePago> detailPayments;
 

@@ -13,9 +13,8 @@ public class Cliente implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
     private Long idCliente;
-    private String codigo;
     private String nit;
-    private String nrc;
+    private String nrcPersona;
     private String email;
     private String direccion;
     private String telefono;
@@ -27,8 +26,11 @@ public class Cliente implements Serializable, EntityPk {
     private List<InvoceDto> pedidoList;
     private Boolean activo;
     private Integer tipoDocumento;
-
+    private Boolean inscritoIva;
     private Boolean eliminado;
+    private int tipoPersoneria;
+    private String numDocumento;
+    private String codigoActividad;
 
     public Cliente() {
     }

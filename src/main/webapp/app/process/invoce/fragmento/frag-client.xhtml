@@ -16,7 +16,7 @@
                     <p:ajax process="@this,cboDte" />
                 </p:selectOneMenu>
             </div>
-            <div class="field col-12" >
+            <div class="field col-12 md:col-3" >
                 <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
                 <p:inputMask id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" onkeyup="nitDuiMask(this)"
                              class="w-full" required="true"
@@ -24,10 +24,23 @@
                     <p:ajax event="blur" listener="#{invoceView.findClient()}" update="dvCliente"/>
                 </p:inputMask>
             </div>
-            <div class="field col-12">
+            <div class="field col-12 md:col-9">
                 <p:outputLabel for="nomRec" value="Nombre"/>
                 <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}"
                              class="w-full" required="true"/>
+            </div>
+            <div class="field col-12" style="display: #{invoceView.invoce.codigoDte eq '03'}">
+                <p:selectBooleanCheckbox itemLabel="Retención ISR" value="#{invoceView.aplicaRetencionIsr}">
+                    <p:ajax update="dvCliente" />
+                </p:selectBooleanCheckbox>
+            </div>
+            <div class="field col-12" style="display: #{invoceView.aplicaRetencionIsr ? 'block': 'none'}" >
+                <p:outputLabel for="cboIsr" value="Porcentaje retención"/>
+                <p:selectOneMenu id="cboIsr" value="#{invoceView.invoce.retencionIsr}">
+                    <f:selectItem itemValue="1" itemLabel="1% ISR" />
+                    <f:selectItem itemValue="10" itemLabel="10% ISR" />
+                    <p:ajax process="@this,cboIsr" />
+                </p:selectOneMenu>
             </div>
         </div>
 

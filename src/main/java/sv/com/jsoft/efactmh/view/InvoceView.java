@@ -34,6 +34,7 @@ import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.Constantes;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
 import sv.com.jsoft.efactmh.util.JsfUtil;
+import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -53,6 +54,10 @@ public class InvoceView implements Serializable {
     @Getter
     private boolean existeCliente = false;
     private boolean makeInvoce = false;
+    @Getter
+    @Setter
+    private boolean aplicaRetencionIsr = false;
+
     private int var = 1;
     @Getter
     private String taskSave;
@@ -121,6 +126,7 @@ public class InvoceView implements Serializable {
         fechaPedido = new Date();
         cliente = new ClienteResponse();
         invoceDto = new InvoceDto();
+        invoceDto.setCodigoDte("01");
 
         invoceDto.setCondicionOperacion("1"); //CONTADO POR DEFECTO
 
@@ -134,7 +140,7 @@ public class InvoceView implements Serializable {
         fontWeightSave = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
-        
+
         loadMetodoPago();
     }
 
@@ -189,6 +195,21 @@ public class InvoceView implements Serializable {
 
         if (obj.getCodeHttp() == 200) {
             cliente = (ClienteResponse) obj.getBody();
+
+            if (invoceDto.getCodigoDte().equals("03") && !cliente.getInscritoIva()) {
+                
+                MessageUtil.builder()
+                            .severity(FacesMessage.SEVERITY_WARN)
+                            .title("ALERTA")
+                            .message("EL RECEPTOR DEBE DE ESTAR INSCRITO AL IVA PARA EMITIR UN CCF")
+                            .build()
+                            .showMessage();
+                
+                cliente = new ClienteResponse();
+                numDocumentoReceptor = "";
+                return;
+            }
+
             nombreCliente = (cliente.getTipoPersoneria() == 1)
                     ? cliente.getNombreCompleto()
                     : cliente.getRazonSocial();
@@ -199,17 +220,50 @@ public class InvoceView implements Serializable {
         log.info(cliente.toString());
     }
 
-    public BigDecimal getSubTotal() {
+    public BigDecimal getSumas() {
         return invoceDto.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public BigDecimal getSubTotal() {
+        return getSumas().add(getIva());
+    }
+
     public BigDecimal getIva() {
+        switch (invoceDto.getCodigoDte()) {
+            case "01":
+                return BigDecimal.ZERO;
+            case "03":
+                return getSumas().multiply(new BigDecimal(0.13));
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getIvaRetenido() {
+        switch (invoceDto.getCodigoDte()) {
+            case "01":
+                return BigDecimal.ZERO;
+            case "03":
+                BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(10));
+                return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas();
+        }
+
         return BigDecimal.ZERO;
     }
 
     public BigDecimal getTotal() {
+        switch (invoceDto.getCodigoDte()) {
+            case "01":
+                return getTotalFe();
+            case "03":
+                return getTotalCcf();
+        }
+
+        return BigDecimal.ZERO;
+    }
+
+    private BigDecimal getTotalFe() {
         if (invoceDto.getDetailInvoce().isEmpty()) {
             return BigDecimal.ZERO;
         }
@@ -217,6 +271,14 @@ public class InvoceView implements Serializable {
         return invoceDto.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getTotalCcf() {
+        if (invoceDto.getDetailInvoce().isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        return getSumas().add(getIva()).add(getIvaRetenido().negate());
     }
 
     public void showDlgDetFactura() {
@@ -227,7 +289,7 @@ public class InvoceView implements Serializable {
                 .maximizable(false)
                 .modal(true)
                 .width("350px")
-                .height("460px")
+                .height("550px")
                 .build();
 
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);

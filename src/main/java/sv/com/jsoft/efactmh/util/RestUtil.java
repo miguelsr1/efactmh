@@ -308,10 +308,7 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            //Type lst = TypeToken.getParameterized(List.class, clazz).getType();
-            Gson gson = new Gson();
-
-            return gson.fromJson(response.body(), clazz);
+             return new Gson().fromJson(response.body(), clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR getById - " + endpoint, ex);
             return null;

@@ -13,6 +13,12 @@
                 border: 0px solid;
                 padding: 0.5rem;
             }
+            body .ui-chkbox .ui-chkbox-box {
+                width: 1rem !important;
+                min-width: 1rem !important;
+                height: 1rem !important;
+                margin-bottom: 0.4rem !important;
+            }
         </style>
     </ui:define>
 
@@ -25,10 +31,10 @@
                 </p:breadCrumb>
 
                 <div class="col-12">
-                    <ui:include src="fragmento/cliente/frag-cliente.xhtml"/>
+                    <ui:include src="cliente/frag-cliente.xhtml"/>
                 </div>
             </div>
-            <ui:include src="fragmento/cliente/frag-lista.xhtml"/>
+            <ui:include src="cliente/frag-lista.xhtml"/>
         </h:form>
     </ui:define>
 </ui:composition>

@@ -21,7 +21,7 @@
                 </div>
             </f:facet>
 
-            <p:ajax event="rowSelect" update="dvDatos" listener="#{clienteView.onRowSelect}"/>
+            <p:ajax event="rowSelect" update="dvDatos,dvPn,dvPj" listener="#{clienteView.onRowSelect}"/>
 
             <p:column headerText="Tipo">
                 <p:outputLabel value="#{cli.tipoPersoneria}"/>

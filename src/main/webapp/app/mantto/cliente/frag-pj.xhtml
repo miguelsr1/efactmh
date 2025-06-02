@@ -1,0 +1,69 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:jsf="http://xmlns.jcp.org/jsf">
+    
+<div class="col-12 md:col-2" style="display: #{clienteView.cliente.tipoPersoneria eq 1 ? 'none' : 'block'}">
+                <div class="formgrid grid">
+                    <div class="field col-12" >
+                        <p:outputLabel for="txtNit" value="NIT"/>
+                        <p:inputMask id="txtNit" value="#{clienteView.cliente.nit}" size="18" mask="9999-999999-999-9" required="true" disabled="#{clienteView.disabled}"
+                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+                    </div>
+                    <div class="field col-12" >
+                        <p:selectBooleanCheckbox itemLabel="INSCRITO IVA" value="#{clienteView.cliente.inscritoIva}" disabled="#{clienteView.disabled}" style="margin-bottom: 0.2rem">
+                            <p:ajax update="txtNrc" />
+                        </p:selectBooleanCheckbox>
+                        <p:inputText id="txtNrc" value="#{clienteView.cliente.nrcPersona}" maxlength="22" disabled="#{clienteView.disabled or !clienteView.cliente.inscritoIva}"
+                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-5" style="display: #{clienteView.cliente.tipoPersoneria eq 1 ? 'none' : 'block'}">
+                <div class="formgrid grid">
+                    <div class="field col-12">
+                        <p:outputLabel for="razSoc" value="Razon Social"/>
+                        <p:inputText id="razSoc" value="#{clienteView.cliente.razonSocial}" disabled="#{clienteView.disabled}"
+                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                    </div>
+                    <div class="field col-12">
+                        <p:outputLabel for="nomComer" value="Nombre Comercial"/>
+                        <p:inputText id="nomComer" value="#{clienteView.cliente.nombreComercial}" disabled="#{clienteView.disabled}"
+                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                    </div>
+                    <div class="field col-12" >
+                        <p:outputLabel for="email" value="Correo electrónico"/>
+                        <p:inputText id="email" value="#{clienteView.cliente.email}" maxlength="22" required="true" disabled="#{clienteView.disabled}"
+                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-5" style="display: #{clienteView.cliente.tipoPersoneria eq 1 ? 'none' : 'block'}">
+                <div class="formgrid grid">
+                    <div class="field col-12" >
+                        <p:outputLabel for="cboDepa" value="Departamento"/>
+                        <p:selectOneMenu id="cboDepa" value="#{clienteView.codigoDepa}" disabled="#{clienteView.disabled}"
+                                         class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary">
+                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
+                            <f:selectItems value="#{ubicacionService.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
+                            <p:ajax update="cboMuni"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field col-12" >
+                        <p:outputLabel for="cboMuni" value="Municipio"/>
+                        <p:selectOneMenu id="cboMuni" value="#{clienteView.cliente.idMunicipio}" disabled="#{clienteView.disabled}"
+                                         class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary">
+                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
+                            <f:selectItems value="#{clienteView.lstMunicipio}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field col-12">
+                        <p:outputLabel for="txtDir" value="Dirección"/>
+                        <p:inputTextarea id="txtDir" value="#{clienteView.cliente.direccion}" disabled="#{clienteView.disabled}"
+                                         class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" rows="3"/>
+                    </div>
+                </div>
+            </div>
+</ui:component>

@@ -15,6 +15,7 @@ public class DetallePago {
     private String numeroReferencia;
     private String plazo;
     private Integer periodoPlazo;
+    private String codigoUnidad;
     
     public String getTipoPagoStr(){
         if(tipoPago == null){

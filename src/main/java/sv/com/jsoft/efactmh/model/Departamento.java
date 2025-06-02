@@ -1,6 +1,7 @@
 package sv.com.jsoft.efactmh.model;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -8,6 +9,7 @@ import lombok.Data;
  * @author migue
  */
 @Data
+@AllArgsConstructor
 public class Departamento implements Serializable {
 
     private String id;

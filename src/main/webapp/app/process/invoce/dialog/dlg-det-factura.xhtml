@@ -42,17 +42,29 @@
                                              requiredMessage="Debe de ingresar una descripción del bien/servicio"/>
                         </div>
 
-                        <div class="field col-12">
+                        <div class="field col-4">
                             <p:outputLabel for="txtCantidad">Cantidad</p:outputLabel>
                             <p:inputNumber id="txtCantidad" value="#{dlgDetFactura.detFactura.cantidad}" inputStyle="text-align: right;"
                                            decimalPlaces="2" decimalSeparator="." thousandSeparator=","
                                            requiredMessage="Debe de ingresar cantidad a facturar" required="true"/>
                         </div>
-                        <div class="field col-12">
+                        <div class="field col-8">
                             <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
                             <p:inputNumber id="txtPU" value="#{dlgDetFactura.detFactura.precioUnitario}" inputStyle="text-align: right;"
                                            decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
                                            requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
+                        </div>
+                        <div class="field col-12">
+                            <p:outputLabel for="cbItems">Tipo Item</p:outputLabel>
+                            <p:selectOneMenu id="cbItems" value="#{dlgDetFactura.detFactura.codigoItem}" required="true">
+                                <f:selectItems value="#{dlgDetFactura.items}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="field col-12">
+                            <p:outputLabel for="cbUni">Codigo Unidad</p:outputLabel>
+                            <p:selectOneMenu id="cbUni" value="#{dlgDetFactura.detFactura.codigoUnidad}" required="true">
+                                <f:selectItems value="#{dlgDetFactura.unidadesMedidas}" var="uni" itemValue="#{uni.id}" itemLabel="#{uni.nombre}" />
+                            </p:selectOneMenu>
                         </div>
 
                         <div class="field col-12">
