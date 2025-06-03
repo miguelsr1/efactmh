@@ -27,7 +27,7 @@
 
                 <div class="col-12">
                     <div class="card">
-                        <h5>Datos Generales</h5>
+                        <h5>Item</h5>
                         <div class="grid">
                             <div class="col-12 md:col-12" jsf:id="dvDatos">
                                 <div class="formgrid grid">
@@ -51,7 +51,7 @@
                                         <p:selectOneMenu id="cboUni" value="#{productoView.producto.idUnidadMedida}" disabled="#{productoView.disabled}"
                                                          class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UNA UNIDAD" />
-                                            <f:selectItems value="#{catalogoService.lstTipoUnidadMedida}" var="uni" itemLabel="#{uni.descripcion}" itemValue="#{uni.idUnidadMedida}" />
+                                            <f:selectItems value="#{catalogoService.lstTipoUnidadMedida}" var="uni" itemLabel="#{uni.id}" itemValue="#{uni.nombre}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="field col-12">

@@ -13,6 +13,8 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
+import sv.com.jsoft.efactmh.model.PerJuridicaRequest;
+import sv.com.jsoft.efactmh.model.PerNaturalRequest;
 import sv.com.jsoft.efactmh.model.dto.ClienteDto;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 import sv.com.jsoft.efactmh.services.SessionService;
@@ -35,6 +37,15 @@ public class ClienteView implements Serializable {
     private boolean disabled = true;
     @Getter
     @Setter
+    private boolean inscritoIva = false;
+    @Getter
+    @Setter
+    private boolean edit = false;
+    @Getter
+    @Setter
+    private int tipoPersoneria;
+    @Getter
+    @Setter
     private String codigoDepa;
     @Getter
     @Setter
@@ -48,12 +59,11 @@ public class ClienteView implements Serializable {
 
     private List<MunicipioDto> lstMunicipio;
 
-    private Cliente cliente;
+    private PerNaturalRequest pn;
+    private PerJuridicaRequest pj;
     private ClienteDto clienteDto;
     @Getter
     private List<ClienteDto> lstCliente;
-
-    private RestUtil res;
 
     @Inject
     UbicacionService ubicacionService;
@@ -62,19 +72,25 @@ public class ClienteView implements Serializable {
 
     @PostConstruct
     public void init() {
+        inicializar();
+    }
+
+    private void inicializar() {
+        edit = false;
         tipoDoc = 1;
-        cliente = new Cliente();
-        cliente.setTipoPersoneria(1);
+        clienteDto = new ClienteDto();
+        pn = new PerNaturalRequest();
+        pn.setPersoneria("N");
         lstMunicipio = new ArrayList<>();
 
-        res = RestUtil
+        ResponseRestApi response = RestUtil
                 .builder()
                 .clazz(ClienteDto.class)
                 .jwtDto(sessionService.getToken())
                 .endpoint("/api/secured/client/")
-                .build();
+                .build()
+                .callGetAuth();
 
-        ResponseRestApi response = res.callGetAuth();
         if (response.getCodeHttp() == 200) {
             lstCliente = (List<ClienteDto>) response.getBody();
         }
@@ -88,13 +104,23 @@ public class ClienteView implements Serializable {
         this.clienteDto = ClienteDto;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public PerNaturalRequest getPn() {
+        return (PerNaturalRequest) pn;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setPn(PerNaturalRequest cliente) {
         if (cliente != null) {
-            this.cliente = cliente;
+            this.pn = cliente;
+        }
+    }
+
+    public PerJuridicaRequest getPj() {
+        return pj;
+    }
+
+    public void setPj(PerJuridicaRequest cliente) {
+        if (cliente != null) {
+            this.pj = cliente;
         }
     }
 
@@ -107,33 +133,52 @@ public class ClienteView implements Serializable {
     }
 
     public void nuevo() {
-        cliente = new Cliente();
-        cliente.setTipoPersoneria(1);
+        pn = new PerNaturalRequest();
+        pn.setPersoneria("N");
         disabled = false;
     }
 
     public void cancelar() {
-        cliente = new Cliente();
-        disabled = true;
+        inicializar();
+    }
+
+    public void iniciarClient() {
+        pn = new PerNaturalRequest();
+        pj = new PerJuridicaRequest();
     }
 
     public void guardar() {
-        if (cliente != null) {
-            tipoDoc = (duiContacto.length() == 10) ? 1 : 2;
-            cliente.setTipoDocumento(tipoDoc);
-            cliente.setDocumentoContacto(duiContacto);
-            cliente.setActivo(true);
-
-            int codeResponse = res.callPersistir(cliente);
-
-            JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (cliente.esNuevo() ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
-
-            cliente = new Cliente();
-            duiContacto = "";
-            disabled = true;
-
-            PrimeFaces.current().ajax().update("tblCli");
+        int codeResponse = 0;
+        if (tipoPersoneria == 1) {
+            pn.setTipoDocumento(1);
+            pn.setDepartamento(codigoDepa);
+            pn.setActivo(true);
+            codeResponse = RestUtil
+                    .builder()
+                    .clazz(ClienteDto.class)
+                    .jwtDto(sessionService.getToken())
+                    .endpoint("/api/secured/client/pn/")
+                    .build()
+                    .callUpdClient(clienteDto.getIdCliente(), pn);
+        } else {
+            pj.setDepartamentoEmp(codigoDepa);
+            pj.setActivo(true);
+            codeResponse = RestUtil
+                    .builder()
+                    .clazz(ClienteDto.class)
+                    .jwtDto(sessionService.getToken())
+                    .endpoint("/api/secured/client/pj/")
+                    .build()
+                    .callUpdClient(clienteDto.getIdCliente(), pj);
         }
+
+        JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
+
+        pn = new PerNaturalRequest();
+        duiContacto = "";
+        disabled = true;
+
+        PrimeFaces.current().ajax().update("tblCli");
     }
 
     public List<MunicipioDto> getLstMunicipio() {
@@ -141,6 +186,7 @@ public class ClienteView implements Serializable {
     }
 
     public void onRowSelect(SelectEvent<ClienteDto> event) {
+        edit = true;
         disabled = false;
         clienteDto = event.getObject();
         idMuni = clienteDto.getIdMunicipio();
@@ -149,19 +195,49 @@ public class ClienteView implements Serializable {
                 .endpoint("/api/catalogo/municipio/" + idMuni)
                 .build().callGetById();
         codigoDepa = m.getCodDepartamento();
-        
+
         ResponseRestApi response = RestUtil.builder()
                 .clazz(Cliente.class)
                 .jwtDto(sessionService.getToken())
                 .endpoint("/api/secured/client/update/" + clienteDto.getIdCliente())
                 .build()
                 .callGetOneAuth();
-        
+
         if (response.getCodeHttp() == 200) {
-            cliente = (Cliente) response.getBody();
+            Cliente client = (Cliente) response.getBody();
+            tipoPersoneria = client.getTipoPersoneria();
+            if (client.getTipoPersoneria() == 1) {
+                pn = new PerNaturalRequest();
+                
+                pn.setCodigoActividad(client.getCodigoActividad());
+                pn.setDepartamento(client.getDepartamento());
+                pn.setDireccion(client.getDireccion());
+                pn.setEmail(client.getEmail());
+                pn.setMunicipio(client.getMunicipio());
+                pn.setNit(client.getNit());
+                pn.setNombreCompleto(client.getRazonSocial());
+                pn.setNrc(client.getNrcPersona());
+                pn.setNumDocumento(client.getNumDocumento());
+                pn.setPersoneria("N");
+                pn.setTelefono(client.getTelefono());
+                pn.setTipoDocumento(client.getTipoDocumento());
+                pn.setActivo(client.getActivo());
+            } else {
+                pj = new PerJuridicaRequest();
+                
+                pj.setCodigoActividad(client.getCodigoActividad());
+                pj.setDepartamentoEmp(client.getDepartamento());
+                pj.setMunicipioEmp(client.getMunicipioEmp());
+                pj.setDireccionEmp(client.getDireccionEmp());
+                pj.setEmailEmp(client.getEmail());
+                pj.setNit(client.getNit());
+                pj.setNrc(client.getNrc());
+                pj.setRazonSocial(client.getRazonSocial());
+                pj.setNombreComercial(client.getNombreComercial());
+                pj.setPersoneria("J");
+                pj.setTelefono(client.getTelefono());
+                pj.setActivo(client.getActivo());
+            }
         }
-        
-        /*tipoDoc = cliente.getTipoDocumento();
-        duiContacto = cliente.getDocumentoContacto();*/
     }
 }

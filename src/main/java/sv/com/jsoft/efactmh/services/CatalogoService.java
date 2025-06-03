@@ -20,6 +20,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import sv.com.jsoft.efactmh.model.Departamento;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
@@ -39,8 +40,7 @@ public class CatalogoService {
     @Getter
     private List<Producto> lstProducto;
     @Getter
-    private List<TipoUnidadMedida> lstTipoUnidadMedida;
-
+    private List<CatalogoDto> lstTipoUnidadMedida;
     @Getter
     private List<CatalogoDto> lstDepartamentos;
     @Getter
@@ -61,7 +61,7 @@ public class CatalogoService {
     @PostConstruct
     public void init() {
         //loadProduct();
-        //loadTipoUnidadMedida();
+        loadTipoUnidadMedida();
         loadDatosUbicacion();
         loadGiros();
         loadTipoDocumentosId();
@@ -77,14 +77,14 @@ public class CatalogoService {
     }
     private void loadTipoUnidadMedida() {
         ResponseRestApi response = RestUtil.builder()
-                .endpoint("item")
+                .endpoint("/api/catalogo/unidad-medidad")
                 .clazz(TipoUnidadMedida.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGet();
+                .callGetAllAuth();
 
         if (response.getCodeHttp() == 200) {
-            lstTipoUnidadMedida = (List<TipoUnidadMedida>) response.getBody();
+            lstTipoUnidadMedida = (List<CatalogoDto>) response.getBody();
         }
     }
 

@@ -15,40 +15,28 @@
         <div class="grid">
             <div class="field col-12" >
                 <p:outputLabel for="cboTipoPer" value="Tipo de Personeria"/>
-                <p:selectOneMenu id="cboTipoPer" value="#{clienteView.cliente.tipoPersoneria}" disabled="#{clienteView.disabled}"  class="w-full">
+                <p:selectOneMenu id="cboTipoPer" value="#{clienteView.tipoPersoneria}" disabled="#{clienteView.disabled or clienteView.edit}"  class="w-full">
                     <f:selectItem itemValue="1" itemLabel="PERSONERIA NATURAL" />
                     <f:selectItem itemValue="2" itemLabel="PERSONERIA JURIDICA" />
-                    <p:ajax update="dvDatos" />
+                    <p:ajax update="dvDatos" listener="#{clienteView.iniciarClient}" />
                 </p:selectOneMenu>
             </div>
-            <div class="col-12" jsf:id="dvPn" style="display: #{clienteView.cliente.tipoPersoneria eq 1 ? 'block' : 'none'}">
-                <ui:include src="frag-pn.xhtml"/>
+            <div class="col-12" jsf:id="dvPn" style="display: #{clienteView.tipoPersoneria eq 1 ? 'block' : 'none'}">
+                <p:outputPanel rendered="#{clienteView.tipoPersoneria eq 1}">
+                    <ui:include src="frag-pn.xhtml"/>
+                </p:outputPanel>
             </div>
-            
-            <div class="col-12" jsf:id="dvPj" style="display: #{clienteView.cliente.tipoPersoneria eq 2 ? 'block' : 'none'}">
-                <ui:include src="frag-pj.xhtml"/>
+
+            <div class="col-12" jsf:id="dvPj" style="display: #{clienteView.tipoPersoneria eq 2 ? 'block' : 'none'}">
+                <p:outputPanel rendered="#{clienteView.tipoPersoneria eq 2}">
+                    <ui:include src="frag-pj.xhtml"/>
+                </p:outputPanel>
             </div>
         </div>
 
-        <!--h6>Datos de contacto</h6>
-        <p:separator/>
-        <div class="formgrid grid">
-            <div class="field col-12 md:col-3" jsf:id="numDoc"> 
-                <p:outputLabel  value="Número de DUI/NIT" />
-
-                <p:inputMask id="txtDoc" value="{clienteView.duiContacto}" size="18" required="true" onkeyup="nitDuiMask(this)" disabled="{clienteView.disabled}"
-                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-            </div>
-            <div class="field col-12 md:col-9" >
-                <p:outputLabel for="txtNom" value="Nombre contacto"/>
-                <p:inputText id="txtNom" value="{clienteView.cliente.nombreContacto}" maxlength="22" required="true" disabled="{clienteView.disabled}"
-                             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-            </div>
-        </div-->
-
         <div class="field col-12">
             <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos" style="margin-right: 5px;" disabled="#{clienteView.disabled}"/>
-            <p:commandButton value="Cancelar" icon="pi pi-times" action="#{clienteView.cancelar()}" update="dvDatos" process="@this" styleClass="ui-button-secondary"/>
+            <p:commandButton value="Cancelar" icon="pi pi-times" action="#{clienteView.cancelar()}" update="dvDatos tblCli" process="@this" styleClass="ui-button-secondary"/>
             <p:spacer height="10px"/>
         </div>
     </div>

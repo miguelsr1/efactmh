@@ -7,17 +7,17 @@
 
     <div class="col-12 md:col-12">
         <div class="formgrid grid">
-            <div class="field col-12 md:col-3" jsf:id="numDoc"> 
+            <!--div class="field col-12 md:col-3" jsf:id="numDoc"> 
                 <p:outputLabel  value="Número de DUI/NIT" />
 
-                <p:inputMask id="txtDoc" value="#{clienteView.duiContacto}" size="18" required="true" onkeyup="nitDuiMask(this)"
+                <p:inputMask id="txtDoc" value="{clienteView.duiContacto}" size="18" required="true" onkeyup="nitDuiMask(this)"
                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
             </div>
             <div class="field col-12 md:col-9" >
                 <p:outputLabel for="txtNom" value="Nombre contacto"/>
-                <p:inputText id="txtNom" value="#{clienteView.cliente.nombreContacto}" maxlength="22" required="true"
+                <p:inputText id="txtNom" value="{clienteView.cliente.nombreContacto}" maxlength="22" required="true"
                              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
-            </div>
+            </div -->
         </div>
     </div>
 </ui:component>

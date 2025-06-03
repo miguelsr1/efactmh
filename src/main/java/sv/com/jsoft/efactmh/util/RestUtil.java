@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.model.EntityPk;
+import sv.com.jsoft.efactmh.model.Personeria;
 import sv.com.jsoft.efactmh.model.dto.ErrorResponseDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
@@ -229,19 +230,21 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 201
-                    || response.statusCode() == 200) {
-                if (response.body() != null) {
-                    log.info("RESPONSE " + endpoint + ": " + response.body());
+            switch (response.statusCode()) {
+                case 201:
+                case 200:
+                    if (response.body() != null) {
+                        log.info("RESPONSE " + endpoint + ": " + response.body());
 
-                    return new ResponseRestApi(response.statusCode(),
-                            gson.fromJson(response.body(), clazz));
-                }
-            } else if (response.statusCode() == 401) {
+                        return new ResponseRestApi(response.statusCode(),
+                                gson.fromJson(response.body(), clazz));
+                    }
+                    break;
                 //RENOVAR JWT KEYCLOAK
-
-            } else {
-                return new ResponseRestApi(response.statusCode(), response.body());
+                case 401:
+                    break;
+                default:
+                    return new ResponseRestApi(response.statusCode(), response.body());
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR postAuth - " + endpoint, ex);
@@ -308,7 +311,7 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-             return new Gson().fromJson(response.body(), clazz);
+            return new Gson().fromJson(response.body(), clazz);
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR getById - " + endpoint, ex);
             return null;
@@ -325,6 +328,29 @@ public class RestUtil {
             httpBuilder = data.esNuevo()
                     ? httpBuilder.POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
                     : httpBuilder.PUT(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())));
+
+            HttpRequest httpRequest = httpBuilder.build();
+
+            HttpResponse<String> response = HttpClient
+                    .newBuilder()
+                    .build()
+                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            return response.statusCode();
+        } catch (URISyntaxException | IOException | InterruptedException ex) {
+            log.error("ERROR persistir - " + endpoint, ex);
+            return 0;
+        }
+    }
+
+    public int callUpdClient(Long idCliente, Personeria data) {
+        try {
+            HttpRequest.Builder httpBuilder = HttpRequest.newBuilder()
+                    .uri(new URI(HOST + endpoint + idCliente))
+                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
+
+            httpBuilder = httpBuilder.PUT(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())));
 
             HttpRequest httpRequest = httpBuilder.build();
 
