@@ -27,7 +27,7 @@ public class ProductoConverter implements Converter<Producto> {
         if (value != null && value.trim().length() > 0) {
             try {
                 System.out.println(value);
-                return catService.getProductoByCodigo(value);
+                return null; //catService.getProductoByCodigo(value);
             } catch (NumberFormatException e) {
                 throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid country."));
             }
@@ -40,7 +40,7 @@ public class ProductoConverter implements Converter<Producto> {
     public String getAsString(FacesContext context, UIComponent component, Producto value) {
         System.out.println(value);
         if (value != null) {
-            return value.getCodigo();
+            return value.getCodigoItem();
         } else {
             return null;
         }

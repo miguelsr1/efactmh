@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import lombok.Getter;
-import sv.com.jsoft.efactmh.model.Departamento;
+import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 
 /**
  *
@@ -18,14 +18,14 @@ import sv.com.jsoft.efactmh.model.Departamento;
 public class TipoItemService implements Serializable {
 
     @Getter
-    private List<Departamento> lstTipoItems;
+    private List<CatalogoDto> lstTipoItems;
 
     @PostConstruct
     public void init() {
-        lstTipoItems = Arrays.asList(new Departamento("1", "BIEN"),
-                new Departamento("2", "SERVICIO"),
-                new Departamento("3", "AMBOS"),
-                new Departamento("4", "OTROS"));
+        lstTipoItems = Arrays.asList(new CatalogoDto("1", "BIEN"),
+                new CatalogoDto("2", "SERVICIO"),
+                new CatalogoDto("3", "AMBOS"),
+                new CatalogoDto("4", "OTROS"));
     }
 
 }

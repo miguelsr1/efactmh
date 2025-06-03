@@ -10,8 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
-import sv.com.jsoft.efactmh.model.Departamento;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
+import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.services.TipoItemService;
 import sv.com.jsoft.efactmh.services.UnidadMedidaService;
 
@@ -48,11 +48,11 @@ public class DlgDetFactura implements Serializable {
         PrimeFaces.current().dialog().closeDynamic(null);
     }
     
-    public List<Departamento> getItems(){
+    public List<CatalogoDto> getItems(){
         return tipoItemService.getLstTipoItems();
     }
     
-    public List<Departamento> getUnidadesMedidas(){
+    public List<CatalogoDto> getUnidadesMedidas(){
         return unidadMedidaService.getLstUnidadesMedidas();
     }
 }

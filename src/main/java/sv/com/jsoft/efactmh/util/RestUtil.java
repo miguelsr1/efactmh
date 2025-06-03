@@ -204,6 +204,8 @@ public class RestUtil {
                     return new ResponseRestApi(response.statusCode(),
                             gson.fromJson(response.body(), lst));
                 }
+            } else if (response.statusCode() == 404) {
+                return new ResponseRestApi(response.statusCode(), null);
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR get - " + endpoint, ex);
@@ -274,7 +276,7 @@ public class RestUtil {
                     MessageUtil.builder()
                             .severity(FacesMessage.SEVERITY_INFO)
                             .title("Información")
-                            .message("Emisor actualizado")
+                            .message("Registro actualizado correctamente")
                             .build()
                             .showMessage();
                     break;

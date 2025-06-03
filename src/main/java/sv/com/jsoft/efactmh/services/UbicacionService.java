@@ -6,8 +6,8 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import lombok.Getter;
-import sv.com.jsoft.efactmh.model.Departamento;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
+import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -20,17 +20,17 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 public class UbicacionService {
 
     @Getter
-    List<Departamento> lstDepartamento;
+    List<CatalogoDto> lstDepartamento;
 
     @Getter
     List<MunicipioDto> lstMunicipio;
 
     @PostConstruct
     public void init() {
-        RestUtil res = RestUtil.builder().endpoint("/api/catalogo/departamento/").clazz(Departamento.class).build();
+        RestUtil res = RestUtil.builder().endpoint("/api/catalogo/departamento/").clazz(CatalogoDto.class).build();
         ResponseRestApi rest = res.callGet();
         if (rest.getCodeHttp() == 200) {
-            lstDepartamento = (List<Departamento>) rest.getBody();
+            lstDepartamento = (List<CatalogoDto>) rest.getBody();
         } else {
             lstDepartamento = new ArrayList<>();
         }

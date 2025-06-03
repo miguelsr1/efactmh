@@ -1,7 +1,6 @@
 package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -12,8 +11,11 @@ import lombok.Setter;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
-import sv.com.jsoft.efactmh.services.CatalogoService;
+import sv.com.jsoft.efactmh.services.ProductoService;
+import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.services.UnidadMedidaService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -27,67 +29,89 @@ public class ProductoView implements Serializable {
     @Getter
     @Setter
     private boolean disabled = true;
-    @Getter
-    @Setter
+    private boolean edit = false;
+
     private Producto producto;
     @Getter
     private List<Producto> lstProducto;
 
-    {
-        producto = new Producto();
-        lstProducto = new ArrayList<>();
-    }
-
     @Inject
-    CatalogoService catalogoService;
-
-    private RestUtil res;
+    SessionService sessionService;
+    @Inject
+    ProductoService productoService;
+    @Inject
+    UnidadMedidaService unidadMedidaService;
 
     @PostConstruct
     public void init() {
-        lstProducto = catalogoService.getLstProducto();
+        producto = new Producto();
+        lstProducto = productoService.findAll(sessionService.getToken());
+    }
 
-        res = RestUtil
-                .builder()
-                .clazz(Producto.class)
-                .endpoint("item/")
-                .build();
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        if (producto != null) {
+            this.producto = producto;
+        }
     }
 
     public void guardar() {
         disabled = true;
-        int codeResponse = res.callPersistir(producto);
-        JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (producto.esNuevo() ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
-
-        /*boolean nuevo = producto.getIdProducto() == null;
-        if (nuevo) {
-            codeResponse = res.callPost(producto);
+        ResponseRestApi response;
+        if (edit) {
+            RestUtil
+                    .builder()
+                    .clazz(Producto.class)
+                    .jwtDto(sessionService.getToken())
+                    .body(producto)
+                    .endpoint("/api/item/" + producto.getIdProducto())
+                    .build()
+                    .callPutAuth();
         } else {
-            codeResponse = res.callPut(producto.getIdProducto(), producto);
+            response = RestUtil
+                    .builder()
+                    .clazz(Producto.class)
+                    .jwtDto(sessionService.getToken())
+                    .body(producto)
+                    .endpoint("/api/item/")
+                    .build()
+                    .callPostAuth();
+
+            if (response.getCodeHttp() == 200
+                    || response.getCodeHttp() == 201) {
+                JsfUtil.mensajeFromEnum(response.getCodeHttp() != 200 ? TipoMensaje.ERROR : (producto.esNuevo() ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
+            }
         }
 
-        if (codeResponse == 200) {
-            if (nuevo) {
-                JsfUtil.mensajeInsert();
-            } else {
-                JsfUtil.mensajeUpdate();
-            }
-        } else {
-            JsfUtil.mensajeError("Ah ocurrido un error");
-        }*/
+        cancelar();
     }
 
     public void nuevo() {
         producto = new Producto();
         disabled = false;
+        edit = false;
     }
-    
+
     public void cancelar() {
         producto = new Producto();
         disabled = true;
+        edit = false;
     }
 
     public void onRowSelect(SelectEvent<Producto> event) {
         producto = event.getObject();
+        disabled = false;
+        edit = true;
+    }
+
+    public String descripcionUnidadMedida(String codigoUnidad) {
+        return unidadMedidaService
+                .getLstUnidadesMedidas()
+                .stream()
+                .filter(uni -> uni.getId().equals(codigoUnidad))
+                .findFirst().get().getNombre();
     }
 }

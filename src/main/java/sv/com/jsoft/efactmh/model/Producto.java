@@ -12,23 +12,23 @@ public class Producto implements Serializable, EntityPk {
 
     private static final long serialVersionUID = 1L;
     private Long idProducto;
-    private String codigo;
     private String nombre;
-    private Double precioUnitario;
+    private String codigoItem;
+    private String codigoUnidad;
     private Boolean activo;
-    private Integer idUnidadMedida;
-
-    private Boolean eliminado;
-
-    {
-        precioUnitario = 0d;
-    }
+    private Boolean exento;
+    private Double precioUnitario;
 
     public Producto() {
+        precioUnitario = 0d;
+        codigoUnidad = "59";
+        activo = true;
+        exento = false;
     }
 
+    @Override
     public String toString() {
-        return codigo + " - " + nombre;
+        return codigoItem + " - " + nombre;
     }
 
     @Override

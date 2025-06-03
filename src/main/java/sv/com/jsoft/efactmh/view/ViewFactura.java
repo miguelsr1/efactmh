@@ -152,10 +152,10 @@ public class ViewFactura implements Serializable {
     }
 
     
-    public List<Producto> completeText(String query) {
+    /*public List<Producto> completeText(String query) {
         String queryLowerCase = query.toLowerCase();
         List<Producto> lstProducto = catServices.getLstProducto();
        
-        return lstProducto.stream().filter(t -> t.getCodigo().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
-    }
+        return lstProducto.stream().filter(t -> t.getCodigoItem().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+    }*/
 }
