@@ -79,7 +79,7 @@
                         </ul>
                     </p:outputLabel>
                     <p:progressBar id="progressBarIndeterminate" value="#{invoceView.advance}" style="height:6px; margin-bottom: 1rem" />
-                    <p:commandButton value="Aceptar" onclick="PF('chatDialog').hide();" action="#{invoceView.cleanFull}" process="@this" 
+                    <p:commandButton value="Aceptar" onclick="PF('chatDialog').hide();" action="#{invoceView.cleanFull}" process="@this"  oncomplete="location.reload(); return false;"
                                      icon="pi pi-check" update="mensajesPanel, step, dvClient, dvDetInvoce, dvDetPayment" disabled="#{invoceView.advance ne 100}"/>
                 </div>
             </p:dialog>
@@ -94,6 +94,9 @@
                 </p:breadCrumb>
 
                 <div class="col-12">
+                    <p:messages showIcon="true" showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
                     <div class="card">
                         <h5>Proceso de emisión de factura electrónica</h5>
                         <p:steps id="step" widgetVar="step" activeIndex="#{invoceView.activeStep}" style="margin-bottom: 2rem;" >
@@ -108,11 +111,6 @@
                     </div>
                 </div>
             </div>
-
-            <p:growl showSummary="true" showDetail="true">
-                <p:autoUpdate />
-            </p:growl>
-
 
             <p:dialog id="dlgAddCustomer" widgetVar="dlgAddCustomer" modal="true" 
                       header="Confirmar">

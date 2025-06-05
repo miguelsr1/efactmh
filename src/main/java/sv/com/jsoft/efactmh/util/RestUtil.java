@@ -168,15 +168,25 @@ public class RestUtil {
                     .build()
                     .send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
-                if (response.body() != null) {
-                    if (clazz.equals(String.class)) {
+            switch (response.statusCode()) {
+                case 200:
+                    if (response.body() != null) {
+                        if (clazz.equals(String.class)) {
+                            return new ResponseRestApi(response.statusCode(),
+                                    response.body());
+                        }
                         return new ResponseRestApi(response.statusCode(),
-                                response.body());
+                                gson.fromJson(response.body(), clazz));
                     }
+                    break;
+                case 404:
                     return new ResponseRestApi(response.statusCode(),
-                            gson.fromJson(response.body(), clazz));
-                }
+                            "DATO NO ENCONTRADO");
+                case 401:
+                    return new ResponseRestApi(response.statusCode(),
+                            "ACCESO NO AUTORIZADO");
+                default:
+                    break;
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR postAuth - " + endpoint, ex);
@@ -347,14 +357,12 @@ public class RestUtil {
 
     public int callUpdClient(Long idCliente, Personeria data) {
         try {
-            HttpRequest.Builder httpBuilder = HttpRequest.newBuilder()
+            HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(HOST + endpoint + idCliente))
+                    .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(data)))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
-
-            httpBuilder = httpBuilder.PUT(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())));
-
-            HttpRequest httpRequest = httpBuilder.build();
+                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                    .build();
 
             HttpResponse<String> response = HttpClient
                     .newBuilder()

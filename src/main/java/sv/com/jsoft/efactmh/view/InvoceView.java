@@ -132,6 +132,7 @@ public class InvoceView implements Serializable {
 
         lstDetPago = new ArrayList<>();
         detPago = new DetallePago();
+        detPago.setTipoPago("01"); //EFECTIVO
 
         taskSave = "taskPending";
         taskSendDte = "taskPending";
@@ -197,14 +198,14 @@ public class InvoceView implements Serializable {
             cliente = (ClienteResponse) obj.getBody();
 
             if (invoceDto.getCodigoDte().equals("03") && !cliente.getInscritoIva()) {
-                
+
                 MessageUtil.builder()
-                            .severity(FacesMessage.SEVERITY_WARN)
-                            .title("ALERTA")
-                            .message("EL RECEPTOR DEBE DE ESTAR INSCRITO AL IVA PARA EMITIR UN CCF")
-                            .build()
-                            .showMessage();
-                
+                        .severity(FacesMessage.SEVERITY_WARN)
+                        .title("ALERTA")
+                        .message("EL RECEPTOR DEBE DE ESTAR INSCRITO AL IVA PARA EMITIR UN CCF")
+                        .build()
+                        .showMessage();
+
                 cliente = new ClienteResponse();
                 numDocumentoReceptor = "";
                 return;
@@ -245,8 +246,12 @@ public class InvoceView implements Serializable {
             case "01":
                 return BigDecimal.ZERO;
             case "03":
-                BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(10));
-                return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas();
+                if (aplicaRetencionIsr) {
+                    BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(10));
+                    return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas();
+                }else {
+                    return BigDecimal.ZERO;
+                }
         }
 
         return BigDecimal.ZERO;
@@ -371,7 +376,16 @@ public class InvoceView implements Serializable {
                         }
                         return true;
                     case "03": //CCF
-                        return true;
+                        if (cliente.getInscritoIva()) {
+                            return true;
+                        } else {
+                            MessageUtil.builder()
+                                    .severity(FacesMessage.SEVERITY_WARN)
+                                    .title("ALERTA")
+                                    .message("EL CLIENTE SELECCIONADO DEBE DE ESTAR INSCRITO AL IVA")
+                                    .build().showMessage();
+                            return false;
+                        }
                     default:
                         return true;
                 }
@@ -557,23 +571,25 @@ public class InvoceView implements Serializable {
     }
 
     public void cleanFull() {
-        existeCliente = false;
-
-        activeStep = 0;
-        advance = 0;
-
-        var = 1;
-
-        numDocumentoReceptor = "";
-        nombreCliente = "";
-
-        lstDetPago.clear();
-        totalPagos = BigDecimal.ZERO;
-
-        invoceDto = new InvoceDto();
-        detPago = new DetallePago();
+        fechaPedido = new Date();
         cliente = new ClienteResponse();
+        invoceDto = new InvoceDto();
+        invoceDto.setCodigoDte("01");
 
-        clearStatus();
+        invoceDto.setCondicionOperacion("1"); //CONTADO POR DEFECTO
+
+        lstDetPago = new ArrayList<>();
+        detPago = new DetallePago();
+        detPago.setTipoPago("01"); //EFECTIVO
+
+        taskSave = "taskPending";
+        taskSendDte = "taskPending";
+        taskComplete = "taskPending";
+
+        fontWeightSave = "";
+        fontWeightSendDte = "";
+        fontWeightComplete = "";
+
+        loadMetodoPago();
     }
 }

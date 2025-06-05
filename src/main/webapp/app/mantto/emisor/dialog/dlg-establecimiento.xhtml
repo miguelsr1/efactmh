@@ -39,7 +39,7 @@
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtNombre" value="Nombre"/>
-                            <p:inputText id="txtNombre" value="#{dlgEstablecimiento.establecimientoDto.nombreSucursal}"/>
+                            <p:inputText id="txtNombre" value="#{dlgEstablecimiento.establecimientoDto.nombreSucursal}" required="true"/>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtCod" value="Código"/>
@@ -47,8 +47,7 @@
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtCodMh" value="Código MH"/>
-                            <p:inputText id="txtCodMh" value="#{dlgEstablecimiento.establecimientoDto.codigoEstableMh}"
-                                         maxlength="4"/>
+                            <p:inputText id="txtCodMh" value="#{dlgEstablecimiento.establecimientoDto.codigoEstableMh}" maxlength="4"/>
                         </div>
                         <div class="field col-12">
                             <p:selectBooleanCheckbox id="chActivo" itemLabel="Activo" value="#{dlgEstablecimiento.establecimientoDto.activo}"/>

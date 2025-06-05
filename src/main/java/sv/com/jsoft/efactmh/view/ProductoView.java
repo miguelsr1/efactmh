@@ -99,6 +99,8 @@ public class ProductoView implements Serializable {
         producto = new Producto();
         disabled = true;
         edit = false;
+        
+        lstProducto = productoService.findAll(sessionService.getToken());
     }
 
     public void onRowSelect(SelectEvent<Producto> event) {
@@ -112,6 +114,14 @@ public class ProductoView implements Serializable {
                 .getLstUnidadesMedidas()
                 .stream()
                 .filter(uni -> uni.getId().equals(codigoUnidad))
+                .findFirst().get().getNombre();
+    }
+    
+    public String descripcionTipoItem(String codigoItem) {
+        return productoService
+                .getLstTipoItems()                
+                .stream()
+                .filter(uni -> uni.getId().equals(codigoItem))
                 .findFirst().get().getNombre();
     }
 }

@@ -6,35 +6,30 @@
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <h:form prependId="false">
-        <p:growl showSummary="true" showDetail="true">
+        <p:growl showDetail="true">
             <p:autoUpdate />
         </p:growl>
         <div class="col-12 md:col-12">
             <div class="formgrid grid" jsf:id="divDatos">
                 <div class="field col-12">
                     <p:outputLabel for="nomComer" value="Nombre Comercial"/>
-                    <p:inputText id="nomComer" value="#{emisorView.emisor.nombreComercial}"
-                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                    <p:inputText id="nomComer" value="#{emisorView.emisor.nombreComercial}" class="w-full" required="true"/>
                 </div>
                 <div class="field col-12">
                     <p:outputLabel for="razSoc" value="Razon Social"/>
-                    <p:inputText id="razSoc" value="#{emisorView.emisor.razonSocial}"
-                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true"/>
+                    <p:inputText id="razSoc" value="#{emisorView.emisor.razonSocial}" class="w-full" required="true"/>
                 </div>
                 <div class="field col-12" >
                     <p:outputLabel for="tel" value="Teléfono"/>
-                    <p:inputMask id="tel" maxlength="9" value="#{emisorView.emisor.telefono}" required="true" mask="9999-9999"
-                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+                    <p:inputMask id="tel" maxlength="9" value="#{emisorView.emisor.telefono}" required="true" mask="9999-9999" class="w-full" />
                 </div>
                 <div class="field col-12" >
                     <p:outputLabel for="email" value="Correo electrónico"/>
-                    <p:inputText id="email" value="#{emisorView.emisor.correo}" maxlength="22" required="true"
-                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+                    <p:inputText id="email" value="#{emisorView.emisor.correo}" maxlength="22" required="true" class="w-full" />
                 </div>
                 <div class="field col-12" >
                     <p:outputLabel for="cboDepa" value="Departamento"/>
-                    <p:selectOneMenu id="cboDepa" value="#{emisorView.emisor.codigoDepartamento}"
-                                     class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                    <p:selectOneMenu id="cboDepa" value="#{emisorView.emisor.codigoDepartamento}" class="w-full" required="true">
                         <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
                         <f:selectItems value="#{emisorView.lstDepartamentos}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
                         <p:ajax update="cboMuni" listener="#{emisorView.updateListaMunicipios()}"/>
@@ -42,39 +37,36 @@
                 </div>
                 <div class="field col-12" >
                     <p:outputLabel for="cboMuni" value="Municipio"/>
-                    <p:selectOneMenu id="cboMuni" value="#{emisorView.emisor.codigoMunicipio}"
-                                     class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                    <p:selectOneMenu id="cboMuni" value="#{emisorView.emisor.codigoMunicipio}" class="w-full" required="true">
                         <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
                         <f:selectItems value="#{emisorView.lstMunicipios}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
                     </p:selectOneMenu>
                 </div>
                 <div class="field col-12">
                     <p:outputLabel for="txtDir" value="Dirección"/>
-                    <p:inputTextarea id="txtDir" value="#{emisorView.emisor.direccion}"
-                                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" rows="3"/>
+                    <p:inputTextarea id="txtDir" value="#{emisorView.emisor.direccion}" class="w-full" required="true" rows="3"/>
                 </div>
                 <div class="field col-12" >
                     <p:outputLabel for="cboGiro" value="Código"/>
-                    <p:selectOneMenu id="cboGiro" value="#{emisorView.emisor.codigoActividad}"
-                                     class="w-full text-base text-color surface-overlay border-1 border-solid surface-border border-round outline-none focus:border-primary" style="appearance: auto">
+                    <p:selectOneMenu id="cboGiro" value="#{emisorView.emisor.codigoActividad}" class="w-full" required="true">
                         <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
                         <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
                     </p:selectOneMenu>
                 </div>
                 <div class="field col-12" >
                     <p:outputLabel for="txtNit" value="NIT"/>
-                    <p:inputMask id="txtNit" value="#{emisorView.emisor.nit}" mask="9999-999999-999-9" required="true"
-                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+                    <p:inputMask id="txtNit" value="#{emisorView.emisor.nit}" mask="9999-999999-999-9" required="true" class="w-full" />
                 </div>
                 <div class="field col-12" >
                     <p:outputLabel for="txtNrc" value="NRC"/>
-                    <p:inputMask id="txtNrc" value="#{emisorView.emisor.nrc}" mask="999999-9" required="true"
-                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" />
+                    <p:inputMask id="txtNrc" value="#{emisorView.emisor.nrc}" mask="999999-9" required="true" class="w-full" />
                 </div>
 
                 <div class="field col-12">
                     <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.guardar()}" update="dvDatos" style="margin-right: 5px;" process="@this,divDatos"/>
-                    <p:commandButton value="Cancelar" icon="pi pi-times" action="#{emisorView.cancelar()}" update="dvDatos" styleClass="ui-button-secondary"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" action="#{emisorView.cancelar()}" update="dvDatos" styleClass="ui-button-secondary">
+                        <p:ajax update="divDatos" resetValues="true"/>
+                    </p:commandButton>
                     <p:spacer height="10px"/>
                 </div>
             </div>

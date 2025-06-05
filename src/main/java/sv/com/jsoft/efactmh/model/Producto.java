@@ -13,6 +13,7 @@ public class Producto implements Serializable, EntityPk {
     private static final long serialVersionUID = 1L;
     private Long idProducto;
     private String nombre;
+    private String codigoProducto;
     private String codigoItem;
     private String codigoUnidad;
     private Boolean activo;
@@ -22,6 +23,7 @@ public class Producto implements Serializable, EntityPk {
     public Producto() {
         precioUnitario = 0d;
         codigoUnidad = "59";
+        codigoItem = "01";
         activo = true;
         exento = false;
     }

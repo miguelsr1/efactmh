@@ -25,7 +25,7 @@
                         <f:selectItem itemValue="1" itemLabel="CONTADO" />
                         <f:selectItem itemValue="2" itemLabel="A CRÉDITO" />
                         <f:selectItem itemValue="3" itemLabel="OTRO" />
-                        <p:ajax process="@this,cboCondicionOpe" listener="#{invoceView.loadMetodoPago}" update="cboTipoPago"/>
+                        <p:ajax process="@this,cboCondicionOpe" listener="#{invoceView.loadMetodoPago}" update="dvPago,cboTipoPago"/>
                     </p:selectOneMenu>
                 </div>
                 <div class="field col-12" >
@@ -44,6 +44,7 @@
                                    class="w-full" required="true" requiredMessage="EL MONTO ES UN VALOR REQUERIDO"/>
                 </div>
                 <div class="field col-12" >
+                    #{invoceView.detPago.tipoPago}
                     <p:outputLabel for="txtNumRef" value="Núm. de Referencia"/>
                     <p:inputText id="txtNumRef" value="#{invoceView.detPago.numeroReferencia}" 
                                  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" 
@@ -121,8 +122,6 @@
         </div>
 
         <p:separator />
-
-
 
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" process="@this"
                          update="step, dvClient, dvDetInvoce, dvDetPayment" icon="pi pi-angle-left" action="#{invoceView.backStep()}" />

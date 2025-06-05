@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <h:head>
         <f:facet name="first">
@@ -16,13 +17,13 @@
 
     <h:body styleClass="login-body" style="background-color: white !important">
         <h:form prependId="false">
-            <p:growl id="growl" showDetail="true" escape="false" sticky="true" >
+            <p:growl id="growl" escape="false" sticky="true" >
                 <p:autoUpdate />
             </p:growl>
 
             <div class="container">
                 <div class="flex align-items-center justify-content-center">
-                    <div class="surface-card p-8 shadow-4 border-round w-full lg:w-12">
+                    <div class="surface-card p-8 shadow-4 border-round w-full lg:w-12" jsf:id="divLogin">
                         <div class="text-center mb-5">
                             <p:graphicImage name="login.png" library="images" alt="Image"
                                             height="50" styleClass="mb-3"/>
@@ -33,9 +34,9 @@
 
                         <div>
                             <label for="email1" class="block text-900 font-medium mb-2">Correo electrónico</label>
-                            <p:inputText id="email" styleClass="w-full mb-3" placeholder="correo@dominio.com" value="#{loginView.usuario}"/>
+                            <p:inputText id="email" styleClass="w-full mb-3" placeholder="correo@dominio.com" value="#{loginView.usuario}" required="true"/>
                             <label for="password1" class="block text-900 font-medium mb-2">Contraseña</label>
-                            <p:inputText id="password" type="password" styleClass="w-full mb-3" placeholder="Clave de acceso" value="#{loginView.claveAcceso}"/>
+                            <p:inputText id="password" type="password" styleClass="w-full mb-3" placeholder="Clave de acceso" value="#{loginView.claveAcceso}" required="true"/>
 
                             <div class="flex align-items-center justify-content-between mb-6">
                                 <div class="flex align-items-center">
@@ -44,7 +45,7 @@
                                 <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">¿Olvidaste tu contraseña?</a>
                             </div>
 
-                            <p:commandButton value="Ingresa" icon="pi pi-user" styleClass="w-full" action="#{loginView.validarProveedor()}"/>
+                            <p:commandButton value="Ingresa" icon="pi pi-user" styleClass="w-full" action="#{loginView.validarProveedor()}" update="divLogin"/>
                         </div>
                     </div>
                 </div>

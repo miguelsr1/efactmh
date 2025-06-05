@@ -77,7 +77,9 @@ public class ClienteView implements Serializable {
 
     private void inicializar() {
         edit = false;
+        inscritoIva = false;
         tipoDoc = 1;
+        tipoPersoneria = 0;
         clienteDto = new ClienteDto();
         pn = new PerNaturalRequest();
         pn.setPersoneria("N");
@@ -136,6 +138,7 @@ public class ClienteView implements Serializable {
         pn = new PerNaturalRequest();
         pn.setPersoneria("N");
         disabled = false;
+        tipoPersoneria = 1;
     }
 
     public void cancelar() {
@@ -148,18 +151,29 @@ public class ClienteView implements Serializable {
     }
 
     public void guardar() {
-        int codeResponse = 0;
+        int codeResponse;
         if (tipoPersoneria == 1) {
             pn.setTipoDocumento(1);
             pn.setDepartamento(codigoDepa);
             pn.setActivo(true);
-            codeResponse = RestUtil
-                    .builder()
-                    .clazz(ClienteDto.class)
-                    .jwtDto(sessionService.getToken())
-                    .endpoint("/api/secured/client/pn/")
-                    .build()
-                    .callUpdClient(clienteDto.getIdCliente(), pn);
+
+            if (edit) {
+                codeResponse = RestUtil
+                        .builder()
+                        .clazz(ClienteDto.class)
+                        .jwtDto(sessionService.getToken())
+                        .endpoint("/api/secured/client/pn/")
+                        .build()
+                        .callUpdClient(clienteDto.getIdCliente(), pn);
+            }else{
+                codeResponse = RestUtil
+                        .builder()
+                        .clazz(ClienteDto.class)
+                        .jwtDto(sessionService.getToken())
+                        .endpoint("/api/secured/client/pn/")
+                        .build()
+                        .callUpdClient(clienteDto.getIdCliente(), pn);
+            }
         } else {
             pj.setDepartamentoEmp(codigoDepa);
             pj.setActivo(true);
@@ -175,8 +189,14 @@ public class ClienteView implements Serializable {
         JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
 
         pn = new PerNaturalRequest();
+        pj = new PerJuridicaRequest();
+        clienteDto = null;
         duiContacto = "";
         disabled = true;
+        inscritoIva = false;
+        edit = false;
+        codigoDepa = "06";
+        tipoPersoneria = 1;
 
         PrimeFaces.current().ajax().update("tblCli");
     }
@@ -206,9 +226,11 @@ public class ClienteView implements Serializable {
         if (response.getCodeHttp() == 200) {
             Cliente client = (Cliente) response.getBody();
             tipoPersoneria = client.getTipoPersoneria();
+
             if (client.getTipoPersoneria() == 1) {
                 pn = new PerNaturalRequest();
-                
+                inscritoIva = (client.getNrcPersona() != null);
+
                 pn.setCodigoActividad(client.getCodigoActividad());
                 pn.setDepartamento(client.getDepartamento());
                 pn.setDireccion(client.getDireccion());
@@ -224,7 +246,8 @@ public class ClienteView implements Serializable {
                 pn.setActivo(client.getActivo());
             } else {
                 pj = new PerJuridicaRequest();
-                
+                inscritoIva = true;
+
                 pj.setCodigoActividad(client.getCodigoActividad());
                 pj.setDepartamentoEmp(client.getDepartamento());
                 pj.setMunicipioEmp(client.getMunicipioEmp());

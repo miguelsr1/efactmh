@@ -5,7 +5,7 @@
               xmlns:p="http://primefaces.org/ui"
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <p:messages showSummary="true" showIcon="false" showDetail="true">
+    <p:messages  showIcon="false"  closable="true">
         <p:autoUpdate />
     </p:messages>
 
@@ -35,7 +35,7 @@
         </div>
 
         <div class="field col-12">
-            <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos" style="margin-right: 5px;" disabled="#{clienteView.disabled}"/>
+            <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos,dvPn,dvPj" style="margin-right: 5px;" disabled="#{clienteView.disabled}"/>
             <p:commandButton value="Cancelar" icon="pi pi-times" action="#{clienteView.cancelar()}" update="dvDatos tblCli" process="@this" styleClass="ui-button-secondary"/>
             <p:spacer height="10px"/>
         </div>
