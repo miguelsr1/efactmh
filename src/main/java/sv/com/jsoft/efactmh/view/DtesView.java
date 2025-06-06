@@ -32,6 +32,12 @@ public class DtesView implements Serializable {
     private Long idFactura;
     @Getter
     @Setter
+    private String codigoDte;
+    @Getter
+    @Setter
+    private String codigoGeneracion;
+    @Getter
+    @Setter
     private ItemDto itemDto;
     private List<DtesResponse> lstDtes;
 
@@ -71,6 +77,8 @@ public class DtesView implements Serializable {
                 .build();
 
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoDte", codigoDte);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoGeneracion", codigoGeneracion);
         PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
     }
 

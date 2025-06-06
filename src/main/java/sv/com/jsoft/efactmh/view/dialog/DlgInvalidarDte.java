@@ -13,10 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
 import sv.com.jsoft.efactmh.model.dto.InvalidateRequest;
-import sv.com.jsoft.efactmh.services.DteService;
+import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 import sv.com.jsoft.efactmh.services.InvalidateService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
+import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.view.SessionView;
 
@@ -59,6 +60,8 @@ public class DlgInvalidarDte implements Serializable {
     @Getter
     @Setter
     private String dteR;
+    private String codigoDte;
+    private String codigoGeneracion;
 
     @Inject
     SessionService sessionService;
@@ -70,22 +73,37 @@ public class DlgInvalidarDte implements Serializable {
     @PostConstruct
     public void init() {
         idFactura = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idFactura");
+        codigoDte = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("codigoDte");
+        codigoGeneracion = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("codigoGeneracion");
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idFactura");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("codigoDte");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("codigoGeneracion");
+
         loadDte();
     }
 
     public void loadDte() {
-        dte = invalidateService.findDteToInvalidate(idFactura, sessionService.getToken());
+        ResponseDto response = invalidateService.findDteToInvalidate(idFactura, codigoDte, codigoGeneracion, sessionService.getToken());
+        if (response.getStatusCode() == 0) {
+            dte = (DteToInvalidate) response.getBody();
+        }else{
+            MessageUtil.builder()
+                    .severity(FacesMessage.SEVERITY_WARN)
+                    .title("ALERTA")
+                    .message(response.getBody().toString())
+                    .build().showMessage();
+        }
     }
-    
+
     public void closeDgl() {
         PrimeFaces.current().dialog().closeDynamic(null);
     }
-    
+
     public void sendDteInvalidate() {
         //enviar dte a invalidar
         InvalidateRequest request = new InvalidateRequest();
-        
+
         request.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
         request.setIdPuntoVenta(sessionView.getIdPuntoVenta() == null ? null : Long.valueOf(sessionView.getIdPuntoVenta()));
         request.setIdFactura(idFactura);
@@ -97,11 +115,11 @@ public class DlgInvalidarDte implements Serializable {
         request.setTipoAnulacion(tipoInvalidacion);
         request.setTipoDocResponsable(tipoDocResponsable);
         request.setTipoDocSolicita(tipoDocSolicitante);
-        
+
         ResponseRestApi response = invalidateService.createInvalidate(request, sessionService.getToken());
-        
+
         PrimeFaces.current().dialog().closeDynamic(null);
-        
+
         switch (response.getCodeHttp()) {
             case 200:
                 JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO, "INFORMACION", "DTE ANULADO");

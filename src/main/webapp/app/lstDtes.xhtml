@@ -129,6 +129,8 @@
                                          action="#{dtesView.showDlgDetToInvalidate}">
                             <p:ajax event="dialogReturn" listener="#{dtesView.onDteInvalidate}" update="tblDtes"/>
                             <f:setPropertyActionListener target="#{dtesView.idFactura}" value="#{dte.idFactura}"/>
+                            <f:setPropertyActionListener target="#{dtesView.codigoDte}" value="#{dte.codigoDte}"/>
+                            <f:setPropertyActionListener target="#{dtesView.codigoGeneracion}" value="#{dte.codigoGeneracion}"/>
                         </p:commandButton>
                         <p:commandButton icon="pi pi-download" styleClass="ui-button-success" />                        
                     </p:column>

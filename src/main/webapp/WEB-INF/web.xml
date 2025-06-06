@@ -68,7 +68,7 @@
     
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/viewExpired.xhtml</location>
+        <location>/index.xhtml</location>
     </error-page>
     
     <listener>
