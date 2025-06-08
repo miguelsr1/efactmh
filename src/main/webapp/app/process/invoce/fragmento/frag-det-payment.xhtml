@@ -44,10 +44,8 @@
                                    class="w-full" required="true" requiredMessage="EL MONTO ES UN VALOR REQUERIDO"/>
                 </div>
                 <div class="field col-12" >
-                    #{invoceView.detPago.tipoPago}
                     <p:outputLabel for="txtNumRef" value="Núm. de Referencia"/>
-                    <p:inputText id="txtNumRef" value="#{invoceView.detPago.numeroReferencia}" 
-                                 class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" 
+                    <p:inputText id="txtNumRef" value="#{invoceView.detPago.numeroReferencia}" class="w-full" 
                                  required="#{invoceView.detPago.tipoPago ne '01'}" 
                                  disabled="#{invoceView.detPago.tipoPago eq '01'}"/>
                 </div>

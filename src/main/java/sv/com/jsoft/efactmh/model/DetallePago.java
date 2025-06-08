@@ -16,7 +16,7 @@ public class DetallePago {
     private String plazo;
     private Integer periodoPlazo;
     private String codigoUnidad;
-    
+       
     public String getTipoPagoStr(){
         if(tipoPago == null){
             return "NA";

@@ -72,28 +72,8 @@ public class DlgInvalidarDte implements Serializable {
 
     @PostConstruct
     public void init() {
-        idFactura = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idFactura");
-        codigoDte = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("codigoDte");
-        codigoGeneracion = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("codigoGeneracion");
-
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idFactura");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("codigoDte");
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("codigoGeneracion");
-
-        loadDte();
-    }
-
-    public void loadDte() {
-        ResponseDto response = invalidateService.findDteToInvalidate(idFactura, codigoDte, codigoGeneracion, sessionService.getToken());
-        if (response.getStatusCode() == 0) {
-            dte = (DteToInvalidate) response.getBody();
-        }else{
-            MessageUtil.builder()
-                    .severity(FacesMessage.SEVERITY_WARN)
-                    .title("ALERTA")
-                    .message(response.getBody().toString())
-                    .build().showMessage();
-        }
+        dte = (DteToInvalidate) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("dteInv");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("dteInv");
     }
 
     public void closeDgl() {

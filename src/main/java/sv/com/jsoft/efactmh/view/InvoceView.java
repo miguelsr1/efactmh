@@ -76,9 +76,6 @@ public class InvoceView implements Serializable {
     private String numDocumentoReceptor;
     @Getter
     @Setter
-    private String tipoPago;
-    @Getter
-    @Setter
     private String nombreCliente;
     @Getter
     @Setter
@@ -92,8 +89,6 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private Producto producto;
-    @Getter
-    @Setter
     private DetallePago detPago;
     @Getter
     @Setter
@@ -143,6 +138,16 @@ public class InvoceView implements Serializable {
         fontWeightComplete = "";
 
         loadMetodoPago();
+    }
+
+    public DetallePago getDetPago() {
+        return detPago;
+    }
+
+    public void setDetPago(DetallePago detPago) {
+        if (detPago != null) {
+            this.detPago = detPago;
+        }
     }
 
     public void loadMetodoPago() {
@@ -249,7 +254,7 @@ public class InvoceView implements Serializable {
                 if (aplicaRetencionIsr) {
                     BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(10));
                     return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas();
-                }else {
+                } else {
                     return BigDecimal.ZERO;
                 }
         }
@@ -310,6 +315,7 @@ public class InvoceView implements Serializable {
     public void addPaymentMethod() {
         lstDetPago.add(detPago);
         detPago = new DetallePago();
+        detPago.setTipoPago("01"); //EFECTIVO
     }
 
     public BigDecimal getTotalPagos() {
@@ -327,6 +333,8 @@ public class InvoceView implements Serializable {
 
     public void removePaymentMethod(int index) {
         lstDetPago.remove(index);
+        detPago = new DetallePago();
+        detPago.setTipoPago("01"); //EFECTIVO
     }
 
     public void removeDetInvoce(int index) {

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -14,8 +15,12 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.ItemDto;
+import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
 import sv.com.jsoft.efactmh.model.dto.DtesResponse;
+import sv.com.jsoft.efactmh.model.dto.ResponseDto;
+import sv.com.jsoft.efactmh.services.InvalidateService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -43,6 +48,8 @@ public class DtesView implements Serializable {
 
     @Inject
     SessionService sessionService;
+    @Inject
+    InvalidateService invalidateService;
 
     @PostConstruct
     public void init() {
@@ -67,19 +74,28 @@ public class DtesView implements Serializable {
 
     public void showDlgDetToInvalidate() {
 
-        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
-                .draggable(false)
-                .resizable(false)
-                .maximizable(false)
-                .modal(true)
-                .width("700")
-                //.height("600px")*/
-                .build();
+        ResponseDto response = invalidateService.findDteToInvalidate(idFactura, codigoDte, codigoGeneracion, sessionService.getToken());
 
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoDte", codigoDte);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoGeneracion", codigoGeneracion);
-        PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
+        if (response.getStatusCode() == 0) {
+            DteToInvalidate dte = (DteToInvalidate) response.getBody();
+
+            DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+                    .draggable(false)
+                    .resizable(false)
+                    .maximizable(false)
+                    .modal(true)
+                    .width("700")
+                    .build();
+            PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("dteInv", dte);
+        } else {
+            MessageUtil.builder()
+                    .severity(FacesMessage.SEVERITY_WARN)
+                    .title("ALERTA")
+                    .message(response.getBody().toString())
+                    .build().showMessage();
+        }
+
     }
 
     public void onDteInvalidate(SelectEvent event) {
