@@ -8,12 +8,6 @@
     <p:outputPanel id="dvDetPayment" style="display: #{invoceView.activeStep eq 2 ? 'block':'none'}">
         <div class="card-header">
             <p:spacer/>
-            <p:outputPanel>
-                <p:outputLabel value="Total de Items: " styleClass="total"/>
-                <p:outputLabel id="total2" value="#{invoceView.total}" styleClass="total">
-                    <f:convertNumber pattern="$ #,##0.00"/>
-                </p:outputLabel>
-            </p:outputPanel>
         </div>
 
         <div class="ui-fluid formgrid grid" jsf:id="dvPago">
@@ -71,12 +65,18 @@
                 </div>
                 <div class="field col-12" style="margin-top: 1.65rem" >
                     <p:commandButton id="btnAdd" icon="pi pi-plus" action="#{invoceView.addPaymentMethod()}" 
-                                     styleClass="ui-button-outlined ui-button-success"
+                                     styleClass="ui-button-success"
                                      process="@this,cboTipoPago,txtMontoPago,txtNumRef,cboPlazo,txtPeriod"
                                      update="dvPago,tblPagos,tblPagos:lblTotal"/>
                 </div>
             </div>
-            <div class="col-9">
+            <div class="col-7">
+                <p:outputPanel>
+                    <p:outputLabel value="Total de Items: " styleClass="total"/>
+                    <p:outputLabel id="total2" value="#{invoceView.total}" styleClass="total">
+                        <f:convertNumber pattern="$ #,##0.00"/>
+                    </p:outputLabel>
+                </p:outputPanel>
                 <p:dataTable id="tblPagos" value="#{invoceView.lstDetPago}" var="pago" rowIndexVar="id" reflow="true" size="small"
                              emptyMessage="No se han agregado detalle de pagos" tableStyle="table-layout: auto;">
                     <p:column headerText="Forma de pago">

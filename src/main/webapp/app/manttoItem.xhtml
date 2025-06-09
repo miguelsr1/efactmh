@@ -46,13 +46,13 @@
                             </div>
                         </div>
                         <div class="card-header">
-                            <p:commandButton value="Agregar" update="tblItems dvItem" icon="pi pi-plus" action="#{viewItem.addItem()}" validateClient="true"/>
+                            <p:commandButton value="Agregar" update="tblItems dvItem" icon="pi pi-plus" action="#{viewItem.addItem()}" validateClient="true"  styleClass="ui-button-success"/>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <p:messages showSummary="true" showIcon="false">
+             <p:messages showDetail="true" closable="true">
                 <p:autoUpdate />
             </p:messages>
 

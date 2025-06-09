@@ -26,7 +26,7 @@
                 </p:breadCrumb>
 
                 <div class="col-12">
-                    <p:messages  showIcon="false" closable="true">
+                    <p:messages showDetail="true" closable="true">
                         <p:autoUpdate />
                     </p:messages>
                     <div class="card">
@@ -66,7 +66,7 @@
                                     <div class="field col-12">
                                         <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" update="dvDatos tblPro" style="margin-right: 5px;"/>
                                         <p:commandButton value="Cancelar" icon="pi pi-times" action="#{productoView.cancelar()}" update="dvDatos" process="@this" styleClass="ui-button-secondary">
-                                             <p:ajax update="dvDatos" resetValues="true"/>
+                                            <p:ajax update="dvDatos" resetValues="true"/>
                                         </p:commandButton>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
 
                             <div>                            
                                 <p:commandButton action="#{productoView.nuevo()}" update="dvDatos" icon="pi pi-plus"
-                                                 validateClient="true" styleClass="ui-button-outlined ui-button-success" process="@this"/>
+                                                 validateClient="true" styleClass="ui-button-success" process="@this"/>
                             </div>
                         </div>
                     </f:facet>

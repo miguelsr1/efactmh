@@ -6,10 +6,11 @@
               xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <h:form prependId="false">
-        <div class="col-12 md:col-12">
+        <div class="col-12">
             <p:dataTable value="#{parametrosView.lstParametros}" var="pa" rowKey="#{pa.ambiente}"
-                         reflow="true">
+                         reflow="true" size="small" >
                 <p:ajax event="rowSelect"  update="divDatos"/>
+                <p:ajax event="rowEdit" listener="#{parametrosView.onRowEdit}" />
 
                 <p:column headerText="Password privado">
                     <p:outputLabel value="#{pa.passwordPrivado}"/>
@@ -23,13 +24,13 @@
                 <p:column headerText="Certificado">
                     <p:outputLabel value="#{pa.certificado}"/>
                 </p:column>
-                <p:column headerText="Ambiente">
-                    <p:selectBooleanButton onLabel="PRODUCCION" offLabel="PRUEBAS" value="#{pa.test}"/>
+                <p:column headerText="Ambiente" style="text-align: center" width="150">
+                    <span style="display: inline-block" class="style-estado #{pa.test ? 'env-prd':'env-tst'}">#{pa.test ?"PRODUCCION":"PRUEBAS"}</span>
                 </p:column>
-                <p:column headerText="Activo">
-                    <p:selectBooleanCheckbox value="#{pa.activo}"/>
+                <p:column headerText="Activo" style="text-align: center">
+                    <p:selectBooleanCheckbox value="#{pa.activo}" disabled="true"/>
                 </p:column>
-                <p:column headerText="Editar">
+                <p:column headerText="Editar" style="text-align: center">
                     <p:commandButton icon="pi pi-pencil" update=":dlg:divParam"
                                      oncomplete="PF('dlgParam').show()"
                                      styleClass="edit-button rounded-button ui-button-success" process="@this">
@@ -41,7 +42,7 @@
         </div>
     </h:form>
     <h:form id="dlg">
-        <p:dialog id="dlgParam" widgetVar="dlgParam" showEffect="fade" modal="true" responsive="true">
+        <p:dialog id="dlgParam" widgetVar="dlgParam" showEffect="fade" modal="true" responsive="true" header="PARAMETRO DE #{parametrosView.parametroDto.test ? 'PRODUCCION':'PRUEBAS'}">
             <div class="col-12 md:col-12">
                 <div class="ui-fluid">
                     <p:outputPanel id="divParam">
@@ -58,13 +59,6 @@
                             <p:inputText id="passApi" type="password" value="#{parametrosView.parametroDto.pwdJwt}"/>
                         </div>
                         <div class="field">
-                            <p:outputLabel for="cboAmb">Ambiente de MH</p:outputLabel>
-                            <p:selectOneRadio id="cboAmb" layout="lineDirection" value="#{parametrosView.parametroDto.ambiente}">
-                                <f:selectItem itemLabel="PRODUCCIÓN" itemValue="00"/>
-                                <f:selectItem itemLabel="PRUEBAS" itemValue="01"/>
-                            </p:selectOneRadio>
-                        </div>
-                        <div class="field">
                             <p:outputLabel >Certificado para el firmador</p:outputLabel>
                             <br/>
                             <p:fileUpload  mode="simple" skinSimple="true" allowTypes="/(\.|\/)(crt)$/" label="Seleccionar"/>
@@ -72,6 +66,12 @@
                     </p:outputPanel>
                 </div>
             </div>
+            <f:facet name="footer">
+                <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
+                                 icon="pi pi-times" style="max-width: 110px" onclick="PF('dlgParam').hide()"/>
+                <p:commandButton value="Agregar" process="@this" icon="pi pi-plus" style="max-width: 110px"
+                                 validateClient="true" styleClass="ui-button-primary"/>
+            </f:facet>
         </p:dialog>
     </h:form>
 </ui:component>

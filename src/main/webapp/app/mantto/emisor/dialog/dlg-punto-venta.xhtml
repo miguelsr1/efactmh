@@ -29,16 +29,15 @@
                     <div class="ui-fluid formgrid grid">
                         <div class="field col-12" >
                             <p:outputLabel for="txtNombre" value="Nombre"/>
-                            <p:inputText id="txtNombre" value="#{dlgPuntoVenta.puntoVentaDto.nombrePuntoVenta}"/>
+                            <p:inputText id="txtNombre" value="#{dlgPuntoVenta.puntoVentaDto.nombrePuntoVenta}" required="true"/>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtCod" value="Código"/>
                             <p:inputText id="txtCod" value="#{dlgPuntoVenta.puntoVentaDto.codigoPuntoVenta}" maxlength="4"/>
                         </div>
-                        <div class="field col-12" >
+                        <div class="field col-12">
                             <p:outputLabel for="txtCodMh" value="Código MH"/>
-                            <p:inputText id="txtCodMh" value="#{dlgPuntoVenta.puntoVentaDto.codigoPuntoVentaMh}"
-                                         maxlength="4"/>
+                            <p:inputText id="txtCodMh" value="#{dlgPuntoVenta.puntoVentaDto.codigoPuntoVentaMh}" maxlength="4"/>
                         </div>
                         <div class="field col-12">
                             <p:selectBooleanCheckbox id="chActivo" itemLabel="Activo" value="#{dlgPuntoVenta.puntoVentaDto.activo}"/>

@@ -39,6 +39,9 @@
                 color: var(--green-500) !important;
                 font-weight: bold;
             }
+            .uppercase {
+                text-transform: uppercase;
+            }
         </style>
         <!-- JS que actualiza el contenido del diálogo cuando llega un mensaje -->
         <script>
@@ -94,7 +97,7 @@
                 </p:breadCrumb>
 
                 <div class="col-12">
-                    <p:messages showIcon="true" showDetail="true" closable="true">
+                    <p:messages showDetail="true" closable="true">
                         <p:autoUpdate />
                     </p:messages>
                     <div class="card">

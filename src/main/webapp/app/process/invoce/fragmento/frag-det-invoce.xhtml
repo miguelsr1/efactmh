@@ -18,7 +18,7 @@
                     <div>
                         <p:commandButton action="#{invoceView.showDlgDetFactura()}"
                                          process="@this" icon="pi pi-plus"
-                                         validateClient="true" styleClass="ui-button-outlined ui-button-success">
+                                         validateClient="true" styleClass="ui-button-success">
                             <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSumas,lblIva,lblSubTotal,lblIvaRet,lblTotal"/>
                         </p:commandButton>
                     </div>

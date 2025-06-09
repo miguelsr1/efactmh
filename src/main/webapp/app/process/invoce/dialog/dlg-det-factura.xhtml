@@ -24,9 +24,9 @@
 
     <h:body>
         <h:form prependId="false">
-            <p:growl id="growl" showSummary="true">
+            <p:messages id="growl" showDetail="true" closable="true">
                 <p:autoUpdate />
-            </p:growl>
+            </p:messages>
 
             <div class="layout-main">
                 <div style="width: 100%; padding: 1rem 1rem 1rem 1rem;">
@@ -38,7 +38,7 @@
                         <div class="field col-12" >
                             <p:outputLabel for="txtDescripcion" value="Descripción"/>
                             <p:inputTextarea id="txtDescripcion" value="#{dlgDetFactura.detFactura.nombre}" rows="2" maxlength="900" 
-                                             required="true"
+                                             required="true" styleClass="uppercase"
                                              requiredMessage="Debe de ingresar una descripción del bien/servicio"/>
                         </div>
 

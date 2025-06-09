@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Base64;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -27,13 +29,19 @@ public class SessionService implements Serializable {
     private ParametroDto parametroDto;
     @Getter
     private String userName;
-
-    @Getter
     private JwtDto token;
     private List<CatalogoDto> lstEstablecimiento;
 
     @Inject
     CatalogoService catalogoService;
+
+    public JwtDto getToken() {
+        if (token == null) {
+            ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
+            configurableNavigationHandler.performNavigation("/index.html");
+        }
+        return token;
+    }
 
     public void setToken(JwtDto token) {
         this.token = token;

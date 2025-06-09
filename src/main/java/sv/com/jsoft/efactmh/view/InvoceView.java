@@ -149,29 +149,6 @@ public class InvoceView implements Serializable {
             this.detPago = detPago;
         }
     }
-
-    public void loadMetodoPago() {
-        lstMetodoPago = new ArrayList<>();
-        switch (invoceDto.getCondicionOperacion()) {
-            case "1":
-                lstMetodoPago.add(new CatalogoDto("01", "EFECTIVO"));
-                break;
-            case "2":
-                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
-                lstMetodoPago.add(new CatalogoDto("03", "TARJETA DE CREDITO"));
-                lstMetodoPago.add(new CatalogoDto("04", "CHEQUE"));
-                lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
-                break;
-            case "3":
-                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
-                lstMetodoPago.add(new CatalogoDto("03", "TARJETA DE CREDITO"));
-                lstMetodoPago.add(new CatalogoDto("04", "CHEQUE"));
-                lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
-                break;
-        }
-    }
-
-    //==========================================================================
     public Date getFechaPedido() {
         return fechaPedido;
     }
@@ -183,6 +160,27 @@ public class InvoceView implements Serializable {
     public InvoceDto getInvoce() {
         return invoceDto;
     }
+
+    public void loadMetodoPago() {
+        lstMetodoPago = new ArrayList<>();
+        switch (invoceDto.getCondicionOperacion()) {
+            case "1":
+                lstMetodoPago.add(new CatalogoDto("01", "EFECTIVO"));
+                detPago.setTipoPago("01");
+                break;
+            case "2":
+            case "3":
+                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
+                lstMetodoPago.add(new CatalogoDto("03", "TARJETA DE CREDITO"));
+                lstMetodoPago.add(new CatalogoDto("04", "CHEQUE"));
+                lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
+                detPago.setTipoPago("02");
+                break;
+        }
+    }
+
+    //==========================================================================
+    
 
     //metodo que valida si el establecimiento permite pago a plazo en modalida credito
     public boolean getAceptaPagoPlazo() {
@@ -316,6 +314,9 @@ public class InvoceView implements Serializable {
         lstDetPago.add(detPago);
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
+
+        invoceDto.setCodigoDte("01");
+        invoceDto.setCondicionOperacion("1");
     }
 
     public BigDecimal getTotalPagos() {
@@ -335,6 +336,9 @@ public class InvoceView implements Serializable {
         lstDetPago.remove(index);
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
+
+        invoceDto.setCodigoDte("01");
+        invoceDto.setCondicionOperacion("1");
     }
 
     public void removeDetInvoce(int index) {
@@ -579,6 +583,8 @@ public class InvoceView implements Serializable {
     }
 
     public void cleanFull() {
+        loadMetodoPago();
+        
         fechaPedido = new Date();
         cliente = new ClienteResponse();
         invoceDto = new InvoceDto();
@@ -597,7 +603,5 @@ public class InvoceView implements Serializable {
         fontWeightSave = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
-
-        loadMetodoPago();
     }
 }

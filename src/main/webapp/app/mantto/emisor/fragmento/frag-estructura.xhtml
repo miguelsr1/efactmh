@@ -20,7 +20,7 @@
                         <div>
                             <p:commandButton action="#{estructuraView.showDlgEstablecimiento()}"
                                              process="@this" icon="pi pi-plus" style="margin-bottom: 1rem"
-                                             validateClient="true" styleClass="ui-button-outlined ui-button-success">
+                                             validateClient="true" styleClass="ui-button-success">
                                 <p:ajax event="dialogReturn" listener="#{estructuraView.onEstablecimiento}" update="tblEstablecimientos" />
                             </p:commandButton>
                         </div>
@@ -66,7 +66,7 @@
                         <h5><span style="margin-right: 1rem"><i class="pi pi-map-marker"></i></span>Puntos de Venta</h5>
 
                         <div>
-                            <p:commandButton icon="pi pi-plus" styleClass="ui-button-outlined ui-button-success"
+                            <p:commandButton icon="pi pi-plus" styleClass="ui-button-success"
                                              update="tblEstablecimientos" style="margin-right: 1rem"
                                              action="#{estructuraView.showDlgPuntoVenta}">
                                 <p:ajax event="dialogReturn" listener="#{estructuraView.loadPuntosVenta}" update="tblPuntos"/>

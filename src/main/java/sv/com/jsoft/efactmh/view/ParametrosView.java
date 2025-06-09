@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.primefaces.event.RowEditEvent;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -19,6 +21,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  */
 @Named
 @ViewScoped
+@Slf4j
 public class ParametrosView implements Serializable {
 
     @Inject
@@ -28,7 +31,7 @@ public class ParametrosView implements Serializable {
     @Getter
     @Setter
     private ParametroDto parametroDto;
-
+    
     @PostConstruct
     public void init() {
         loadParametros();
@@ -52,4 +55,8 @@ public class ParametrosView implements Serializable {
             lstParametros = (List<ParametroDto>) response.getBody();
         }
     }
+    
+     public void onRowEdit(RowEditEvent<ParametroDto> event) {
+         log.info("CAMIBIO DE PRAMETROS: " + securityService.getUserName() + " - " + event.toString());
+     }
 }

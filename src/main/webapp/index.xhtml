@@ -17,9 +17,6 @@
 
     <h:body styleClass="login-body" style="background-color: white !important">
         <h:form prependId="false">
-            <p:growl id="growl" escape="false" sticky="true" >
-                <p:autoUpdate />
-            </p:growl>
 
             <div class="container">
                 <div class="flex align-items-center justify-content-center">
@@ -31,7 +28,9 @@
                             <span class="text-600 font-medium line-height-3">¿No tienes cuenta?</span>
                             <a class="font-medium no-underline ml-9 text-blue-500 cursor-pointer">Créala ya!</a>
                         </div>
-
+                        <p:messages showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
                         <div>
                             <label for="email1" class="block text-900 font-medium mb-2">Correo electrónico</label>
                             <p:inputText id="email" styleClass="w-full mb-3" placeholder="correo@dominio.com" value="#{loginView.usuario}" required="true"/>

@@ -32,9 +32,9 @@
 
     <h:body>
         <h:form prependId="false">
-            <p:growl id="growl" showSummary="true" showDetail="true">
+            <p:messages showDetail="true" closable="true">
                 <p:autoUpdate />
-            </p:growl>
+            </p:messages>
 
             <div class="layout-main">
                 <div style="width: 100%; padding: 1rem 1rem 1rem 1rem;">
@@ -145,7 +145,7 @@
                         </div>
                         <div class="col-12">
                             <p><small>* son campos obligatorios</small></p>
-                            
+
 
                             <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary mr-2" process="@this"
                                              icon="pi pi-times" style="max-width: 110px" action="#{dlgInvalidarDte.closeDgl()}"/>

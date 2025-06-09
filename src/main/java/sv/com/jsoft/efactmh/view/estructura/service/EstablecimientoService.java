@@ -35,7 +35,7 @@ public class EstablecimientoService {
                 .jwtDto(token)
                 .endpoint("/api/punto-venta/establecimiento/" + idEstablecimiento)
                 .build()
-                .callGet();
+                .callGetAllAuth();
 
         return rest.getCodeHttp() == 200 ? (List<PuntoVentaDto>) rest.getBody() : new ArrayList<>();
     }

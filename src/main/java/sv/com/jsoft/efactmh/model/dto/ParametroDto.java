@@ -1,12 +1,14 @@
 package sv.com.jsoft.efactmh.model.dto;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  *
  * @author migue
  */
 @Data
+@ToString
 public class ParametroDto {
 
     private String passwordPrivado;
