@@ -33,29 +33,29 @@
                         <h5>Item</h5>
                         <div class="grid">
                             <div class="col-12 md:col-12" jsf:id="dvDatos">
-                                <div class="formgrid grid">
+                                <div class="formgrid grid ui-fluid">
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtCod" value="Código"/>
-                                        <p:inputText id="txtCod" value="#{productoView.producto.codigoProducto}" disabled="#{productoView.disabled}" class="w-full" required="true"/>
+                                        <p:inputText id="txtCod" value="#{productoView.producto.codigoProducto}" disabled="#{productoView.disabled}" required="true"/>
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtNom" value="Nombre"/>
-                                        <p:inputText id="txtNom" value="#{productoView.producto.nombre}" required="true" disabled="#{productoView.disabled}" class="w-full" />
+                                        <p:inputText id="txtNom" value="#{productoView.producto.nombre}" required="true" disabled="#{productoView.disabled}" />
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtPu" value="Precio Unitario"/>
-                                        <p:inputText id="txtPu" value="#{productoView.producto.precioUnitario}" required="true" disabled="#{productoView.disabled}" class="w-full" />
+                                        <p:inputText id="txtPu" value="#{productoView.producto.precioUnitario}" required="true" disabled="#{productoView.disabled}" />
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="cboUni" value="Unidad de Medida"/>
-                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.codigoUnidad}" disabled="#{productoView.disabled}" class="w-full" >
+                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.codigoUnidad}" disabled="#{productoView.disabled}" >
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UNA UNIDAD" />
                                             <f:selectItems value="#{unidadMedidaService.lstUnidadesMedidas}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.id}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="cboTipoItem" value="Tipo Item"/>
-                                        <p:selectOneMenu id="cboTipoItem" value="#{productoView.producto.codigoItem}" disabled="#{productoView.disabled}" class="w-full" >
+                                        <p:selectOneMenu id="cboTipoItem" value="#{productoView.producto.codigoItem}" disabled="#{productoView.disabled}" >
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN TIPO" />
                                             <f:selectItems value="#{productoService.lstTipoItems}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.id}" />
                                         </p:selectOneMenu>
@@ -64,9 +64,11 @@
                                         <p:selectBooleanCheckbox itemLabel="EXENTO" value="#{productoView.producto.exento}" disabled="#{productoView.disabled}" style="margin-bottom: 0.2rem;"/>
                                     </div>
                                     <div class="field col-12">
-                                        <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" update="dvDatos tblPro" style="margin-right: 5px;"/>
-                                        <p:commandButton value="Cancelar" icon="pi pi-times" action="#{productoView.cancelar()}" update="dvDatos" process="@this" styleClass="ui-button-secondary">
-                                            <p:ajax update="dvDatos" resetValues="true"/>
+                                        <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" 
+                                                         update="dvDatos tblPro" style="width: 10rem" styleClass="mr-2"/>
+                                        <p:commandButton value="Cancelar" icon="pi pi-times" action="#{productoView.cancelar()}" update="dvDatos" process="@this" 
+                                                         style="width: 10rem" styleClass="ui-button-secondary" oncomplete="PF('tblPro').unselectAllRows()">
+                                            <p:ajax update="dvDatos, tblPro" resetValues="true"/>
                                         </p:commandButton>
                                     </div>
                                 </div>

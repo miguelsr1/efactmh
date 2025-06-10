@@ -44,12 +44,14 @@ public class SessionService implements Serializable {
     }
 
     public void setToken(JwtDto token) {
-        this.token = token;
-        String jwtData = new String(Base64.getDecoder().decode(token.getAccessToken().split("\\.")[1]));
-        userName = new Gson().fromJson(jwtData, JsonObject.class).get("name").getAsString();
+        if (token != null) {
+            this.token = token;
+            String jwtData = new String(Base64.getDecoder().decode(token.getAccessToken().split("\\.")[1]));
+            userName = new Gson().fromJson(jwtData, JsonObject.class).get("name").getAsString();
 
-        cargarParametrosMh();
-        loadEstablecimiento();
+            cargarParametrosMh();
+            loadEstablecimiento();
+        }
     }
 
     private void loadEstablecimiento() {

@@ -9,7 +9,9 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeExpandEvent;
+import org.primefaces.model.file.UploadedFile;
 import sv.com.jsoft.efactmh.model.Emisor;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
@@ -87,5 +89,13 @@ public class EmisorView implements Serializable {
 
     public void onNodeExpand(NodeExpandEvent event) {
         log.info("EXPANDI");
+    }
+    
+    public void handleFileUpload(FileUploadEvent event) {
+        UploadedFile file = event.getFile();
+
+        if (file != null && file.getContent() != null && file.getContent().length > 0 && file.getFileName() != null) {
+
+        }
     }
 }

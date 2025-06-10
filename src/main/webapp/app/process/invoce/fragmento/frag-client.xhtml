@@ -18,16 +18,14 @@
             </div>
             <div class="field col-12 md:col-3" >
                 <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
-                <p:inputMask id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" onkeyup="nitDuiMask(this)"
-                             class="w-full" required="true"
+                <p:inputMask id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" onkeyup="nitDuiMask(this)" required="true"
                              requiredMessage="DEBE DE INGRESAR EL NUMERO DE DOCUMENTO DE UN CLIENTE">
                     <p:ajax event="blur" listener="#{invoceView.findClient()}" update="dvCliente"/>
                 </p:inputMask>
             </div>
             <div class="field col-12 md:col-9">
                 <p:outputLabel for="nomRec" value="Nombre"/>
-                <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}"
-                             class="w-full" required="true"/>
+                <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}" required="true"/>
             </div>
             <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
                 <p:selectBooleanCheckbox itemLabel="Retención ISR" value="#{invoceView.aplicaRetencionIsr}">

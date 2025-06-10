@@ -51,7 +51,7 @@
         <h:form prependId="false">
             <div class="grid dashboard ">
                 <div class="col-12">
-                    <div class="card" jsf:id="dvFiltro">
+                    <div class="card ui-fluid" jsf:id="dvFiltro">
                         <div class="card-header" style="margin-bottom: 1rem">
                             <h5>Listado de DTE registrados</h5>
                         </div>
@@ -59,23 +59,24 @@
                         <div class="formgrid grid">
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtNom" value="Nombre Cliente"/>
-                                <p:inputText id="txtNom" class="w-full"/>
+                                <p:inputText id="txtNom"/>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtNumDoc" value="Número de Documento cliente"/>
-                                <p:inputText id="txtNumDoc" class="w-full"/>
+                                <p:inputText id="txtNumDoc"/>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtCorreo" value="Correo cliente"/>
-                                <p:inputText id="txtCorreo" class="w-full"/>
+                                <p:inputText id="txtCorreo"/>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtFecha" value="Fecha creación"/>
-                                <p:inputText id="txtFecha" class="w-full"/>
+                                <p:inputText id="txtFecha"/>
                             </div>
                         </div>
                         <div class="card-header">
-                            <p:commandButton value="Buscar" action="#{dtesView.findDtes()}" update="tblDtes dvFiltro" icon="pi pi-search"/>
+                            <p:commandButton value="Buscar" action="#{dtesView.findDtes()}" update="tblDtes dvFiltro" 
+                                             style="width: 10rem" icon="pi pi-search"/>
                         </div>
                     </div>
                 </div>
