@@ -11,11 +11,9 @@
         </p:messages>
         <div class="flex gap-8 flex-column-reverse md:flex-row">
             <div class="grid formgrid ui-fluid">
-
             </div>
-            
         </div>
-
+        
         <div class="col-12">
             <div class="formgrid grid ui-fluid" jsf:id="divDatos">
                 <div class="field col-9">
@@ -83,10 +81,12 @@
                 </div>
             </div>
         </div>
-        
-        <p:panel visible="false">
-            <p:fileUpload id="pnUpd" auto="true" widgetVar="pnUpd" mode="simple" listener="#{emisorView.handleFileUpload}"
-                          skinSimple="true" allowTypes="/(\.|\/)(jpg)$/" chooseIcon="pi pi-pencil" label=""  />
-        </p:panel>
-    </h:form>
+    </h:form>    
+    <p:panel visible="true">
+        <h:form prependId="false">
+            <p:fileUpload id="pnUpd" auto="true" widgetVar="pnUpd" mode="simple" listener="#{uploadLogoView.handleFileUpload}"
+                          skinSimple="true" allowTypes="/(\.|\/)(jpg)$/" chooseIcon="pi pi-pencil" process="@this"  />
+        </h:form>
+    </p:panel>
+
 </ui:component>

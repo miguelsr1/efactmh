@@ -2,6 +2,7 @@ package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotEmpty;
@@ -50,6 +51,7 @@ public class LoginView implements Serializable {
                 JsfUtil.mensajeError("Usuario/Clave de acceso incorrectos!");
                 break;
             case 200:
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", usuario);
                 securityService.setToken(loginServices.getToken(response));
                 return urlWelcome + "?faces-redirect=true";
             default:

@@ -6,7 +6,7 @@
     </context-param>
     <session-config>
         <session-timeout>
-            5
+            10
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -23,6 +23,10 @@
     <context-param>
         <param-name>primefaces.THEME</param-name>
         <param-value>paradise-#{guestPreferences.theme}</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.UPLOADER</param-name>
+        <param-value>auto</param-value>
     </context-param>
     <context-param>
         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
@@ -44,11 +48,11 @@
         <param-name>primefaces.FONT_AWESOME</param-name>
         <param-value>true</param-value>
     </context-param>
-     <context-param>
+    <context-param>
         <param-name>primefaces.CACHE_PROVIDER</param-name>
         <param-value>org.primefaces.showcase.util.EHCache3Provider</param-value>
     </context-param>
-     <context-param>
+    <context-param>
         <param-name>com.sun.faces.numberOfViewsInSession</param-name>
         <param-value>5</param-value>
     </context-param>
@@ -58,11 +62,81 @@
     </context-param>
     
     <filter>
+        <filter-name>noCacheFilter</filter-name>
+        <filter-class>org.omnifaces.filter.CacheControlFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>noCacheFilter</filter-name>
+        <servlet-name>facesServlet</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>facesExceptionFilter</filter-name>
+        <filter-class>org.omnifaces.filter.FacesExceptionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>facesExceptionFilter</filter-name>
+        <servlet-name>facesServlet</servlet-name>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.omnifaces.filter.CharacterEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <servlet-name>facesServlet</servlet-name>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>sv.com.jsoft.efactmh.filter.AuthorizationFilter</filter-class>
+        <init-param>
+            <param-name>sv.com.jsoft.stdte.model.LoginURI</param-name>
+            <param-value>/index.xhtml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sv.com.jsoft.stdte.model.NoForwardViewIds</param-name>
+            <param-value>/redirect.jsp /index.xhtml</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>facesExceptionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
         <filter-name>No Cache Filter</filter-name>
         <filter-class>org.primefaces.webapp.filter.NoCacheFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>No Cache Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    
+     <servlet>
+        <servlet-name>DynamicImageServlet</servlet-name>
+        <servlet-class>sv.com.jsoft.efactmh.servlet.DynamicImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DynamicImageServlet</servlet-name>
+        <url-pattern>/DynamicImageServlet</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
     

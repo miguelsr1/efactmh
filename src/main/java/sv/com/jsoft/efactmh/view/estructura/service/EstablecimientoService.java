@@ -23,7 +23,7 @@ public class EstablecimientoService {
                 .jwtDto(token)
                 .endpoint("/api/establecimiento")
                 .build()
-                .callGetAuth();
+                .callGetAllAuth();
 
         return rest.getCodeHttp() == 200 ? (List<EstablecimientoDto>) rest.getBody() : new ArrayList<>();
     }

@@ -17,6 +17,8 @@ import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.MessageUtil;
+import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
@@ -54,19 +56,22 @@ public class EmisorView implements Serializable {
     }
 
     private void loadDataEmisor() {
-        RestUtil rest = RestUtil
+        ResponseRestApi response = RestUtil
                 .builder()
                 .clazz(Emisor.class)
                 .jwtDto(securityService.getToken())
                 .endpoint("/api/secured/emisor")
-                .build();
+                .build()
+                .callGetOneAuth();
 
-        emisor = (Emisor) rest
-                .callGetOne();
-
-        municipio = emisor.getCodigoDepartamento().concat(emisor.getCodigoMunicipio());
-        lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(emisor.getCodigoDepartamento());
-        lstDepartamentos = catalogoService.getLstDepartamentos();
+        if (response.getCodeHttp() == 200) {
+            emisor = (Emisor) response.getBody();
+            municipio = emisor.getCodigoDepartamento().concat(emisor.getCodigoMunicipio());
+            lstMunicipios = catalogoService.getMunicipioDtoByCodDepa(emisor.getCodigoDepartamento());
+            lstDepartamentos = catalogoService.getLstDepartamentos();
+        } else {
+            MessageUtil.builder().message("NO SE HAN CARGADO LOS DATOS DEL EMISOR").build().showMessage();
+        }
     }
 
     public void updateListaMunicipios() {
@@ -89,13 +94,5 @@ public class EmisorView implements Serializable {
 
     public void onNodeExpand(NodeExpandEvent event) {
         log.info("EXPANDI");
-    }
-    
-    public void handleFileUpload(FileUploadEvent event) {
-        UploadedFile file = event.getFile();
-
-        if (file != null && file.getContent() != null && file.getContent().length > 0 && file.getFileName() != null) {
-
-        }
     }
 }

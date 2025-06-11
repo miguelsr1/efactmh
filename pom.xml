@@ -61,7 +61,7 @@
             <groupId>org.primefaces</groupId>
             <artifactId>paradise-theme-jakarta</artifactId>
             <version>7.0.0</version>
-        </dependency>
+        </dependency>      
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
@@ -93,6 +93,11 @@
             <groupId>org.omnifaces</groupId>
             <artifactId>omnifaces</artifactId>
             <version>3.14.7</version>
+        </dependency>
+         <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.5</version> 
         </dependency>
         
         <dependency>

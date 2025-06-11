@@ -1,11 +1,12 @@
 package sv.com.jsoft.efactmh.services;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -20,8 +21,8 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  * @author migue
  */
 @Named
-@ApplicationScoped
-public class CatalogoService {
+@SessionScoped
+public class CatalogoService implements Serializable {
 
     @Getter
     private List<CatalogoDto> lstTipoUnidadMedida;
@@ -39,7 +40,6 @@ public class CatalogoService {
 
     @PostConstruct
     public void init() {
-        //loadProduct();
         lstTipoUnidadMedida = new ArrayList<>();
         loadTipoUnidadMedida();
         loadDatosUbicacion();
@@ -47,14 +47,15 @@ public class CatalogoService {
         loadTipoDocumentosId();
     }
 
-    private void loadTipoDocumentosId(){
+    private void loadTipoDocumentosId() {
         lstTipoDocumentosId = new ArrayList<>();
-        lstTipoDocumentosId.add(new CatalogoDto("13","DUI"));
-        lstTipoDocumentosId.add(new CatalogoDto("36","NIT"));
-        lstTipoDocumentosId.add(new CatalogoDto("37","OTRO"));
-        lstTipoDocumentosId.add(new CatalogoDto("03","PASAPORTE"));
-        lstTipoDocumentosId.add(new CatalogoDto("02","CARNET DE RESIDENTE"));
+        lstTipoDocumentosId.add(new CatalogoDto("13", "DUI"));
+        lstTipoDocumentosId.add(new CatalogoDto("36", "NIT"));
+        lstTipoDocumentosId.add(new CatalogoDto("37", "OTRO"));
+        lstTipoDocumentosId.add(new CatalogoDto("03", "PASAPORTE"));
+        lstTipoDocumentosId.add(new CatalogoDto("02", "CARNET DE RESIDENTE"));
     }
+
     private void loadTipoUnidadMedida() {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/catalogo/unidad-medidad")
@@ -74,7 +75,7 @@ public class CatalogoService {
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGet();
+                .callGetAllAuth();
 
         if (response.getCodeHttp() == 200) {
             lstDepartamentos = (List<CatalogoDto>) response.getBody();
@@ -85,7 +86,7 @@ public class CatalogoService {
                 .clazz(MunicipioDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGet();
+                .callGetAllAuth();
 
         if (response.getCodeHttp() == 200) {
             lstMunicipios = (List<MunicipioDto>) response.getBody();
@@ -106,7 +107,7 @@ public class CatalogoService {
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGet();
+                .callGetAllAuth();
         if (response.getCodeHttp() == 200) {
             lstGiros = (List<CatalogoDto>) response.getBody();
         }
@@ -118,7 +119,8 @@ public class CatalogoService {
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGetAuth();
+                .callGetAllAuth();
+        
         return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 
@@ -128,7 +130,8 @@ public class CatalogoService {
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
-                .callGetAuth();
+                .callGetAllAuth();
+        
         return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 }

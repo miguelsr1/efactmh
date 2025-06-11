@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
@@ -24,11 +25,19 @@ public class UbicacionService {
 
     @Getter
     List<MunicipioDto> lstMunicipio;
+    @Inject
+    SessionService sessionService;
 
     @PostConstruct
     public void init() {
-        RestUtil res = RestUtil.builder().endpoint("/api/catalogo/departamento/").clazz(CatalogoDto.class).build();
-        ResponseRestApi rest = res.callGet();
+        ResponseRestApi rest = RestUtil
+                .builder()
+                .clazz(CatalogoDto.class)
+                .jwtDto(sessionService.getToken())
+                .endpoint("/api/catalogo/departamento/")
+                .build()
+                .callGetAllAuth();
+        
         if (rest.getCodeHttp() == 200) {
             lstDepartamento = (List<CatalogoDto>) rest.getBody();
         } else {
@@ -41,8 +50,14 @@ public class UbicacionService {
             return new ArrayList<>();
         }
         
-        RestUtil res = RestUtil.builder().endpoint("/api/catalogo/municipio/departamento/" + depa).clazz(MunicipioDto.class).build();
-        ResponseRestApi rest = res.callGet();
+        ResponseRestApi rest = RestUtil
+                .builder()
+                .clazz(MunicipioDto.class)
+                .jwtDto(sessionService.getToken())
+                .endpoint("/api/catalogo/municipio/departamento/" + depa)
+                .build()
+                .callGetAllAuth();
+        
         if (rest.getCodeHttp() == 200) {
             return (List<MunicipioDto>) rest.getBody();
         } else {

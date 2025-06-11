@@ -42,15 +42,14 @@ public class ParametrosView implements Serializable {
     }
 
     public void loadParametros() {
-        RestUtil rest = RestUtil
+        ResponseRestApi response = RestUtil
                 .builder()
                 .clazz(ParametroDto.class)
                 .jwtDto(securityService.getToken())
                 .endpoint("/api/secured/emisor/parametro/all")
-                .build();
-
-        ResponseRestApi response = rest
-                .callGetAuth();
+                .build()
+                .callGetAllAuth();
+        
         if (response.getCodeHttp() == 200) {
             lstParametros = (List<ParametroDto>) response.getBody();
         }

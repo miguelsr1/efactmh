@@ -22,7 +22,7 @@
     <h:body styleClass="#{guestPreferences.inputStyleClass}">
 
         <h:form>
-            <p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="600000" />
+            <p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="450000" />
 
             <p:dialog id="sessionTimeOutDialog" modal="true" closable="false"
                       header="Sesión finalizada" widgetVar="sessionTimeOutDialog">

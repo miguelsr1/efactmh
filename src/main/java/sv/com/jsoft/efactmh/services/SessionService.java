@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.util.Base64;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.ConfigurableNavigationHandler;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -36,10 +34,6 @@ public class SessionService implements Serializable {
     CatalogoService catalogoService;
 
     public JwtDto getToken() {
-        if (token == null) {
-            ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
-            configurableNavigationHandler.performNavigation("/index.html");
-        }
         return token;
     }
 
@@ -73,7 +67,7 @@ public class SessionService implements Serializable {
                 .jwtDto(token)
                 .endpoint("/api/secured/emisor/parametro/all")
                 .build()
-                .callGetAuth();
+                .callGetAllAuth();
 
         if (rest.getCodeHttp() == 200) {
             List<ParametroDto> lst = (List<ParametroDto>) rest.getBody();

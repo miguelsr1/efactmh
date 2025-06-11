@@ -41,121 +41,6 @@ public class RestUtil {
     private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
 
-    public ResponseRestApi callGet() {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                if (response.body() != null) {
-                    Type lst = TypeToken.getParameterized(List.class, clazz).getType();
-                    return new ResponseRestApi(response.statusCode(),
-                            gson.fromJson(response.body(), lst));
-                }
-            }
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR get - " + endpoint, ex);
-
-            String mensajeError;
-            if (ex instanceof java.net.ConnectException) {
-                mensajeError = "ERROR DE CONEXION";
-            } else if (ex instanceof java.net.http.HttpTimeoutException) {
-                mensajeError = "TIEMPO DE ESPERA SUPERADO";
-            } else {
-                mensajeError = "ERROR INESPERADO";
-            }
-
-            return new ResponseRestApi(-1, mensajeError);
-        }
-        return null;
-    }
-
-    public ResponseRestApi callGetAuth() {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
-                    .GET()
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                if (response.body() != null) {
-                    Type lst = TypeToken.getParameterized(List.class, clazz).getType();
-                    return new ResponseRestApi(response.statusCode(),
-                            gson.fromJson(response.body(), lst));
-                }
-            }
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR get - " + endpoint, ex);
-
-            String mensajeError;
-            if (ex instanceof java.net.ConnectException) {
-                mensajeError = "ERROR DE CONEXION";
-            } else if (ex instanceof java.net.http.HttpTimeoutException) {
-                mensajeError = "TIEMPO DE ESPERA SUPERADO";
-            } else {
-                mensajeError = "ERROR INESPERADO";
-            }
-
-            return new ResponseRestApi(-1, mensajeError);
-        }
-        return null;
-    }
-
-    /*public ResponseRestApi callGetAll() {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
-                    .GET()
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                if (response.body() != null) {
-                     Type lst = TypeToken.getParameterized(List.class, clazz).getType();
-                    return new ResponseRestApi(response.statusCode(),
-                             gson.fromJson(response.body(), lst));
-                }
-            }
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR get - " + endpoint, ex);
-            return null;
-        }
-        return null;
-    }*/
-    public Object callGetOne() {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
-                    .GET()
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            return gson.fromJson(response.body(), clazz);
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR getOne - " + endpoint, ex);
-            return null;
-        }
-    }
-
     public ResponseRestApi callGetOneAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
@@ -219,7 +104,17 @@ public class RestUtil {
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR get - " + endpoint, ex);
-            return null;
+
+            String mensajeError;
+            if (ex instanceof java.net.ConnectException) {
+                mensajeError = "ERROR DE CONEXION";
+            } else if (ex instanceof java.net.http.HttpTimeoutException) {
+                mensajeError = "TIEMPO DE ESPERA SUPERADO";
+            } else {
+                mensajeError = "ERROR INESPERADO";
+            }
+
+            return new ResponseRestApi(-1, mensajeError);
         }
         return null;
     }
@@ -376,51 +271,7 @@ public class RestUtil {
         }
     }
 
-    public int callPost(Object data) {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(HOST + endpoint))
-                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .POST(HttpRequest.BodyPublishers
-                            .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode();
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR post - " + endpoint, ex);
-            return 0;
-        }
-    }
-
-    public <T> T callPost(Object data, Class<T> clazz, FieldNamingPolicy namingConvention) {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI(HOST + endpoint))
-                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .POST(HttpRequest.BodyPublishers
-                            .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            String responseStr = response.body();
-
-            return new GsonBuilder().setFieldNamingPolicy(namingConvention).create().fromJson(responseStr, clazz);
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR post - " + endpoint, ex);
-            return null;
-        }
-    }
-
-    public ResponseDto callPostV2(Object data) {
+    public ResponseDto callPost(Object data) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(new URI(HOST + endpoint))
@@ -456,26 +307,5 @@ public class RestUtil {
     public <T> T getDataByTypeClass(ResponseDto responseDto, Class<T> clazz, FieldNamingPolicy namingConvention) {
         return new GsonBuilder()
                 .setFieldNamingPolicy(namingConvention).create().fromJson(responseDto.getBody().toString(), clazz);
-    }
-
-    public int callPut(int id, Object data) {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8090/" + endpoint + "/" + id))
-                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .PUT(HttpRequest.BodyPublishers
-                            .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode();
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR dataByTypeClass - " + endpoint, ex);
-            return 0;
-        }
     }
 }

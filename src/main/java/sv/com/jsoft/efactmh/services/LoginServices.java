@@ -18,7 +18,7 @@ public class LoginServices {
 
     public ResponseDto login(LoginDto login) {
         RestUtil rest = RestUtil.builder().endpoint("/api/security/login").build();
-        return rest.callPostV2(login);
+        return rest.callPost(login);
     }
 
     public JwtDto getToken(ResponseDto responseDto) {

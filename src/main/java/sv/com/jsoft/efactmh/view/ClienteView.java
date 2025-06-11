@@ -91,7 +91,7 @@ public class ClienteView implements Serializable {
                 .jwtDto(sessionService.getToken())
                 .endpoint("/api/secured/client/")
                 .build()
-                .callGetAuth();
+                .callGetAllAuth();
 
         if (response.getCodeHttp() == 200) {
             lstCliente = (List<ClienteDto>) response.getBody();
