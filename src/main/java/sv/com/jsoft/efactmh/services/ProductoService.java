@@ -21,16 +21,16 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @ApplicationScoped
 public class ProductoService {
 
-    @Getter
-    private List<CatalogoDto> lstTipoItems;
+    /*@Getter
+    private List<CatalogoDto> lstTipoItems;*/
 
     @PostConstruct
     public void init() {
-        lstTipoItems = Arrays.asList(
+        /*lstTipoItems = Arrays.asList(
                 new CatalogoDto("01", "BIEN"),
                 new CatalogoDto("02", "SERVICIO"),
                 new CatalogoDto("03", "AMBOS"),
-                new CatalogoDto("04", "OTROS"));
+                new CatalogoDto("04", "OTROS"));*/
     }
 
     public List<Producto> findAll(JwtDto token) {

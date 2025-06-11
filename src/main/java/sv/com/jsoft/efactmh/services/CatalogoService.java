@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
+import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -34,9 +35,13 @@ public class CatalogoService implements Serializable {
     private List<CatalogoDto> lstTipoDocumentosId;
     @Getter
     private List<MunicipioDto> lstMunicipios;
+    @Getter
+    private List<Producto> lstProducto;
 
     @Inject
     SessionService securityService;
+    @Inject
+    ProductoService productoService;
 
     @PostConstruct
     public void init() {
@@ -45,6 +50,11 @@ public class CatalogoService implements Serializable {
         loadDatosUbicacion();
         loadGiros();
         loadTipoDocumentosId();
+        loadItems();
+    }
+    
+    private void loadItems(){
+        lstProducto = productoService.findAll(securityService.getToken());
     }
 
     private void loadTipoDocumentosId() {

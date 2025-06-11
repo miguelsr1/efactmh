@@ -57,12 +57,12 @@
                                         <p:outputLabel for="cboTipoItem" value="Tipo Item"/>
                                         <p:selectOneMenu id="cboTipoItem" value="#{productoView.producto.codigoItem}" disabled="#{productoView.disabled}" >
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN TIPO" />
-                                            <f:selectItems value="#{productoService.lstTipoItems}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.id}" />
+                                            <f:selectItems value="#{tipoItemService.lstTipoItems}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.id}" />
                                         </p:selectOneMenu>
                                     </div>
                                     <div class="field col-12" >
                                         <p:selectBooleanCheckbox itemLabel="EXENTO" value="#{productoView.producto.exento}" disabled="#{productoView.disabled}" style="margin-bottom: 0.2rem;"/>
-                                    </div>
+                                    </div>lstTipoItems
                                     <div class="field col-12">
                                         <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" 
                                                          update="dvDatos tblPro" style="width: 10rem" styleClass="mr-2"/>

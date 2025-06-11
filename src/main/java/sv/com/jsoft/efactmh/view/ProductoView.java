@@ -13,6 +13,7 @@ import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 import sv.com.jsoft.efactmh.services.ProductoService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.services.TipoItemService;
 import sv.com.jsoft.efactmh.services.UnidadMedidaService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -41,6 +42,8 @@ public class ProductoView implements Serializable {
     ProductoService productoService;
     @Inject
     UnidadMedidaService unidadMedidaService;
+    @Inject
+    TipoItemService tipoItemService;
 
     @PostConstruct
     public void init() {
@@ -118,7 +121,7 @@ public class ProductoView implements Serializable {
     }
     
     public String descripcionTipoItem(String codigoItem) {
-        return productoService
+        return tipoItemService
                 .getLstTipoItems()                
                 .stream()
                 .filter(uni -> uni.getId().equals(codigoItem))

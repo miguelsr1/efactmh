@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class DetalleFacturaDto implements Serializable {
 
-    private String codigo;
+    private String codigoProducto;
     private String nombre;
     private BigDecimal cantidad;
     private BigDecimal precioUnitario;

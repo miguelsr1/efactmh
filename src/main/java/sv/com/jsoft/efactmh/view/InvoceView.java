@@ -2,6 +2,7 @@ package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -227,11 +228,12 @@ public class InvoceView implements Serializable {
     public BigDecimal getSumas() {
         return invoceDto.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getSubTotal() {
-        return getSumas().add(getIva());
+        return getSumas().add(getIva()).setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getIva() {
@@ -239,7 +241,7 @@ public class InvoceView implements Serializable {
             case "01":
                 return BigDecimal.ZERO;
             case "03":
-                return getSumas().multiply(new BigDecimal(0.13));
+                return getSumas().multiply(new BigDecimal(0.13)).setScale(2, RoundingMode.HALF_UP);
         }
         return BigDecimal.ZERO;
     }
@@ -251,7 +253,7 @@ public class InvoceView implements Serializable {
             case "03":
                 if (aplicaRetencionIsr) {
                     BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(10));
-                    return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas();
+                    return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas().setScale(2, RoundingMode.HALF_UP);
                 } else {
                     return BigDecimal.ZERO;
                 }
@@ -278,7 +280,8 @@ public class InvoceView implements Serializable {
 
         return invoceDto.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     private BigDecimal getTotalCcf() {
@@ -286,7 +289,8 @@ public class InvoceView implements Serializable {
             return BigDecimal.ZERO;
         }
 
-        return getSumas().add(getIva()).add(getIvaRetenido().negate());
+        return getSumas()
+                .add(getIva()).add(getIvaRetenido().negate()).setScale(2, RoundingMode.HALF_UP);
     }
 
     public void showDlgDetFactura() {
@@ -315,14 +319,13 @@ public class InvoceView implements Serializable {
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
 
-        invoceDto.setCodigoDte("01");
         invoceDto.setCondicionOperacion("1");
     }
 
     public BigDecimal getTotalPagos() {
         totalPagos = BigDecimal.ZERO;
         lstDetPago.forEach(pago -> {
-            totalPagos = totalPagos.add(pago.getMonto());
+            totalPagos = totalPagos.add(pago.getMonto()).setScale(2, RoundingMode.HALF_UP);
         }
         );
         return totalPagos;
@@ -337,7 +340,6 @@ public class InvoceView implements Serializable {
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
 
-        invoceDto.setCodigoDte("01");
         invoceDto.setCondicionOperacion("1");
     }
 

@@ -1,6 +1,7 @@
 package sv.com.jsoft.efactmh.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.Data;
 
 /**
@@ -18,10 +19,10 @@ public class Producto implements Serializable, EntityPk {
     private String codigoUnidad;
     private Boolean activo;
     private Boolean exento;
-    private Double precioUnitario;
+    private BigDecimal precioUnitario;
 
     public Producto() {
-        precioUnitario = 0d;
+        precioUnitario = BigDecimal.ZERO;
         codigoUnidad = "59";
         codigoItem = "01";
         activo = true;

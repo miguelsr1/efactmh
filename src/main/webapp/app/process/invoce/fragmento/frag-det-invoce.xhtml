@@ -9,6 +9,7 @@
 
         <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.invoce.detailInvoce}" var="item" 
                      rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
+                     styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines"
                      emptyMessage="No se han agregado items">
 
             <f:facet name="header">
@@ -29,7 +30,7 @@
                 #{rowId + 1} 
             </p:column>
             <p:column headerText="Código">
-                <p:outputLabel value="#{item.codigo}" />
+                <p:outputLabel value="#{item.codigoProducto}" />
             </p:column>
             <p:column headerText="Descripción">
                 <p:outputLabel value="#{item.nombre}" />
@@ -51,7 +52,7 @@
             </p:column>
             <p:column headerText="Borrar" style="text-align: center;">
                 <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
-                                 action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido" process="@this">
+                                 action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido, invoice-content" process="@this">
                     <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
                 </p:commandButton>
             </p:column>
@@ -79,22 +80,22 @@
                                     <f:convertNumber pattern="#,##0.00"/>
                                 </p:outputLabel>
                             </div>
-                            
+
                             <div class="invoice-label">IVA (13%)</div>
                             <div class="invoice-value">$ 
                                 <p:outputLabel id="lblIva" value="#{invoceView.iva}">
                                     <f:convertNumber pattern="#,##0.00"/>
                                 </p:outputLabel>
                             </div>
-                            
+
                             <div class="invoice-label">Sub-Total</div>
                             <div class="invoice-value">$ 
                                 <p:outputLabel id="lblSubTotal" value="#{invoceView.subTotal}">
                                     <f:convertNumber pattern="#,##0.00"/>
                                 </p:outputLabel>
                             </div>
-                            
-                            
+
+
                             <div class="invoice-label">IVA Retenido(1%)</div>
                             <div class="invoice-value">$ 
                                 <p:outputLabel id="lblIvaRet" value="#{invoceView.ivaRetenido}">

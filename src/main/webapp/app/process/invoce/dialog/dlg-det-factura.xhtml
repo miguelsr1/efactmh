@@ -33,7 +33,14 @@
                     <div class="ui-fluid formgrid grid" jsf:id="dvDetFac">
                         <div class="field col-12" >
                             <p:outputLabel for="txtCodigo" value="Código"/>
-                            <p:inputText id="txtCodigo" value="#{dlgDetFactura.detFactura.codigo}"/>
+                            <p:selectOneMenu id="txtCodigo" value="#{dlgDetFactura.detFactura.codigoProducto}" appendTo="@this"
+                                             filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel=" SELECCIONAR " noSelectionOption="true"/>
+                                <f:selectItems value="#{catalogoService.lstProducto}"
+                                               itemLabel="#{prod.codigoProducto} - #{prod.nombre}"
+                                               itemValue="#{prod.codigoProducto}" var="prod"/>
+                                <p:ajax event="itemSelect" listener="#{dlgDetFactura.selProductoListener}" update="dvDetFac"/>
+                            </p:selectOneMenu>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtDescripcion" value="Descripción"/>
@@ -57,7 +64,7 @@
                         <div class="field col-12">
                             <p:outputLabel for="cbItems">Tipo Item</p:outputLabel>
                             <p:selectOneMenu id="cbItems" value="#{dlgDetFactura.detFactura.codigoItem}" required="true">
-                                <f:selectItems value="#{dlgDetFactura.items}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
+                                <f:selectItems value="#{tipoItemService.lstTipoItems}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
                             </p:selectOneMenu>
                         </div>
                         <div class="field col-12">
