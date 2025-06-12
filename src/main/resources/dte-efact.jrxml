@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dte-efact" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6bbe36ef-b3cb-422a-b8bc-725e29e80b35">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="post"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="efact.jrdax"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="151"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="843"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
@@ -150,10 +150,27 @@ order by df.id_detalle_factura asc]]>
 	vw.recep_nrc,
 	vw.recep_telefono,
 	vw.recep_correo,
-	vw.id_cliente
+	vw.id_cliente,
+	sum(df.cantidad * df.precio_unitario) sumas,
+	(
+	CASE 
+    	WHEN f.codigo_dte = '01' THEN 0
+    	WHEN f.codigo_dte  = '03' THEN round(sum(df.cantidad * df.precio_unitario) * 0.13,2)
+    	ELSE 0.1
+  	END
+	) iva,
+	sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2) sub_total,
+	round(sum(df.cantidad * df.precio_unitario) *(
+	CASE 
+    	WHEN f.retencion_isr = 0 THEN 0
+    	WHEN f.retencion_isr = 1 THEN 0.01
+    	ELSE 0.1
+  	END) ,2) isr_retenido,
+	sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2) - round(sum(df.cantidad * df.precio_unitario) * 0.1,2) total 
 from 
 	contribuyente c 
-	inner join factura f on c.id_contribuyente  = f.id_contribuyente
+	inner join factura f on c.id_contribuyente = f.id_contribuyente
+	inner join detalle_factura df on f.id_factura = df.id_factura 
 	inner join cat_002_tipo_documentos ctd on ctd.codigo_dte = f.codigo_dte
 	inner join cat_003_modelo_facturacion cmf on f.codigo_facturacion = cmf.codigo_facturacion
 	inner join cat_004_tipo_transmicion ctt on f.codigo_transmision = ctt.codigo_transmision
@@ -163,7 +180,38 @@ from
 	inner join departamento d on m.codigo_departamento = d.codigo_departamento
 	inner join vw_receptor_dte vw on f.id_cliente = vw.id_cliente
 where 
-	f.id_factura = $P{PID_FACTURA}]]>
+	f.id_factura = $P{PID_FACTURA} 
+group by
+	c.nombre_comercial,
+	c.nit,
+	c.nrc,
+	ae.actividad_economica,
+	c.direccion, 
+	m.nombre_municipio, 
+	d.nombre_departamento,
+	c.telefono,
+	c.correo,
+	ctd.nombre_dte,
+	f.codigo_generacion,
+	f.numero_control,
+	cmf.descripcion,
+	ctt.descirpionc,
+	f.fecha_creacion,
+	f.fecha_creacion,
+	f.monto_operacion,
+	vw.recep_nombre,
+	vw.recep_actividad,
+	vw.recep_direccion,
+	vw.recep_municipio,
+	vw.recep_departamento,
+	vw.recep_tipo_documento,
+	vw.recep_numero_documento,
+	vw.recep_nrc,
+	vw.recep_telefono,
+	vw.recep_correo,
+	vw.id_cliente,
+	f.retencion_isr,
+	f.codigo_dte]]>
 	</queryString>
 	<field name="nombre" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
@@ -300,13 +348,33 @@ where
 		<property name="com.jaspersoft.studio.field.label" value="id_cliente"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="vw_receptor_dte"/>
 	</field>
+	<field name="sumas" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="sumas"/>
+		<property name="com.jaspersoft.studio.field.label" value="sumas"/>
+	</field>
+	<field name="iva" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="iva"/>
+		<property name="com.jaspersoft.studio.field.label" value="iva"/>
+	</field>
+	<field name="sub_total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="sub_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="sub_total"/>
+	</field>
+	<field name="isr_retenido" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="isr_retenido"/>
+		<property name="com.jaspersoft.studio.field.label" value="isr_retenido"/>
+	</field>
+	<field name="total" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="total"/>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="183" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="5" width="330" height="88" uuid="58f25d18-fe7f-42b8-bb81-d2eeb607981d">
+				<reportElement x="10" y="5" width="330" height="88" uuid="58f25d18-fe7f-42b8-bb81-d2eeb607981d">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement markup="html">
@@ -324,7 +392,7 @@ where
 "<b>Correo: </b>" + $F{correo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="350" y="103" width="222" height="80" uuid="e06ea01a-544d-48e5-92d4-076cb48de94f">
+				<reportElement x="336" y="103" width="222" height="80" uuid="e06ea01a-544d-48e5-92d4-076cb48de94f">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement markup="html">
@@ -339,7 +407,7 @@ where
 "<b>Fecha: </b>" + $F{fecha} + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Hora: </b>"+$F{hora}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="103" width="330" height="80" uuid="8fb8f8a8-f3ef-46f6-beee-e1c945401657">
+				<reportElement x="10" y="103" width="330" height="80" uuid="8fb8f8a8-f3ef-46f6-beee-e1c945401657">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -396,7 +464,7 @@ where
 						<jr:columnFooter style="Table_CH" height="20" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="250" height="20" uuid="093fe17b-d2c9-445e-98f5-5148129f1892"/>
-								<textElement verticalAlignment="Middle" markup="html">
+								<textElement textAlignment="Left" verticalAlignment="Middle" markup="html">
 									<font size="6"/>
 								</textElement>
 								<textFieldExpression><![CDATA["<b>CANTIDAD EN LETRAS: </b>" + $P{P_CANTIDAD_LETRAS}]]></textFieldExpression>
@@ -646,7 +714,92 @@ where
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="264" splitType="Stretch"/>
+		<band height="129" splitType="Stretch">
+			<staticText>
+				<reportElement x="410" y="-1" width="100" height="10" uuid="53ceb56b-60d3-4282-9848-60c54db5c51b"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Sumas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="9" width="100" height="10" uuid="8b74e168-3a28-4219-a536-552bd00eb5ec"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[IVA retenido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="39" width="100" height="10" uuid="bcca626c-1c87-4816-ae48-b0659759c400"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Total no gravado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="49" width="100" height="10" uuid="c6978c0c-5463-42c4-8723-9eff39d43c15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Total pagado]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="510" y="-1" width="51" height="10" uuid="2fd82fa5-6a60-4598-9667-882a9adb5d80"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sumas}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="510" y="9" width="51" height="10" uuid="a96b61f1-f15b-4b96-9a00-61a37dc00054"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{iva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="510" y="39" width="51" height="10" uuid="0e97f7c5-d3f8-47cf-8b37-9dc821b9fc29"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["0.00"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="510" y="49" width="51" height="10" uuid="1c0d0c72-577e-447c-8fa5-ee36bc424c15"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="410" y="29" width="100" height="10" uuid="946b6e74-f3f0-4ab6-bb59-2bd279e8a819"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[ISR retenido]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="510" y="29" width="51" height="10" uuid="3f759c25-c1ac-4a4c-a5a4-32cbe659b561"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{isr_retenido}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="410" y="19" width="100" height="10" uuid="1d413dfa-bfdc-4722-9137-e13c748d20ba"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Sub total]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="510" y="19" width="51" height="10" uuid="8bb83b9b-1315-4684-9958-cbf7762768ed"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sub_total}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch"/>
