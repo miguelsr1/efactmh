@@ -194,7 +194,7 @@ public class InvoceView implements Serializable {
                 .builder()
                 .clazz(ClienteResponse.class)
                 .jwtDto(securityService.getToken())
-                .endpoint("/api/secured/client/" + numDocumentoReceptor)
+                .endpoint("/api/secured/client/" + numDocumentoReceptor.replace(" ", ""))
                 .build();
         ResponseRestApi obj = rest.callGetOneAuth();
 

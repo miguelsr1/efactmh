@@ -18,10 +18,11 @@
             </div>
             <div class="field col-12 md:col-3" >
                 <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
-                <p:inputMask id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" onkeyup="nitDuiMask(this)" required="true"
+                <p:inputText id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" onkeyup="nitDuiMask(this)" required="true"
                              requiredMessage="DEBE DE INGRESAR EL NUMERO DE DOCUMENTO DE UN CLIENTE">
                     <p:ajax event="blur" listener="#{invoceView.findClient()}" update="dvCliente"/>
-                </p:inputMask>
+                </p:inputText>
+                <p:keyFilter for="txtNumDoc" mask="pint" />
             </div>
             <div class="field col-12 md:col-9">
                 <p:outputLabel for="nomRec" value="Nombre"/>
@@ -48,7 +49,7 @@
         </div>
 
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" 
-                         icon="pi pi-angle-left" disabled="false" />
+                         icon="pi pi-angle-left" disabled="#{invoceView.activeStep eq 0}"/>
         <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary" update="step, dvClient, dvDetInvoce, dvDetPayment" 
                          icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.nextStep()}" />
     </p:outputPanel>

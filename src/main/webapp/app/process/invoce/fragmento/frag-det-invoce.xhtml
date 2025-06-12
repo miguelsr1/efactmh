@@ -9,7 +9,6 @@
 
         <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.invoce.detailInvoce}" var="item" 
                      rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
-                     styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines"
                      emptyMessage="No se han agregado items">
 
             <f:facet name="header">
@@ -52,7 +51,8 @@
             </p:column>
             <p:column headerText="Borrar" style="text-align: center;">
                 <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
-                                 action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido, invoice-content" process="@this">
+                                 action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido, invoice-content" 
+                                 style="width: 22px; height: 22px" process="@this">
                     <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
                 </p:commandButton>
             </p:column>

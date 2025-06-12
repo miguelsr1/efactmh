@@ -24,7 +24,7 @@
 
     <h:body>
         <h:form prependId="false">
-            <p:messages id="growl" showDetail="true" closable="true">
+            <p:messages showDetail="true" showSummary="false" closable="true">
                 <p:autoUpdate />
             </p:messages>
 
@@ -81,7 +81,7 @@
                             <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
                                              icon="pi pi-times" action="#{dlgDetFactura.closeDgl()}" style="max-width: 110px"/>
                             <p:commandButton value="Agregar" update="dvDetFac" 
-                                             process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU,growl"
+                                             process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU"
                                              icon="pi pi-plus" action="#{dlgDetFactura.addItem()}" style="max-width: 110px"
                                              validateClient="true" styleClass="ui-button-primary"/>
                         </div>
