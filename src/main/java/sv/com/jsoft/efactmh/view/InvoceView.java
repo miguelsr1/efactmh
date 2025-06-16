@@ -150,6 +150,7 @@ public class InvoceView implements Serializable {
             this.detPago = detPago;
         }
     }
+
     public Date getFechaPedido() {
         return fechaPedido;
     }
@@ -181,8 +182,6 @@ public class InvoceView implements Serializable {
     }
 
     //==========================================================================
-    
-
     //metodo que valida si el establecimiento permite pago a plazo en modalida credito
     public boolean getAceptaPagoPlazo() {
         return sessionView.getAceptaPagoPlazo();
@@ -205,7 +204,7 @@ public class InvoceView implements Serializable {
 
                 MessageUtil.builder()
                         .severity(FacesMessage.SEVERITY_WARN)
-                        .title("ALERTA")
+                        .title(MSG_ALERT)
                         .message("EL RECEPTOR DEBE DE ESTAR INSCRITO AL IVA PARA EMITIR UN CCF")
                         .build()
                         .showMessage();
@@ -385,7 +384,9 @@ public class InvoceView implements Serializable {
                 switch (invoceDto.getCodigoDte()) {
                     case "01": //FE
                         if (cliente.getIdCliente() == null) {
-                            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "POR FAVOR AGREGE UN CLIENTE");
+                            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                                    MSG_ALERT,
+                                    "POR FAVOR AGREGE UN CLIENTE");
                             return false;
                         }
                         return true;
@@ -395,7 +396,7 @@ public class InvoceView implements Serializable {
                         } else {
                             MessageUtil.builder()
                                     .severity(FacesMessage.SEVERITY_WARN)
-                                    .title("ALERTA")
+                                    .title(MSG_ALERT)
                                     .message("EL CLIENTE SELECCIONADO DEBE DE ESTAR INSCRITO AL IVA")
                                     .build().showMessage();
                             return false;
@@ -406,7 +407,9 @@ public class InvoceView implements Serializable {
             case 1:
                 //VALIDAR QUE EXISTA UN ITEM AGREGADO EN LA FACTURA
                 if (invoceDto.getDetailInvoce().isEmpty()) {
-                    JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "POR FAVOR AGREGE UN ITEM A LA FACTURA");
+                    JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                            MSG_ALERT,
+                            "POR FAVOR AGREGE UN ITEM A LA FACTURA");
                     return false;
                 }
                 return true;
@@ -463,6 +466,8 @@ public class InvoceView implements Serializable {
                             log.info("Finalizando");
 
                             clearStatus();
+                            
+                            dteServices.sendMail(idFac, securityService.getToken());
                             break;
                         case 504:
                             /*
@@ -519,7 +524,9 @@ public class InvoceView implements Serializable {
      */
     private boolean validatePreSend() {
         if (lstDetPago.isEmpty()) {
-            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "DEBE DE AGREGAR EL DETALLE DE PAGOS");
+            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                    MSG_ALERT,
+                    "DEBE DE AGREGAR EL DETALLE DE PAGOS");
             return false;
         }
 
@@ -528,7 +535,9 @@ public class InvoceView implements Serializable {
                 .filter(monto -> monto != null) // Opcional, si puede haber montos nulos
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         if (getTotal().compareTo(total) != 0) {
-            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN, MSG_ALERT, "DEBE DE REVISAR LA SUMATORIA DE LOS DETALLES DE PAGO");
+            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                    MSG_ALERT,
+                    "DEBE DE REVISAR LA SUMATORIA DE LOS DETALLES DE PAGO");
             return false;
         }
 
@@ -586,7 +595,7 @@ public class InvoceView implements Serializable {
 
     public void cleanFull() {
         loadMetodoPago();
-        
+
         fechaPedido = new Date();
         cliente = new ClienteResponse();
         invoceDto = new InvoceDto();

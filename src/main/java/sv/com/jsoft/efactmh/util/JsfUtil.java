@@ -18,38 +18,13 @@ public class JsfUtil {
 
     private static FacesMessage msg;
 
-    public static void mensajeUpdate() {
-        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Actualización exitosa.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
     public static void mensajeInsert() {
         msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Registro almacenado satisfactoriamente");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public static void mensajeDelete() {
-        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "Registro eliminado satisfactoriamente");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
     public static void mensajeFromEnum(TipoMensaje tipoMsj) {
         msg = new FacesMessage(tipoMsj.getTipoMensaje(), tipoMsj.getTituloMensaje(), tipoMsj.getMensaje());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public static void mensajeAlerta(String mensaje) {
-        msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Alerta", "" + mensaje + "");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public static void mensajeError(String mensaje) {
-        msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "" + mensaje + "");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public static void mensajeInformacion(String mensaje) {
-        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Información", "" + mensaje + "");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -88,8 +63,8 @@ public class JsfUtil {
             log.error("Error redireccionando al Index", ex);
         }
     }
-    
-    public static void showMessageDialog(FacesMessage.Severity severity, String title, String message){
+
+    public static void showMessageDialog(FacesMessage.Severity severity, String title, String message) {
         msg = new FacesMessage(severity, title, message);
         PrimeFaces.current().dialog().showMessageDynamic(msg);
     }
