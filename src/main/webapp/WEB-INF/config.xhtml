@@ -18,8 +18,8 @@
                 <p:outputPanel id="menumodes-panel" styleClass="layout-config-section options">
                     <span class="section-name">Establecimiento</span>
                     <div class="grid layout-config-options">                        
-                        <h:selectOneMenu value="#{sessionView.idEstablecimiento}" styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all"
-                                         onchange="PrimeFaces.ParadiseConfigurator.changeMenuMode(event.target.value)" style="width: 100%">
+                        <h:selectOneMenu value="#{sessionView.idEstablecimiento}" 
+                                         styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all" style="width: 100%">
                             <f:selectItem noSelectionOption="true" itemLabel="-- SELECCIONE --" />
                             <f:selectItems value="#{sessionService.lstEstablecimiento}" var="est" itemValue="#{est.id}" itemLabel="#{est.nombre}"/>
                             <f:ajax render="menumodes-panel lightdark-panel"/>

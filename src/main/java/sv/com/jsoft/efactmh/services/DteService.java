@@ -14,12 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -31,13 +30,13 @@ import sv.com.jsoft.efactmh.model.dto.ParametroDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
-import sv.com.jsoft.efactmh.view.ViewFactura;
 
 /**
  *
  * @author migue
  */
 @ApplicationScoped
+@Slf4j
 public class DteService {
 
     private final static ResourceBundle VARIABLES = ResourceBundle.getBundle("variables");
@@ -164,7 +163,7 @@ public class DteService {
 
             return jsonResponse;
         } catch (URISyntaxException | IOException | InterruptedException | ParseException ex) {
-            Logger.getLogger(ViewFactura.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR en getProcesarMh", ex);
             return null;
         }
     }
@@ -224,7 +223,7 @@ public class DteService {
 
             return jsonResponse;
         } catch (URISyntaxException | IOException | InterruptedException | ParseException ex) {
-            Logger.getLogger(ViewFactura.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR en getTokenMh", ex);
             return null;
         }
     }
@@ -261,7 +260,7 @@ public class DteService {
             JSONObject jsonFirmado = (JSONObject) parser.parse(response.body());
             return jsonFirmado;
         } catch (URISyntaxException | IOException | InterruptedException | ParseException ex) {
-            Logger.getLogger(ViewFactura.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("ERROR en getFirmarDocumento", ex);
             return null;
         }
     }
@@ -275,5 +274,15 @@ public class DteService {
                 .build();
 
         return restUtil.callPostAuth();
+    }
+
+    public ResponseRestApi sendMail(Long idFactura, JwtDto token) {
+        RestUtil restUtil = RestUtil.builder()
+                .endpoint("/api/secured/dte/send-mail/" + idFactura)
+                .clazz(String.class)
+                .jwtDto(token)
+                .build();
+
+        return restUtil.callGetOneAuth();
     }
 }

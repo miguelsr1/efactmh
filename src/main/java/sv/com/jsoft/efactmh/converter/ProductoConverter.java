@@ -8,6 +8,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 
@@ -17,6 +18,7 @@ import sv.com.jsoft.efactmh.services.CatalogoService;
  */
 @Named
 @FacesConverter(value = "productoConverter", managed = true)
+@Slf4j
 public class ProductoConverter implements Converter<Producto> {
 
     @Inject
@@ -26,8 +28,8 @@ public class ProductoConverter implements Converter<Producto> {
     public Producto getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                System.out.println(value);
-                return null; //catService.getProductoByCodigo(value);
+                log.info(value);
+                return null; 
             } catch (NumberFormatException e) {
                 throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid country."));
             }
@@ -38,7 +40,7 @@ public class ProductoConverter implements Converter<Producto> {
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Producto value) {
-        System.out.println(value);
+        log.info(value.toString());
         if (value != null) {
             return value.getCodigoItem();
         } else {

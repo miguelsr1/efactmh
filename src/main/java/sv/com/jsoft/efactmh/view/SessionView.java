@@ -16,6 +16,8 @@ import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.Constantes;
+import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 
 /**
@@ -35,7 +37,7 @@ public class SessionView implements Serializable {
     @Getter
     @Setter
     private Boolean aceptaPagoPlazo = true;
-    private boolean sinParametrosIniciales = false;
+    //private boolean sinParametrosIniciales = false;
 
     @PostConstruct
     public void init() {
@@ -45,20 +47,18 @@ public class SessionView implements Serializable {
     private void loadCookies() {
         Map<String, Object> requestCookieMap = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
         if (requestCookieMap.containsKey("idEstable")) {
-            idEstablecimiento = ((Cookie)requestCookieMap.get("idEstable")).getValue();
+            idEstablecimiento = ((Cookie) requestCookieMap.get("idEstable")).getValue();
         }
         if (requestCookieMap.containsKey("idPuntoV")) {
-            idPuntoVenta = ((Cookie)requestCookieMap.get("idPuntoV")).getValue();
+            idPuntoVenta = ((Cookie) requestCookieMap.get("idPuntoV")).getValue();
         }
-
-        sinParametrosIniciales = (idEstablecimiento == null && idPuntoVenta == null);
     }
 
     public void validateParamInitial() {
-        if (sinParametrosIniciales) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Importante", " Debe configurar sus parametros iniciales!");
-
-            PrimeFaces.current().dialog().showMessageDynamic(message);
+        if (idEstablecimiento == null || idPuntoVenta == null) {
+            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                    MSG_ALERT,
+                    "ES REQUERIDO REALIZAR LA CONFIGURACIÓN INICIAL");
         }
     }
 
@@ -67,11 +67,14 @@ public class SessionView implements Serializable {
     }
 
     public void setIdEstablecimiento(String idEstablecimiento) {
+        JsfUtil.eliminarCookie("idPuntoV");
+        idPuntoVenta = null;
         if (idEstablecimiento == null) {
             JsfUtil.eliminarCookie("idEstable");
         } else {
             JsfUtil.crearCookie("idEstable", idEstablecimiento);
-            sinParametrosIniciales = false;
+            JsfUtil.eliminarCookie("idPuntoV");
+            //sinParametrosIniciales = false;
         }
         this.idEstablecimiento = idEstablecimiento;
     }
@@ -85,7 +88,7 @@ public class SessionView implements Serializable {
             JsfUtil.eliminarCookie("idPuntoV");
         } else {
             JsfUtil.crearCookie("idPuntoV", idPuntoVenta);
-            sinParametrosIniciales = false;
+            //sinParametrosIniciales = false;
         }
         this.idPuntoVenta = idPuntoVenta;
     }

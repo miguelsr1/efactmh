@@ -16,6 +16,8 @@ import sv.com.jsoft.efactmh.model.dto.InvalidateRequest;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 import sv.com.jsoft.efactmh.services.InvalidateService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import static sv.com.jsoft.efactmh.util.Constantes.MSG_ERROR;
+import static sv.com.jsoft.efactmh.util.Constantes.MSG_INFO;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -102,10 +104,20 @@ public class DlgInvalidarDte implements Serializable {
 
         switch (response.getCodeHttp()) {
             case 200:
-                JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO, "INFORMACION", "DTE ANULADO");
+                MessageUtil.builder()
+                        .severity(FacesMessage.SEVERITY_INFO)
+                        .title(MSG_INFO)
+                        .message("DTE ANULADO")
+                        .build()
+                        .showMessage();
                 break;
             case 400:
-                JsfUtil.showMessageDialog(FacesMessage.SEVERITY_ERROR, "ERROR", "OCURRIO UN ERROR EN LA ANULACION");
+                MessageUtil.builder()
+                        .severity(FacesMessage.SEVERITY_ERROR)
+                        .title(MSG_ERROR)
+                        .message("OCURRIO UN ERROR EN LA ANULACION")
+                        .build()
+                        .showMessage();
                 break;
         }
     }
