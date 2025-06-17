@@ -44,6 +44,7 @@ public class RestUtil {
     public ResponseRestApi callGetOneAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .build();
@@ -84,6 +85,7 @@ public class RestUtil {
     public ResponseRestApi callGetAllAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .build();
@@ -127,9 +129,10 @@ public class RestUtil {
     public ResponseRestApi callPostAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .version(HttpClient.Version.HTTP_1_1)
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .POST(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .POST(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -164,9 +167,10 @@ public class RestUtil {
     public void callPutAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .version(HttpClient.Version.HTTP_1_1)
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -210,6 +214,7 @@ public class RestUtil {
     public Object callGetById() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
+                    .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .build();
 
@@ -228,6 +233,7 @@ public class RestUtil {
     public int callPersistir(EntityPk data) {
         try {
             HttpRequest.Builder httpBuilder = HttpRequest.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
                     .uri(new URI(HOST + endpoint + (data.esNuevo() ? "" : data.getId())))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
@@ -253,6 +259,7 @@ public class RestUtil {
     public int callUpdClient(Long idCliente, Personeria data) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
                     .uri(new URI(HOST + endpoint + idCliente))
                     .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(data)))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
@@ -274,6 +281,7 @@ public class RestUtil {
     public ResponseDto callPost(Object data) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
                     .uri(new URI(HOST + endpoint))
                     .timeout(Duration.ofSeconds(5))
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")

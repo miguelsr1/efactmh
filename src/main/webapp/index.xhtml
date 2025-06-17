@@ -19,7 +19,7 @@
         <h:form prependId="false">
 
             <div class="container">
-                <div class="flex align-items-center justify-content-center">
+                <div class="align-items-center justify-content-center">
                     <div class="surface-card p-8 shadow-4 border-round w-full lg:w-12" jsf:id="divLogin">
                         <div class="text-center mb-5">
                             <p:graphicImage name="login.png" library="images" alt="Image"
@@ -28,9 +28,6 @@
                             <span class="text-600 font-medium line-height-3">¿No tienes cuenta?</span>
                             <a class="font-medium no-underline ml-9 text-blue-500 cursor-pointer">Créala ya!</a>
                         </div>
-                        <p:messages showDetail="true" closable="true">
-                            <p:autoUpdate />
-                        </p:messages>
                         <div>
                             <label for="email1" class="block text-900 font-medium mb-2">Correo electrónico</label>
                             <p:inputText id="email" styleClass="w-full mb-3" placeholder="correo@dominio.com" value="#{loginView.usuario}" required="true"/>
@@ -47,6 +44,9 @@
                             <p:commandButton value="Ingresa" icon="pi pi-user" styleClass="w-full" action="#{loginView.validarProveedor()}" update="divLogin"/>
                         </div>
                     </div>
+                    <p:messages showDetail="true" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
                 </div>
             </div>
 

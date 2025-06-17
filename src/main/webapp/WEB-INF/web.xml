@@ -122,7 +122,7 @@
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
     
-     <servlet>
+    <servlet>
         <servlet-name>DynamicImageServlet</servlet-name>
         <servlet-class>sv.com.jsoft.efactmh.servlet.DynamicImageServlet</servlet-class>
     </servlet>
@@ -209,6 +209,10 @@
     <mime-mapping>
         <extension>svg#fontawesomeregular</extension>
         <mime-type>image/svg+xml</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>wasm</extension>
+        <mime-type>application/wasm</mime-type>
     </mime-mapping>
     <error-page>
         <error-code>403</error-code>

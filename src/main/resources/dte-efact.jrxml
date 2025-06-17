@@ -121,9 +121,6 @@ order by df.id_detalle_factura asc]]>
 		</variable>
 	</subDataset>
 	<parameter name="PID_FACTURA" class="java.lang.Long"/>
-	<parameter name="P_QR" class="java.lang.String">
-		<defaultValueExpression><![CDATA["https://admin.factura.gob.sv/consultaPublica?ambiente={0}&codGen={1}&fechaEmi={2}"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="P_PATH_IMG" class="java.lang.String">
 		<defaultValueExpression><![CDATA["/home/msanchez/opt/mh/images/logos/logo-dte.jpg"]]></defaultValueExpression>
 	</parameter>
@@ -172,10 +169,12 @@ order by df.id_detalle_factura asc]]>
     	WHEN f.retencion_isr = 1 THEN 0.01
     	ELSE 0.1
   	END) ,2) isr_retenido,
-	sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2) - round(sum(df.cantidad * df.precio_unitario) * 0.1,2) total 
+	sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2) - round(sum(df.cantidad * df.precio_unitario) * 0.1,2) total ,
+	concat('https://admin.factura.gob.sv/consultaPublica?ambiente=',f.ambiente,'&codGen=',f.codigo_generacion,'&fechaEmi=', TO_CHAR(bm.fh_procesamiento,'yyyy-mm-dd')) qr
 from 
 	contribuyente c 
 	inner join factura f on c.id_contribuyente = f.id_contribuyente
+	inner join bitacora_mh bm on f.id_factura = bm.id_factura 
 	inner join detalle_factura df on f.id_factura = df.id_factura 
 	inner join cat_002_tipo_documentos ctd on ctd.codigo_dte = f.codigo_dte
 	inner join cat_003_modelo_facturacion cmf on f.codigo_facturacion = cmf.codigo_facturacion
@@ -217,7 +216,9 @@ group by
 	vw.recep_correo,
 	vw.id_cliente,
 	f.retencion_isr,
-	f.codigo_dte]]>
+	f.codigo_dte,
+	f.ambiente,
+	bm.fh_procesamiento]]>
 	</queryString>
 	<field name="nombre" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
@@ -374,6 +375,10 @@ group by
 		<property name="com.jaspersoft.studio.field.name" value="total"/>
 		<property name="com.jaspersoft.studio.field.label" value="total"/>
 	</field>
+	<field name="qr" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="qr"/>
+		<property name="com.jaspersoft.studio.field.label" value="qr"/>
+	</field>
 	<background>
 		<band height="752" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -441,7 +446,7 @@ group by
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<jr:codeExpression><![CDATA[$P{P_QR}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{qr}]]></jr:codeExpression>
 				</jr:QRCode>
 			</componentElement>
 			<image>

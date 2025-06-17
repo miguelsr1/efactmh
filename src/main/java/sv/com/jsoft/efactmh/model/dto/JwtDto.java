@@ -1,5 +1,6 @@
 package sv.com.jsoft.efactmh.model.dto;
 
+import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Data;
  * @author migue
  */
 @Data
-public class JwtDto {
+public class JwtDto implements Serializable {
 
     private String accessToken;
     private int expiresIn;

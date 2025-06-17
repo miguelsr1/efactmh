@@ -1,7 +1,12 @@
 package sv.com.jsoft.efactmh.view;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -13,7 +18,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DialogFrameworkOptions;
+import org.primefaces.model.StreamedContent;
 import sv.com.jsoft.efactmh.model.ItemDto;
 import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
 import sv.com.jsoft.efactmh.model.dto.DtesResponse;
@@ -50,6 +57,8 @@ public class DtesView implements Serializable {
     SessionService sessionService;
     @Inject
     InvalidateService invalidateService;
+
+    private StreamedContent media;
 
     @PostConstruct
     public void init() {
@@ -100,5 +109,44 @@ public class DtesView implements Serializable {
 
     public void onDteInvalidate(SelectEvent event) {
         findDtes();
+    }
+
+    public void viewPdf(DtesResponse dte) {
+        idFactura = dte.getIdFactura();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("jwt", sessionService.getToken());
+        PrimeFaces.current().ajax().update("panelPrint");
+    }
+
+    public void createPdf(DtesResponse dte) {
+        idFactura = dte.getIdFactura();
+
+        ResponseRestApi rest = RestUtil.builder()
+                .clazz(String.class)
+                .endpoint("/api/secured/dte/report/pdf/" + idFactura)
+                .jwtDto(sessionService.getToken())
+                .build()
+                .callGetOneAuth();
+
+        if (rest.getCodeHttp() == 200) {
+            String pdfBase64 = rest.getBody().toString();
+            JsonObject jsonPdf = new Gson().fromJson(pdfBase64, JsonObject.class);
+            byte[] byteRpt = Base64.getDecoder().decode(jsonPdf.get("pdf").getAsString());
+            if (byteRpt != null) {
+
+                InputStream stream = new ByteArrayInputStream(byteRpt);
+
+                media = DefaultStreamedContent.builder()
+                        .name("documento.pdf")
+                        .contentType("application/pdf")
+                        .stream(() -> stream)
+                        .build();
+                PrimeFaces.current().ajax().update("panelPrint");
+            }
+        }
+
+    }
+
+    public StreamedContent getMedia() {
+        return media;
     }
 }

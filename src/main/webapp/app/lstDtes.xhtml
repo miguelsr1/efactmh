@@ -4,6 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="head">
@@ -38,7 +39,7 @@
                 letter-spacing: 0.3px;
                 width: 150px !important;
             }
-            
+
             iframe{
                 width: 700px !important;
                 height: 720px !important;
@@ -93,9 +94,7 @@
                     <f:facet name="header">
                         <div class="flex justify-content-between align-items-center">
                             <i class="pi pi-send"></i>
-
                             <div>
-
                             </div>
                         </div>
                     </f:facet>
@@ -120,12 +119,12 @@
                     </p:column>
                     <p:column headerText="Estado" style="text-align: center" width="150">
                         <span style="display: inline-block" class="style-estado #{dte.estado eq 0 ? 'dte-no-recibido' : 
-                                                    (dte.estado eq 1 ? 'dte-recibido' : 
-                                                    (dte.estado eq 2 ? 'dte-rechazado' :
-                                                    (dte.estado eq 3 ? 'dte-anulado' : 'dte-recibido-observado')))}">#{dte.estadoDescripcion}</span>
+                                                                                  (dte.estado eq 1 ? 'dte-recibido' : 
+                                                                                  (dte.estado eq 2 ? 'dte-rechazado' :
+                                                                                  (dte.estado eq 3 ? 'dte-anulado' : 'dte-recibido-observado')))}">#{dte.estadoDescripcion}</span>
                     </p:column>
                     <p:column headerText="Operaciones" style="text-align: center" >
-                        <p:commandButton icon="pi pi-print" styleClass="mr-2" />
+                        <p:commandButton icon="pi pi-print" styleClass="mr-2" action="#{dtesView.createPdf(dte)}" oncomplete="PF('dlgViewPdf').show()" />
                         <p:commandButton icon="pi pi-ban" styleClass="mr-2 ui-button-secondary" disabled="#{dte.estado ne 1 and dte.estado ne 4}"
                                          action="#{dtesView.showDlgDetToInvalidate}">
                             <p:ajax event="dialogReturn" listener="#{dtesView.onDteInvalidate}" update="tblDtes"/>
@@ -138,5 +137,20 @@
                 </p:dataTable>
             </div>
         </h:form>
+
+        <p:dialog id="dlgViewPdf" widgetVar="dlgViewPdf" responsive="true"
+                  appendTo="@(body)" resizable="false" modal="true"
+                  style="margin-bottom:0;" closeOnEscape="true"
+                  header="REPORTE FACTURA ELECTRÓNICA" position="center"
+                  closable="true">            
+            <h:form prependId="false">
+                <p:hotkey bind="esc" handler="PF('dlgViewPdf').hide();"/>
+                <p:outputPanel id="panelPrint" deferred="true">
+                    <!--pe:documentViewer style="width: 1000px !important" height="500" zoom="page-width" page="1" 
+                                       cache="false" locale="es" url="/viewReport?idFactura={dtesView.idFactura}" / -->
+                    <p:media value="#{dtesView.media}" width="800" player="pdf"/>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>
