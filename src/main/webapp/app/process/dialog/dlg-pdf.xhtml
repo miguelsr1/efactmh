@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+
+        <title>Preview PDF - DTE</title>
+
+        <h:outputScript name="js/prism.js" library="paradise-layout"/>
+        <h:outputStylesheet name="det-factura.css" library="css" />
+        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+
+        <style>
+            h6 {
+                font-size: 1rem;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                margin: 1.5rem 0 0.5rem 0;
+                font-family: inherit;
+                font-weight: 500;
+                line-height: 1.2;
+                color: inherit;
+            }
+            h6 {
+                display: block;
+                font-weight: bold;
+                unicode-bidi: isolate;
+            }
+            body .ui-widget {
+                font-family: "Roboto", "Helvetica Neue", sans-serif;
+                font-size: 1rem;
+                text-decoration: none;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <h:form prependId="false">
+            <p:outputPanel id="panelPrint">
+                <p:media value="/viewReport/" width="900" height="700" player="pdf"/>
+            </p:outputPanel>
+        </h:form>
+    </h:body>
+</html>

@@ -251,7 +251,7 @@ public class InvoceView implements Serializable {
                 return BigDecimal.ZERO;
             case "03":
                 if (aplicaRetencionIsr) {
-                    BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(10));
+                    BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(100));
                     return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas().setScale(2, RoundingMode.HALF_UP);
                 } else {
                     return BigDecimal.ZERO;

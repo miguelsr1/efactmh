@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Base64;
-import javax.faces.context.FacesContext;
 import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -21,9 +20,9 @@ public class JasperReportServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
-            String idFactura = request.getParameter("idFactura");
-            
+            Long idFactura = (Long) request.getSession().getAttribute("idFactura");
             JwtDto jwt = (JwtDto) request.getSession().getAttribute("jwt");
+            
             ResponseRestApi rest = RestUtil.builder()
                     .clazz(String.class)
                     .endpoint("/api/secured/dte/report/pdf/" + idFactura)

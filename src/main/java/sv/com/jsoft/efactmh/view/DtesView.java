@@ -58,8 +58,6 @@ public class DtesView implements Serializable {
     @Inject
     InvalidateService invalidateService;
 
-    private StreamedContent media;
-
     @PostConstruct
     public void init() {
         lstDtes = new ArrayList<>();
@@ -95,8 +93,10 @@ public class DtesView implements Serializable {
                     .modal(true)
                     .width("700")
                     .build();
-            PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("dteInv", dte);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoDte", codigoDte);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
+            PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
         } else {
             MessageUtil.builder()
                     .severity(FacesMessage.SEVERITY_WARN)
@@ -118,35 +118,18 @@ public class DtesView implements Serializable {
     }
 
     public void createPdf(DtesResponse dte) {
-        idFactura = dte.getIdFactura();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", dte.getIdFactura());
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("jwt", sessionService.getToken());
 
-        ResponseRestApi rest = RestUtil.builder()
-                .clazz(String.class)
-                .endpoint("/api/secured/dte/report/pdf/" + idFactura)
-                .jwtDto(sessionService.getToken())
-                .build()
-                .callGetOneAuth();
+        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+                .resizable(false)
+                .draggable(false)
+                .dynamic(true)
+                .responsive(true)
+                .width("800")
+                .modal(false)
+                .build();
 
-        if (rest.getCodeHttp() == 200) {
-            String pdfBase64 = rest.getBody().toString();
-            JsonObject jsonPdf = new Gson().fromJson(pdfBase64, JsonObject.class);
-            byte[] byteRpt = Base64.getDecoder().decode(jsonPdf.get("pdf").getAsString());
-            if (byteRpt != null) {
-
-                InputStream stream = new ByteArrayInputStream(byteRpt);
-
-                media = DefaultStreamedContent.builder()
-                        .name("documento.pdf")
-                        .contentType("application/pdf")
-                        .stream(() -> stream)
-                        .build();
-                PrimeFaces.current().ajax().update("panelPrint");
-            }
-        }
-
-    }
-
-    public StreamedContent getMedia() {
-        return media;
+        PrimeFaces.current().dialog().openDynamic("process/dialog/dlg-pdf", options, null);
     }
 }

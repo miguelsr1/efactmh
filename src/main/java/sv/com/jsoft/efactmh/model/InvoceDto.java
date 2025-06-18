@@ -26,6 +26,7 @@ public class InvoceDto implements Serializable, EntityPk {
 
     public InvoceDto() {
         detailInvoce = new ArrayList<>();
+        retencionIsr = 0;
     }
 
     @Override

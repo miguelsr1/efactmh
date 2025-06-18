@@ -16,9 +16,9 @@ import sv.com.jsoft.efactmh.model.dto.InvalidateRequest;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 import sv.com.jsoft.efactmh.services.InvalidateService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ERROR;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_INFO;
-import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.view.SessionView;
@@ -31,7 +31,7 @@ import sv.com.jsoft.efactmh.view.SessionView;
 @ViewScoped
 @Slf4j
 public class DlgInvalidarDte implements Serializable {
-
+    
     private Long idFactura;
     @Getter
     private DteToInvalidate dte;
@@ -63,29 +63,35 @@ public class DlgInvalidarDte implements Serializable {
     @Setter
     private String dteR;
     private String codigoDte;
-    private String codigoGeneracion;
-
     @Inject
     SessionService sessionService;
     @Inject
     InvalidateService invalidateService;
     @Inject
     SessionView sessionView;
-
+    
     @PostConstruct
     public void init() {
         dte = (DteToInvalidate) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("dteInv");
+        idFactura = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idFactura");
+        codigoDte = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("codigoDte");
+        
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("dteInv");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idFactura");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("codigoDte");
     }
-
+    
     public void closeDgl() {
         PrimeFaces.current().dialog().closeDynamic(null);
     }
-
+    
     public void sendDteInvalidate() {
+        if (tipoInvalidacion != 2 && !validarDteR()) {
+            return;
+        }
         //enviar dte a invalidar
         InvalidateRequest request = new InvalidateRequest();
-
+        
         request.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
         request.setIdPuntoVenta(sessionView.getIdPuntoVenta() == null ? null : Long.valueOf(sessionView.getIdPuntoVenta()));
         request.setIdFactura(idFactura);
@@ -97,11 +103,12 @@ public class DlgInvalidarDte implements Serializable {
         request.setTipoAnulacion(tipoInvalidacion);
         request.setTipoDocResponsable(tipoDocResponsable);
         request.setTipoDocSolicita(tipoDocSolicitante);
-
+        request.setCodigoGeneracionR(tipoInvalidacion != 2 ? dteR : null);
+        
         ResponseRestApi response = invalidateService.createInvalidate(request, sessionService.getToken());
-
+        
         PrimeFaces.current().dialog().closeDynamic(null);
-
+        
         switch (response.getCodeHttp()) {
             case 200:
                 MessageUtil.builder()
@@ -120,5 +127,23 @@ public class DlgInvalidarDte implements Serializable {
                         .showMessage();
                 break;
         }
+    }
+    
+    public void findDteR() {
+        validarDteR();
+    }
+    
+    private Boolean validarDteR() {
+        ResponseDto resposeDto = invalidateService.findDteToInvalidateByReplace(codigoDte, dteR, sessionService.getToken());
+        if (resposeDto.getStatusCode() == 1) {
+            MessageUtil.builder()
+                    .severity(FacesMessage.SEVERITY_WARN)
+                    .title(MSG_ALERT)
+                    .message("EL DTE A REEMPLAZAR NO CUMPLE CON LOS TIEMPOS DE INVALIDACION O NO ES DEL MISMO TIPO DE DTE")
+                    .build()
+                    .showMessage();
+            return false;
+        }
+        return true;
     }
 }

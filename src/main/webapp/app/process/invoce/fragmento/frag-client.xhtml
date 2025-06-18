@@ -38,8 +38,8 @@
                     <p:outputLabel for="cboIsr" styleClass="col-12 mb-2 md:col-2 mb-md-0">Porcentaje retención</p:outputLabel>
                     <div class="col-12 md:col-4">
                         <p:selectOneMenu id="cboIsr" value="#{invoceView.invoce.retencionIsr}">
-                            <f:selectItem itemValue="1" itemLabel="1% ISR" />
-                            <f:selectItem itemValue="10" itemLabel="10% ISR" />
+                            <f:selectItem itemValue="1" itemLabel="1%" />
+                            <f:selectItem itemValue="10" itemLabel="10%" />
                             <link href="../../../../resources/css/custom.css" rel="stylesheet" type="text/css"/>
                             <p:ajax process="@this,cboIsr" />
                         </p:selectOneMenu>

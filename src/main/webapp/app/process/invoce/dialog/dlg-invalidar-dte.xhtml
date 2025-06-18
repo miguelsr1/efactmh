@@ -24,7 +24,7 @@
         <style>
             body .ui-card .ui-card-title {
                 font-size: 1.2rem;
-                font-weight: 700;
+                font-weight: 800;
                 margin-bottom: 0.5rem;
             }
         </style>            
@@ -71,9 +71,11 @@
                                 <p:ajax update="dvInvalidateDte" />
                             </p:selectOneMenu>
                         </div>
-                        <div class="field col-12 md:col-6" style="display: #{dlgInvalidarDte.tipoInvalidacion eq 1 ? 'block':'none'}">
+                        <div class="field col-12 md:col-6" style="display: #{dlgInvalidarDte.tipoInvalidacion eq 2 ? 'none':'block'}">
                             <p:outputLabel for="txtDteR" value="Código generación a reemplazar" styleClass="mr-3"/>
-                            <p:inputText id="txtDteR" value="#{dlgInvalidarDte.dteR}" />
+                            <p:inputText id="txtDteR" value="#{dlgInvalidarDte.dteR}">
+                                <p:ajax event="blur" listener="#{dlgInvalidarDte.findDteR()}" />
+                            </p:inputText>
                         </div>
                         <div class="field col-12" >
                             <p:outputLabel for="txtMotivo" value="Motivo invalidación"/>
