@@ -1,12 +1,7 @@
 package sv.com.jsoft.efactmh.view;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -18,9 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DialogFrameworkOptions;
-import org.primefaces.model.StreamedContent;
 import sv.com.jsoft.efactmh.model.ItemDto;
 import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
 import sv.com.jsoft.efactmh.model.dto.DtesResponse;

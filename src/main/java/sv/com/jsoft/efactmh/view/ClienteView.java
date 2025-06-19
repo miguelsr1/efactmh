@@ -156,7 +156,7 @@ public class ClienteView implements Serializable {
             pn.setTipoDocumento(1);
             pn.setDepartamento(codigoDepa);
             pn.setActivo(true);
-
+            
             if (edit) {
                 codeResponse = RestUtil
                         .builder()
