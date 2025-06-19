@@ -29,7 +29,7 @@
         </div>
         <div class="field col-12 md:col-3">
             <p:selectBooleanCheckbox itemLabel="INSCRITO IVA" value="#{clienteView.inscritoIva}" disabled="#{clienteView.disabled}" style="margin-bottom: 0.2rem;">
-                <p:ajax update="txtNrcPn" />
+                <p:ajax update="txtNrcPn txtCodActPn" />
             </p:selectBooleanCheckbox>
             <p:inputText id="txtNrcPn" value="#{clienteView.pn.nrc}" placeholder="N.R.C." maxlength="11" disabled="#{clienteView.disabled or !clienteView.inscritoIva}"
                          required="#{clienteView.inscritoIva}" class="w-full" />

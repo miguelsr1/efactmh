@@ -84,6 +84,7 @@ public class ClienteView implements Serializable {
         pn = new PerNaturalRequest();
         pn.setPersoneria("N");
         lstMunicipio = new ArrayList<>();
+        codigoDepa = "06";
 
         ResponseRestApi response = RestUtil
                 .builder()
@@ -98,6 +99,7 @@ public class ClienteView implements Serializable {
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="getter-setter">
     public ClienteDto getClienteDto() {
         return clienteDto;
     }
@@ -133,6 +135,11 @@ public class ClienteView implements Serializable {
     public void setTipoDoc(int tipoDoc) {
         this.tipoDoc = tipoDoc;
     }
+    
+    public List<MunicipioDto> getLstMunicipio() {
+        return ubicacionService.findMunicipioByDepa(codigoDepa);
+    }
+    // </editor-fold>
 
     public void nuevo() {
         pn = new PerNaturalRequest();
@@ -156,7 +163,7 @@ public class ClienteView implements Serializable {
             pn.setTipoDocumento(1);
             pn.setDepartamento(codigoDepa);
             pn.setActivo(true);
-            
+
             if (edit) {
                 codeResponse = RestUtil
                         .builder()
@@ -165,16 +172,17 @@ public class ClienteView implements Serializable {
                         .endpoint("/api/secured/client/pn/")
                         .build()
                         .callUpdClient(clienteDto.getIdCliente(), pn);
-            }else{
+            } else {
                 codeResponse = RestUtil
                         .builder()
-                        .clazz(ClienteDto.class)
+                        .clazz(String.class)
                         .jwtDto(sessionService.getToken())
+                        .body(pn)
                         .endpoint("/api/secured/client/pn/")
                         .build()
-                        .callUpdClient(clienteDto.getIdCliente(), pn);
+                        .callPostAuth().getCodeHttp();
             }
-        } else {
+        } else if (edit) {
             pj.setDepartamentoEmp(codigoDepa);
             pj.setActivo(true);
             codeResponse = RestUtil
@@ -184,25 +192,22 @@ public class ClienteView implements Serializable {
                     .endpoint("/api/secured/client/pj/")
                     .build()
                     .callUpdClient(clienteDto.getIdCliente(), pj);
+        } else {
+            codeResponse = RestUtil
+                    .builder()
+                    .clazz(String.class)
+                    .jwtDto(sessionService.getToken())
+                    .body(pj)
+                    .endpoint("/api/secured/client/pj/")
+                    .build()
+                    .callPostAuth().getCodeHttp();
         }
 
         JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
 
-        pn = new PerNaturalRequest();
-        pj = new PerJuridicaRequest();
-        clienteDto = null;
-        duiContacto = "";
-        disabled = true;
-        inscritoIva = false;
-        edit = false;
-        codigoDepa = "06";
-        tipoPersoneria = 1;
+        inicializar();
 
         PrimeFaces.current().ajax().update("tblCli");
-    }
-
-    public List<MunicipioDto> getLstMunicipio() {
-        return ubicacionService.findMunicipioByDepa(codigoDepa);
     }
 
     public void onRowSelect(SelectEvent<ClienteDto> event) {
@@ -212,8 +217,9 @@ public class ClienteView implements Serializable {
         idMuni = clienteDto.getIdMunicipio();
         MunicipioDto m = (MunicipioDto) RestUtil.builder()
                 .clazz(MunicipioDto.class)
+                .jwtDto(sessionService.getToken())
                 .endpoint("/api/catalogo/municipio/" + idMuni)
-                .build().callGetById();
+                .build().callGetOneAuth().getBody();
         codigoDepa = m.getCodDepartamento();
 
         ResponseRestApi response = RestUtil.builder()
