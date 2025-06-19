@@ -53,7 +53,7 @@ public class CatalogoService implements Serializable {
         loadItems();
     }
     
-    private void loadItems(){
+    public void loadItems(){
         lstProducto = productoService.findAll(securityService.getToken());
     }
 

@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="field col-12" >
                                         <p:selectBooleanCheckbox itemLabel="EXENTO" value="#{productoView.producto.exento}" disabled="#{productoView.disabled}" style="margin-bottom: 0.2rem;"/>
-                                    </div>lstTipoItems
+                                    </div>
                                     <div class="field col-12">
                                         <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" 
                                                          update="dvDatos tblPro" style="width: 10rem" styleClass="mr-2"/>
@@ -98,7 +98,7 @@
 
                     <p:ajax event="rowSelect" update="dvDatos" listener="#{productoView.onRowSelect}"/>
                     <p:column headerText="Código">
-                        <p:outputLabel value="#{pro.codigoItem}"/>
+                        <p:outputLabel value="#{pro.codigoProducto}"/>
                     </p:column>
                     <p:column headerText="Nombre">
                         <p:outputLabel value="#{pro.nombre}"/>

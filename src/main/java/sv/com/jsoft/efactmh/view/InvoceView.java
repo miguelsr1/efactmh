@@ -371,6 +371,7 @@ public class InvoceView implements Serializable {
                     break;
                 case 2:
                     activeStep++;
+                    detPago.setMonto(getTotal());
                     break;
                 default:
                     break;

@@ -44,6 +44,8 @@ public class DlgDetFactura implements Serializable {
         detFactura = new DetalleFacturaDto();
         detFactura.setCodigoItem("01");
         detFactura.setCodigoUnidad("59");
+        
+        catalogoService.loadItems();
     }
     
     public void addItem() {
