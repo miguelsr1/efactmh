@@ -13,7 +13,7 @@
                     <f:selectItem itemLabel="SELECCIONE UN DTE" noSelectionOption="true"/>
                     <f:selectItem itemValue="01" itemLabel="FACTURA" />
                     <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL" />
-                    <p:ajax process="@this,cboDte, cboIsr" update="dvCliente"/>
+                    <p:ajax process="@this,cboDte" update="dvCliente"/>
                 </p:selectOneMenu>
             </div>
             <div class="field col-12 md:col-3" >
@@ -29,22 +29,10 @@
                 <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}" required="true"/>
             </div>
             <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
-                <p:selectBooleanCheckbox itemLabel="Retención ISR" value="#{invoceView.aplicaRetencionIsr}">
-                    <p:ajax update="dvCliente" />
-                </p:selectBooleanCheckbox>
+                <p:selectBooleanCheckbox itemLabel="Retención IVA" value="#{invoceView.invoce.aplicaIvaRetenido}" />
             </div>
-            <div class="col-10">
-                <div class="field grid" style="display: #{invoceView.aplicaRetencionIsr ? 'flex': 'none'}; margin-top: 1rem">
-                    <p:outputLabel for="cboIsr" styleClass="col-12 mb-2 md:col-2 mb-md-0">Porcentaje retención</p:outputLabel>
-                    <div class="col-12 md:col-4">
-                        <p:selectOneMenu id="cboIsr" value="#{invoceView.invoce.retencionIsr}">
-                            <f:selectItem itemValue="1" itemLabel="1%" />
-                            <f:selectItem itemValue="10" itemLabel="10%" />
-                            <link href="../../../../resources/css/custom.css" rel="stylesheet" type="text/css"/>
-                            <p:ajax process="@this,cboIsr" />
-                        </p:selectOneMenu>
-                    </div>
-                </div>
+            <div class="col-10" style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
+                <p:selectBooleanCheckbox itemLabel="Retención ISR" value="#{invoceView.invoce.aplicaRentaRetenido}" />
             </div>
         </div>
 

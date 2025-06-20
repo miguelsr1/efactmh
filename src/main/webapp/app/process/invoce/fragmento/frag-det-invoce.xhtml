@@ -19,7 +19,7 @@
                         <p:commandButton action="#{invoceView.showDlgDetFactura()}"
                                          process="@this" icon="pi pi-plus"
                                          validateClient="true" styleClass="ui-button-success">
-                            <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSumas,lblIva,lblSubTotal,lblIvaRet,lblTotal"/>
+                            <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSumas,lblIva,lblSubTotal,lblIvaRet,lblRentaRet,lblTotal"/>
                         </p:commandButton>
                     </div>
                 </div>
@@ -96,9 +96,16 @@
                             </div>
 
 
-                            <div class="invoice-label">IVA Retenido(#{invoceView.invoce.retencionIsr}%)</div>
+                            <div class="invoice-label">IVA Retenido(1%)</div>
                             <div class="invoice-value">$ 
                                 <p:outputLabel id="lblIvaRet" value="#{invoceView.ivaRetenido}">
+                                    <f:convertNumber pattern="#,##0.00"/>
+                                </p:outputLabel>
+                            </div>
+                            
+                            <div class="invoice-label">Renta Retenido(10%)</div>
+                            <div class="invoice-value">$ 
+                                <p:outputLabel id="lblRentaRet" value="#{invoceView.rentaRetenido}">
                                     <f:convertNumber pattern="#,##0.00"/>
                                 </p:outputLabel>
                             </div>

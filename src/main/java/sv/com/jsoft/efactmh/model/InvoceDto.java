@@ -20,13 +20,17 @@ public class InvoceDto implements Serializable, EntityPk {
     private Long idPuntoVenta;
     private String condicionOperacion;
     private String codigoDte;
-    private int retencionIsr;
+    //private int retencionIsr;
+    private boolean aplicaIvaRetenido;
+    private boolean aplicaRentaRetenido;
     private List<DetalleFacturaDto> detailInvoce;
     private List<DetallePago> detailPayments;
 
     public InvoceDto() {
         detailInvoce = new ArrayList<>();
-        retencionIsr = 0;
+        //retencionIsr = 0;
+        aplicaIvaRetenido = false;
+        aplicaRentaRetenido = false;
     }
 
     @Override

@@ -55,9 +55,9 @@ public class InvoceView implements Serializable {
     @Getter
     private boolean existeCliente = false;
     private boolean makeInvoce = false;
-    @Getter
+    /*@Getter
     @Setter
-    private boolean aplicaRetencionIsr = false;
+    private boolean aplicaRetencionIsr = false;*/
 
     private int var = 1;
     @Getter
@@ -250,9 +250,25 @@ public class InvoceView implements Serializable {
             case "01":
                 return BigDecimal.ZERO;
             case "03":
-                if (aplicaRetencionIsr) {
-                    BigDecimal porcentajeIsr = BigDecimal.valueOf(invoceDto.getRetencionIsr()).divide(BigDecimal.valueOf(100));
-                    return aplicaRetencionIsr ? getSumas().multiply(porcentajeIsr) : getSumas().setScale(2, RoundingMode.HALF_UP);
+                if (invoceDto.isAplicaIvaRetenido()) {
+                    BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
+                    return invoceDto.isAplicaIvaRetenido() ? getSumas().multiply(porcentajeIva) : getSumas().setScale(2, RoundingMode.HALF_UP);
+                } else {
+                    return BigDecimal.ZERO;
+                }
+        }
+
+        return BigDecimal.ZERO;
+    }
+    
+    public BigDecimal getRentaRetenido() {
+        switch (invoceDto.getCodigoDte()) {
+            case "01":
+                return BigDecimal.ZERO;
+            case "03":
+                if (invoceDto.isAplicaRentaRetenido()) {
+                    BigDecimal porcentajeIsr = BigDecimal.valueOf(10).divide(BigDecimal.valueOf(100));
+                    return invoceDto.isAplicaRentaRetenido() ? getSumas().multiply(porcentajeIsr) : getSumas().setScale(2, RoundingMode.HALF_UP);
                 } else {
                     return BigDecimal.ZERO;
                 }
@@ -289,7 +305,10 @@ public class InvoceView implements Serializable {
         }
 
         return getSumas()
-                .add(getIva()).add(getIvaRetenido().negate()).setScale(2, RoundingMode.HALF_UP);
+                .add(getIva())
+                .add(getIvaRetenido().negate())
+                .add(getRentaRetenido().negate())
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     public void showDlgDetFactura() {
