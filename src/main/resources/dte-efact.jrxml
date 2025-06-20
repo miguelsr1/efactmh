@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dte-efact" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6bbe36ef-b3cb-422a-b8bc-725e29e80b35">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="post"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="151"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="843"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="efact.jrdax"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -162,14 +162,32 @@ order by df.id_detalle_factura asc]]>
     	ELSE 0.1
   	END
 	) iva,
-	sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2) sub_total,
+	(
+	CASE 
+    	WHEN f.codigo_dte = '01' THEN 0
+    	WHEN f.codigo_dte  = '03' THEN round(sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2),2)
+    	ELSE 0.1
+  	END
+	) sub_total,
 	round(sum(df.cantidad * df.precio_unitario) *(
 	CASE 
     	WHEN f.retencion_isr = 0 THEN 0
     	WHEN f.retencion_isr = 1 THEN 0.01
     	ELSE 0.1
   	END) ,2) isr_retenido,
-	sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2) - round(sum(df.cantidad * df.precio_unitario) * 0.1,2) total ,
+	(
+	CASE 
+    	WHEN f.codigo_dte = '01' THEN round(sum(df.cantidad * df.precio_unitario),2)
+    	WHEN f.codigo_dte  = '03' THEN (round(sum(df.cantidad * df.precio_unitario) + (sum(df.cantidad * df.precio_unitario) * 0.13) - round(sum(df.cantidad * df.precio_unitario) *(
+	CASE 
+    	WHEN f.retencion_isr = 0 THEN 0
+    	WHEN f.retencion_isr = 1 THEN 0.01
+    	ELSE 0.1
+  	END) ,2) ,2)    			
+    	)
+    	ELSE 0.1
+  	END
+	) total ,
 	concat('https://admin.factura.gob.sv/consultaPublica?ambiente=',f.ambiente,'&codGen=',f.codigo_generacion,'&fechaEmi=', TO_CHAR(bm.fh_procesamiento,'yyyy-mm-dd')) qr
 from 
 	contribuyente c 
@@ -382,10 +400,6 @@ group by
 	<background>
 		<band height="752" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="3" y="0" width="569" height="752" uuid="e673dce9-0bf9-4b15-b512-25e5a4baefc4"/>
-				<imageExpression><![CDATA["/home/msanchez/Imágenes/fondo3.png"]]></imageExpression>
-			</image>
 		</band>
 	</background>
 	<title>
@@ -794,7 +808,7 @@ group by
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
-				<text><![CDATA[IVA retenido]]></text>
+				<text><![CDATA[IVA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="410" y="43" width="100" height="10" uuid="bcca626c-1c87-4816-ae48-b0659759c400"/>
@@ -843,7 +857,7 @@ group by
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
-				<text><![CDATA[ISR retenido]]></text>
+				<text><![CDATA[IVA retenido]]></text>
 			</staticText>
 			<textField pattern="$ #,##0.00">
 				<reportElement x="510" y="33" width="51" height="10" uuid="3f759c25-c1ac-4a4c-a5a4-32cbe659b561"/>
