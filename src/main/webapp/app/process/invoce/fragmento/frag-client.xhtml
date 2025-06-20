@@ -29,10 +29,14 @@
                 <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}" required="true"/>
             </div>
             <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
-                <p:selectBooleanCheckbox itemLabel="Retención IVA" value="#{invoceView.invoce.aplicaIvaRetenido}" />
+                <p:selectBooleanCheckbox id="bchIva" itemLabel="Retención IVA" value="#{invoceView.invoce.aplicaIvaRetenido}">
+                    <p:ajax process="bchIva" />
+                </p:selectBooleanCheckbox>
             </div>
             <div class="col-10" style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
-                <p:selectBooleanCheckbox itemLabel="Retención ISR" value="#{invoceView.invoce.aplicaRentaRetenido}" />
+                <p:selectBooleanCheckbox id="bchRenta" itemLabel="Retención ISR" value="#{invoceView.invoce.aplicaRentaRetenido}">
+                    <p:ajax process="bchRenta" />
+                </p:selectBooleanCheckbox>
             </div>
         </div>
 
