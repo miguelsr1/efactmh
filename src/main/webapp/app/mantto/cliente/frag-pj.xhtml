@@ -51,7 +51,10 @@
         </div>
         <div class="field col-12 md:col-4" >
             <p:outputLabel for="txtDir" value="Dirección"/>
-            <p:inputTextarea id="txtDir" value="#{clienteView.pj.direccionEmp}" disabled="#{clienteView.disabled}" class="w-full" required="true" rows="3"/>
+            <p:inputTextarea id="txtDir" counter="displayTxtDir" value="#{clienteView.pj.direccionEmp}" maxlength="200"
+                             counterTemplate="{0} caracteres restantes."
+                             disabled="#{clienteView.disabled}" class="w-full" required="true" rows="3"/>
+            <h:outputText id="displayTxtDir" class="block" />
         </div>
         
     </div>

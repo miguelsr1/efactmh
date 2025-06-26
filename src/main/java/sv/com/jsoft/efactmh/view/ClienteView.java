@@ -82,7 +82,6 @@ public class ClienteView implements Serializable {
         tipoPersoneria = 0;
         clienteDto = new ClienteDto();
         pn = new PerNaturalRequest();
-        pn.setPersoneria("N");
         lstMunicipio = new ArrayList<>();
         codigoDepa = "06";
 
@@ -135,7 +134,7 @@ public class ClienteView implements Serializable {
     public void setTipoDoc(int tipoDoc) {
         this.tipoDoc = tipoDoc;
     }
-    
+
     public List<MunicipioDto> getLstMunicipio() {
         return ubicacionService.findMunicipioByDepa(codigoDepa);
     }
@@ -160,6 +159,7 @@ public class ClienteView implements Serializable {
     public void guardar() {
         int codeResponse;
         if (tipoPersoneria == 1) {
+            pn.setDepartamento(codigoDepa);
             pn.setTipoDocumento(1);
             pn.setDepartamento(codigoDepa);
             pn.setActivo(true);
@@ -182,25 +182,29 @@ public class ClienteView implements Serializable {
                         .build()
                         .callPostAuth().getCodeHttp();
             }
-        } else if (edit) {
-            pj.setDepartamentoEmp(codigoDepa);
-            pj.setActivo(true);
-            codeResponse = RestUtil
-                    .builder()
-                    .clazz(ClienteDto.class)
-                    .jwtDto(sessionService.getToken())
-                    .endpoint("/api/secured/client/pj/")
-                    .build()
-                    .callUpdClient(clienteDto.getIdCliente(), pj);
         } else {
-            codeResponse = RestUtil
-                    .builder()
-                    .clazz(String.class)
-                    .jwtDto(sessionService.getToken())
-                    .body(pj)
-                    .endpoint("/api/secured/client/pj/")
-                    .build()
-                    .callPostAuth().getCodeHttp();
+            pj.setDepartamentoEmp(codigoDepa);
+            if (edit) {
+                pj.setDepartamentoEmp(codigoDepa);
+                pj.setActivo(true);
+                codeResponse = RestUtil
+                        .builder()
+                        .clazz(ClienteDto.class)
+                        .jwtDto(sessionService.getToken())
+                        .endpoint("/api/secured/client/pj/")
+                        .build()
+                        .callUpdClient(clienteDto.getIdCliente(), pj);
+            } else {
+
+                codeResponse = RestUtil
+                        .builder()
+                        .clazz(String.class)
+                        .jwtDto(sessionService.getToken())
+                        .body(pj)
+                        .endpoint("/api/secured/client/pj/")
+                        .build()
+                        .callPostAuth().getCodeHttp();
+            }
         }
 
         JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE));

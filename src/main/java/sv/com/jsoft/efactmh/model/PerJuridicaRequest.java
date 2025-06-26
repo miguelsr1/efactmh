@@ -22,4 +22,9 @@ public class PerJuridicaRequest implements Personeria, Serializable {
     private String departamentoEmp;
     private String municipioEmp;
     private String direccionEmp;
+
+    public PerJuridicaRequest() {
+        this.personeria = "J";
+        this.activo = true;
+    }
 }

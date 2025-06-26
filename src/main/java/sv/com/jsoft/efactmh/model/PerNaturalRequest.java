@@ -23,4 +23,11 @@ public class PerNaturalRequest implements Personeria, Serializable {
     private String departamento;
     private String municipio;
     private String direccion;
+
+    public PerNaturalRequest() {
+        this.personeria = "N";
+        this.activo = true;
+    }
+    
+    
 }
