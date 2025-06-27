@@ -13,7 +13,7 @@
             <div class="grid formgrid ui-fluid">
             </div>
         </div>
-        
+
         <div class="col-12">
             <div class="formgrid grid ui-fluid" jsf:id="divDatos">
                 <div class="field col-9">
@@ -70,6 +70,24 @@
                     <p:inputMask id="txtNrc" value="#{emisorView.emisor.nrc}" mask="999999-9" required="true" />
                 </div>
 
+                <p:separator />
+
+                <div class="field col-12" >
+                    <p:outputLabel for="txtnomRes" value="Nombre Responsable"/>
+                    <p:inputText id="txtnomRes" value="#{emisorView.emisor.nombreResponsable}" required="true" maxlength="100" />
+                </div>
+                <div class="field col-12" >
+                    <p:outputLabel for="txtTipoDocRes" value="Tipo Documento de Responsable"/>
+                    <p:selectOneMenu id="txtTipoDocRes" value="#{emisorView.emisor.tipoDocResponsable}" required="true">
+                        <f:selectItem noSelectionOption="true" itemLabel="" />
+                        <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemValue="#{doc.id}" itemLabel="#{doc.nombre}" />
+                    </p:selectOneMenu>
+                </div>
+                <div class="field col-12" >
+                    <p:outputLabel for="txtNumDocRes" value="Número de Documento de Responsable"/>
+                    <p:inputText id="txtNumDocRes" value="#{emisorView.emisor.numeroDocResponsable}" required="true" maxlength="25"/>
+                </div>
+
                 <div class="field col-12">
                     <p:commandButton value="Guardar" icon="pi pi-save" action="#{emisorView.guardar()}" update="dvDatos"  styleClass="mr-2"
                                      style="width: 10rem" process="@this,divDatos"/>
@@ -82,7 +100,7 @@
             </div>
         </div>
     </h:form>    
-    <p:panel visible="true">
+    <p:panel visible="false">
         <h:form prependId="false">
             <p:fileUpload id="pnUpd" auto="true" widgetVar="pnUpd" mode="simple" listener="#{uploadLogoView.handleFileUpload}"
                           skinSimple="true" allowTypes="/(\.|\/)(jpg)$/" chooseIcon="pi pi-pencil" process="@this"  />
