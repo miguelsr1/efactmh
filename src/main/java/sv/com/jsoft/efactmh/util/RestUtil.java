@@ -13,12 +13,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.faces.application.FacesMessage;
 import javax.ws.rs.core.MediaType;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import sv.com.jsoft.efactmh.adapter.LocalDateTimeAdapter;
 import sv.com.jsoft.efactmh.model.EntityPk;
 import sv.com.jsoft.efactmh.model.Personeria;
 import sv.com.jsoft.efactmh.model.dto.ErrorResponseDto;
@@ -37,7 +39,7 @@ public class RestUtil {
     private Class clazz;
     private JwtDto jwtDto;
     private Object body;
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
     private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
 

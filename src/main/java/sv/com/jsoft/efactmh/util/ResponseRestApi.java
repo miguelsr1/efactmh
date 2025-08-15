@@ -6,10 +6,12 @@ import lombok.Data;
 /**
  *
  * @author msanchez
+ * @param <T>
  */
 @Data
 @AllArgsConstructor
-public class ResponseRestApi {
+public class ResponseRestApi<T> {
+
     private int codeHttp;
-    private Object body;
+    private T body;
 }

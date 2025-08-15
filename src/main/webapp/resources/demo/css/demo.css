@@ -704,8 +704,9 @@ pre[class*=language-] code {
 .block-content > div {
   display: none;
 }
-.block-content > div.block-content-active {
+.container > div.block-content-active {
   display: block;
+  width: 1024px;
 }
 
 .block-section pre[class*=language-] {
