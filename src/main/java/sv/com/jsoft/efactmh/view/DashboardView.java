@@ -17,13 +17,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import software.xdev.chartjs.model.charts.BarChart;
+import software.xdev.chartjs.model.charts.LineChart;
 import software.xdev.chartjs.model.color.RGBAColor;
 import software.xdev.chartjs.model.data.BarData;
+import software.xdev.chartjs.model.data.LineData;
 import software.xdev.chartjs.model.dataset.BarDataset;
+import software.xdev.chartjs.model.dataset.LineDataset;
 import software.xdev.chartjs.model.enums.IndexAxis;
 import software.xdev.chartjs.model.options.BarOptions;
+import software.xdev.chartjs.model.options.LineOptions;
 import software.xdev.chartjs.model.options.Plugins;
 import software.xdev.chartjs.model.options.Title;
+import software.xdev.chartjs.model.options.elements.Fill;
 import software.xdev.chartjs.model.options.scale.Scales;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianScaleOptions;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianTickOptions;
@@ -49,7 +54,7 @@ public class DashboardView implements Serializable {
 
     private List<DashboardDto> lst;
     @Getter
-    private String barModel;
+    private String model;
 
     @PostConstruct
     public void init() {
@@ -69,7 +74,7 @@ public class DashboardView implements Serializable {
                     .showMessage();
         }
 
-        createBarModel();
+        createLineModel();
     }
 
     public Integer getTotalInvoces() {
@@ -99,21 +104,11 @@ public class DashboardView implements Serializable {
     }
 
     public void createBarModel() {
-
-        Map<LocalDate, BigDecimal> datos = flujoFacturadoUltimaSemana();
-
-        List<BigDecimal> montosOrdenados = datos.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey()) // ordenar por fecha (LocalDate)
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
-
-        Collection<Number> numeros = montosOrdenados.stream()
-                .map(monto -> (Number) monto) // conversión explícita (opcional, pero claro)
-                .collect(Collectors.toList());
+        Collection<Number> numeros = flujoFacturadoUltimaSemana();
 
         Collection<String> dias = obtenerNombresUltimos7Dias();
 
-        barModel = new BarChart()
+        model = new BarChart()
                 .setData(new BarData()
                         .addDataset(new BarDataset()
                                 .setData(numeros)
@@ -138,12 +133,39 @@ public class DashboardView implements Serializable {
                                         .setText("Facturado de últimos 7 días")))
                 ).toJson();
     }
+    
+    public void createLineModel() {
+        Collection<Number> numeros = flujoFacturadoUltimaSemana();
+        
+        Collection<String> dias = obtenerNombresUltimos7Dias();
+        
+        model = new LineChart()
+                .setData(new LineData()
+                .addDataset(new LineDataset()
+                        .setData(numeros)
+                        .setLabel("My First Dataset")
+                        .setBorderColor(new RGBAColor(34, 150, 243))
+                        .setLineTension(0.5f)
+                        .setBackgroundColor("GRADIENT")
+                        .setFill(new Fill<Boolean>(true)))
+                .setLabels(dias))
+                .setOptions(new LineOptions()
+                        .setResponsive(true)
+                        .setAnimation(true)
+                        .setMaintainAspectRatio(false)
+                        .setPlugins(new Plugins()
+                                .setTitle(new Title()
+                                        .setDisplay(true)
+                                        .setText("Line Chart Subtitle")))
+                ).toJson();
+    }
 
-    public Map<LocalDate, BigDecimal> flujoFacturadoUltimaSemana() {
+
+    public Collection<Number> flujoFacturadoUltimaSemana() {
         LocalDate hoy = LocalDate.now();
         LocalDate hace7dias = hoy.minusDays(6);
 
-        return lst.stream()
+        Map<LocalDate, BigDecimal> flujoPorDia = lst.stream()
                 .filter(dto -> dto.getFechaCreacion() != null)
                 .filter(dto -> {
                     LocalDate fecha = dto.getFechaCreacion().toLocalDate();
@@ -156,6 +178,12 @@ public class DashboardView implements Serializable {
                                 Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)
                         )
                 ));
+        
+        return flujoPorDia.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey()) // Ordena las entradas por la fecha (LocalDate).
+            .map(Map.Entry::getValue)           // Extrae solo el valor (el monto BigDecimal).
+            .map(monto -> (Number) monto)       // Convierte cada BigDecimal a Number.
+            .collect(Collectors.toList());
     }
 
     public Collection<String> obtenerNombresUltimos7Dias() {

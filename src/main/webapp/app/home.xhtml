@@ -65,7 +65,33 @@
                     </div>
                     <div class="col-12 lg:col-6">
                         <div class="surface-card shadow-2 border-round p-4">
-                            <p:chart value="#{dashboardView.barModel}" style="width: 100%; height: 500px;" />
+                            <p:chart id="lineChart" widgetVar="lineChart" value="#{dashboardView.model}" style="width: 100%; height: 500px;" />
+
+                            <h:outputScript>
+                                $(function() {
+                                // Esperar a que el chart esté renderizado
+                                const chart = PF('lineChart').chart;
+
+                                if (chart) {
+                                const ctx = chart.ctx;
+
+                                // Crear el degradado azul marino → transparente
+                                const gradient = ctx.createLinearGradient(0, 0, 0, chart.height);
+                                gradient.addColorStop(0, 'rgba(154, 212, 250, 0.6)');
+                                gradient.addColorStop(1, 'rgba(0, 0, 128, 0.0)');
+
+                                // Reemplazar backgroundColor si tiene el marcador "GRADIENT"
+                                chart.data.datasets.forEach(ds => {
+                                if (ds.backgroundColor === 'GRADIENT') {
+                                ds.backgroundColor = gradient;
+                                }
+                                });
+
+                                // Volver a dibujar el gráfico con el degradado aplicado
+                                chart.update();
+                                }
+                                });
+                            </h:outputScript>
                         </div>
                     </div>
                     <div class="col-12 lg:col-6">
