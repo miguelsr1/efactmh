@@ -17,11 +17,14 @@ public class ColorUtil {
         if (colorBackground.isEmpty()) {
             colorBackground = new HashMap<>();
 
-            colorBackground.put("01", new RGBAColor(255, 179, 186, 0.2)); // Rosa pastel
-            colorBackground.put("02", new RGBAColor(255, 223, 186, 0.2)); // Durazno pastel
-            colorBackground.put("03", new RGBAColor(255, 255, 186, 0.2)); // Amarillo pastel
-            colorBackground.put("04", new RGBAColor(186, 255, 201, 0.2)); // Verde menta
-            colorBackground.put("05", new RGBAColor(186, 225, 255, 0.2)); // Azul cielo
+            colorBackground.put("01", new RGBAColor(154, 208, 245, 0.9)); // azul - FE
+            colorBackground.put("03", new RGBAColor(165, 223, 223, 0.9)); // verde CCFE
+            //NOTAS: REMISION - CREDITO - DEBITO
+            colorBackground.put("04", new RGBAColor(228, 229, 231, 0.9)); // Verde menta
+            colorBackground.put("05", new RGBAColor(255, 230, 170, 0.9)); // Azul cielo
+            colorBackground.put("06", new RGBAColor(255, 223, 186, 0.9)); // 
+            
+            colorBackground.put("99", new RGBAColor(255, 177, 193, 0.9)); // 
         }
 
         return colorBackground;
@@ -31,14 +34,17 @@ public class ColorUtil {
         if (colorBorder.isEmpty()) {
             colorBorder = new HashMap<>();
 
-            colorBorder.put("01", new RGBAColor(255, 179, 186)); // Rosa pastel
-            colorBorder.put("02", new RGBAColor(255, 223, 186)); // Durazno pastel
-            colorBorder.put("03", new RGBAColor(255, 255, 186)); // Amarillo pastel
-            colorBorder.put("04", new RGBAColor(186, 255, 201)); // Verde menta
-            colorBorder.put("05", new RGBAColor(186, 225, 255)); // Azul cielo
+            colorBorder.put("01", new RGBAColor(154, 208, 245)); // Rosa pastel
+            colorBorder.put("03", new RGBAColor(165, 223, 223)); // Durazno pastel
+            //NOTAS: REMISION - CREDITO - DEBITO
+            colorBorder.put("04", new RGBAColor(228, 229, 231)); // Amarillo pastel
+            colorBorder.put("05", new RGBAColor(255, 230, 170)); // Verde menta
+            colorBorder.put("06", new RGBAColor(255, 223, 186)); // Azul cielo
+            
+            colorBorder.put("99", new RGBAColor(255, 177, 193)); // Azul cielo
         }
 
-        return colorBackground;
+        return colorBorder;
     }
 
     public static RGBAColor getColorBackgroundFromDte(String codigoDte) {

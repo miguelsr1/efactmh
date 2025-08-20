@@ -40,6 +40,8 @@ import software.xdev.chartjs.model.options.scale.cartesian.CartesianScaleOptions
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianTickOptions;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
+import sv.com.jsoft.efactmh.model.dto.InvoicedAmountsDto;
+import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.DashboardService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.ColorUtil;
@@ -56,15 +58,19 @@ import sv.com.jsoft.efactmh.util.ResponseRestApi;
 public class DashboardView implements Serializable {
 
     @Inject
+    CatalogoService catalogoService;
+    @Inject
     DashboardService dashboardService;
     @Inject
     SessionService securityService;
-
-    private List<DashboardDto> lst;
+    @Getter
+    private List<InvoicedAmountsDto> lstInvoiced = new ArrayList<>();
     @Getter
     private String model;
     @Getter
     private String barModel;
+    
+    private List<DashboardDto> lst;
     private Collection<String> dias = null;
 
     @PostConstruct
@@ -77,6 +83,16 @@ public class DashboardView implements Serializable {
         makeChartInvoce();
 
         loadDataInvoice7Days();
+        
+        loadInvoicedAmounts();
+    }
+    
+    private void loadInvoicedAmounts(){
+        ResponseRestApi<List<InvoicedAmountsDto>> response = dashboardService.getInvoicedAmounts(securityService.getToken());
+        
+        if (response.getCodeHttp() == 200) {
+            lstInvoiced = response.getBody();
+        }
     }
 
     private void loadDataInvoice7Days() {
@@ -101,6 +117,7 @@ public class DashboardView implements Serializable {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         BarData barData = new BarData();
+        
 
         for (String dte : codigosDte) {
             barData.addDataset(makeDateFromDte(dte, lstData));
@@ -145,20 +162,14 @@ public class DashboardView implements Serializable {
             BigDecimal monto = registroOpt.map(Invoice7DaysDto::getMonto).orElse(BigDecimal.ZERO);
             lstSerie.add(monto);
         }
-
-        /*Collection<Number> lstSerie = lstData.stream()
-                .filter(dto -> codigoDte.equals(dto.getCodigoDte()))
-                .sorted(Comparator.comparing(Invoice7DaysDto::getFecha))
-                .map(Invoice7DaysDto::getMonto)
-                .collect(Collectors.toList());*/
+        
         return new BarDataset()
                 .setData(lstSerie)
-                .setLabel("Codigo: " + codigoDte)
+                .setLabel(catalogoService.getDtes().get(codigoDte))
                 .setBackgroundColor(ColorUtil.getColorBackgroundFromDte(codigoDte))
                 .setBorderColor(ColorUtil.getColorBorderFromDte(codigoDte))
-                //.setBackgroundColor(new RGBAColor(255, 99, 132, 0.2))
-                //.setBorderColor(new RGBAColor(255, 99, 132))
-                .setBorderWidth(1);
+                .setBorderWidth(1)
+                .setCategoryPercentage(0.2);
     }
 
     public Integer getTotalInvoces() {
@@ -286,7 +297,7 @@ public class DashboardView implements Serializable {
 
         return IntStream.rangeClosed(0, 6)
                 .mapToObj(i -> hoy.minusDays(6 - i)) // orden cronológico: de más antiguo a hoy
-                .map(fecha -> fecha.getDayOfWeek().getDisplayName(TextStyle.FULL.FULL, locale)) // lunes, martes...
+                .map(fecha -> fecha.getDayOfWeek().getDisplayName(TextStyle.SHORT.SHORT, locale).concat("-" + fecha.getDayOfMonth())) // lunes, martes...
                 .collect(Collectors.toList());
     }
 

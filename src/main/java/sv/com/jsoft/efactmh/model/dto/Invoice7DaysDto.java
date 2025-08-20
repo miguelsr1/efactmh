@@ -16,6 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Invoice7DaysDto {
 
+    private Long id;
     private String fecha;
     private Long cantidad;
     private BigDecimal monto;

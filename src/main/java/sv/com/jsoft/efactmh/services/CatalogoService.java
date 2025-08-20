@@ -3,7 +3,9 @@ package sv.com.jsoft.efactmh.services;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -37,6 +39,8 @@ public class CatalogoService implements Serializable {
     private List<MunicipioDto> lstMunicipios;
     @Getter
     private List<Producto> lstProducto;
+    @Getter
+    private Map<String, String> dtes;
 
     @Inject
     SessionService securityService;
@@ -51,6 +55,19 @@ public class CatalogoService implements Serializable {
         loadGiros();
         loadTipoDocumentosId();
         loadItems();
+        loadDtes();
+    }
+    
+    private void loadDtes(){
+        dtes = new HashMap<>();
+        dtes.put("01", "FE");
+        dtes.put("03", "CCF");
+        
+        dtes.put("04", "NR");
+        dtes.put("05", "NC");
+        dtes.put("06", "ND");
+        
+        dtes.put("99", "ANU");
     }
     
     public void loadItems(){
