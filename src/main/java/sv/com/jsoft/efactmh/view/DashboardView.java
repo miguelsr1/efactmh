@@ -4,10 +4,16 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.annotation.PostConstruct;
@@ -33,8 +39,10 @@ import software.xdev.chartjs.model.options.scale.Scales;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianScaleOptions;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianTickOptions;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
+import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
 import sv.com.jsoft.efactmh.services.DashboardService;
 import sv.com.jsoft.efactmh.services.SessionService;
+import sv.com.jsoft.efactmh.util.ColorUtil;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_INFO;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -55,16 +63,28 @@ public class DashboardView implements Serializable {
     private List<DashboardDto> lst;
     @Getter
     private String model;
+    @Getter
+    private String barModel;
+    private Collection<String> dias = null;
 
     @PostConstruct
     public void init() {
-
+        dias = obtenerNombresUltimos7Dias();
     }
 
     public void loadData() {
-        ResponseRestApi<List<DashboardDto>> response = dashboardService.findAllData(securityService.getToken());
+
+        makeChartInvoce();
+
+        loadDataInvoice7Days();
+    }
+
+    private void loadDataInvoice7Days() {
+        List<Invoice7DaysDto> lstData = new ArrayList<>();
+        ResponseRestApi<List<Invoice7DaysDto>> response = dashboardService.getInvoice7Days(securityService.getToken());
+
         if (response.getCodeHttp() == 200) {
-            lst = response.getBody();
+            lstData = response.getBody();
         } else if (response.getCodeHttp() == 404) {
             MessageUtil.builder()
                     .severity(FacesMessage.SEVERITY_INFO)
@@ -74,7 +94,71 @@ public class DashboardView implements Serializable {
                     .showMessage();
         }
 
-        createLineModel();
+        //obtener los tipos de codigosDte
+        Set<String> codigosDte = lstData.stream()
+                .map(Invoice7DaysDto::getCodigoDte)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        BarData barData = new BarData();
+
+        for (String dte : codigosDte) {
+            barData.addDataset(makeDateFromDte(dte, lstData));
+        }
+        
+        barData.setLabels(dias);
+
+        BarChart barChart = new BarChart()
+                .setData(barData)
+                .setOptions(new BarOptions()
+                        .setResponsive(true)
+                        .setMaintainAspectRatio(false)
+                        .setIndexAxis(IndexAxis.X)
+                        .setScales(new Scales().addScale(Scales.ScaleAxis.Y, new CartesianScaleOptions()
+                                .setStacked(false)
+                                .setTicks(new CartesianTickOptions()
+                                        .setAutoSkip(true)
+                                        .setMirror(true)))
+                        )
+                        .setPlugins(new Plugins()
+                                .setTitle(new Title()
+                                        .setDisplay(true)
+                                        .setText("Tipos de DTE últimos 7 días")))
+                );
+
+        barModel = barChart.toJson();
+    }
+
+    private BarDataset makeDateFromDte(String codigoDte, List<Invoice7DaysDto> lstData) {
+        Collection<Number> lstSerie = new ArrayList<>();
+
+        // Rango fijo de fechas: del 13 al 19 de agosto de 2025
+        LocalDate fechaInicio = LocalDate.now();
+        for (int i = 6; i >= 0; i--) {
+            LocalDate fechaActual = fechaInicio.minusDays(i);
+
+            Optional<Invoice7DaysDto> registroOpt = lstData.stream()
+                    .filter(r -> codigoDte.equals(r.getCodigoDte())
+                    && LocalDate.parse(r.getFecha()).equals(fechaActual))
+                    .findFirst();
+
+            BigDecimal monto = registroOpt.map(Invoice7DaysDto::getMonto).orElse(BigDecimal.ZERO);
+            lstSerie.add(monto);
+        }
+
+        /*Collection<Number> lstSerie = lstData.stream()
+                .filter(dto -> codigoDte.equals(dto.getCodigoDte()))
+                .sorted(Comparator.comparing(Invoice7DaysDto::getFecha))
+                .map(Invoice7DaysDto::getMonto)
+                .collect(Collectors.toList());*/
+        return new BarDataset()
+                .setData(lstSerie)
+                .setLabel("Codigo: " + codigoDte)
+                .setBackgroundColor(ColorUtil.getColorBackgroundFromDte(codigoDte))
+                .setBorderColor(ColorUtil.getColorBorderFromDte(codigoDte))
+                //.setBackgroundColor(new RGBAColor(255, 99, 132, 0.2))
+                //.setBorderColor(new RGBAColor(255, 99, 132))
+                .setBorderWidth(1);
     }
 
     public Integer getTotalInvoces() {
@@ -106,8 +190,7 @@ public class DashboardView implements Serializable {
     public void createBarModel() {
         Collection<Number> numeros = flujoFacturadoUltimaSemana();
 
-        Collection<String> dias = obtenerNombresUltimos7Dias();
-
+        //Collection<String> dias = obtenerNombresUltimos7Dias();
         model = new BarChart()
                 .setData(new BarData()
                         .addDataset(new BarDataset()
@@ -133,22 +216,34 @@ public class DashboardView implements Serializable {
                                         .setText("Facturado de últimos 7 días")))
                 ).toJson();
     }
-    
-    public void createLineModel() {
+
+    public void makeChartInvoce() {
+        ResponseRestApi<List<DashboardDto>> response = dashboardService.findAllData(securityService.getToken());
+        if (response.getCodeHttp() == 200) {
+            lst = response.getBody();
+        } else if (response.getCodeHttp() == 404) {
+            MessageUtil.builder()
+                    .severity(FacesMessage.SEVERITY_INFO)
+                    .title(MSG_INFO)
+                    .message("NO HAY DATOS PARA MOSTRAR")
+                    .build()
+                    .showMessage();
+        }
+
         Collection<Number> numeros = flujoFacturadoUltimaSemana();
-        
+
         Collection<String> dias = obtenerNombresUltimos7Dias();
-        
+
         model = new LineChart()
                 .setData(new LineData()
-                .addDataset(new LineDataset()
-                        .setData(numeros)
-                        .setLabel("My First Dataset")
-                        .setBorderColor(new RGBAColor(34, 150, 243))
-                        .setLineTension(0.5f)
-                        .setBackgroundColor("GRADIENT")
-                        .setFill(new Fill<Boolean>(true)))
-                .setLabels(dias))
+                        .addDataset(new LineDataset()
+                                .setData(numeros)
+                                .setLabel("Facturado por día")
+                                .setBorderColor(new RGBAColor(34, 150, 243))
+                                .setLineTension(0.5f)
+                                .setBackgroundColor("GRADIENT")
+                                .setFill(new Fill<Boolean>(true)))
+                        .setLabels(dias))
                 .setOptions(new LineOptions()
                         .setResponsive(true)
                         .setAnimation(true)
@@ -156,10 +251,9 @@ public class DashboardView implements Serializable {
                         .setPlugins(new Plugins()
                                 .setTitle(new Title()
                                         .setDisplay(true)
-                                        .setText("Line Chart Subtitle")))
+                                        .setText("Facturado de últimos 7 días")))
                 ).toJson();
     }
-
 
     public Collection<Number> flujoFacturadoUltimaSemana() {
         LocalDate hoy = LocalDate.now();
@@ -178,12 +272,12 @@ public class DashboardView implements Serializable {
                                 Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)
                         )
                 ));
-        
+
         return flujoPorDia.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey()) // Ordena las entradas por la fecha (LocalDate).
-            .map(Map.Entry::getValue)           // Extrae solo el valor (el monto BigDecimal).
-            .map(monto -> (Number) monto)       // Convierte cada BigDecimal a Number.
-            .collect(Collectors.toList());
+                .sorted(Map.Entry.comparingByKey()) // Ordena las entradas por la fecha (LocalDate).
+                .map(Map.Entry::getValue) // Extrae solo el valor (el monto BigDecimal).
+                .map(monto -> (Number) monto) // Convierte cada BigDecimal a Number.
+                .collect(Collectors.toList());
     }
 
     public Collection<String> obtenerNombresUltimos7Dias() {
