@@ -38,6 +38,7 @@ import software.xdev.chartjs.model.options.elements.Fill;
 import software.xdev.chartjs.model.options.scale.Scales;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianScaleOptions;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianTickOptions;
+import sv.com.jsoft.efactmh.model.dto.AmountDto;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
 import sv.com.jsoft.efactmh.model.dto.InvoicedAmountsDto;
@@ -66,10 +67,12 @@ public class DashboardView implements Serializable {
     @Getter
     private List<InvoicedAmountsDto> lstInvoiced = new ArrayList<>();
     @Getter
+    private List<AmountDto> lstAmount = new ArrayList<>();
+    @Getter
     private String model;
     @Getter
     private String barModel;
-    
+
     private List<DashboardDto> lst;
     private Collection<String> dias = null;
 
@@ -83,13 +86,13 @@ public class DashboardView implements Serializable {
         makeChartInvoce();
 
         loadDataInvoice7Days();
-        
+
         loadInvoicedAmounts();
     }
-    
-    private void loadInvoicedAmounts(){
+
+    private void loadInvoicedAmounts() {
         ResponseRestApi<List<InvoicedAmountsDto>> response = dashboardService.getInvoicedAmounts(securityService.getToken());
-        
+
         if (response.getCodeHttp() == 200) {
             lstInvoiced = response.getBody();
         }
@@ -117,12 +120,11 @@ public class DashboardView implements Serializable {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         BarData barData = new BarData();
-        
 
         for (String dte : codigosDte) {
             barData.addDataset(makeDateFromDte(dte, lstData));
         }
-        
+
         barData.setLabels(dias);
 
         BarChart barChart = new BarChart()
@@ -162,7 +164,7 @@ public class DashboardView implements Serializable {
             BigDecimal monto = registroOpt.map(Invoice7DaysDto::getMonto).orElse(BigDecimal.ZERO);
             lstSerie.add(monto);
         }
-        
+
         return new BarDataset()
                 .setData(lstSerie)
                 .setLabel(catalogoService.getDtes().get(codigoDte))
@@ -240,11 +242,16 @@ public class DashboardView implements Serializable {
                     .build()
                     .showMessage();
         }
+        
+        ResponseRestApi<List<AmountDto>> responseAmounts = dashboardService.getAmount7Days(securityService.getToken());
 
-        Collection<Number> numeros = flujoFacturadoUltimaSemana();
+        //Collection<Number> numeros = flujoFacturadoUltimaSemana();
+        Collection<Number> numeros = responseAmounts.getBody().stream()
+                .sorted(Comparator.comparingLong(AmountDto::getId)) // orden por id
+                .map(AmountDto::getMonto) // extrae el monto
+                .collect(Collectors.toList()); // devuelve List<Number>
 
-        Collection<String> dias = obtenerNombresUltimos7Dias();
-
+        //Collection<String> dias = obtenerNombresUltimos7Dias();
         model = new LineChart()
                 .setData(new LineData()
                         .addDataset(new LineDataset()

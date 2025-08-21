@@ -26,20 +26,20 @@
             <div class="p-2 flex flex-column flex-auto">
                 <div class="grid">
                     <div class="col-12">
-                        <div class="surface-card shadow-2 border-round flex p-3 flex-column md:flex-row">
+                        <div class="surface-card shadow-2 border-round flex p-1 flex-column md:flex-row">
                             <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
                                 <div class="flex align-items-center mb-3">
-                                    <i class="pi pi-copy text-blue-500 text-3xl mr-2"></i>
+                                    <i class="pi pi-copy text-blue-500 text-2xl mr-2"></i>
                                     <span class="text-500 font-medium text-xl">Facturas Emitidas</span>
                                 </div>
-                                <span class="block text-900 font-medium mb-2 text-3xl">#{dashboardView.totalInvoces}</span>
+                                <span class="block text-900 font-medium mb-2 text-2xl">#{dashboardView.totalInvoces}</span>
                             </div>
                             <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
                                 <div class="flex align-items-center mb-3">
-                                    <i class="pi pi-money-bill text-orange-500 text-3xl mr-2"></i>
+                                    <i class="pi pi-money-bill text-orange-500 text-2xl mr-2"></i>
                                     <span class="text-500 font-medium text-xl">Monto Facturado</span>
                                 </div>
-                                <span class="block text-900 font-medium mb-2 text-3xl">
+                                <span class="block text-900 font-medium mb-2 text-2xl">
                                     <h:outputText value="#{dashboardView.totalBilled}">
                                         <f:convertNumber pattern="$ #,##0.00"/>
                                     </h:outputText>
@@ -47,10 +47,10 @@
                             </div>
                             <div class="border-bottom-1 md:border-right-1 md:border-bottom-none surface-border flex-auto p-3">
                                 <div class="flex align-items-center mb-3">
-                                    <i class="pi pi-id-card text-purple-500 text-3xl mr-2"></i>
+                                    <i class="pi pi-id-card text-purple-500 text-2xl mr-2"></i>
                                     <span class="text-500 font-medium text-xl">Clientes</span>
                                 </div>
-                                <span class="block text-900 font-medium mb-2 text-3xl">
+                                <span class="block text-900 font-medium mb-2 text-2xl">
                                     <h:outputText value="#{dashboardView.totalCustomers}">
                                         <f:convertNumber pattern="#,##0"/>
                                     </h:outputText>
@@ -58,10 +58,10 @@
                             </div>
                             <div class="flex-auto p-3">
                                 <div class="flex align-items-center mb-3">
-                                    <i class="pi pi-trash text-red-500 text-3xl mr-2"></i>
+                                    <i class="pi pi-trash text-red-500 text-2xl mr-2"></i>
                                     <span class="text-500 font-medium text-xl">Anulaciones</span>
                                 </div>
-                                <span class="block text-900 font-medium mb-2 text-3xl">
+                                <span class="block text-900 font-medium mb-2 text-2xl">
                                     <h:outputText value="#{dashboardView.totalCancellations}">
                                         <f:convertNumber pattern="#,##0"/>
                                     </h:outputText>
