@@ -2,6 +2,7 @@ package sv.com.jsoft.efactmh.services;
 
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
+import sv.com.jsoft.efactmh.model.dto.BalanceDto;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
 import sv.com.jsoft.efactmh.model.dto.InvoicedAmountsDto;
@@ -48,6 +49,18 @@ public class DashboardService {
                 .endpoint("/api/secured/dashboard/invoiced-amounts")
                 .build()
                 .callGetAllAuth();
+
+        return response;
+    }
+    
+    public ResponseRestApi<BalanceDto> getBalanceDte(JwtDto token) {
+        ResponseRestApi<BalanceDto> response = RestUtil
+                .builder()
+                .clazz(BalanceDto.class)
+                .jwtDto(token)
+                .endpoint("/api/secured/dashboard/balance-dte")
+                .build()
+                .callGetOneAuth();
 
         return response;
     }

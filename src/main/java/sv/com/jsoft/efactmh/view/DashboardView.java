@@ -38,6 +38,7 @@ import software.xdev.chartjs.model.options.elements.Fill;
 import software.xdev.chartjs.model.options.scale.Scales;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianScaleOptions;
 import software.xdev.chartjs.model.options.scale.cartesian.CartesianTickOptions;
+import sv.com.jsoft.efactmh.model.dto.BalanceDto;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
 import sv.com.jsoft.efactmh.model.dto.InvoicedAmountsDto;
@@ -69,7 +70,9 @@ public class DashboardView implements Serializable {
     private String model;
     @Getter
     private String barModel;
-    
+    @Getter
+    private BalanceDto balanceDto;
+
     private List<DashboardDto> lst;
     private Collection<String> dias = null;
 
@@ -83,13 +86,23 @@ public class DashboardView implements Serializable {
         makeChartInvoce();
 
         loadDataInvoice7Days();
-        
+
         loadInvoicedAmounts();
+
+        loadUsePlan();
     }
-    
-    private void loadInvoicedAmounts(){
+
+    private void loadUsePlan() {
+        ResponseRestApi<BalanceDto> response = dashboardService.getBalanceDte(securityService.getToken());
+
+        if (response.getCodeHttp() == 200) {
+            balanceDto = response.getBody();
+        }
+    }
+
+    private void loadInvoicedAmounts() {
         ResponseRestApi<List<InvoicedAmountsDto>> response = dashboardService.getInvoicedAmounts(securityService.getToken());
-        
+
         if (response.getCodeHttp() == 200) {
             lstInvoiced = response.getBody();
         }
@@ -117,12 +130,11 @@ public class DashboardView implements Serializable {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         BarData barData = new BarData();
-        
 
         for (String dte : codigosDte) {
             barData.addDataset(makeDateFromDte(dte, lstData));
         }
-        
+
         barData.setLabels(dias);
 
         BarChart barChart = new BarChart()
@@ -162,7 +174,7 @@ public class DashboardView implements Serializable {
             BigDecimal monto = registroOpt.map(Invoice7DaysDto::getMonto).orElse(BigDecimal.ZERO);
             lstSerie.add(monto);
         }
-        
+
         return new BarDataset()
                 .setData(lstSerie)
                 .setLabel(catalogoService.getDtes().get(codigoDte))
