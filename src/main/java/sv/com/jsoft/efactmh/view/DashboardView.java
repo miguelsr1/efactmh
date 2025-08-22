@@ -23,14 +23,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import software.xdev.chartjs.model.charts.BarChart;
+import software.xdev.chartjs.model.charts.DoughnutChart;
 import software.xdev.chartjs.model.charts.LineChart;
 import software.xdev.chartjs.model.color.RGBAColor;
 import software.xdev.chartjs.model.data.BarData;
+import software.xdev.chartjs.model.data.DoughnutData;
 import software.xdev.chartjs.model.data.LineData;
 import software.xdev.chartjs.model.dataset.BarDataset;
+import software.xdev.chartjs.model.dataset.DoughnutDataset;
 import software.xdev.chartjs.model.dataset.LineDataset;
 import software.xdev.chartjs.model.enums.IndexAxis;
 import software.xdev.chartjs.model.options.BarOptions;
+import software.xdev.chartjs.model.options.DoughnutOptions;
 import software.xdev.chartjs.model.options.LineOptions;
 import software.xdev.chartjs.model.options.Plugins;
 import software.xdev.chartjs.model.options.Title;
@@ -71,6 +75,8 @@ public class DashboardView implements Serializable {
     @Getter
     private String barModel;
     @Getter
+    private String donutModel;
+    @Getter
     private BalanceDto balanceDto;
 
     private List<DashboardDto> lst;
@@ -98,6 +104,19 @@ public class DashboardView implements Serializable {
         if (response.getCodeHttp() == 200) {
             balanceDto = response.getBody();
         }
+
+        donutModel = new DoughnutChart()
+                .setData(new DoughnutData()
+                        .addDataset(new DoughnutDataset()
+                                .setData(BigDecimal.valueOf(balanceDto.getSubTotal()),
+                                        BigDecimal.valueOf(balanceDto.getPendiente()))
+                                .addBackgroundColors(
+                                        new RGBAColor(255, 99, 132),
+                                        new RGBAColor(54, 162, 235))
+                        )
+                        .setLabels("GENERADOS: " + balanceDto.getSubTotal(), "SALDO: " + balanceDto.getPendiente()))
+                .setOptions(new DoughnutOptions().setMaintainAspectRatio(Boolean.FALSE))
+                .toJson();
     }
 
     private void loadInvoicedAmounts() {
@@ -151,7 +170,7 @@ public class DashboardView implements Serializable {
                         )
                         .setPlugins(new Plugins()
                                 .setTitle(new Title()
-                                        .setDisplay(true)
+                                        .setDisplay(false)
                                         .setText("Tipos de DTE últimos 7 días")))
                 );
 
@@ -235,7 +254,7 @@ public class DashboardView implements Serializable {
                         )
                         .setPlugins(new Plugins()
                                 .setTitle(new Title()
-                                        .setDisplay(true)
+                                        .setDisplay(false)
                                         .setText("Facturado de últimos 7 días")))
                 ).toJson();
     }
@@ -255,8 +274,6 @@ public class DashboardView implements Serializable {
 
         Collection<Number> numeros = flujoFacturadoUltimaSemana();
 
-        Collection<String> dias = obtenerNombresUltimos7Dias();
-
         model = new LineChart()
                 .setData(new LineData()
                         .addDataset(new LineDataset()
@@ -273,7 +290,7 @@ public class DashboardView implements Serializable {
                         .setMaintainAspectRatio(false)
                         .setPlugins(new Plugins()
                                 .setTitle(new Title()
-                                        .setDisplay(true)
+                                        .setDisplay(false)
                                         .setText("Facturado de últimos 7 días")))
                 ).toJson();
     }

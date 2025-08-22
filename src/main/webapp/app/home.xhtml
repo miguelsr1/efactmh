@@ -25,9 +25,16 @@
 
             <div class="p-2 flex flex-column flex-auto">
                 <div class="grid">
-                    <div class="col-12 lg:col-6">
-                        <div class="surface-card shadow-2 border-round p-4">
-                            <p:dataTable value="#{dashboardView.lstInvoiced}" var="inv" reflow="true" tableStyle="table-layout: auto;">
+                    <div class="col-12 lg:col-6 md:col-12">
+                        <div class="card border-round p-4">
+                            <div class="card-header mb-3">
+                                <h5>Subtotales por tipo de DTE</h5>
+                                <div id="order-tabs-container" class="order-tabs">
+                                    <i class="pi pi-users"/>
+                                </div>
+                            </div>
+                            
+                            <p:dataTable value="#{dashboardView.lstInvoiced}" var="inv" reflow="true" tableStyle="table-layout: auto;" size="small" >
                                 <p:column headerText="PERIODO">
                                     <p:outputLabel value="#{inv.periodo}" />
                                 </p:column>
@@ -64,52 +71,59 @@
                             </p:dataTable>
                         </div>
                     </div>
-                    <div class="col-3">
-                        <div class="surface-card shadow-2  p-3 flex-column md:flex-row">
+                    <div class="col-12 lg:col-3 md:col-6">
+                        <div class="card p-3 flex-column md:flex-row">
+                            <div class="card-header mb-3">
+                                <h5>Saldos de este año</h5>
+                                <div id="order-tabs-container" class="order-tabs">
+                                    <i class="pi pi-users"/>
+                                </div>
+                            </div>
+                            
                             <ul class="list-none p-0 m-0">
-                                <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+                                <li class="py-2 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                                     <div class="flex align-items-start mr-0 lg:mr-5">
                                         <div class="flex align-items-center mb-2">
-                                            <i class="pi pi-copy text-blue-500 text-2xl mr-2"></i>
-                                            <span class="text-500 font-medium text-lg">Facturas Emitidas</span>
+                                            <i class="pi pi-copy text-blue-500 text-xl mr-2"></i>
+                                            <span class="text-500 font-medium text-base">Facturas Emitidas</span>
                                         </div>
                                     </div>
-                                    <span class="block text-500 font-medium mb-2 text-2xl">#{dashboardView.totalInvoces}</span>
+                                    <span class="block text-500 font-medium mb-2 text-xl">#{dashboardView.totalInvoces}</span>
                                 </li>
-                                <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+                                <li class="py-2 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                                     <div class="flex align-items-start mr-0 lg:mr-5">
                                         <div class="flex align-items-center mb-2">
-                                            <i class="pi pi-money-bill text-orange-500 text-2xl mr-2"></i>
-                                            <span class="text-500 font-medium text-lg">Monto Facturado</span>
+                                            <i class="pi pi-money-bill text-orange-500 text-xl mr-2"></i>
+                                            <span class="text-500 font-medium text-base">Monto Facturado</span>
                                         </div>
                                     </div>
-                                    <span class="block text-500 font-medium mb-2 text-2xl">
+                                    <span class="block text-500 font-medium mb-2 text-xl">
                                         <h:outputText value="#{dashboardView.totalBilled}">
                                             <f:convertNumber pattern="$ #,##0.00"/>
                                         </h:outputText>
                                     </span>
                                 </li>
-                                <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+                                <li class="py-2 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                                     <div class="flex align-items-start mr-0 lg:mr-5">
                                         <div class="flex align-items-center mb-2">
-                                            <i class="pi pi-id-card text-purple-500 text-2xl mr-2"></i>
-                                            <span class="text-500 font-medium text-lg">Clientes</span>
+                                            <i class="pi pi-id-card text-purple-500 text-xl mr-2"></i>
+                                            <span class="text-500 font-medium text-base">Clientes</span>
                                         </div>
                                     </div>
-                                    <span class="block text-500 font-medium mb-2 text-2xl">
+                                    <span class="block text-500 font-medium mb-2 text-xl">
                                         <h:outputText value="#{dashboardView.totalCustomers}">
                                             <f:convertNumber pattern="#,##0"/>
                                         </h:outputText>
                                     </span>
                                 </li>
-                                <li class="py-3 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
+                                <li class="py-2 border-bottom-1 surface-border flex md:align-items-start md:justify-content-between flex-column md:flex-row">
                                     <div class="flex align-items-start mr-0 lg:mr-5">
                                         <div class="flex align-items-center mb-2">
-                                            <i class="pi pi-trash text-red-500 text-2xl mr-2"></i>
-                                            <span class="text-500 font-medium text-lg">Anulaciones</span>
+                                            <i class="pi pi-trash text-red-500 text-xl mr-2"></i>
+                                            <span class="text-500 font-medium text-base">Anulaciones</span>
                                         </div>
                                     </div>
-                                    <span class="block text-500 font-medium mb-2 text-2xl">
+                                    <span class="block text-500 font-medium mb-2 text-xl">
                                         <h:outputText value="#{dashboardView.totalCancellations}">
                                             <f:convertNumber pattern="#,##0"/>
                                         </h:outputText>
@@ -123,16 +137,29 @@
                             </div -->
                         </div>
                     </div>
-                    <div class="col-3">
-                        <div class="surface-card shadow-2  p-3 flex-column md:flex-row">
-                            <p:knob foregroundColor="#2196F3" backgroundColor="#495057" 
-                                    value="#{dashboardView.balanceDto.subTotal}"
-                                    max="#{dashboardView.balanceDto.limiteDte}"/>
+                    <div class="col-12 lg:col-3 md:col-6">
+                        <div class="card revenue-graph">
+                            <div class="card-header mb-3">
+                                <h5>Balance del plan</h5>
+                                <div id="order-tabs-container" class="order-tabs">
+                                    <i class="pi pi-users"/>
+                                </div>
+                            </div>
+                            <div class="overview-chart">
+                                <p:chart id="donut" value="#{dashboardView.donutModel}" style="width: 100%; height: 158px;"/>
+                            </div>
                         </div>
                     </div>
                     <div class="col-12 lg:col-6">
-                        <div class="surface-card shadow-2 border-round p-4">
-                            <p:chart id="lineChart" widgetVar="lineChart" value="#{dashboardView.model}" style="width: 100%; height: 400px;" />
+                        <div class="card border-round p-4">
+                            <div class="card-header mb-3">
+                                <h5>Facturado de últimos 7 días</h5>
+                                <div id="order-tabs-container" class="order-tabs">
+                                    <i class="pi pi-users"/>
+                                </div>
+                            </div>
+                            
+                            <p:chart id="lineChart" widgetVar="lineChart" value="#{dashboardView.model}" style="width: 100%; height: 380px;" />
 
                             <h:outputScript>
                                 $(function() {
@@ -162,8 +189,15 @@
                         </div>
                     </div>
                     <div class="col-12 lg:col-6">
-                        <div class="surface-card shadow-2 border-round p-4">
-                            <p:chart value="#{dashboardView.barModel}"  style="width: 100%; height: 400px;" />
+                        <div class="card border-round p-4">
+                            <div class="card-header mb-3">
+                                <h5>Facturado por DTE de últimos 7 días</h5>
+                                <div id="order-tabs-container" class="order-tabs">
+                                    <i class="pi pi-users"/>
+                                </div>
+                            </div>
+                            
+                            <p:chart value="#{dashboardView.barModel}"  style="width: 100%; height: 380px;" />
                         </div>
                     </div>
                 </div>
