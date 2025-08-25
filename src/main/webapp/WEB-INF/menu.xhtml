@@ -14,6 +14,9 @@
                     <input type="text" class="topbar-search" placeholder="Type your search here"/>
                 </div>
                 <pv:menu widgetVar="ParadiseMenuWidget">
+                    <p:submenu id="m_homepage" label="Favoritos" icon="pi pi-home">
+                        <p:menuitem id="m_dashboard" value="Dashboard" icon="pi pi-home" outcome="/app/home" process="@this"/>
+                    </p:submenu>
                     <p:submenu label="Operaciones" icon="pi pi-fw pi-prime" >
                         <p:menuitem value="Factura" icon="pi pi-inbox" outcome="/app/process/invoce/invoce" process="@this"/>
                         <p:menuitem value="DTE's" icon="pi pi-list" outcome="/app/lstDtes" process="@this"/>
