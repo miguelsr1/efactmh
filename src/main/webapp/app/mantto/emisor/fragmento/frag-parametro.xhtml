@@ -25,7 +25,7 @@
                     <p:outputLabel value="#{pa.certificado}"/>
                 </p:column>
                 <p:column headerText="Ambiente" style="text-align: center" width="150">
-                    <span style="display: inline-block" class="style-estado #{pa.test ? 'env-prd':'env-tst'}">#{pa.test ?"PRODUCCION":"PRUEBAS"}</span>
+                    <span style="display: inline-block" class="style-estado #{pa.test ? 'env-tst':'env-prd'}">#{pa.test ?"PRUEBAS":"PRODUCCION"}</span>
                 </p:column>
                 <p:column headerText="Activo" style="text-align: center">
                     <p:selectBooleanCheckbox value="#{pa.activo}" disabled="true"/>

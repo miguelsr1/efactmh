@@ -88,6 +88,8 @@ public class DashboardView implements Serializable {
     }
 
     public void loadData() {
+        lst = List.of();
+        lstInvoiced = List.of();
 
         makeChartInvoce();
 
@@ -140,6 +142,7 @@ public class DashboardView implements Serializable {
                     .message("NO HAY DATOS PARA MOSTRAR")
                     .build()
                     .showMessage();
+            return;
         }
 
         //obtener los tipos de codigosDte
@@ -204,7 +207,7 @@ public class DashboardView implements Serializable {
     }
 
     public Integer getTotalInvoces() {
-        return lst.size() - 1;
+        return lst.size();
 
     }
 
@@ -270,6 +273,7 @@ public class DashboardView implements Serializable {
                     .message("NO HAY DATOS PARA MOSTRAR")
                     .build()
                     .showMessage();
+            return;
         }
 
         Collection<Number> numeros = flujoFacturadoUltimaSemana();
