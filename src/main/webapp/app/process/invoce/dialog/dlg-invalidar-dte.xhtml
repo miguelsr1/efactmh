@@ -1,44 +1,22 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="/WEB-INF/template.xhtml">
 
-    <h:head>
-        <f:facet name="first">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes"/>
-        </f:facet>
-
-        <title>Invalidar DTE</title>
-
-        <h:outputScript name="js/prism.js" library="paradise-layout"/>
-        <h:outputStylesheet name="det-factura.css" library="css" />
-        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
-        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
-
-        <style>
-            body .ui-card .ui-card-title {
-                font-size: 1.2rem;
-                font-weight: 800;
-                margin-bottom: 0.5rem;
-            }
-        </style>            
-    </h:head>
-
-    <h:body>
+    <ui:define name="content">
         <h:form prependId="false">
             <p:messages showDetail="true" showSummary="false" closable="true">
                 <p:autoUpdate />
             </p:messages>
 
-            <div class="layout-main">
-                <div style="width: 100%; padding: 1rem 1rem 1rem 1rem;">
-                    <div class="ui-fluid formgrid grid" jsf:id="dvInvalidateDte">
+            <div class="card dashboard ">
+                <div class="col-12">
+                    <div class="ui-fluid formgrid grid" jsf:id="dvFiltro">
                         <div class="field col-12 md:col-6">
                             <p:outputLabel value="Código generación" styleClass="mr-3"/>
                             <p:outputLabel value="#{dlgInvalidarDte.dte.codigoGeneracion}" style="font-weight: bold; text-decoration: underline;  "/>
@@ -47,17 +25,17 @@
                             <p:outputLabel value="Sello recepción"  styleClass="mr-3"/>
                             <p:outputLabel value="#{dlgInvalidarDte.dte.selloRecibido}" style="font-weight: bold; text-decoration: underline;  "/>
                         </div>                        
-                        <div class="field col-3 md:col-3">
+                        <div class="field col-3 md:col-6">
                             <p:outputLabel value="Tipo DTE:" styleClass="mr-3"/>
                             <p:outputLabel value="#{dlgInvalidarDte.dte.nombreDte}" style="font-weight: bold; text-decoration: underline;  "/>
                         </div>
-                        <div class="field col-3 md:col-4">
+                        <div class="field col-3 md:col-6">
                             <p:outputLabel value="Monto operación:" styleClass="mr-3"/>
                             <p:outputLabel value="#{dlgInvalidarDte.dte.total}" style="font-weight: bold; text-decoration: underline;">
                                 <f:convertNumber pattern="#,##0.00"/>
                             </p:outputLabel>
                         </div>
-                        <div class="field col-6 md:col-5">
+                        <div class="field col-3 md:col-6">
                             <p:outputLabel value="Fecha generación:" styleClass="mr-3"/>
                             <p:outputLabel value="#{dlgInvalidarDte.dte.fechaProcesamiento}" style="font-weight: bold; text-decoration: underline;"/>
                         </div>
@@ -68,7 +46,7 @@
                                 <f:selectItem itemValue="1" itemLabel="ERROR DE LA INFORMACION DEL DTE A INVALIDAR" />
                                 <f:selectItem itemValue="2" itemLabel="RESCINDIR DE LA OPERACION" />
                                 <f:selectItem itemValue="3" itemLabel="OTRO" />
-                                <p:ajax update="dvInvalidateDte" />
+                                <p:ajax update="dvFiltro" />
                             </p:selectOneMenu>
                         </div>
                         <div class="field col-12 md:col-6" style="display: #{dlgInvalidarDte.tipoInvalidacion eq 2 ? 'none':'block'}">
@@ -84,6 +62,14 @@
                                              requiredMessage="Debe de ingresar una descripción del bien/servicio" counter="display" style="margin-bottom: 0.5rem"/>
                             <h:outputText id="display" class="block" />
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layout-main">
+                <div style="padding: 1rem 1rem 1rem 1rem;">
+                    <div class="ui-fluid formgrid grid" jsf:id="dvInvalidateDte">
+
 
                         <div class="field col-6">
                             <p:card style="width: 25rem; margin-bottom: 0.5em" >
@@ -161,5 +147,5 @@
                 </div>
             </div>
         </h:form>
-    </h:body>
-</html>
+    </ui:define>
+</ui:composition>

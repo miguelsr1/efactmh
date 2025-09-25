@@ -76,6 +76,8 @@ public class DlgInvalidarDte implements Serializable {
         idFactura = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idFactura");
         codigoDte = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("codigoDte");
         
+        validarDteR();
+        
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("dteInv");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idFactura");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("codigoDte");

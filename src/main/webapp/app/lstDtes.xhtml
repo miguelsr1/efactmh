@@ -89,7 +89,8 @@
 
             <div class="card">
                 <p:dataTable id="tblDtes" widgetVar="tblDtes" var="dte" value="#{dtesView.lstDtes}"
-                             reflow="true" size="small" tableStyle="table-layout: auto;"
+                             reflow="true" size="small" tableStyle="table-layout: auto;" rows="10" paginator="true"
+                             paginatorPosition="top"
                              emptyMessage="No se han agregado DTES">
                     <f:facet name="header">
                         <div class="flex justify-content-between align-items-center">

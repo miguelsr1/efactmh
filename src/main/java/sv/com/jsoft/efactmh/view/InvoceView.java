@@ -260,7 +260,7 @@ public class InvoceView implements Serializable {
 
         return BigDecimal.ZERO;
     }
-    
+
     public BigDecimal getRentaRetenido() {
         switch (invoceDto.getCodigoDte()) {
             case "01":
@@ -467,51 +467,55 @@ public class InvoceView implements Serializable {
                     addProgressAvance();
 
                     //enviando a MH
-                    response = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
+                    //response = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
+                    response = null;
 
                     if (response == null) {
                         log.error("ERROR ENVIANDO DTE: " + idFac);
                         log.error("API: /api/secured/dte/send");
                         log.error("CODIGO ERROR: " + Constantes.COD_ERROR_NULL_RESPONSE);
 
-                        showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_NULL_RESPONSE);
-                        return;
+                        //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_NULL_RESPONSE);
+                        //return;
                     }
 
-                    switch (response.getCodeHttp()) {
-                        case 200:
-                            //advance 100%
-                            addProgressAvance();
+                    //finalizar el proceso, aunque no se genere el DTE a MH
+                    //advance 100%
+                    addProgressAvance();
 
-                            log.info("Finalizando");
+                    log.info("Finalizando");
 
-                            clearStatus();
-                            
-                            dteServices.sendMail(idFac, securityService.getToken());
-                            break;
-                        case 504:
-                            /*
+                    clearStatus();
+
+                    if (response != null) {
+                        switch (response.getCodeHttp()) {
+                            case 200:
+                                dteServices.sendMail(idFac, securityService.getToken());
+                                break;
+                            case 504:
+                                /*
                             reintento despues de 8 segundos:
                             1. hacer consulta del estado del dte.
                             2. si no ha sido recibido, enviarlo nuevamente
                             esto hacerlo dos veces máximo
-                             */
+                                 */
 
-                            break;
-                        default:
-                            /*
+                                break;
+                            default:
+                                /*
                             si falla el envio, reintentar:
                             1. hacer consulta del estado del dte.
                             2. si no ha sido recibido, enviarlo nuevamente
                             esto hacerlo dos veces máximo
-                             */
+                                 */
 
-                            log.error("ERROR ENVIANDO DTE: " + idFac);
-                            log.error("CODIGO HTTP: " + response.getCodeHttp());
-                            log.error("MENSAJE ERROR: " + response.getBody());
+                                log.error("ERROR ENVIANDO DTE: " + idFac);
+                                log.error("CODIGO HTTP: " + response.getCodeHttp());
+                                log.error("MENSAJE ERROR: " + response.getBody());
 
-                            showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
-                            break;
+                                //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
+                                break;
+                        }
                     }
                 } else {
                     log.error("ERROR CREANDO FACTURA: " + invoceDto.toString());
@@ -554,6 +558,7 @@ public class InvoceView implements Serializable {
                 .map(DetallePago::getMonto)
                 .filter(monto -> monto != null) // Opcional, si puede haber montos nulos
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+
         if (getTotal().compareTo(total) != 0) {
             JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
                     MSG_ALERT,

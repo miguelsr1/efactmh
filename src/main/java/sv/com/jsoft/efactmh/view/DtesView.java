@@ -72,32 +72,34 @@ public class DtesView implements Serializable {
         }
     }
 
-    public void showDlgDetToInvalidate() {
+    public String showDlgDetToInvalidate() {
 
         ResponseDto response = invalidateService.findDteToInvalidate(idFactura, codigoDte, codigoGeneracion, sessionService.getToken());
 
         if (response.getStatusCode() == 0) {
             DteToInvalidate dte = (DteToInvalidate) response.getBody();
 
-            DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+            /*DialogFrameworkOptions options = DialogFrameworkOptions.builder()
                     .draggable(false)
                     .resizable(false)
                     .maximizable(false)
                     .modal(true)
                     .width("700")
-                    .build();
+                    .build();*/
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("dteInv", dte);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoDte", codigoDte);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
-            PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
+            //PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
+            return "process/invoce/dialog/dlg-invalidar-dte";
         } else {
             MessageUtil.builder()
                     .severity(FacesMessage.SEVERITY_WARN)
                     .title("ALERTA")
                     .message(response.getBody().toString())
                     .build().showMessage();
-        }
 
+            return null;
+        }
     }
 
     public void onDteInvalidate(SelectEvent event) {
