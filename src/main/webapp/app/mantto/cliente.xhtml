@@ -1,18 +1,13 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="/WEB-INF/template.xhtml"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="title">Cliente</ui:define>
-    <ui:define name="head">
+    <f:view>
+        
         <h:outputScript name="inputmask.js" library="js"/>
         <style>
-            body .ui-breadcrumb {
-                background: transparent !important;
-                border: 0px solid;
-                padding: 0.5rem;
-            }
             body .ui-chkbox .ui-chkbox-box {
                 width: 1rem !important;
                 min-width: 1rem !important;
@@ -20,21 +15,14 @@
                 margin-bottom: 0.4rem !important;
             }
         </style>
-    </ui:define>
-
-    <ui:define name="content">   
+        
         <h:form prependId="false">
             <div class="grid dashboard ">
-                <p:breadCrumb>
-                    <p:menuitem value="Matenimientos" outcome="/app/home" />
-                    <p:menuitem value="Mis Clientes"/>
-                </p:breadCrumb>
-
                 <div class="col-12">
                     <ui:include src="cliente/frag-cliente.xhtml"/>
                 </div>
             </div>
             <ui:include src="cliente/frag-lista.xhtml"/>
         </h:form>
-    </ui:define>
+    </f:view>
 </ui:composition>

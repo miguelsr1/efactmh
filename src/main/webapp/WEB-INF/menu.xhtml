@@ -1,10 +1,10 @@
 <ui:composition
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:pv="http://primefaces.org/paradise">
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pv="http://primefaces.org/paradise">
 
     <div class="layout-menu-wrapper ">
         <div class="layout-menu-container">
@@ -13,7 +13,9 @@
                     <i class="pi pi-fw pi-search topbar-search-icon"></i>
                     <input type="text" class="topbar-search" placeholder="Type your search here"/>
                 </div>
-                <pv:menu widgetVar="ParadiseMenuWidget">
+                <pv:menu widgetVar="ParadiseMenuWidget" model="#{sessionView.model}">
+                </pv:menu>
+                <!--pv:menu widgetVar="ParadiseMenuWidget">
                     <p:submenu id="m_homepage" label="Favoritos" icon="pi pi-home">
                         <p:menuitem id="m_dashboard" value="Dashboard" icon="pi pi-home" outcome="/app/home" process="@this"/>
                     </p:submenu>
@@ -28,7 +30,7 @@
                         <p:menuitem value="Mis Datos" icon="pi pi-briefcase" outcome="/app/mantto/emisor/emisor" process="@this" />
                         <p:menuitem value="Clientes" icon="pi pi-id-card" outcome="/app/mantto/cliente" process="@this" />
                     </p:submenu>
-                </pv:menu>
+                </pv:menu-->
             </h:form>
         </div>
     </div>

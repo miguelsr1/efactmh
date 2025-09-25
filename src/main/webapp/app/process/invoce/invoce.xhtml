@@ -5,11 +5,9 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:o="http://omnifaces.org/ui"
-                xmlns:of="http://omnifaces.org/functions"
-                template="/WEB-INF/template.xhtml">
+                xmlns:of="http://omnifaces.org/functions">
+    <f:view>
 
-    <ui:define name="title">Nueva factura</ui:define>
-    <ui:define name="head">
         <h:outputScript name="fn.js" library="js" />
         <h:outputScript name="inputmask.js" library="js" />
         <style>
@@ -22,12 +20,6 @@
                 font-size: 1.1rem !important;
                 color: #3984b8;
                 font-weight: bold;
-            }
-
-            body .ui-breadcrumb {
-                background: transparent !important;
-                border: 0px solid;
-                padding: 0.5rem;
             }
             iframe{
                 width: 350px !important;
@@ -50,9 +42,6 @@
                 ejecutarGrowl([{name: 'data', value: message}]);
             }
         </script>
-    </ui:define>
-
-    <ui:define name="content">
 
         <h:form prependId="false">
             <o:socket channel="chatChannel" 
@@ -91,11 +80,6 @@
 
         <h:form prependId="false">
             <div class="grid dashboard">
-                <p:breadCrumb>
-                    <p:menuitem value="Operaciones" outcome="/app/home" />
-                    <p:menuitem value="Factura"/>
-                </p:breadCrumb>
-
                 <div class="col-12">
                     <p:messages showDetail="true" showSummary="false" closable="true">
                         <p:autoUpdate />
@@ -127,5 +111,5 @@
                 </f:facet>
             </p:dialog>
         </h:form>
-    </ui:define>
+    </f:view>
 </ui:composition>

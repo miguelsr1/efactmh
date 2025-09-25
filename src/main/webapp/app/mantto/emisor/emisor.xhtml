@@ -3,11 +3,9 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:jsf="http://xmlns.jcp.org/jsf"
-                template="/WEB-INF/template.xhtml">
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <ui:define name="title">Cliente</ui:define>
-    <ui:define name="head">
+    <f:view>
         <h:outputScript name="inputmask.js" library="js"/>
         <h:outputScript name="fn.js" library="js"/>
         <style>
@@ -27,11 +25,6 @@
             body .ui-datatable.ui-datatable-sm .ui-datatable-data > tr > td {
                 padding: 0.2rem 0.5rem;
             }
-            body .ui-breadcrumb {
-                background: transparent !important;
-                border: 0px solid;
-                padding: 0.5rem;
-            }
             .style-estado {
                 border-radius: 2px;
                 padding: 0.25em 0.5rem;
@@ -50,17 +43,8 @@
                 color: var(--yellow-800);
             }
         </style>
-    </ui:define>
 
-    <ui:define name="content">
         <div class="grid dashboard ">
-            <h:form prependId="false">
-                <p:breadCrumb>
-                    <p:menuitem value="Matenimientos" outcome="/app/home" />
-                    <p:menuitem value="Mis Datos"/>
-                </p:breadCrumb>
-            </h:form>
-
             <div class="col-12">                    
                 <div class="card" jsf:id="dvDatos">
                     <p:tabView dynamic="true" cache="true" prependId="false">
@@ -80,21 +64,8 @@
                             </div>
                         </p:tab>
                     </p:tabView>
-
-
-                    <!--h6>Datos de contacto</h6>
-                    <p:separator/>
-                    <div class="grid">
-                        <ui:include src="fragmento/emisor/frag-responsable-dte.xhtml"/>
-                    </div>
-                    
-                    <h6>Estructura empresa</h6>
-                    <p:separator/>
-                    <div class="grid">
-                        <ui:include src="fragmento/emisor/frag-estructura.xhtml"/>
-                    </div-->
                 </div>
             </div>
         </div>
-    </ui:define>
+    </f:view>
 </ui:composition>

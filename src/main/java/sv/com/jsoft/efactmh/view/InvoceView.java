@@ -28,7 +28,6 @@ import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
-import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.InvoceService;
 import sv.com.jsoft.efactmh.services.SessionService;
@@ -322,7 +321,7 @@ public class InvoceView implements Serializable {
                 .height("550px")
                 .build();
 
-        PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);
+        PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-det-factura", options, null);
     }
 
     public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {

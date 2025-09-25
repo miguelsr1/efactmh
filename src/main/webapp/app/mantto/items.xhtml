@@ -3,28 +3,11 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:jsf="http://xmlns.jcp.org/jsf"
-                template="/WEB-INF/template.xhtml">
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <ui:define name="title">Items</ui:define>
-    <ui:define name="head">
-        <style>
-            body .ui-breadcrumb {
-                background: transparent !important;
-                border: 0px solid;
-                padding: 0.5rem;
-            }
-        </style>
-    </ui:define>
-
-    <ui:define name="content">   
+    <f:view>
         <h:form prependId="false">
             <div class="grid dashboard ">
-                <p:breadCrumb>
-                    <p:menuitem value="Matenimientos" outcome="/app/home" />
-                    <p:menuitem value="Items"/>
-                </p:breadCrumb>
-
                 <div class="col-12">
                     <p:messages showDetail="true" showSummary="false" closable="true">
                         <p:autoUpdate />
@@ -119,5 +102,5 @@
             </div>
 
         </h:form>
-    </ui:define>
+    </f:view>
 </ui:composition>

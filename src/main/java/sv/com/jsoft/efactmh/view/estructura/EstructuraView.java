@@ -76,7 +76,7 @@ public class EstructuraView implements Serializable {
                 .height("460px")
                 .build();
 
-        PrimeFaces.current().dialog().openDynamic("dialog/dlg-establecimiento", options, null);
+        PrimeFaces.current().dialog().openDynamic("mantto/dialog/dlg-establecimiento", options, null);
     }
 
     public void showDlgPuntoVenta() {
@@ -104,7 +104,7 @@ public class EstructuraView implements Serializable {
                 .height("460px")
                 .build();
 
-        PrimeFaces.current().dialog().openDynamic("dialog/dlg-punto-venta", options, null);
+        PrimeFaces.current().dialog().openDynamic("mantto/dialog/dlg-punto-venta", options, null);
     }
 
     public void onEstablecimiento(SelectEvent<EstablecimientoDto> event) {

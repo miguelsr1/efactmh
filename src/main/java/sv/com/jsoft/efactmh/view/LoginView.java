@@ -39,7 +39,7 @@ public class LoginView implements Serializable {
     SessionService securityService;
 
     public String validarProveedor() {
-        return validarLogin("app/home");
+        return validarLogin("app/index");
     }
 
     private String validarLogin(String urlWelcome) {

@@ -4,6 +4,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui"
       lang="en">
 
     <h:head>
@@ -21,6 +22,10 @@
     </h:head>
 
     <h:body styleClass="#{guestPreferences.inputStyleClass}">
+        
+        <f:metadata>
+		<o:enableRestorableView />
+	</f:metadata>
 
         <h:form>
             <p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="450000" />
@@ -42,8 +47,9 @@
                 <ui:include src="./menu.xhtml"/>
 
                 <div class="layout-content">
-                    <ui:insert name="content"/>
-
+                    <!--ui:insert name="content"/-->
+                    <ui:include src="#{sessionView.opcion}" id="workspace"/>
+                    
                     <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" 
                                             update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
 
