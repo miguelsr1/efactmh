@@ -32,20 +32,47 @@ public class UploadLogoView {
 
     @PostConstruct
     public void init() {
-        PATH_IMG_LOGO = VARIABLES.getString("path.img-logo");
+        PATH_IMG_LOGO = System.getProperty("os.name").toLowerCase().contains("win")
+                ? VARIABLES.getString("path.img-logo.win")
+                : VARIABLES.getString("path.img-logo.linux");
     }
 
     public void handleFileUpload(FileUploadEvent event) {
         UploadedFile file = event.getFile();
 
-        if (file != null && file.getContent() != null && file.getContent().length > 0 && file.getFileName() != null) {
-            File imgLogo = new File(PATH_IMG_LOGO + File.separator + sessionService.getParametroDto().getUserJwt().concat(".jpg"));
+        if (file != null
+                && file.getContent() != null
+                && file.getContent().length > 0
+                && file.getFileName() != null
+                && isRealJpg(file)) {
+            File imgLogo = new File(PATH_IMG_LOGO + File.separator + "logos" + File.separator + sessionService.getParametroDto().getUserJwt().concat(".jpg"));
 
             try (InputStream input = file.getInputStream()) {
                 Files.copy(input, imgLogo.toPath(), StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException ex) {
                 log.error("ERROR CREANDO IMAGEN DE LOGO PARA EMISOR: " + sessionService.getParametroDto().getUserJwt());
             }
+        } else if (file != null) {
+            log.error("=================================");
+            log.error("ERROR EN FORMATO DE IMG: " + file.getFileName());
+            log.error("CONTENT TYPE: " + file.getContentType());
+            log.error("USUARIO: " + sessionService.getUserName());
+            log.error("=================================");
         }
+    }
+
+    public boolean isRealJpg(UploadedFile file) {
+        try (InputStream input = file.getInputStream()) {
+            byte[] header = new byte[8];
+            if (input.read(header) != -1) {
+                // JPG
+                if (header[0] == (byte) 0xFF && header[1] == (byte) 0xD8) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+        return false;
     }
 }

@@ -30,8 +30,9 @@
                     <div class="flex flex-column align-items-center flex-or">
                         <span class="font-normal text-900 mb-2">Mi logo</span>
                         <!--p:graphicImage name="escudo.png" library="images"/-->
-                        <p:graphicImage name="efact.png" library="images" width="130" />
+                        <p:graphicImage value="/DynamicImageServlet?file=#{emisorView.emisor.nit.replace('-', '')}" width="130" />
                         <p:commandButton icon="pi pi-pencil" class="ui-button-icon-only rounded-button mt-4" oncomplete="onClick('pnUpd_input')"/>
+                        <small style="text-align: center;margin-top: 1rem">Peso máxima: 100KB</small>
                         <small style="text-align: center;margin-top: 1rem">La imagen no debe de superar 150x150</small>
                     </div>
                 </div>
@@ -102,7 +103,7 @@
     </h:form>    
     <p:panel visible="false">
         <h:form prependId="false">
-            <p:fileUpload id="pnUpd" auto="true" widgetVar="pnUpd" mode="simple" listener="#{uploadLogoView.handleFileUpload}"
+            <p:fileUpload id="pnUpd" auto="true" widgetVar="pnUpd" mode="simple" listener="#{uploadLogoView.handleFileUpload}" sizeLimit="150000"
                           skinSimple="true" allowTypes="/(\.|\/)(jpg)$/" chooseIcon="pi pi-pencil" process="@this"  />
         </h:form>
     </p:panel>
