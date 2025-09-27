@@ -30,7 +30,7 @@
                     <div class="flex flex-column align-items-center flex-or">
                         <span class="font-normal text-900 mb-2">Mi logo</span>
                         <!--p:graphicImage name="escudo.png" library="images"/-->
-                        <p:graphicImage value="/DynamicImageServlet?file=#{emisorView.emisor.nit.replace('-', '')}" width="130" />
+                        <p:graphicImage value="/DynamicImageServlet?file=#{emisorView.emisor.nit.replace('-', '')}" width="250" />
                         <p:commandButton icon="pi pi-pencil" class="ui-button-icon-only rounded-button mt-4" oncomplete="onClick('pnUpd_input')"/>
                         <small style="text-align: center;margin-top: 1rem">Peso máxima: 100KB</small>
                         <small style="text-align: center;margin-top: 1rem">La imagen no debe de superar 150x150</small>

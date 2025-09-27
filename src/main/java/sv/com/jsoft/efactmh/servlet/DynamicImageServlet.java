@@ -1,13 +1,11 @@
 package sv.com.jsoft.efactmh.servlet;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ResourceBundle;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +29,7 @@ public class DynamicImageServlet extends HttpServlet {
             byte[] bytes;
             String pathImg = System.getProperty("os.name").toLowerCase().contains("win")
                     ? RESOURCE_BUNDLE.getString("path.img-logo.win")
-                    : RESOURCE_BUNDLE.getString("path.img-logo.linuc");
+                    : RESOURCE_BUNDLE.getString("path.img-logo.linux");
 
             log("path img: " + pathImg);
 
