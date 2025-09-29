@@ -31,7 +31,7 @@
                     </p:selectOneMenu>
                     <small jsf:id="chkCompra" style="display: #{invoceView.detPago.tipoPago eq 3 ? 'block':'none'}"><p:selectBooleanCheckbox itemLabel="Compra a plazos"/> </small>
                 </div>
-                <div class="field col-12" >
+                <div class="field col-12" style="display: none" >
                     <p:outputLabel for="txtMontoPago" value="Monto"/>
                     <p:inputNumber id="txtMontoPago" value="#{invoceView.detPago.monto}" inputStyle="text-align: right;"
                                    decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "

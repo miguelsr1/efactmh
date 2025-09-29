@@ -10,147 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/nb-configuration.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/primefaces/paradise/component/LayoutWidgetBuilder.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/primefaces/paradise/component/ParadiseMenu.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/primefaces/paradise/component/ParadiseMenuRenderer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/primefaces/paradise/filter/CharacterEncodingFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/primefaces/paradise/view/GuestPreferences.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/JAXRSConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/converter/ProductoConverter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/converter/UnidadMedidaConverter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/exceptionhandler/ViewExpiredExceptionHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/exceptionhandler/ViewExpiredExceptionHandlerFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/AuthorizationFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/Cliente.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/DetFacturaDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/DetalleFacturaDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/DetallePago.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/DetallePedido.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/Efactura.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/Emisor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/EntityPk.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/EstadoPedido.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/InvoceDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/ItemDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/MunicipioDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/PerJuridicaRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/PerNaturalRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/Personeria.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/Producto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/TipoUnidadMedida.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ApiMhDteResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/CatalogoDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ClienteDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ClienteResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DocumentoRespuestaDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DteToInvalidate.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DtesResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/EmisorDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ErrorResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/EstablecimientoDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/IdDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/InvalidateRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/JwtDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/LoginDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/MotivoInvalidarDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ParametroDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/PuntoVentaDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ReceptorDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/SendDteRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/enums/TipoMensaje.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/mapper/EmisorMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/util/Filtro.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/util/TipoOperacion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/util/TipoOperador.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/resources/JavaEE8Resource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ConfigurationBean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/Encriptador.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/CatalogoService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ComprobanteCreditoFiscalService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ContribuyenteService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/DteService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/IdentificacionService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/InvalidateService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/InvoceService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/LoginServices.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ProductoService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ResumenService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/TipoItemService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/UbicacionService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/UnidadMedidaService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/servlet/DynamicImageServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/servlet/JasperReportServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/CantidadALetras.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/Constantes.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/JsfUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/MessageUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/ResponseRestApi.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/VersionDteUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ClienteView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ConfigView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/EmisorView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/FacturaView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/LoginView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/MonitorDeSessionView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ParametrosView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ProductoView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ReporteView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/TestOmnifacesPushView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/UploadLogoView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/dialog/DlgDetFactura.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/dialog/DlgInvalidarDte.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/DlgEstablecimiento.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/DlgPuntoVenta.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/EstructuraView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/service/EstablecimientoService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/beans.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/config.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/faces-config.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jboss-web.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/menu.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/primefaces-paradise.taglib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/primefaces-paradise.taglib.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/template.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/topbar.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/access.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/home.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/lstDtes.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/cliente.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/cliente/frag-cliente.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/cliente/frag-lista.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/cliente/frag-pj.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/cliente/frag-pn.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/emisor/dialog/dlg-establecimiento.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/emisor/dialog/dlg-punto-venta.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/emisor/emisor.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/emisor/fragmento/frag-emisor.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/emisor/fragmento/frag-estructura.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/emisor/fragmento/frag-parametro.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/emisor/fragmento/frag-responsable-dte.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/fragmento/establecimiento/frag-establecimiento.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/mantto/items.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/manttoItem.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-cliente.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-pdf.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invalidate/invalidate.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/dialog/dlg-det-factura.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/dialog/dlg-invalidar-dte.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-client.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-det-invoce.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-det-payment.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/shopping/index.xhtml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/viewExpired.xhtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/faces-config.NavData" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +55,7 @@
     "JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/migue/Documents/NetBeansProjects/efactmh",
@@ -203,7 +64,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.3505747",
     "settings.editor.selected.configurable": "preferences.lookFeel",
@@ -282,6 +143,17 @@
         </option>
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="efactmh" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="efactmh" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -302,6 +174,7 @@
       <workItem from="1752772885202" duration="4926000" />
       <workItem from="1752806526963" duration="606000" />
       <workItem from="1752807176921" duration="8316000" />
+      <workItem from="1759108048476" duration="69000" />
     </task>
     <servers />
   </component>

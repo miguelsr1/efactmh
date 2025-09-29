@@ -117,7 +117,7 @@ public class SessionView implements Serializable {
                 .build();
         
         addSubMenu(subMenuMan, "Items", "pi pi-th-large", "/app/mantto/items.xhtml");
-        addSubMenu(subMenuMan, "Mis Datos", "pi pi-th-large", "/app/mantto/emisor/emisor.xhtml");
+        addSubMenu(subMenuMan, "Mis Datos", "pi pi-user", "/app/mantto/emisor/emisor.xhtml");
         addSubMenu(subMenuMan, "Clientes", "pi pi-id-card", "/app/mantto/cliente.xhtml");
         
         model.getElements().add(subMenuMan);

@@ -7,56 +7,63 @@
 
     <p:outputPanel id="dvDetInvoce" style="display: #{invoceView.activeStep eq 1 ? 'block':'none'}">
 
-        <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.invoce.detailInvoce}" var="item" 
-                     rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
-                     emptyMessage="No se han agregado items">
-
-            <f:facet name="header">
-                <div class="flex justify-content-between align-items-center">
-                    <h5><span style="margin-right: 1rem"></span>Detalle factura</h5>
-
-                    <div>
-                        <p:commandButton action="#{invoceView.showDlgDetFactura()}"
-                                         process="@this" icon="pi pi-plus"
-                                         validateClient="true" styleClass="ui-button-success">
-                            <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="tblDetPedido,lblSumas,lblIva,lblSubTotal,lblIvaRet,lblRentaRet,lblTotal"/>
-                        </p:commandButton>
-                    </div>
-                </div>
-            </f:facet>
-
-            <p:column headerText="Id">
-                #{rowId + 1} 
-            </p:column>
-            <p:column headerText="Código">
-                <p:outputLabel value="#{item.codigoProducto}" />
-            </p:column>
-            <p:column headerText="Descripción">
-                <p:outputLabel value="#{item.nombre}" />
-            </p:column>
-            <p:column headerText="Cantidad" style="text-align: right;">
-                <p:outputLabel value="#{item.cantidad}">
-                    <f:convertNumber pattern="#,##0"/>
-                </p:outputLabel>
-            </p:column>
-            <p:column headerText="Precio Unit." style="text-align: right;">
-                <p:outputLabel value="#{item.precioUnitario}">
-                    <f:convertNumber pattern="#,##0.00"/>
-                </p:outputLabel>
-            </p:column>
-            <p:column headerText="Total" style="text-align: right;">
-                <p:outputLabel value="#{item.subTotal}">
-                    <f:convertNumber pattern="#,##0.00"/>
-                </p:outputLabel>
-            </p:column>
-            <p:column headerText="Borrar" style="text-align: center;">
-                <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
-                                 action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido, invoice-content" 
-                                 style="width: 22px; height: 22px" process="@this">
-                    <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
+        <div >
+            <div class="card-header">
+                <h5>Detalle factura</h5>
+                <p:commandButton action="#{invoceView.showDlgDetFactura()}"
+                                 process="@this" icon="pi pi-plus"
+                                 validateClient="true" styleClass="ui-button-success">
+                    <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="msjEmptyItems,tblDetPedido,lblSumas,lblIva,lblSubTotal,lblIvaRet,lblRentaRet,lblTotal"/>
                 </p:commandButton>
-            </p:column>
-        </p:dataTable>
+            </div>
+
+            <p:outputPanel id="msjEmptyItems">
+                <div style="display: #{invoceView.invoce.detailInvoce.size() eq 0 ? 'block':'none'}; text-align: center;">
+                    <p:graphicImage name="empty-box.png" library="images" style="margin-top: 3rem" /><br/>
+                    <small>No se han agregado items a la factura</small>
+                </div>
+
+
+                <div style="display: #{invoceView.invoce.detailInvoce.size() eq 0 ? 'none':'block'}; text-align: center;">
+                    <p:dataTable id="tblDetPedido" widgetVar="tblDetPedido" value="#{invoceView.invoce.detailInvoce}" var="item" 
+                                 rowIndexVar="rowId" reflow="true" size="small" tableStyle="table-layout: auto;"
+                                 emptyMessage="No se han agregado items">
+
+                        <p:column headerText="Id">
+                            #{rowId + 1} 
+                        </p:column>
+                        <p:column headerText="Código">
+                            <p:outputLabel value="#{item.codigoProducto}" />
+                        </p:column>
+                        <p:column headerText="Descripción">
+                            <p:outputLabel value="#{item.nombre}" />
+                        </p:column>
+                        <p:column headerText="Cantidad" style="text-align: right;">
+                            <p:outputLabel value="#{item.cantidad}">
+                                <f:convertNumber pattern="#,##0"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Precio Unit." style="text-align: right;">
+                            <p:outputLabel value="#{item.precioUnitario}">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Total" style="text-align: right;">
+                            <p:outputLabel value="#{item.subTotal}">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Borrar" style="text-align: center;">
+                            <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat"
+                                             action="#{invoceView.removeDetInvoce(rowId)}" update="tblDetPedido, invoice-content" 
+                                             style="width: 22px; height: 22px" process="@this">
+                                <p:confirm header="Confirmar" message="¿Esta seguro de eliminar este item?" icon="pi pi-info-circle"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </p:outputPanel>
+        </div>        
 
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat" process="@this"/>
@@ -102,7 +109,7 @@
                                     <f:convertNumber pattern="#,##0.00"/>
                                 </p:outputLabel>
                             </div>
-                            
+
                             <div class="invoice-label">Renta Retenido(10%)</div>
                             <div class="invoice-value">$ 
                                 <p:outputLabel id="lblRentaRet" value="#{invoceView.rentaRetenido}">
