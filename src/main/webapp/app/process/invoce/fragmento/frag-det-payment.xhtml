@@ -11,7 +11,7 @@
         </div>
 
         <div class="ui-fluid formgrid grid" jsf:id="dvPago">
-            <div class="col-3" style="padding-right: 2rem">
+            <div class="col-6" style="padding-right: 2rem">
                 <div class="field col-12" >
                     <p:outputLabel for="cboCondicionOpe" value="Condición de Operación"/>
                     <p:selectOneMenu id="cboCondicionOpe" value="#{invoceView.invoce.condicionOperacion}" required="true" style="margin-bottom: 0.5rem"
@@ -70,9 +70,9 @@
                                      update="dvPago,tblPagos,tblPagos:lblTotal"/>
                 </div>
             </div>
-            <div class="col-7">
+            <div class="col-6">
                 <p:dataTable id="tblPagos" value="#{invoceView.lstDetPago}" var="pago" rowIndexVar="id" reflow="true" size="small"
-                             emptyMessage="No se han agregado detalle de pagos" tableStyle="table-layout: auto;">
+                             emptyMessage="No se han agregado detalle de pagos" tableStyle="table-layout: auto; width: 100%">
 
                     <f:facet name="header">
                         <div class="flex justify-content-between align-items-center">
@@ -132,7 +132,8 @@
                          update="step, dvClient, dvDetInvoce, tblDetPedido, invoice-content, dvDetPayment" icon="pi pi-angle-left" action="#{invoceView.backStep()}" />
         <p:commandButton value="Generar DTE" styleClass="mr-2 ui-button-info"  icon="pi pi-file-export"
                          process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.preSave()}"
-                         oncomplete="onClick('btnSend')" style="margin-top: 1rem" />
+                         oncomplete="onClick('btnSend')" style="margin-top: 1rem" >
+        </p:commandButton>
 
         <p:panel visible="false">
             <p:commandButton id="btnSend" value="SEND DTE" process="@this" action="#{invoceView.save()}"/>

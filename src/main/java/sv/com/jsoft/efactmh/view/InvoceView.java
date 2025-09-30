@@ -28,6 +28,7 @@ import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
+import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.InvoceService;
 import sv.com.jsoft.efactmh.services.SessionService;
@@ -88,6 +89,9 @@ public class InvoceView implements Serializable {
 
     @Getter
     @Setter
+    private boolean sinDatos = true;
+    @Getter
+    @Setter
     private Producto producto;
     private DetallePago detPago;
     @Getter
@@ -138,6 +142,8 @@ public class InvoceView implements Serializable {
         fontWeightComplete = "";
 
         loadMetodoPago();
+
+        facturaSinDatos();
     }
 
     public DetallePago getDetPago() {
@@ -371,6 +377,7 @@ public class InvoceView implements Serializable {
                 break;
             case 1:
             case 2:
+                lstDetPago.clear();
                 activeStep--;
                 break;
             default:
@@ -451,71 +458,70 @@ public class InvoceView implements Serializable {
                 invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
 
                 //Persistiendo factura
+                log.info("PERSISTIENDO FACTURA: " + invoceDto.toString());
                 ResponseRestApi response = invoceService.saveInvoce(securityService.getToken(), invoceDto);
 
                 if (response.getCodeHttp() == 201) {
                     IdDto newInvoce = (IdDto) response.getBody();
                     idFac = newInvoce.getId();
 
-                    //advance 30%
-                    addProgressAvance();
-
+                    /*//advance 30%
+                    addProgressAvance();*/
                     invoceDto.setIdFactura(idFac);
 
-                    //advance 60%
-                    addProgressAvance();
-
+                    /*//advance 60%
+                    addProgressAvance();*/
                     //enviando a MH
-                    //response = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
-                    response = null;
+                    log.info("ENVIANDO DTE: " + idFac + " A MH");
+                    response = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
 
                     if (response == null) {
                         log.error("ERROR ENVIANDO DTE: " + idFac);
                         log.error("API: /api/secured/dte/send");
                         log.error("CODIGO ERROR: " + Constantes.COD_ERROR_NULL_RESPONSE);
+                        log.info("LA FACTURA ID: " + idFac + " - SE ENVIARA POR CRON");
+                        addProgressAvance();
 
                         //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_NULL_RESPONSE);
-                        //return;
+                        return;
                     }
 
                     //finalizar el proceso, aunque no se genere el DTE a MH
                     //advance 100%
-                    addProgressAvance();
-
+                    //addProgressAvance();
                     log.info("Finalizando");
 
                     clearStatus();
 
-                    if (response != null) {
-                        switch (response.getCodeHttp()) {
-                            case 200:
-                                dteServices.sendMail(idFac, securityService.getToken());
-                                break;
-                            case 504:
-                                /*
+                    switch (response.getCodeHttp()) {
+                        case 200:
+                            dteServices.sendMail(idFac, securityService.getToken());
+                            break;
+                        case 504:
+                            /*
                             reintento despues de 8 segundos:
                             1. hacer consulta del estado del dte.
                             2. si no ha sido recibido, enviarlo nuevamente
                             esto hacerlo dos veces máximo
-                                 */
+                             */
 
-                                break;
-                            default:
-                                /*
+                            break;
+                        default:
+                            /*
                             si falla el envio, reintentar:
                             1. hacer consulta del estado del dte.
                             2. si no ha sido recibido, enviarlo nuevamente
                             esto hacerlo dos veces máximo
-                                 */
+                             */
 
-                                log.error("ERROR ENVIANDO DTE: " + idFac);
-                                log.error("CODIGO HTTP: " + response.getCodeHttp());
-                                log.error("MENSAJE ERROR: " + response.getBody());
+                            log.error("ERROR ENVIANDO DTE: " + idFac);
+                            log.error("CODIGO HTTP: " + response.getCodeHttp());
+                            log.error("MENSAJE ERROR: " + response.getBody());
 
-                                //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
-                                break;
-                        }
+                            //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
+                            break;
                     }
+
                 } else {
                     log.error("ERROR CREANDO FACTURA: " + invoceDto.toString());
                     log.error("CODIGO HTTP: " + response.getCodeHttp());
@@ -565,7 +571,8 @@ public class InvoceView implements Serializable {
             return false;
         }
 
-        PrimeFaces.current().executeScript("PF('chatDialog').show()");
+        PrimeFaces.current().executeScript("PF('dlgDteSave').show()");
+        
         return true;
     }
 
@@ -638,5 +645,10 @@ public class InvoceView implements Serializable {
         fontWeightSave = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
+    }
+
+    public void facturaSinDatos() {
+        numDocumentoReceptor = sinDatos ? "00000000-0" : null;
+        findClient();
     }
 }

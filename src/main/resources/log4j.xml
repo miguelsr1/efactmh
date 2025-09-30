@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="target" value="System.out"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd/MM/yyyy hh:mm:ss aa} - dtesv - [%p] %c{1}:%L - %m%n "/>
+        </layout>
+    </appender>	
+    <appender name="file" class="org.apache.log4j.RollingFileAppender">
+        <param name="append" value="true" />
+        <param name="maxFileSize" value="30MB" />
+        <param name="maxBackupIndex" value="30" />
+        <param name="file" value="${jboss.server.log.dir}/logs/vmt-docs.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd/MM/yyyy hh:mm:ss aa} - dtesv - [%p] %c{1}:%L - %m%n "/>                
+        </layout>
+    </appender>    
+    <logger name="sv.com.sertracen">
+        <level value="info" />
+    </logger>
+    <root>
+        <level value="info" />      
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+    </root>
+</log4j:configuration>

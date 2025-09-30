@@ -75,6 +75,13 @@
                                      icon="pi pi-check" update="mensajesPanel, step, dvClient, dvDetInvoce, dvDetPayment" disabled="#{invoceView.advance ne 100}"/>
                 </div>
             </p:dialog>
+
+            <p:dialog header="Información" id="dlgDteSave" widgetVar="dlgDteSave" modal="true" closable="false" draggable="false" resizable="false" >
+                <span>FACTURA ALMACENADA SATISFACTORIAMENTE</span>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" icon="pi pi-check" action="#{invoceView.cleanFull}" onclick="location.reload(); return false;"/>
+                </f:facet>
+            </p:dialog>
         </h:form>
 
 

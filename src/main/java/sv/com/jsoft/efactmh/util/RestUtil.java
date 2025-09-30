@@ -49,7 +49,7 @@ public class RestUtil {
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .timeout(Duration.ofSeconds(5))
+                    .timeout(Duration.ofSeconds(3))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -91,6 +91,7 @@ public class RestUtil {
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .timeout(Duration.ofSeconds(3))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -136,6 +137,7 @@ public class RestUtil {
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .POST(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
+                    .timeout(Duration.ofSeconds(3))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -174,6 +176,7 @@ public class RestUtil {
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
+                    .timeout(Duration.ofSeconds(3))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -219,6 +222,7 @@ public class RestUtil {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
+                    .timeout(Duration.ofSeconds(3))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -239,7 +243,8 @@ public class RestUtil {
                     .version(HttpClient.Version.HTTP_1_1)
                     .uri(new URI(HOST + endpoint + (data.esNuevo() ? "" : data.getId())))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8");
+                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                    .timeout(Duration.ofSeconds(3));
 
             httpBuilder = data.esNuevo()
                     ? httpBuilder.POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
@@ -267,6 +272,7 @@ public class RestUtil {
                     .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(data)))
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                    .timeout(Duration.ofSeconds(3))
                     .build();
 
             HttpResponse<String> response = HttpClient
@@ -290,6 +296,7 @@ public class RestUtil {
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .POST(HttpRequest.BodyPublishers
                             .ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
+                    .timeout(Duration.ofSeconds(3))
                     .build();
 
             HttpResponse<String> response = HttpClient

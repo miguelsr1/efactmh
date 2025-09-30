@@ -6,6 +6,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,6 +67,7 @@ public class LoginView implements Serializable {
             case 200:
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", usuario);
                 securityService.setToken(loginServices.getToken(response));
+                setIpAddessAndUserAgent();
                 return urlWelcome + "?faces-redirect=true";
             default:
                 break;
@@ -72,4 +75,18 @@ public class LoginView implements Serializable {
         return null;
     }
 
+    /**
+     * metodo para gaurdar datos importantes de sesión
+     *
+     * @author
+     */
+    private void setIpAddessAndUserAgent() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+        HttpSession httpSession = request.getSession(true);
+
+        httpSession.setAttribute("clientIpAddress", request.getRemoteAddr());
+        httpSession.setAttribute("clientUserAgent", request.getHeader("User-Agent"));
+        httpSession.setAttribute("loggedIn", true);
+    }
 }
