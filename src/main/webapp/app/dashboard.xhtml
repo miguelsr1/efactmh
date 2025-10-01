@@ -2,15 +2,28 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/WEB-INF/template.xhtml"
                 xmlns:p="http://primefaces.org/ui">
 
-    <f:view>
+    <ui:define name="head">
+        <style>
+            .custom-chart {
+                width: 100%;  /* O un ancho fijo como 800px */
+                max-width: 900px;
+                height: 400px;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Principal</ui:define>
+
+    <ui:define name="content">   
         <h:form prependId="false">
             <f:metadata>
                 <f:event type="preRenderView" listener="#{dashboardView.loadData()}" />
             </f:metadata>
 
-            <div class="p-2 flex flex-column flex-auto">
+            <div class="grid dashboard">
                 <div class="grid">
                     <div class="col-12 lg:col-6 md:col-12">
                         <div class="card border-round p-4">
@@ -190,5 +203,5 @@
                 </div>
             </div>
         </h:form>
-    </f:view>
+    </ui:define>
 </ui:composition>

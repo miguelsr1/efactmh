@@ -6,14 +6,12 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 /**
  *
  * @author migue
  */
-@Named
 @ApplicationScoped
 public class Encriptador implements Serializable {
 

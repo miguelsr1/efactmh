@@ -58,7 +58,7 @@ public class JsfUtil {
     public static void redirectToIndex() {
         try {
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-            externalContext.redirect(externalContext.getApplicationContextPath());
+            externalContext.redirect(externalContext.getApplicationContextPath().concat("/"));
         } catch (IOException ex) {
             log.error("Error redireccionando al Index", ex);
         }

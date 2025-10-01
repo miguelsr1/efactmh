@@ -11,7 +11,7 @@
         <param name="append" value="true" />
         <param name="maxFileSize" value="30MB" />
         <param name="maxBackupIndex" value="30" />
-        <param name="file" value="${jboss.server.log.dir}/logs/vmt-docs.log" />
+        <param name="file" value="${jboss.server.log.dir}/logs/efact.log" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd/MM/yyyy hh:mm:ss aa} - dtesv - [%p] %c{1}:%L - %m%n "/>                
         </layout>

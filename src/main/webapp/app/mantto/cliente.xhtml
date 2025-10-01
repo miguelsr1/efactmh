@@ -1,11 +1,11 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                template="/WEB-INF/template.xhtml"
+                xmlns:p="http://primefaces.org/ui">
 
-    <f:view>
-        
+    <ui:define name="title">Cliente</ui:define>
+    <ui:define name="head">
         <h:outputScript name="inputmask.js" library="js"/>
         <style>
             body .ui-chkbox .ui-chkbox-box {
@@ -15,7 +15,9 @@
                 margin-bottom: 0.4rem !important;
             }
         </style>
+    </ui:define>
         
+    <ui:define name="content">   
         <h:form prependId="false">
             <div class="grid dashboard ">
                 <div class="col-12">
@@ -24,5 +26,5 @@
             </div>
             <ui:include src="cliente/frag-lista.xhtml"/>
         </h:form>
-    </f:view>
+    </ui:define>
 </ui:composition>

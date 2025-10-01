@@ -3,9 +3,13 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:jsf="http://xmlns.jcp.org/jsf">
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
 
-    <f:view>
+    <ui:define name="title">Items</ui:define>
+    <ui:define name="head"></ui:define>
+
+    <ui:define name="content">   
         <h:form prependId="false">
             <div class="grid dashboard ">
                 <div class="col-12">
@@ -31,7 +35,8 @@
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="cboUni" value="Unidad de Medida"/>
-                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.codigoUnidad}" disabled="#{productoView.disabled}" >
+                                        <p:selectOneMenu id="cboUni" value="#{productoView.producto.codigoUnidad}" disabled="#{productoView.disabled}" 
+                                                         filter="true" filterMatchMode="startsWith" filterNormalize="true">
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UNA UNIDAD" />
                                             <f:selectItems value="#{unidadMedidaService.lstUnidadesMedidas}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.id}" />
                                         </p:selectOneMenu>
@@ -102,5 +107,5 @@
             </div>
 
         </h:form>
-    </f:view>
+    </ui:define>
 </ui:composition>

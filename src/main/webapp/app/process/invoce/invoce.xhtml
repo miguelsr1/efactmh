@@ -5,9 +5,11 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:o="http://omnifaces.org/ui"
-                xmlns:of="http://omnifaces.org/functions">
-    <f:view>
+                xmlns:of="http://omnifaces.org/functions"
+                template="/WEB-INF/template.xhtml">
 
+    <ui:define name="title">Nueva factura</ui:define>
+    <ui:define name="head">
         <h:outputScript name="fn.js" library="js" />
         <h:outputScript name="inputmask.js" library="js" />
         <style>
@@ -42,6 +44,9 @@
                 ejecutarGrowl([{name: 'data', value: message}]);
             }
         </script>
+    </ui:define>
+
+    <ui:define name="content">
 
         <h:form prependId="false">
             <o:socket channel="chatChannel" 
@@ -118,5 +123,5 @@
                 </f:facet>
             </p:dialog>
         </h:form>
-    </f:view>
+    </ui:define>
 </ui:composition>

@@ -12,7 +12,6 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  *
  * @author migue
  */
-@Named
 @ApplicationScoped
 public class LoginServices {
 

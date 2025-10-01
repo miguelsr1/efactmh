@@ -13,11 +13,11 @@
                     <i class="pi pi-fw pi-search topbar-search-icon"></i>
                     <input type="text" class="topbar-search" placeholder="Type your search here"/>
                 </div>
-                <pv:menu widgetVar="ParadiseMenuWidget" model="#{sessionView.model}">
-                </pv:menu>
-                <!--pv:menu widgetVar="ParadiseMenuWidget">
+                <!--pv:menu widgetVar="ParadiseMenuWidget" model="#{sessionView.model}">
+                </pv:menu-->
+                <pv:menu widgetVar="ParadiseMenuWidget">
                     <p:submenu id="m_homepage" label="Favoritos" icon="pi pi-home">
-                        <p:menuitem id="m_dashboard" value="Dashboard" icon="pi pi-home" outcome="/app/home" process="@this"/>
+                        <p:menuitem id="m_dashboard" value="Dashboard" icon="pi pi-home" outcome="/app/dashboard" process="@this"/>
                     </p:submenu>
                     <p:submenu label="Operaciones" icon="pi pi-fw pi-prime" >
                         <p:menuitem value="Factura" icon="pi pi-inbox" outcome="/app/process/invoce/invoce" process="@this"/>
@@ -30,7 +30,7 @@
                         <p:menuitem value="Mis Datos" icon="pi pi-briefcase" outcome="/app/mantto/emisor/emisor" process="@this" />
                         <p:menuitem value="Clientes" icon="pi pi-id-card" outcome="/app/mantto/cliente" process="@this" />
                     </p:submenu>
-                </pv:menu-->
+                </pv:menu>
             </h:form>
         </div>
     </div>

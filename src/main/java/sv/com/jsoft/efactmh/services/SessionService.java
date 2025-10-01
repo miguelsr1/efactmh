@@ -9,6 +9,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
+import sv.com.jsoft.efactmh.model.Emisor;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
@@ -24,6 +25,8 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 public class SessionService implements Serializable {
 
     @Getter
+    private Emisor emisor;
+    @Getter
     private ParametroDto parametroDto;
     @Getter
     private String userName;
@@ -32,6 +35,8 @@ public class SessionService implements Serializable {
 
     @Inject
     CatalogoService catalogoService;
+    @Inject
+    EmisorService emisorService;
 
     public JwtDto getToken() {
         return token;
@@ -45,6 +50,14 @@ public class SessionService implements Serializable {
 
             cargarParametrosMh();
             loadEstablecimiento();
+            loadEmisor();
+        }
+    }
+
+    private void loadEmisor() {
+        ResponseRestApi<Emisor> response = emisorService.getEmisor(token);
+        if (response.getCodeHttp() == 200) {
+            emisor = response.getBody();
         }
     }
 

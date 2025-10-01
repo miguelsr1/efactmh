@@ -49,6 +49,8 @@ public class DtesView implements Serializable {
     @Inject
     SessionService sessionService;
     @Inject
+    SessionView sessionView;
+    @Inject
     InvalidateService invalidateService;
 
     @PostConstruct
@@ -73,23 +75,15 @@ public class DtesView implements Serializable {
     }
 
     public String showDlgDetToInvalidate() {
-
         ResponseDto response = invalidateService.findDteToInvalidate(idFactura, codigoDte, codigoGeneracion, sessionService.getToken());
 
         if (response.getStatusCode() == 0) {
             DteToInvalidate dte = (DteToInvalidate) response.getBody();
 
-            /*DialogFrameworkOptions options = DialogFrameworkOptions.builder()
-                    .draggable(false)
-                    .resizable(false)
-                    .maximizable(false)
-                    .modal(true)
-                    .width("700")
-                    .build();*/
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("dteInv", dte);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoDte", codigoDte);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
-            //PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-invalidar-dte", options, null);
+            
             return "process/invoce/dialog/dlg-invalidar-dte";
         } else {
             MessageUtil.builder()
@@ -97,9 +91,8 @@ public class DtesView implements Serializable {
                     .title("ALERTA")
                     .message(response.getBody().toString())
                     .build().showMessage();
-
-            return null;
         }
+        return null;
     }
 
     public void onDteInvalidate(SelectEvent event) {

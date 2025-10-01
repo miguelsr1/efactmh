@@ -14,7 +14,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
     padding: 0;
     margin: 0;
-    min-height: 100%;
 }
 .ui-outputlabel .ui-outputlabel-label {
     overflow: hidden;

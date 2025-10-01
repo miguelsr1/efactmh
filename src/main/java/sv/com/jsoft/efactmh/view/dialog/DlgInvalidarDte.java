@@ -31,7 +31,7 @@ import sv.com.jsoft.efactmh.view.SessionView;
 @ViewScoped
 @Slf4j
 public class DlgInvalidarDte implements Serializable {
-    
+
     private Long idFactura;
     @Getter
     private DteToInvalidate dte;
@@ -69,31 +69,42 @@ public class DlgInvalidarDte implements Serializable {
     InvalidateService invalidateService;
     @Inject
     SessionView sessionView;
-    
+
     @PostConstruct
     public void init() {
+
+        loadDataDte();
+        validarDteR();
+        loadResponsable();
+    }
+
+    private void loadDataDte() {
         dte = (DteToInvalidate) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("dteInv");
         idFactura = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idFactura");
         codigoDte = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("codigoDte");
-        
-        validarDteR();
-        
+
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("dteInv");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idFactura");
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("codigoDte");
     }
-    
-    public void closeDgl() {
-        PrimeFaces.current().dialog().closeDynamic(null);
+
+    private void loadResponsable() {
+        nomResponsable = sessionService.getEmisor().getNombreResponsable();
+        tipoDocResponsable = sessionService.getEmisor().getTipoDocResponsable();
+        numDocResponsable = sessionService.getEmisor().getNumeroDocResponsable();
     }
-    
+
+    public String closeDgl() {
+        return "/app/lstDtes";
+    }
+
     public void sendDteInvalidate() {
         if (tipoInvalidacion != 2 && !validarDteR()) {
             return;
         }
         //enviar dte a invalidar
         InvalidateRequest request = new InvalidateRequest();
-        
+
         request.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
         request.setIdPuntoVenta(sessionView.getIdPuntoVenta() == null ? null : Long.valueOf(sessionView.getIdPuntoVenta()));
         request.setIdFactura(idFactura);
@@ -106,11 +117,11 @@ public class DlgInvalidarDte implements Serializable {
         request.setTipoDocResponsable(tipoDocResponsable);
         request.setTipoDocSolicita(tipoDocSolicitante);
         request.setCodigoGeneracionR(tipoInvalidacion != 2 ? dteR : null);
-        
+
         ResponseRestApi response = invalidateService.createInvalidate(request, sessionService.getToken());
-        
+
         PrimeFaces.current().dialog().closeDynamic(null);
-        
+
         switch (response.getCodeHttp()) {
             case 200:
                 MessageUtil.builder()
@@ -130,11 +141,11 @@ public class DlgInvalidarDte implements Serializable {
                 break;
         }
     }
-    
+
     public void findDteR() {
         validarDteR();
     }
-    
+
     private Boolean validarDteR() {
         ResponseDto resposeDto = invalidateService.findDteToInvalidateByReplace(codigoDte, dteR, sessionService.getToken());
         if (resposeDto.getStatusCode() == 1) {

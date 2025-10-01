@@ -327,7 +327,7 @@ public class InvoceView implements Serializable {
                 .height("550px")
                 .build();
 
-        PrimeFaces.current().dialog().openDynamic("process/invoce/dialog/dlg-det-factura", options, null);
+        PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);
     }
 
     public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {

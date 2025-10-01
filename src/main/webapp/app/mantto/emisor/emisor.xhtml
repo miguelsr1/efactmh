@@ -3,9 +3,11 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:jsf="http://xmlns.jcp.org/jsf">
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
 
-    <f:view>
+    <ui:define name="title">Cliente</ui:define>
+    <ui:define name="head">
         <h:outputScript name="inputmask.js" library="js"/>
         <h:outputScript name="fn.js" library="js"/>
         <style>
@@ -43,7 +45,9 @@
                 color: var(--yellow-800);
             }
         </style>
+    </ui:define>
 
+    <ui:define name="content">
         <div class="grid dashboard ">
             <div class="col-12">                    
                 <div class="card" jsf:id="dvDatos">
@@ -67,5 +71,5 @@
                 </div>
             </div>
         </div>
-    </f:view>
+    </ui:define>
 </ui:composition>

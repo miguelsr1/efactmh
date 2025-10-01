@@ -1,7 +1,6 @@
 package sv.com.jsoft.efactmh.services;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
@@ -12,7 +11,6 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  *
  * @author msanchez
  */
-@Named
 @ApplicationScoped
 public class InvoceService {
 

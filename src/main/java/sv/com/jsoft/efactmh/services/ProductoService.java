@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -14,7 +13,6 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  *
  * @author migue
  */
-@Named
 @ApplicationScoped
 public class ProductoService {
 
