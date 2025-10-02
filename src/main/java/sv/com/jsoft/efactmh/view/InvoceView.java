@@ -25,6 +25,7 @@ import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.DetallePago;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.Producto;
+import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
@@ -34,6 +35,7 @@ import sv.com.jsoft.efactmh.services.InvoceService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.Constantes;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
+import static sv.com.jsoft.efactmh.util.Constantes.MSG_INFO;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -446,9 +448,7 @@ public class InvoceView implements Serializable {
 
     public void preSave() {
         makeInvoce = validatePreSend();
-    }
 
-    public void save() {
         if (makeInvoce) {
             lstDetPago.forEach(det -> det.getMonto());
 
@@ -473,16 +473,16 @@ public class InvoceView implements Serializable {
                     addProgressAvance();*/
                     //enviando a MH
                     log.info("ENVIANDO DTE: " + idFac + " A MH");
-                    response = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
+                    ResponseRestApi<ApiMhDteResponse> responseSendMh = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
 
-                    if (response == null) {
+                    if (responseSendMh == null) {
                         log.error("ERROR ENVIANDO DTE: " + idFac);
                         log.error("API: /api/secured/dte/send");
                         log.error("CODIGO ERROR: " + Constantes.COD_ERROR_NULL_RESPONSE);
                         log.info("LA FACTURA ID: " + idFac + " - SE ENVIARA POR CRON");
                         addProgressAvance();
 
-                        //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_NULL_RESPONSE);
+                        showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE - SE INTENTARÁ ENVIAR EN BREVE. " + Constantes.COD_ERROR_NULL_RESPONSE);
                         return;
                     }
 
@@ -493,8 +493,14 @@ public class InvoceView implements Serializable {
 
                     clearStatus();
 
-                    switch (response.getCodeHttp()) {
+                    switch (responseSendMh.getCodeHttp()) {
                         case 200:
+                            String codigoGeneracion = responseSendMh.getBody().getCodigoGeneracion();
+
+                            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO,
+                                    MSG_INFO,
+                                    "FACTURA CREADA Y RECIBIDA EN MH. FACTURA: " + codigoGeneracion);
+
                             dteServices.sendMail(idFac, securityService.getToken());
                             break;
                         case 504:
@@ -515,8 +521,8 @@ public class InvoceView implements Serializable {
                              */
 
                             log.error("ERROR ENVIANDO DTE: " + idFac);
-                            log.error("CODIGO HTTP: " + response.getCodeHttp());
-                            log.error("MENSAJE ERROR: " + response.getBody());
+                            log.error("CODIGO HTTP: " + responseSendMh.getCodeHttp());
+                            log.error("MENSAJE ERROR: " + responseSendMh.getBody());
 
                             //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
                             break;
@@ -532,6 +538,8 @@ public class InvoceView implements Serializable {
             } catch (InterruptedException ex) {
                 log.error("ERROR ENVIANDO DTE", ex);
             }
+            
+            cleanFull();
         }
     }
 
@@ -542,7 +550,7 @@ public class InvoceView implements Serializable {
 
         cleanFull();
 
-        PrimeFaces.current().executeScript("PF('chatDialog').hide()");
+        //PrimeFaces.current().executeScript("PF('chatDialog').hide()");
         PrimeFaces.current().ajax().update("mensajesPanel", "step", "dvClient", "dvDetInvoce", "dvDetPayment");
     }
 
@@ -578,8 +586,7 @@ public class InvoceView implements Serializable {
             return false;
         }
 
-        PrimeFaces.current().executeScript("PF('dlgDteSave').show()");
-
+        //PrimeFaces.current().executeScript("PF('dlgDteSave').show()");
         return true;
     }
 

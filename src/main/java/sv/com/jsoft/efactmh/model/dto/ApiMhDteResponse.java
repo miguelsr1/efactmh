@@ -13,5 +13,6 @@ public class ApiMhDteResponse implements Serializable {
 
     private String estado;
     private String descripcionMsg;
+    private String codigoGeneracion;
     private List<String> observaciones;
 }

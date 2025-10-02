@@ -131,12 +131,8 @@
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" process="@this"
                          update="step, dvClient, dvDetInvoce, tblDetPedido, invoice-content, dvDetPayment" icon="pi pi-angle-left" action="#{invoceView.backStep()}" />
         <p:commandButton value="Generar DTE" styleClass="mr-2 ui-button-info"  icon="pi pi-file-export"
-                         process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.preSave()}"
-                         oncomplete="onClick('btnSend')" style="margin-top: 1rem" >
+                         process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.preSave()}" oncomplete="location.reload(); return false;"
+                         style="margin-top: 1rem" >
         </p:commandButton>
-
-        <p:panel visible="false">
-            <p:commandButton id="btnSend" value="SEND DTE" process="@this" action="#{invoceView.save()}"/>
-        </p:panel>
     </p:outputPanel>
 </ui:component>

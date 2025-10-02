@@ -42,17 +42,14 @@ public class DtesView implements Serializable {
     @Setter
     private String codigoGeneracion;
     
-    
     @Getter
     @Setter
     private ItemDto itemDto;
     private List<DtesResponse> lstDtes;
     
-
     @Inject
     SessionService sessionService;
-    @Inject
-    SessionView sessionView;
+
     @Inject
     InvalidateService invalidateService;
 

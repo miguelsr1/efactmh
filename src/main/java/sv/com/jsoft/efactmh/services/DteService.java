@@ -25,6 +25,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.InvoceDto;
+import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
@@ -265,10 +266,10 @@ public class DteService {
         }
     }
 
-    public ResponseRestApi getSendMh(SendDteRequest send, JwtDto token) {
+    public ResponseRestApi<ApiMhDteResponse> getSendMh(SendDteRequest send, JwtDto token) {
         RestUtil restUtil = RestUtil.builder()
                 .endpoint("/api/secured/dte/send")
-                .clazz(ResponseRestApi.class)
+                .clazz(ApiMhDteResponse.class)
                 .jwtDto(token)
                 .body(send)
                 .build();
