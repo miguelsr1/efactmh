@@ -43,6 +43,7 @@ public class RestUtil {
     //private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
     private final static String HOST = "http://localhost:8099";
+    //private final static String HOST = "http://3.82.175.148:8099";
 
     public ResponseRestApi callGetOneAuth() {
         try {

@@ -82,7 +82,21 @@
             </p:dialog>
 
             <p:dialog header="Información" id="dlgDteSave" widgetVar="dlgDteSave" modal="true" closable="false" draggable="false" resizable="false" >
-                <span>FACTURA CREADA Y RECIBIDA EN MH.<br />FACTURA: </span>
+                <span>FACTURA CREADA Y RECIBIDA EN MH.<br />FACTURA: #{invoceView.codigoGeneracion}</span>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" icon="pi pi-check" action="#{invoceView.cleanFull}" onclick="location.reload(); return false;"/>
+                </f:facet>
+            </p:dialog>
+
+            <p:dialog header="Información" id="dlgDteError" widgetVar="dlgDteError" modal="true" closable="false" draggable="false" resizable="false" >
+                <span>FACTURA CREADA, PERO NO SE RECIBIO EN MH.<br />SE INTENTARA EL REENVIO EN BREVE</span>
+                <f:facet name="footer">
+                    <p:commandButton value="Aceptar" icon="pi pi-check" action="#{invoceView.cleanFull}" onclick="location.reload(); return false;"/>
+                </f:facet>
+            </p:dialog>
+
+            <p:dialog header="Error" id="dlgError" widgetVar="dlgDteError" modal="true" closable="false" draggable="false" resizable="false" >
+                <span>OCURRIO UN ERROR EN LA CREACION DE LA FACTURA</span>
                 <f:facet name="footer">
                     <p:commandButton value="Aceptar" icon="pi pi-check" action="#{invoceView.cleanFull}" onclick="location.reload(); return false;"/>
                 </f:facet>

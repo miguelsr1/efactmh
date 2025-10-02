@@ -7,7 +7,7 @@
     <session-config>
         <tracking-mode>COOKIE</tracking-mode>
         <session-timeout>
-            10
+            20
         </session-timeout>
         <cookie-config>
             <http-only>true</http-only>

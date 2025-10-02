@@ -35,7 +35,6 @@ import sv.com.jsoft.efactmh.services.InvoceService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.Constantes;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
-import static sv.com.jsoft.efactmh.util.Constantes.MSG_INFO;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -74,6 +73,8 @@ public class InvoceView implements Serializable {
     private String fontWeightSendDte;
     @Getter
     private String fontWeightComplete;
+    @Getter
+    private String codigoGeneracion;
     @Getter
     @Setter
     private String numDocumentoReceptor;
@@ -482,7 +483,8 @@ public class InvoceView implements Serializable {
                         log.info("LA FACTURA ID: " + idFac + " - SE ENVIARA POR CRON");
                         addProgressAvance();
 
-                        showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE - SE INTENTARÁ ENVIAR EN BREVE. " + Constantes.COD_ERROR_NULL_RESPONSE);
+                        log.error("OCURRIO UN ERROR EN EL ENVIO DEL DTE - SE INTENTARÁ ENVIAR EN BREVE. " + Constantes.COD_ERROR_NULL_RESPONSE);
+                        PrimeFaces.current().executeScript("PF('dlgDteError').show();");
                         return;
                     }
 
@@ -495,11 +497,12 @@ public class InvoceView implements Serializable {
 
                     switch (responseSendMh.getCodeHttp()) {
                         case 200:
-                            String codigoGeneracion = responseSendMh.getBody().getCodigoGeneracion();
+                            codigoGeneracion = responseSendMh.getBody().getCodigoGeneracion();
 
-                            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO,
+                            /*JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO,
                                     MSG_INFO,
-                                    "FACTURA CREADA Y RECIBIDA EN MH. FACTURA: " + codigoGeneracion);
+                                    "FACTURA CREADA Y RECIBIDA EN MH. FACTURA: " + codigoGeneracion);*/
+                            PrimeFaces.current().executeScript("PF('dlgDteSave').show();");
 
                             dteServices.sendMail(idFac, securityService.getToken());
                             break;
@@ -524,7 +527,9 @@ public class InvoceView implements Serializable {
                             log.error("CODIGO HTTP: " + responseSendMh.getCodeHttp());
                             log.error("MENSAJE ERROR: " + responseSendMh.getBody());
 
-                            //showMessageSaveInvoce("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
+                            log.error("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
+
+                            PrimeFaces.current().executeScript("PF('dlgDteError').show();");
                             break;
                     }
 
@@ -533,13 +538,12 @@ public class InvoceView implements Serializable {
                     log.error("CODIGO HTTP: " + response.getCodeHttp());
                     log.error("MENSAJE ERROR: " + response.getBody());
 
-                    showMessageSaveInvoce("OCURRIO UN ERROR EN LA CREACION DE LA FACTURA");
+                    log.error("OCURRIO UN ERROR EN LA CREACION DE LA FACTURA");
+                    PrimeFaces.current().executeScript("PF('dlgError').show();");
                 }
             } catch (InterruptedException ex) {
                 log.error("ERROR ENVIANDO DTE", ex);
             }
-            
-            cleanFull();
         }
     }
 
@@ -586,7 +590,6 @@ public class InvoceView implements Serializable {
             return false;
         }
 
-        //PrimeFaces.current().executeScript("PF('dlgDteSave').show()");
         return true;
     }
 
