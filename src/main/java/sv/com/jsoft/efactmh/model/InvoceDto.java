@@ -20,6 +20,7 @@ public class InvoceDto implements Serializable, EntityPk {
     private Long idPuntoVenta;
     private String condicionOperacion;
     private String codigoDte;
+    private String dateInvoce;
     //private int retencionIsr;
     private boolean aplicaIvaRetenido;
     private boolean aplicaRentaRetenido;

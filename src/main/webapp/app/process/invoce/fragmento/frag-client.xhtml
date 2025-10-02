@@ -16,6 +16,11 @@
                     <p:ajax process="@this,cboDte" update="dvCliente"/>
                 </p:selectOneMenu>
             </div>
+            <div class="field col-12" >
+                <p:outputLabel for="txtFecha" value="Fecha de factura"/>
+                <p:datePicker id="txtFecha" value="#{invoceView.dateInvoce}" hourFormat="24" pattern="dd/MM/yyyy HH:mm:ss" showTime="true" required="true" maxdate="#{invoceView.dateInvoce}"/>
+            </div>
+            
             <div class="field col-12" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
                 <p:selectBooleanCheckbox value="#{invoceView.sinDatos}" itemLabel="SIN DATOS">
                     <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}"/>
@@ -49,6 +54,6 @@
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" 
                          icon="pi pi-angle-left" disabled="#{invoceView.activeStep eq 0}"/>
         <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary" update="step, dvClient, dvDetInvoce, dvDetPayment" 
-                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.nextStep()}" />
+                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec,txtFecha" action="#{invoceView.nextStep()}" />
     </p:outputPanel>
 </ui:component>

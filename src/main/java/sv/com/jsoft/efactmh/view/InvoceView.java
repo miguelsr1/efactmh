@@ -3,6 +3,9 @@ package sv.com.jsoft.efactmh.view;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +63,11 @@ public class InvoceView implements Serializable {
     @Setter
     private boolean aplicaRetencionIsr = false;*/
 
+    private SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    
+    @Getter
+    @Setter
+    private Date dateInvoce;
     private int var = 1;
     @Getter
     private String taskSave;
@@ -454,6 +462,7 @@ public class InvoceView implements Serializable {
             lstDetPago.forEach(det -> det.getMonto());
 
             try {
+                invoceDto.setDateInvoce(sfd.format(dateInvoce));
                 invoceDto.setDetailPayments(lstDetPago);
                 invoceDto.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
                 invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
@@ -502,6 +511,7 @@ public class InvoceView implements Serializable {
                             /*JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO,
                                     MSG_INFO,
                                     "FACTURA CREADA Y RECIBIDA EN MH. FACTURA: " + codigoGeneracion);*/
+                            PrimeFaces.current().ajax().update("pnMsg");
                             PrimeFaces.current().executeScript("PF('dlgDteSave').show();");
 
                             dteServices.sendMail(idFac, securityService.getToken());
@@ -564,6 +574,12 @@ public class InvoceView implements Serializable {
      * @return
      */
     private boolean validatePreSend() {
+        if(dateInvoce == null){
+            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                    MSG_ALERT,
+                    "REVISE LA FECHA DE LA FACTURA");
+            return false;
+        }
         if (sessionView.getIdEstablecimiento() == null || sessionView.getIdPuntoVenta() == null) {
             JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
                     MSG_ALERT,
