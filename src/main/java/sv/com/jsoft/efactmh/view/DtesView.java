@@ -41,10 +41,13 @@ public class DtesView implements Serializable {
     @Getter
     @Setter
     private String codigoGeneracion;
+    
+    
     @Getter
     @Setter
     private ItemDto itemDto;
     private List<DtesResponse> lstDtes;
+    
 
     @Inject
     SessionService sessionService;

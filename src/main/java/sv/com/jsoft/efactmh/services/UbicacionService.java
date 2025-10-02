@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
@@ -15,6 +16,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  *
  * @author migue
  */
+@Named
 @ApplicationScoped
 public class UbicacionService {
 

@@ -16,25 +16,34 @@
         </div>
         <div class="field col-12 md:col-4" >
             <p:outputLabel for="razSoc" value="Razon Social"/>
-            <p:inputText id="razSoc" value="#{clienteView.pj.razonSocial}" disabled="#{clienteView.disabled}" class="w-full" required="true"/>
+            <p:inputText id="razSoc" value="#{clienteView.pj.razonSocial}" disabled="#{clienteView.disabled}" 
+                         class="w-full" required="true" styleClass="text-uppercase"/>
         </div>
         <div class="field col-12 md:col-4" >
             <p:outputLabel for="nomComer" value="Nombre Comercial"/>
-            <p:inputText id="nomComer" value="#{clienteView.pj.nombreComercial}" disabled="#{clienteView.disabled}" class="w-full" required="true"/>
+            <p:inputText id="nomComer" value="#{clienteView.pj.nombreComercial}" disabled="#{clienteView.disabled}" 
+                         class="w-full" required="true" styleClass="text-uppercase"/>
         </div>
         <div class="field col-12 md:col-2" >
             <p:outputLabel for="email" value="Correo electrónico"/>
-            <p:inputText id="email" value="#{clienteView.pj.emailEmp}" maxlength="22" required="true" disabled="#{clienteView.disabled}" class="w-full" />
+            <p:inputText id="email" value="#{clienteView.pj.emailEmp}" maxlength="22" required="true" disabled="#{clienteView.disabled}" 
+                         class="w-full" styleClass="text-lowercase"/>
         </div>
-        <div class="field col-12 md:col-2" >
+        <div class="field col-12 md:col-3" >
             <p:outputLabel for="codActPj" value="Código Actividad"/>
-            <p:inputText id="codActPj" value="#{clienteView.pj.codigoActividad}" maxlength="22" required="true" disabled="#{clienteView.disabled}" class="w-full" />
+
+            <p:selectOneMenu id="codActPj" value="#{clienteView.pj.codigoActividad}" 
+                             filter="true" filterMatchMode="contains"
+                             disabled="#{clienteView.disabled}" required="#{clienteView.inscritoIva}">
+                <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
+                <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
+            </p:selectOneMenu>
         </div>
         <div class="field col-12 md:col-2" >
             <p:outputLabel for="txtTelEmp" value="Teléfono"/>
             <p:inputMask id="txtTelEmp" value="#{clienteView.pj.telefono}" mask="9999-9999" required="true" disabled="#{clienteView.disabled}" class="w-full" />
         </div>
-        <div class="field col-12 md:col-3" >
+        <div class="field col-12 md:col-2" >
             <p:outputLabel for="cboDepa" value="Departamento"/>
             <p:selectOneMenu id="cboDepa" value="#{clienteView.codigoDepa}" disabled="#{clienteView.disabled}" class="w-full">
                 <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
@@ -52,10 +61,10 @@
         <div class="field col-12 md:col-4" >
             <p:outputLabel for="txtDir" value="Dirección"/>
             <p:inputTextarea id="txtDir" counter="displayTxtDir" value="#{clienteView.pj.direccionEmp}" maxlength="200"
-                             counterTemplate="{0} caracteres restantes."
+                             counterTemplate="{0} caracteres restantes." styleClass="text-uppercase"
                              disabled="#{clienteView.disabled}" class="w-full" required="true" rows="3"/>
             <h:outputText id="displayTxtDir" class="block" />
         </div>
-        
+
     </div>
 </ui:component>

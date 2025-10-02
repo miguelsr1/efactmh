@@ -18,13 +18,24 @@
             <div class="formgrid grid ui-fluid" jsf:id="divDatos">
                 <div class="field col-9">
                     <p:outputLabel for="nomComer" value="Nombre Comercial"/>
-                    <p:inputText id="nomComer" value="#{emisorView.emisor.nombreComercial}" required="true" style="margin-bottom: 1rem"/>
+                    <p:inputText id="nomComer" value="#{emisorView.emisor.nombreComercial}" required="true" class="mb-2"/>
                     <p:outputLabel for="razSoc" value="Razon Social"/>
-                    <p:inputText id="razSoc" value="#{emisorView.emisor.razonSocial}" required="true" style="margin-bottom: 1rem"/>
+                    <p:inputText id="razSoc" value="#{emisorView.emisor.razonSocial}" required="true" class="mb-2"/>
                     <p:outputLabel for="tel" value="Teléfono"/>
-                    <p:inputMask id="tel" maxlength="9" value="#{emisorView.emisor.telefono}" required="true" mask="9999-9999" style="margin-bottom: 1rem"/>
+                    <p:inputMask id="tel" maxlength="9" value="#{emisorView.emisor.telefono}" required="true" mask="9999-9999" class="mb-2"/>
                     <p:outputLabel for="email" value="Correo electrónico"/>
-                    <p:inputText id="email" value="#{emisorView.emisor.correo}" maxlength="22" required="true" />
+                    <p:inputText id="email" value="#{emisorView.emisor.correo}" maxlength="22" required="true" class="mb-2"/>
+                    <p:outputLabel for="cboDepa" value="Departamento"/>
+                    <p:selectOneMenu id="cboDepa" value="#{emisorView.emisor.codigoDepartamento}" required="true" class="mb-2">
+                        <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
+                        <f:selectItems value="#{emisorView.lstDepartamentos}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
+                        <p:ajax update="cboMuni" listener="#{emisorView.updateListaMunicipios()}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="cboMuni" value="Municipio"/>
+                    <p:selectOneMenu id="cboMuni" value="#{emisorView.emisor.codigoMunicipio}" required="true" class="mb-2">
+                        <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
+                        <f:selectItems value="#{emisorView.lstMunicipios}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
+                    </p:selectOneMenu>
                 </div>
                 <div class="field col-3">
                     <div class="flex flex-column align-items-center flex-or">
@@ -36,27 +47,12 @@
                         <small style="text-align: center;margin-top: 1rem">La imagen no debe de superar 150x150</small>
                     </div>
                 </div>
-                <div class="field col-12" >
-                    <p:outputLabel for="cboDepa" value="Departamento"/>
-                    <p:selectOneMenu id="cboDepa" value="#{emisorView.emisor.codigoDepartamento}" required="true">
-                        <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
-                        <f:selectItems value="#{emisorView.lstDepartamentos}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
-                        <p:ajax update="cboMuni" listener="#{emisorView.updateListaMunicipios()}"/>
-                    </p:selectOneMenu>
-                </div>
-                <div class="field col-12" >
-                    <p:outputLabel for="cboMuni" value="Municipio"/>
-                    <p:selectOneMenu id="cboMuni" value="#{emisorView.emisor.codigoMunicipio}" required="true">
-                        <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
-                        <f:selectItems value="#{emisorView.lstMunicipios}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
-                    </p:selectOneMenu>
-                </div>
                 <div class="field col-12">
                     <p:outputLabel for="txtDir" value="Dirección"/>
                     <p:inputTextarea id="txtDir" value="#{emisorView.emisor.direccion}" required="true" rows="3"/>
                 </div>
                 <div class="field col-12" >
-                    <p:outputLabel for="cboGiro" value="Código"/>
+                    <p:outputLabel for="cboGiro" value="Código de Actividad Económica"/>
                     <p:selectOneMenu id="cboGiro" value="#{emisorView.emisor.codigoActividad}" required="true">
                         <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
                         <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />

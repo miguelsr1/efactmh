@@ -8,15 +8,16 @@
 
     <div class="card">
         <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" selectionMode="single"
+                     allowUnsorting="true" sortMode="single"
                      reflow="true" size="small" tableStyle="table-layout: auto;"
                      rowKey="#{cli.idCliente}" rowIndexVar="rowId" selection="#{clienteView.clienteDto}">
             <f:facet name="header">
                 <div class="flex justify-content-between align-items-center">
                     <h5><span style="margin-right: 1rem"></span>Listado de Clientes</h5>
 
-                    <div>                            
-                        <p:commandButton action="#{clienteView.nuevo()}" update="dvDatos" icon="pi pi-plus"
-                                         validateClient="true" styleClass="ui-button-success" process="@this"/>
+                    <div>
+                        <p:inputText id="globalFilter" onkeyup="PF('tblCli').filter()" style="width:20rem"
+                                     placeholder="Buscar por Num. Documento o Nombre" />
                     </div>
                 </div>
             </f:facet>
@@ -26,10 +27,10 @@
             <p:column headerText="Tipo">
                 <p:outputLabel value="#{cli.tipoPersoneria}"/>
             </p:column>
-            <p:column headerText="Nombre">
+            <p:column headerText="Nombre" sortable="true" sortOrder="asc" sortBy="#{cli.nombre}" filterBy="#{cli.nombre}" filterMatchMode="contains" filterStyle="display: none;">
                 <p:outputLabel value="#{cli.nombre}"/>
             </p:column>
-            <p:column headerText="Nombre Comercial">
+            <p:column headerText="Nombre Comercial" filterBy="#{cli.nombreComercial}" filterMatchMode="contains" filterStyle="display: none;">
                 <p:outputLabel value="#{cli.nombreComercial}"/>
             </p:column>
             <p:column headerText="Tipo Documento">
@@ -41,7 +42,7 @@
             <p:column headerText="N.R.C." >
                 <p:outputLabel value="#{cli.nrc}" />
             </p:column>
-            <p:column headerText="Correo" >
+            <p:column headerText="Correo">
                 <p:outputLabel value="#{cli.correo}" />
             </p:column>
         </p:dataTable>

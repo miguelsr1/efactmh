@@ -552,6 +552,13 @@ public class InvoceView implements Serializable {
      * @return
      */
     private boolean validatePreSend() {
+        if (sessionView.getIdEstablecimiento() == null || sessionView.getIdPuntoVenta() == null) {
+            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                    MSG_ALERT,
+                    "DEBE DE SELECCIONAR EL ESTABLECIMIENTO Y PUNTO DE VENTA");
+            return false;
+        }
+
         if (lstDetPago.isEmpty()) {
             JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
                     MSG_ALERT,
@@ -572,7 +579,7 @@ public class InvoceView implements Serializable {
         }
 
         PrimeFaces.current().executeScript("PF('dlgDteSave').show()");
-        
+
         return true;
     }
 

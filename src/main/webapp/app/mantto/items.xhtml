@@ -17,17 +17,19 @@
                         <p:autoUpdate />
                     </p:messages>
                     <div class="card">
-                        <h5>Item</h5>
+                        <h5>Listado de ITEMS</h5>
                         <div class="grid">
                             <div class="col-12 md:col-12" jsf:id="dvDatos">
-                                <div class="formgrid grid ui-fluid">
+                                <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out"
+                                     style="display: #{productoView.disabled ? 'none': 'block'}">
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtCod" value="Código"/>
                                         <p:inputText id="txtCod" value="#{productoView.producto.codigoProducto}" disabled="#{productoView.disabled}" required="true"/>
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtNom" value="Nombre"/>
-                                        <p:inputText id="txtNom" value="#{productoView.producto.nombre}" required="true" disabled="#{productoView.disabled}" />
+                                        <p:inputText id="txtNom" value="#{productoView.producto.nombre}" required="true" 
+                                                     disabled="#{productoView.disabled}" styleClass="text-uppercase"/>
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="txtPu" value="Precio Unitario"/>
@@ -43,7 +45,7 @@
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="cboTipoItem" value="Tipo Item"/>
-                                        <p:selectOneMenu id="cboTipoItem" value="#{productoView.producto.codigoItem}" disabled="#{productoView.disabled}" >
+                                        <p:selectOneMenu id="cboTipoItem" value="#{productoView.producto.codigoItem}" disabled="#{productoView.disabled}" required="true" >
                                             <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN TIPO" />
                                             <f:selectItems value="#{tipoItemService.lstTipoItems}" var="uni" itemLabel="#{uni.nombre}" itemValue="#{uni.id}" />
                                         </p:selectOneMenu>
@@ -51,14 +53,17 @@
                                     <div class="field col-12" >
                                         <p:selectBooleanCheckbox itemLabel="EXENTO" value="#{productoView.producto.exento}" disabled="#{productoView.disabled}" style="margin-bottom: 0.2rem;"/>
                                     </div>
-                                    <div class="field col-12">
-                                        <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" 
-                                                         update="dvDatos tblPro" style="width: 10rem" styleClass="mr-2"/>
-                                        <p:commandButton value="Cancelar" icon="pi pi-times" action="#{productoView.cancelar()}" update="dvDatos" process="@this" 
-                                                         style="width: 10rem" styleClass="ui-button-secondary" oncomplete="PF('tblPro').unselectAllRows()">
-                                            <p:ajax update="dvDatos, tblPro" resetValues="true"/>
-                                        </p:commandButton>
-                                    </div>
+                                </div>
+
+                                <div class="field col-12">
+                                    <p:commandButton value="Guardar" icon="pi pi-save" action="#{productoView.guardar()}" disabled="#{productoView.disabled}" 
+                                                     update="dvDatos tblPro" style="width: 10rem" styleClass="mr-2"/>
+                                    <p:commandButton value="Cancelar" icon="pi pi-times" action="#{productoView.cancelar()}" update="dvDatos" process="@this" 
+                                                     style="width: 10rem" styleClass="ui-button-secondary mr-2" oncomplete="PF('tblPro').unselectAllRows()">
+                                        <p:ajax update="dvDatos, tblPro" resetValues="true"/>
+                                    </p:commandButton>
+                                    <p:commandButton value="Nuevo" action="#{productoView.nuevo()}" update="dvDatos" icon="pi pi-plus"
+                                                     style="width: 10rem" validateClient="true" styleClass="ui-button-success" process="@this"/>
                                 </div>
                             </div>
                         </div>
@@ -69,6 +74,7 @@
             <div class="card">
                 <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" value="#{productoView.lstProducto}" rowKey="#{pro.id}"
                              rowIndexVar="rowId" selectionMode="single" selection="#{productoView.producto}"
+                             allowUnsorting="true" sortMode="single"
                              styleClass="ui-datatable-striped ui-datatable-sm"
                              reflow="true" size="small" tableStyle="table-layout: auto;"
                              paginator="true" paginatorPosition="bottom" rows="10" >
@@ -78,17 +84,18 @@
                             <h5><span style="margin-right: 1rem"></span>Listado de Items</h5>
 
                             <div>                            
-                                <p:commandButton action="#{productoView.nuevo()}" update="dvDatos" icon="pi pi-plus"
-                                                 validateClient="true" styleClass="ui-button-success" process="@this"/>
+                                <p:inputText id="globalFilter" onkeyup="PF('tblPro').filter()" style="width:20rem"
+                                             placeholder="Buscar por Código o Nombre" />
                             </div>
                         </div>
                     </f:facet>
 
                     <p:ajax event="rowSelect" update="dvDatos" listener="#{productoView.onRowSelect}"/>
-                    <p:column headerText="Código">
+
+                    <p:column headerText="Código" sortable="true" sortOrder="asc" sortBy="#{pro.codigoProducto}" filterBy="#{pro.codigoProducto}" filterStyle="display: none;">
                         <p:outputLabel value="#{pro.codigoProducto}"/>
                     </p:column>
-                    <p:column headerText="Nombre">
+                    <p:column headerText="Nombre" filterBy="#{pro.nombre}" filterMatchMode="contains" filterStyle="display: none;">
                         <p:outputLabel value="#{pro.nombre}"/>
                     </p:column>
                     <p:column headerText="Precio Unitario">

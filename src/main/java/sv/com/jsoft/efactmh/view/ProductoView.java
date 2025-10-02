@@ -1,8 +1,10 @@
 package sv.com.jsoft.efactmh.view;
 
+import com.google.gson.Gson;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -10,12 +12,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.SelectEvent;
 import sv.com.jsoft.efactmh.model.Producto;
+import sv.com.jsoft.efactmh.model.dto.ErrorMessageDto;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
 import sv.com.jsoft.efactmh.services.ProductoService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.services.TipoItemService;
 import sv.com.jsoft.efactmh.services.UnidadMedidaService;
+import static sv.com.jsoft.efactmh.util.Constantes.MSG_ERROR;
 import sv.com.jsoft.efactmh.util.JsfUtil;
+import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -83,9 +88,16 @@ public class ProductoView implements Serializable {
                     .build()
                     .callPostAuth();
 
-            if (response.getCodeHttp() == 200
-                    || response.getCodeHttp() == 201) {
-                JsfUtil.mensajeFromEnum(response.getCodeHttp() != 200 ? TipoMensaje.ERROR : (producto.esNuevo() ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
+            if (response.getCodeHttp() == 201) {
+                JsfUtil.mensajeFromEnum(TipoMensaje.INSERT);
+            } else {
+                ErrorMessageDto errorMessage = new Gson().fromJson(response.getBody().toString(), ErrorMessageDto.class);
+                MessageUtil.builder()
+                        .message(errorMessage.getErrorMessage())
+                        .severity(FacesMessage.SEVERITY_ERROR)
+                        .title(MSG_ERROR)
+                        .build()
+                        .showMessage();
             }
         }
 
@@ -94,6 +106,7 @@ public class ProductoView implements Serializable {
 
     public void nuevo() {
         producto = new Producto();
+        producto.setCodigoItem("1");
         disabled = false;
         edit = false;
     }
@@ -102,7 +115,7 @@ public class ProductoView implements Serializable {
         producto = new Producto();
         disabled = true;
         edit = false;
-        
+
         lstProducto = productoService.findAll(sessionService.getToken());
     }
 
@@ -119,10 +132,10 @@ public class ProductoView implements Serializable {
                 .filter(uni -> uni.getId().equals(codigoUnidad))
                 .findFirst().get().getNombre();
     }
-    
+
     public String descripcionTipoItem(String codigoItem) {
         return tipoItemService
-                .getLstTipoItems()                
+                .getLstTipoItems()
                 .stream()
                 .filter(uni -> uni.getId().equals(codigoItem))
                 .findFirst().get().getNombre();

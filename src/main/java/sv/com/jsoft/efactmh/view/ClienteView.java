@@ -76,6 +76,7 @@ public class ClienteView implements Serializable {
     }
 
     private void inicializar() {
+        disabled = true;
         edit = false;
         inscritoIva = false;
         tipoDoc = 1;

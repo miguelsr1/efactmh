@@ -8,36 +8,47 @@
     <div class="ui-fluid formgrid grid">
         <div class="field col-12 md:col-6">
             <p:outputLabel for="txtPNom" value="Nombre Completo"/>
-            <p:inputText id="txtPNom" value="#{clienteView.pn.nombreCompleto}" disabled="#{clienteView.disabled}" required="true" class="w-full" />
+            <p:inputText id="txtPNom" value="#{clienteView.pn.nombreCompleto}" disabled="#{clienteView.disabled}" 
+                         required="true" class="w-full" styleClass="text-uppercase" />
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtDuiPn" value="D.U.I."/>
-            <p:inputMask id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}" mask="99999999-9" required="true" class="w-full" />
+            <p:inputMask id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}" 
+                         mask="99999999-9" required="true" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtNitPn" value="N.I.T."/>
-            <p:inputMask id="txtNitPn" value="#{clienteView.pn.nit}" disabled="#{clienteView.disabled}" mask="9999-999999-999-9" required="true" class="w-full" />
+            <p:inputMask id="txtNitPn" value="#{clienteView.pn.nit}" disabled="#{clienteView.disabled}" 
+                         mask="9999-999999-999-9" class="w-full" />
         </div>
-        
+
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtTel" value="Teléfono"/>
-            <p:inputMask id="txtTel" value="#{clienteView.pn.telefono}" disabled="#{clienteView.disabled}" mask="9999-9999" required="true" class="w-full" />
+            <p:inputMask id="txtTel" value="#{clienteView.pn.telefono}" disabled="#{clienteView.disabled}" 
+                         mask="9999-9999" required="true" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtEmail" value="Correo"/>
-            <p:inputText id="txtEmail" value="#{clienteView.pn.email}" disabled="#{clienteView.disabled}" required="true" class="w-full" />
+            <p:inputText id="txtEmail" value="#{clienteView.pn.email}" disabled="#{clienteView.disabled}" 
+                         required="true" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">
-            <p:selectBooleanCheckbox itemLabel="INSCRITO IVA" value="#{clienteView.inscritoIva}" disabled="#{clienteView.disabled}" style="margin-bottom: 0.2rem;">
-                <p:ajax update="txtNrcPn txtCodActPn" />
+            <p:selectBooleanCheckbox itemLabel="INSCRITO IVA" value="#{clienteView.inscritoIva}" 
+                                     disabled="#{clienteView.disabled}" style="margin-bottom: 0.2rem;">
+                <p:ajax update="txtNrcPn cboGiro" />
             </p:selectBooleanCheckbox>
-            <p:inputText id="txtNrcPn" value="#{clienteView.pn.nrc}" placeholder="N.R.C." maxlength="11" disabled="#{clienteView.disabled or !clienteView.inscritoIva}"
+            <p:inputText id="txtNrcPn" value="#{clienteView.pn.nrc}" placeholder="N.R.C." maxlength="11" 
+                         disabled="#{clienteView.disabled or !clienteView.inscritoIva}"
                          required="#{clienteView.inscritoIva}" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">
-            <p:outputLabel for="txtCodActPn" value="Act. Económica"/>
-            <p:inputText id="txtCodActPn" value="#{clienteView.pn.codigoActividad}" maxlength="11" disabled="#{!clienteView.inscritoIva}" required="#{clienteView.inscritoIva}"
-                         class="w-full" />
+            <p:outputLabel for="cboGiro" value="Código de Actividad Económica"/>
+            <p:selectOneMenu id="cboGiro" value="#{clienteView.pn.codigoActividad}" 
+                             filter="true" filterMatchMode="contains"
+                             disabled="#{!clienteView.inscritoIva}" required="#{clienteView.inscritoIva}">
+                <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
+                <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
+            </p:selectOneMenu>
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="cbDepPn" value="Departamento"/>
@@ -56,7 +67,8 @@
         </div>
         <div class="field col-12 md:col-6">
             <p:outputLabel for="txtDirPn" value="Dirección"/>
-            <p:inputTextarea id="txtDirPn" value="#{clienteView.pn.direccion}" disabled="#{clienteView.disabled}" required="#{clienteView.inscritoIva}" rows="3" class="w-full" />
+            <p:inputTextarea id="txtDirPn" value="#{clienteView.pn.direccion}" disabled="#{clienteView.disabled}" 
+                             required="true" rows="3" class="w-full" styleClass="text-uppercase" />
         </div>
     </div>
 </ui:component>

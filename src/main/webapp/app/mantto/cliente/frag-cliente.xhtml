@@ -35,9 +35,9 @@
         </div>
 
         <div class="field col-12">
-            <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos,dvPn,dvPj" style="margin-right: 5px;" disabled="#{clienteView.disabled}"/>
-            <p:commandButton value="Cancelar" icon="pi pi-times" action="#{clienteView.cancelar()}" update="dvDatos tblCli" process="@this" styleClass="ui-button-secondary"/>
-            <p:spacer height="10px"/>
+            <p:commandButton value="Guardar" icon="pi pi-save" action="#{clienteView.guardar()}" update="dvDatos,dvPn,dvPj" disabled="#{clienteView.disabled}" styleClass="mr-2"/>
+            <p:commandButton value="Cancelar" icon="pi pi-times" action="#{clienteView.cancelar()}" update="dvDatos tblCli" process="@this" styleClass="ui-button-secondary mr-2"/>
+            <p:commandButton value="Nuevo" action="#{clienteView.nuevo()}" update="dvDatos" icon="pi pi-plus" validateClient="true" styleClass="ui-button-success" process="@this"/>
         </div>
     </div>
 
