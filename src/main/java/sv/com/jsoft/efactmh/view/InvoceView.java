@@ -107,7 +107,7 @@ public class InvoceView implements Serializable {
 
     @Getter
     @Setter
-    private boolean sinDatos = true;
+    private boolean sinDatos = false;
     @Getter
     @Setter
     private boolean requiereFactura = false;
@@ -612,6 +612,9 @@ public class InvoceView implements Serializable {
         }
         if (requiereFactura && invoceDto.getCodigoDte().equals("01")) {
             invoceDto.setClientTemp(new ClientTempDto(nombreClienteReq, correoClienteReq));
+            invoceDto.setIdCliente(null);
+        }else if(!requiereFactura){
+            invoceDto.setClientTemp(null);
         }
 
         BigDecimal total = lstDetPago.stream()
