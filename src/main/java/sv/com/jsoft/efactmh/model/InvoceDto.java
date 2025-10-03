@@ -26,6 +26,7 @@ public class InvoceDto implements Serializable, EntityPk {
     private boolean aplicaRentaRetenido;
     private List<DetalleFacturaDto> detailInvoce;
     private List<DetallePago> detailPayments;
+    private ClientTempDto clientTemp;
 
     public InvoceDto() {
         detailInvoce = new ArrayList<>();

@@ -20,26 +20,57 @@
                 <p:outputLabel for="txtFecha" value="Fecha de factura"/>
                 <p:datePicker id="txtFecha" value="#{invoceView.dateInvoce}" hourFormat="24" pattern="dd/MM/yyyy HH:mm:ss" showTime="true" required="true" maxdate="#{invoceView.dateInvoce}"/>
             </div>
-            
-            <div class="field col-12" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
-                <p:selectBooleanCheckbox value="#{invoceView.sinDatos}" itemLabel="SIN DATOS">
-                    <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}"/>
+
+            <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
+
+                <p:selectBooleanCheckbox value="#{invoceView.sinDatos}" itemLabel="SIN DATOS" styleClass="mb-2">
+                    <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}" process="@this,txtFecha"/>
                 </p:selectBooleanCheckbox>
             </div>
-            <div class="field col-12 md:col-3" >
-                <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
-                <p:inputText id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" onkeyup="nitDuiMask(this)" required="true" 
-                             disabled="#{invoceView.invoce.codigoDte eq '01' and invoceView.sinDatos}"
-                             requiredMessage="DEBE DE INGRESAR EL NUMERO DE DOCUMENTO DE UN CLIENTE">
-                    <p:ajax event="blur" listener="#{invoceView.findClient()}" update="dvCliente"/>
-                </p:inputText>
-                <p:keyFilter for="txtNumDoc" mask="pint" />
+            <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
+                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA">
+                    <p:ajax update="dvClient" />
+                </p:selectBooleanCheckbox>
             </div>
-            <div class="field col-12 md:col-9">
+
+            <!--BLOQUE DE CLIENTE GUARDADO -->
+            <div class="field col-12 md:col-3" style="display:#{invoceView.requiereFactura?'none':'block'}" >
+                <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
+                <div class="ui-inputgroup">                    
+                    <p:inputText id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" required="true" 
+                                 disabled="#{invoceView.invoce.codigoDte eq '01' and invoceView.sinDatos}"
+                                 requiredMessage="DEBE DE INGRESAR EL NUMERO DE DOCUMENTO DE UN CLIENTE"/>
+                    <p:commandButton value="Buscar" action="#{invoceView.findClient()}" process="@this,txtNumDoc,cboDte,txtFecha" update="dvCliente"/>
+                </div>
+            </div>
+            <div class="field col-12 md:col-9" style="display:#{invoceView.requiereFactura?'none':'block'}">
                 <p:outputLabel for="nomRec" value="Nombre"/>
                 <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}" required="true"/>
             </div>
-            <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
+
+
+            <!-- BLOQUE SIN DATOS PERO CON FACTURA NOMBRE -->
+            <div class="field col-12 md:col-4" style="display:#{invoceView.requiereFactura?'block':'none'}">
+                <p:outputLabel for="txtNomReq" value="Nombre cliente"/>
+                <p:inputText id="txtNomReq" value="#{invoceView.nombreClienteReq}" required="#{invoceView.requiereFactura}"
+                             disabled="#{invoceView.invoce.codigoDte ne '01'}"
+                             requiredMessage="DEBE DE INGRESAR EL NOMBRE DEL CLIENTE"/>
+            </div>
+            <div class="field col-12 md:col-4" style="display:#{invoceView.requiereFactura?'block':'none'}">
+                <p:outputLabel for="txtCorreoReq" value="Correo electrónico"/>
+                <p:inputText id="txtCorreoReq" value="#{invoceView.correoClienteReq}" required="#{invoceView.requiereFactura}"
+                             disabled="#{invoceView.invoce.codigoDte ne '01'}"
+                             validatorMessage="FORMATO DE CORREO NO VALIDO"
+                             requiredMessage="DEBE DE INGRESAR EL CORREO DEL CLIENTE">
+                    <f:validateRegex
+                        pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                </p:inputText>
+            </div>
+            <div class="field col-12 md:col-4" style="display:#{invoceView.requiereFactura?'block':'none'}">
+            </div>
+
+
+            <div class="field col-2" style="margin-top: 1rem">
                 <p:selectBooleanCheckbox id="bchIva" itemLabel="Retención IVA" value="#{invoceView.invoce.aplicaIvaRetenido}">
                     <p:ajax process="bchIva" />
                 </p:selectBooleanCheckbox>
@@ -54,6 +85,6 @@
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" 
                          icon="pi pi-angle-left" disabled="#{invoceView.activeStep eq 0}"/>
         <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary" update="step, dvClient, dvDetInvoce, dvDetPayment" 
-                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec,txtFecha" action="#{invoceView.nextStep()}" />
+                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec,txtFecha,txtNomReq,txtCorreoReq" action="#{invoceView.nextStep()}" />
     </p:outputPanel>
 </ui:component>

@@ -60,19 +60,19 @@
                         <div class="formgrid grid">
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtNom" value="Nombre Cliente"/>
-                                <p:inputText id="txtNom"/>
+                                <p:inputText id="txtNom" value="#{dtesView.nombreCliente}"/>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtNumDoc" value="Número de Documento cliente"/>
-                                <p:inputText id="txtNumDoc"/>
+                                <p:inputText id="txtNumDoc" value="#{dtesView.numDocCliente}"/>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtCorreo" value="Correo cliente"/>
-                                <p:inputText id="txtCorreo"/>
+                                <p:inputText id="txtCorreo" value="#{dtesView.correoCliente}"/>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtFecha" value="Fecha creación"/>
-                                <p:datePicker id="txtFecha" locale="es" monthNavigator="true" pattern="dd/MM/yyyy"/>
+                                <p:datePicker id="txtFecha" locale="es" monthNavigator="true" pattern="dd/MM/yyyy" value="#{dtesView.fechaCreacion}"/>
                             </div>
                         </div>
                         <div class="card-header">
@@ -122,7 +122,7 @@
                             <div class="col-2">
                                 <p:commandButton type="button" id="btnCopy" widgetVar="btnCopy" icon="pi pi-copy" class="ui-button-outlined"/>
                                 <pe:clipboard id="clipCopy" trigger="tblDtes:#{row}:btnCopy" action="copy" target="tblDtes:#{row}:txtCodGen">
-                                     <p:ajax event="success" />
+                                    <p:ajax event="success" />
                                 </pe:clipboard>
                             </div>
                         </div>

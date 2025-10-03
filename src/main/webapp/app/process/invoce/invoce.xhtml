@@ -6,6 +6,7 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:o="http://omnifaces.org/ui"
                 xmlns:of="http://omnifaces.org/functions"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Nueva factura</ui:define>
@@ -83,7 +84,15 @@
 
             <p:dialog header="Información" id="dlgDteSave" widgetVar="dlgDteSave" modal="true" closable="false" draggable="false" resizable="false" >
                 <p:outputPanel id="pnMsg">
-                    <span>FACTURA CREADA Y RECIBIDA EN MH.<br />FACTURA: #{invoceView.codigoGeneracion}</span>
+                    <p>FACTURA CREADA Y RECIBIDA EN MH.
+                        <br/><br />
+                        FACTURA: 
+                        <p:outputLabel id="lblCodGen" value="#{invoceView.codigoGeneracion}" />
+                        <p:commandButton type="button" id="btnCopyCG" widgetVar="btnCopy" icon="pi pi-copy" class="ui-button-outlined"/>
+                        <pe:clipboard id="clipCopy" trigger="btnCopyCG" action="copy" target="lblCodGen">
+                            <p:ajax event="success" />
+                        </pe:clipboard>
+                    </p>
                 </p:outputPanel>
                 <f:facet name="footer">
                     <p:commandButton value="Aceptar" icon="pi pi-check" action="#{invoceView.cleanFull}" onclick="location.reload(); return false;"/>

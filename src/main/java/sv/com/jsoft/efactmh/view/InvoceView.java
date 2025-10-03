@@ -24,6 +24,7 @@ import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
+import sv.com.jsoft.efactmh.model.ClientTempDto;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.DetallePago;
 import sv.com.jsoft.efactmh.model.InvoceDto;
@@ -64,10 +65,10 @@ public class InvoceView implements Serializable {
     private boolean aplicaRetencionIsr = false;*/
 
     private SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    
+
     @Getter
     @Setter
-    private Date dateInvoce;
+    private Date dateInvoce = new Date();
     private int var = 1;
     @Getter
     private String taskSave;
@@ -91,6 +92,12 @@ public class InvoceView implements Serializable {
     private String nombreCliente;
     @Getter
     @Setter
+    private String nombreClienteReq;
+    @Getter
+    @Setter
+    private String correoClienteReq;
+    @Getter
+    @Setter
     private String mensaje = "";
     @Getter
     @Setter
@@ -101,6 +108,9 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private boolean sinDatos = true;
+    @Getter
+    @Setter
+    private boolean requiereFactura = false;
     @Getter
     @Setter
     private Producto producto;
@@ -264,7 +274,13 @@ public class InvoceView implements Serializable {
     public BigDecimal getIvaRetenido() {
         switch (invoceDto.getCodigoDte()) {
             case "01":
-                return BigDecimal.ZERO;
+                if (invoceDto.isAplicaIvaRetenido()) {
+                    BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
+                    return invoceDto.isAplicaIvaRetenido() ? getSumas().divide(new BigDecimal("1.13"), RoundingMode.HALF_UP).multiply(porcentajeIva) : getSumas().setScale(2, RoundingMode.HALF_UP);
+                } else {
+                    return BigDecimal.ZERO;
+                }
+
             case "03":
                 if (invoceDto.isAplicaIvaRetenido()) {
                     BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
@@ -312,6 +328,7 @@ public class InvoceView implements Serializable {
         return invoceDto.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .add(getIvaRetenido().negate())
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
@@ -574,7 +591,7 @@ public class InvoceView implements Serializable {
      * @return
      */
     private boolean validatePreSend() {
-        if(dateInvoce == null){
+        if (dateInvoce == null) {
             JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
                     MSG_ALERT,
                     "REVISE LA FECHA DE LA FACTURA");
@@ -592,6 +609,9 @@ public class InvoceView implements Serializable {
                     MSG_ALERT,
                     "DEBE DE AGREGAR EL DETALLE DE PAGOS");
             return false;
+        }
+        if (requiereFactura && invoceDto.getCodigoDte().equals("01")) {
+            invoceDto.setClientTemp(new ClientTempDto(nombreClienteReq, correoClienteReq));
         }
 
         BigDecimal total = lstDetPago.stream()

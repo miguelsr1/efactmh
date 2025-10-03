@@ -1,6 +1,7 @@
 package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -41,12 +42,25 @@ public class DtesView implements Serializable {
     @Getter
     @Setter
     private String codigoGeneracion;
-    
+
+    @Getter
+    @Setter
+    private String nombreCliente;
+    @Getter
+    @Setter
+    private String numDocCliente;
+    @Getter
+    @Setter
+    private String correoCliente;
+    @Getter
+    @Setter
+    private LocalDate fechaCreacion;
+
     @Getter
     @Setter
     private ItemDto itemDto;
     private List<DtesResponse> lstDtes;
-    
+
     @Inject
     SessionService sessionService;
 
@@ -83,7 +97,7 @@ public class DtesView implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("dteInv", dte);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoDte", codigoDte);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", idFactura);
-            
+
             return "process/invoce/dialog/dlg-invalidar-dte";
         } else {
             MessageUtil.builder()

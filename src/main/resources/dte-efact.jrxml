@@ -142,7 +142,23 @@ order by df.id_detalle_factura asc]]>
 	ctt.descirpionc,
 	TO_CHAR(f.fecha_creacion,'dd/MM/yyyy') fecha,
 	TO_CHAR(f.fecha_creacion,'HH:mm:ss') hora,
-	upper(numero_a_texto(f.monto_operacion)) valor_letras,
+	upper(numero_a_texto2((
+	CASE 
+    	WHEN f.codigo_dte = '01' THEN round(sum(df.cantidad * df.precio_unitario),2)
+    	WHEN f.codigo_dte  = '03' THEN (round(sum(df.cantidad * df.precio_unitario) + (sum(df.cantidad * df.precio_unitario) * 0.13) - round(sum(df.cantidad * df.precio_unitario) *(
+	CASE 
+    	WHEN f.retencion_isr = 0 THEN 0
+    	WHEN f.retencion_isr = 1 THEN 0.01
+    	ELSE 0.1
+  	END) ,2) ,2)    			
+    	)
+    	ELSE 0.1
+  	END
+	) - round(
+	CASE f.aplica_iva_retenido 
+    	WHEN true THEN (sum(df.cantidad * df.precio_unitario)/1.13)*0.01
+    	ELSE 0.00
+  	END ,2))) valor_letras,
 	vw.recep_nombre,
 	vw.recep_actividad,
 	vw.recep_direccion,
@@ -175,6 +191,11 @@ order by df.id_detalle_factura asc]]>
     	WHEN f.retencion_isr = 1 THEN 0.01
     	ELSE 0.1
   	END) ,2) isr_retenido,
+  	round(
+	CASE f.aplica_iva_retenido 
+    	WHEN true THEN (sum(df.cantidad * df.precio_unitario)/1.13)*0.01
+    	ELSE 0.00
+  	END ,2) iva1_retenido,
 	(
 	CASE 
     	WHEN f.codigo_dte = '01' THEN round(sum(df.cantidad * df.precio_unitario),2)
@@ -187,12 +208,16 @@ order by df.id_detalle_factura asc]]>
     	)
     	ELSE 0.1
   	END
-	) total ,
+	) - round(
+	CASE f.aplica_iva_retenido 
+    	WHEN true THEN (sum(df.cantidad * df.precio_unitario)/1.13)*0.01
+    	ELSE 0.00
+  	END ,2) total ,
 	concat('https://admin.factura.gob.sv/consultaPublica?ambiente=',f.ambiente,'&codGen=',f.codigo_generacion,'&fechaEmi=', TO_CHAR(bm.fh_procesamiento,'yyyy-mm-dd')) qr
 from 
 	contribuyente c 
 	inner join factura f on c.id_contribuyente = f.id_contribuyente
-	inner join bitacora_mh bm on f.id_factura = bm.id_factura 
+	inner join bitacora_mh bm on f.id_factura = bm.id_factura and bm.activo = true
 	inner join detalle_factura df on f.id_factura = df.id_factura 
 	inner join cat_002_tipo_documentos ctd on ctd.codigo_dte = f.codigo_dte
 	inner join cat_003_modelo_facturacion cmf on f.codigo_facturacion = cmf.codigo_facturacion
@@ -217,6 +242,7 @@ group by
 	ctd.nombre_dte,
 	f.codigo_generacion,
 	f.numero_control,
+	f.aplica_iva_retenido ,
 	cmf.descripcion,
 	ctt.descirpionc,
 	f.fecha_creacion,
@@ -397,6 +423,7 @@ group by
 		<property name="com.jaspersoft.studio.field.name" value="qr"/>
 		<property name="com.jaspersoft.studio.field.label" value="qr"/>
 	</field>
+	<field name="iva1_retenido" class="java.math.BigDecimal"/>
 	<background>
 		<band height="752" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -419,7 +446,7 @@ group by
 "<b>Dirección: </b>" +$F{direccion}+ "<br/>"+
 "<b>Municipio: </b>" +$F{nombre_municipio}+ "<br/>"+
 "<b>Departamento: </b>" + $F{nombre_departamento}+ "<br/>"+
-"<b>Teléfono: </b>" + $F{telefono}+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+"<b>Teléfono: </b>" + $F{telefono}+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
 "<b>Correo: </b>" + $F{correo}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -452,8 +479,8 @@ group by
 "<b>Dirección: </b>" + $F{recep_direccion} + "<br/>"+
 "<b>Municipio: </b>" +$F{recep_municipio}+ "<br/>"+
 "<b>Departamento: </b>" + $F{recep_departamento}+ "<br/>"+
-"<b>Teléfono: </b>" + $F{telefono}+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
-"<b>Correo: </b>" + $F{correo}]]></textFieldExpression>
+"<b>Teléfono: </b>" + ($F{recep_telefono} == null?"":$F{recep_telefono} )+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+"<b>Correo: </b>" + $F{recep_correo}]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="370" y="20" width="80" height="80" uuid="f04118eb-1ecf-42a9-8929-7197e871a4f1">
@@ -578,8 +605,8 @@ group by
 							</jr:columnHeader>
 							<jr:columnFooter style="Table_CH" height="0" rowSpan="1"/>
 							<jr:detailCell style="Table_TD" height="20">
-								<textField>
-									<reportElement x="0" y="0" width="180" height="20" uuid="affa50d0-03e6-4e46-92d8-f513705524f6"/>
+								<textField textAdjust="StretchHeight">
+									<reportElement x="0" y="0" width="180" height="20" isPrintWhenDetailOverflows="true" uuid="affa50d0-03e6-4e46-92d8-f513705524f6"/>
 									<textElement verticalAlignment="Middle">
 										<font size="7"/>
 									</textElement>
@@ -595,7 +622,7 @@ group by
 									<textElement textAlignment="Right" verticalAlignment="Middle">
 										<font size="7"/>
 									</textElement>
-									<text><![CDATA[Ventas No Grabados]]></text>
+									<text><![CDATA[Ventas No Gravados]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter style="Table_CH" height="0" rowSpan="1"/>
@@ -738,7 +765,7 @@ group by
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<text><![CDATA[Ventas Grabadas]]></text>
+								<text><![CDATA[Ventas Gravadas]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="15" rowSpan="2">
@@ -760,6 +787,7 @@ group by
 							</textField>
 						</jr:detailCell>
 					</jr:column>
+					<jr:detail splitType="Stretch"/>
 				</jr:table>
 			</componentElement>
 		</band>
@@ -811,14 +839,14 @@ group by
 				<text><![CDATA[IVA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="43" width="100" height="10" uuid="bcca626c-1c87-4816-ae48-b0659759c400"/>
+				<reportElement x="410" y="53" width="100" height="10" uuid="bcca626c-1c87-4816-ae48-b0659759c400"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<text><![CDATA[Total no gravado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="53" width="100" height="10" uuid="c6978c0c-5463-42c4-8723-9eff39d43c15"/>
+				<reportElement x="410" y="63" width="100" height="10" uuid="c6978c0c-5463-42c4-8723-9eff39d43c15"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
@@ -839,32 +867,32 @@ group by
 				<textFieldExpression><![CDATA[$F{iva}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="510" y="43" width="51" height="10" uuid="0e97f7c5-d3f8-47cf-8b37-9dc821b9fc29"/>
+				<reportElement x="510" y="53" width="51" height="10" uuid="0e97f7c5-d3f8-47cf-8b37-9dc821b9fc29"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ 0.00"]]></textFieldExpression>
 			</textField>
 			<textField pattern="$ #,##0.00">
-				<reportElement x="510" y="53" width="51" height="10" uuid="1c0d0c72-577e-447c-8fa5-ee36bc424c15"/>
+				<reportElement x="510" y="63" width="51" height="10" uuid="1c0d0c72-577e-447c-8fa5-ee36bc424c15"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="410" y="33" width="100" height="10" uuid="946b6e74-f3f0-4ab6-bb59-2bd279e8a819"/>
+				<reportElement x="410" y="43" width="100" height="10" uuid="946b6e74-f3f0-4ab6-bb59-2bd279e8a819"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<text><![CDATA[IVA retenido]]></text>
 			</staticText>
 			<textField pattern="$ #,##0.00">
-				<reportElement x="510" y="33" width="51" height="10" uuid="3f759c25-c1ac-4a4c-a5a4-32cbe659b561"/>
+				<reportElement x="510" y="43" width="51" height="10" uuid="3f759c25-c1ac-4a4c-a5a4-32cbe659b561"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{isr_retenido}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{iva1_retenido}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="410" y="23" width="100" height="10" uuid="1d413dfa-bfdc-4722-9137-e13c748d20ba"/>
@@ -879,6 +907,20 @@ group by
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sub_total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="410" y="33" width="100" height="10" uuid="6f5b43ac-04ac-4425-9849-f29e9793a492"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[ISR]]></text>
+			</staticText>
+			<textField pattern="$ #,##0.00">
+				<reportElement x="510" y="33" width="51" height="10" uuid="3c8158a6-917c-4184-9a4d-ecf1a5f22cdb"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{isr_retenido}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

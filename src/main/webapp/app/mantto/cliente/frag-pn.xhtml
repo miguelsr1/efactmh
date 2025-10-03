@@ -52,7 +52,7 @@
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="cbDepPn" value="Departamento"/>
-            <p:selectOneMenu id="cbDepPn" value="#{clienteView.codigoDepa}" disabled="#{clienteView.disabled}" required="#{clienteView.inscritoIva}" class="w-full">
+            <p:selectOneMenu id="cbDepPn" value="#{clienteView.codigoDepa}" disabled="#{clienteView.disabled}" required="true" class="w-full">
                 <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
                 <f:selectItems value="#{ubicacionService.lstDepartamento}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
                 <p:ajax update="cbMunPn"/>
@@ -60,7 +60,7 @@
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="cbMunPn" value="Municipio"/>
-            <p:selectOneMenu id="cbMunPn" value="#{clienteView.pn.municipio}" disabled="#{clienteView.disabled}" required="#{clienteView.inscritoIva}" class="w-full">
+            <p:selectOneMenu id="cbMunPn" value="#{clienteView.pn.municipio}" disabled="#{clienteView.disabled}" required="true" class="w-full">
                 <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
                 <f:selectItems value="#{clienteView.lstMunicipio}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
             </p:selectOneMenu>

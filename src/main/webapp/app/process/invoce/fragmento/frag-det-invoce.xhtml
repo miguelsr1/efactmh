@@ -40,7 +40,7 @@
                         </p:column>
                         <p:column headerText="Cantidad" style="text-align: right;">
                             <p:outputLabel value="#{item.cantidad}">
-                                <f:convertNumber pattern="#,##0"/>
+                                <f:convertNumber pattern="#,##00.00"/>
                             </p:outputLabel>
                         </p:column>
                         <p:column headerText="Precio Unit." style="text-align: right;">
@@ -61,6 +61,65 @@
                             </p:commandButton>
                         </p:column>
                     </p:dataTable>
+
+                    <p:outputPanel id="invoice-content" style="margin-right: 8rem">
+                        <div class="invoice">
+                            <div class="invoice-summary">
+                                <div class="invoice-notes">
+                                    <b></b>
+                                    <div>
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="invoice-details">
+                                        <div class="invoice-label">Sumas</div>
+                                        <div class="invoice-value">$ 
+                                            <p:outputLabel id="lblSumas" value="#{invoceView.sumas}">
+                                                <f:convertNumber pattern="#,##0.00"/>
+                                            </p:outputLabel>
+                                        </div>
+
+                                        <div class="invoice-label">IVA (13%)</div>
+                                        <div class="invoice-value">$ 
+                                            <p:outputLabel id="lblIva" value="#{invoceView.iva}">
+                                                <f:convertNumber pattern="#,##0.00"/>
+                                            </p:outputLabel>
+                                        </div>
+
+                                        <div class="invoice-label">Sub-Total</div>
+                                        <div class="invoice-value">$ 
+                                            <p:outputLabel id="lblSubTotal" value="#{invoceView.subTotal}">
+                                                <f:convertNumber pattern="#,##0.00"/>
+                                            </p:outputLabel>
+                                        </div>
+
+
+                                        <div class="invoice-label">IVA Retenido(1%)</div>
+                                        <div class="invoice-value">$ 
+                                            <p:outputLabel id="lblIvaRet" value="#{invoceView.ivaRetenido}">
+                                                <f:convertNumber pattern="#,##0.00"/>
+                                            </p:outputLabel>
+                                        </div>
+
+                                        <div class="invoice-label">Renta Retenido(10%)</div>
+                                        <div class="invoice-value">$ 
+                                            <p:outputLabel id="lblRentaRet" value="#{invoceView.rentaRetenido}">
+                                                <f:convertNumber pattern="#,##0.00"/>
+                                            </p:outputLabel>
+                                        </div>
+
+                                        <div class="invoice-label">Total</div>
+                                        <div class="invoice-value">$ 
+                                            <p:outputLabel id="lblTotal" value="#{invoceView.total}">
+                                                <f:convertNumber pattern="#,##0.00"/>
+                                            </p:outputLabel>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </p:outputPanel>
                 </div>
             </p:outputPanel>
         </div>        
@@ -70,64 +129,6 @@
             <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" process="@this"/>
         </p:confirmDialog>
 
-        <p:outputPanel id="invoice-content" style="margin-right: 8rem">
-            <div class="invoice">
-                <div class="invoice-summary">
-                    <div class="invoice-notes">
-                        <b></b>
-                        <div>
-
-                        </div>
-                    </div>
-                    <div>
-                        <div class="invoice-details">
-                            <div class="invoice-label">Sumas</div>
-                            <div class="invoice-value">$ 
-                                <p:outputLabel id="lblSumas" value="#{invoceView.sumas}">
-                                    <f:convertNumber pattern="#,##0.00"/>
-                                </p:outputLabel>
-                            </div>
-
-                            <div class="invoice-label">IVA (13%)</div>
-                            <div class="invoice-value">$ 
-                                <p:outputLabel id="lblIva" value="#{invoceView.iva}">
-                                    <f:convertNumber pattern="#,##0.00"/>
-                                </p:outputLabel>
-                            </div>
-
-                            <div class="invoice-label">Sub-Total</div>
-                            <div class="invoice-value">$ 
-                                <p:outputLabel id="lblSubTotal" value="#{invoceView.subTotal}">
-                                    <f:convertNumber pattern="#,##0.00"/>
-                                </p:outputLabel>
-                            </div>
-
-
-                            <div class="invoice-label">IVA Retenido(1%)</div>
-                            <div class="invoice-value">$ 
-                                <p:outputLabel id="lblIvaRet" value="#{invoceView.ivaRetenido}">
-                                    <f:convertNumber pattern="#,##0.00"/>
-                                </p:outputLabel>
-                            </div>
-
-                            <div class="invoice-label">Renta Retenido(10%)</div>
-                            <div class="invoice-value">$ 
-                                <p:outputLabel id="lblRentaRet" value="#{invoceView.rentaRetenido}">
-                                    <f:convertNumber pattern="#,##0.00"/>
-                                </p:outputLabel>
-                            </div>
-
-                            <div class="invoice-label">Total</div>
-                            <div class="invoice-value">$ 
-                                <p:outputLabel id="lblTotal" value="#{invoceView.total}">
-                                    <f:convertNumber pattern="#,##0.00"/>
-                                </p:outputLabel>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </p:outputPanel>
 
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" process="@this"
                          update="step, dvClient, dvDetInvoce, dvDetPayment" icon="pi pi-angle-left" action="#{invoceView.backStep()}" />
