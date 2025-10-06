@@ -87,7 +87,7 @@
                     <p>FACTURA CREADA Y RECIBIDA EN MH.
                         <br/><br />
                         FACTURA: 
-                        <p:outputLabel id="lblCodGen" value="#{invoceView.codigoGeneracion}" />
+                        <p:outputLabel id="lblCodGen" style="font-weight: bold" value="#{invoceView.codigoGeneracion}" styleClass="mr-2" />
                         <p:commandButton type="button" id="btnCopyCG" widgetVar="btnCopy" icon="pi pi-copy" class="ui-button-outlined"/>
                         <pe:clipboard id="clipCopy" trigger="btnCopyCG" action="copy" target="lblCodGen">
                             <p:ajax event="success" />

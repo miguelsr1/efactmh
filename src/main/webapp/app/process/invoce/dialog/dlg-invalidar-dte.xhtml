@@ -58,7 +58,7 @@
                     <h5>Anulación de DTE: #{dlgInvalidarDte.dte.nombreDte}</h5>
                 </div>
                 <div class="col-12">
-                    <div class="ui-fluid formgrid grid" jsf:id="dvFiltro">
+                    <div class="ui-fluid formgrid grid">
                         <div class="field col-12 md:col-6">
                             <p:outputLabel value="Código generación" styleClass="mr-3"/>
                             <p:outputLabel value="#{dlgInvalidarDte.dte.codigoGeneracion}" style="font-weight: bold; text-decoration: underline;  "/>
@@ -81,106 +81,17 @@
                             <p:outputLabel value="Fecha generación:" styleClass="mr-3"/>
                             <p:outputLabel value="#{dlgInvalidarDte.dte.fechaProcesamiento}" style="font-weight: bold; text-decoration: underline;"/>
                         </div>
-                        <div class="field col-6" >
-                            <p:outputLabel for="cbInva" value="Tipo invalidación"/>
-                            <p:selectOneMenu id="cbInva" required="true" value="#{dlgInvalidarDte.tipoInvalidacion}">
-                                <f:selectItem noSelectionOption="true" itemLabel="-----" />
-                                <f:selectItem itemValue="1" itemLabel="ERROR DE LA INFORMACION DEL DTE A INVALIDAR" />
-                                <f:selectItem itemValue="2" itemLabel="RESCINDIR DE LA OPERACION" />
-                                <f:selectItem itemValue="3" itemLabel="OTRO" />
-                                <p:ajax update="dvFiltro" />
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="field col-12 md:col-6" style="display: #{dlgInvalidarDte.tipoInvalidacion eq 2 ? 'none':'block'}">
-                            <p:outputLabel for="txtDteR" value="Código generación a reemplazar" styleClass="mr-3"/>
-                            <p:inputText id="txtDteR" value="#{dlgInvalidarDte.dteR}">
-                                <p:ajax event="blur" listener="#{dlgInvalidarDte.findDteR()}" />
-                            </p:inputText>
-                        </div>
-                        <div class="field col-12" >
-                            <p:outputLabel for="txtMotivo" value="Motivo invalidación"/>
-                            <p:inputTextarea id="txtMotivo" rows="2" required="true" maxlength="250" counterTemplate="{0} caracteres restantes."
-                                             value="#{dlgInvalidarDte.motivo}"
-                                             requiredMessage="Debe de ingresar una descripción del bien/servicio" counter="display" style="margin-bottom: 0.5rem"/>
-                            <h:outputText id="display" class="block text-sm"  />
-                        </div>
                     </div>
                 </div>
-            </div>
-
-
-            <div class="ui-fluid formgrid grid" jsf:id="dvInvalidateDte">
-                <div class="field col-12 md:col-4">
-                    <div class="card">
-                        <div class="card-header">
-                            Responsable
-                        </div>
-                        <div class="ui-fluid">
-                            <div class="field" style="margin-top: 0.5rem">
-                                <span class="ui-float-label">
-                                    <p:inputText id="txtNomRes" value="#{dlgInvalidarDte.nomResponsable}" required="true" maxlength="100"/>
-                                    <p:outputLabel for="@previous" value="Nombre" />
-                                </span>
-                            </div>
-                            <div class="field" style="margin-top: 2rem">
-                                <span class="ui-float-label">
-                                    <p:selectOneMenu id="txtTipoDocRes" value="#{dlgInvalidarDte.tipoDocResponsable}" required="true">
-                                        <f:selectItem noSelectionOption="true" itemLabel="" />
-                                        <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemValue="#{doc.id}" itemLabel="#{doc.nombre}" />
-                                    </p:selectOneMenu>
-                                    <p:outputLabel for="@previous" value="Tipo Doc." />
-                                </span>                                        
-                            </div>
-                            <div class="field" style="margin-top: 2rem">
-                                <span class="ui-float-label">
-                                    <p:inputText id="txtNumDocRes" value="#{dlgInvalidarDte.numDocResponsable}" required="true" maxlength="20"/>
-                                    <p:outputLabel for="@previous" value="Núm. Doc."/>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="field col-12 md:col-4">
-                    <div class="card" style="margin-bottom: 0.5em" >
-                        <div class="card-header">
-                            Solicitante
-                        </div>
-                        <div class="ui-fluid">
-                            <div class="field" style="margin-top: 0.5rem">
-                                <span class="ui-float-label">
-                                    <p:inputText id="txtNomSol" value="#{dlgInvalidarDte.nomSolicitante}" required="true" maxlength="100"/>
-                                    <p:outputLabel for="@previous" value="Nombre"/>
-                                </span>
-                            </div>
-                            <div class="field" style="margin-top: 2rem">
-                                <span class="ui-float-label">
-                                    <p:selectOneMenu id="txtTipoDocSol" value="#{dlgInvalidarDte.tipoDocSolicitante}" required="true">
-                                        <f:selectItem noSelectionOption="true" itemLabel="" />
-                                        <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemValue="#{doc.id}" itemLabel="#{doc.nombre}" />
-                                    </p:selectOneMenu>
-                                    <p:outputLabel for="@previous" value="Tipo Doc."/>
-                                </span>
-                            </div>
-                            <div class="field" style="margin-top: 2rem">
-                                <span class="ui-float-label">
-                                    <p:inputText id="txtNumDocSol" value="#{dlgInvalidarDte.numDocSolicitante}" required="true" maxlength="20"/>
-                                    <p:outputLabel for="@previous" value="Num. Doc"/>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card col-12 md:col-8 mb-2">
-                    <p><small>* son campos obligatorios</small></p>
-
-
+                <p:divider />
+                <div class="card-subtitle" jsf:id="dvBtn" >
                     <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary mr-2" process="@this"
                                      icon="pi pi-times" style="max-width: 110px" action="#{dlgInvalidarDte.closeDgl()}"/>
-                    <p:commandButton value="Anular" update="dvInvalidateDte" 
+                    <p:commandButton value="Anular"
                                      process="@this,cbInva,txtMotivo,txtNomRes,txtTipoDocRes,txtNumDocRes,txtNomSol,txtTipoDocSol,txtNumDocSol"
-                                     icon="pi pi-ban" style="max-width: 110px"
+                                     icon="pi pi-ban" style="max-width: 110px" disabled="#{dlgInvalidarDte.anulado}"
+                                     update="dvBtn"
                                      validateClient="true" styleClass="ui-button-primary" action="#{dlgInvalidarDte.sendDteInvalidate()}"/>
-                    <br/><br/>
                 </div>
             </div>
         </h:form>

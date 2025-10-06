@@ -9,16 +9,16 @@ import lombok.Data;
 @Data
 public class InvalidateRequest {
 
-    private int tipoAnulacion;
+    /*private int tipoAnulacion;
     private String nombreSolicita;
     private String numDocSolicita;
     private String tipoDocSolicita;
     private String motivoAnulacion;
     private String nombreResponsable;
     private String numDocResponsable;
-    private String tipoDocResponsable;
+    private String tipoDocResponsable;*/
     private Long idFactura;
-    private String codigoGeneracionR;
+    //private String codigoGeneracionR;
     private Long idEstablecimiento;
     private Long idPuntoVenta;
 }

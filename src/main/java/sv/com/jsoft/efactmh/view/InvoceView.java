@@ -164,7 +164,7 @@ public class InvoceView implements Serializable {
 
         loadMetodoPago();
 
-        facturaSinDatos();
+        //facturaSinDatos();
     }
 
     public DetallePago getDetPago() {

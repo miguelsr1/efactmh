@@ -34,7 +34,7 @@ public class DlgInvalidarDte implements Serializable {
 
     private Long idFactura;
     @Getter
-    private DteToInvalidate dte;
+    private boolean anulado = false;
     @Getter
     @Setter
     private int tipoInvalidacion;
@@ -63,6 +63,8 @@ public class DlgInvalidarDte implements Serializable {
     @Setter
     private String dteR;
     private String codigoDte;
+    @Getter
+    private DteToInvalidate dte;
     @Inject
     SessionService sessionService;
     @Inject
@@ -99,24 +101,12 @@ public class DlgInvalidarDte implements Serializable {
     }
 
     public void sendDteInvalidate() {
-        if (tipoInvalidacion != 2 && !validarDteR()) {
-            return;
-        }
         //enviar dte a invalidar
         InvalidateRequest request = new InvalidateRequest();
 
         request.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
         request.setIdPuntoVenta(sessionView.getIdPuntoVenta() == null ? null : Long.valueOf(sessionView.getIdPuntoVenta()));
         request.setIdFactura(idFactura);
-        request.setMotivoAnulacion(motivo);
-        request.setNombreResponsable(nomResponsable);
-        request.setNombreSolicita(nomSolicitante);
-        request.setNumDocResponsable(numDocResponsable);
-        request.setNumDocSolicita(numDocSolicitante);
-        request.setTipoAnulacion(tipoInvalidacion);
-        request.setTipoDocResponsable(tipoDocResponsable);
-        request.setTipoDocSolicita(tipoDocSolicitante);
-        request.setCodigoGeneracionR(tipoInvalidacion != 2 ? dteR : null);
 
         ResponseRestApi response = invalidateService.createInvalidate(request, sessionService.getToken());
 
@@ -124,6 +114,7 @@ public class DlgInvalidarDte implements Serializable {
 
         switch (response.getCodeHttp()) {
             case 200:
+                anulado = true;
                 MessageUtil.builder()
                         .severity(FacesMessage.SEVERITY_INFO)
                         .title(MSG_INFO)
