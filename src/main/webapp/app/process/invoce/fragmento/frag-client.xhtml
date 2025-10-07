@@ -23,29 +23,25 @@
 
             <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
 
-                <p:selectBooleanCheckbox value="#{invoceView.sinDatos}" itemLabel="SIN DATOS" styleClass="mb-2">
-                    <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}" process="@this,txtFecha"/>
+                <p:selectBooleanCheckbox id="chbSinDatos" value="#{invoceView.sinDatos}" itemLabel="SIN DATOS" styleClass="mb-2">
+                    <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}" process="@this,txtFecha,chbSinDatos"/>
                 </p:selectBooleanCheckbox>
             </div>
             <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
                 <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA">
-                    <p:ajax update="dvClient" />
+                    <p:ajax update="dvClient" listener="#{invoceView.requiereFactura()}"  />
                 </p:selectBooleanCheckbox>
             </div>
 
             <!--BLOQUE DE CLIENTE GUARDADO -->
-            <div class="field col-12 md:col-3" style="display:#{invoceView.requiereFactura?'none':'block'}" >
-                <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
-                <div class="ui-inputgroup">                    
-                    <p:inputText id="txtNumDoc" value="#{invoceView.numDocumentoReceptor}" required="true" 
-                                 disabled="#{invoceView.invoce.codigoDte eq '01' and invoceView.sinDatos}"
-                                 requiredMessage="DEBE DE INGRESAR EL NUMERO DE DOCUMENTO DE UN CLIENTE"/>
-                    <p:commandButton value="Buscar" action="#{invoceView.findClient()}" process="@this,txtNumDoc,cboDte,txtFecha" update="dvCliente"/>
-                </div>
-            </div>
-            <div class="field col-12 md:col-9" style="display:#{invoceView.requiereFactura?'none':'block'}">
-                <p:outputLabel for="nomRec" value="Nombre"/>
-                <p:inputText id="nomRec" value="#{invoceView.nombreCliente}" readonly="#{not invoceView.existeCliente}" required="true"/>
+            <div class="field col-12" style="display:#{invoceView.sinDatos ?'none':'block'}" >
+                <p:outputLabel for="txtNumDoc" value="Buscar cliente (DUI o NOMBRE)"/>
+                <p:autoComplete id="txtNumDoc" value="#{invoceView.cliente}"
+                                completeMethod="#{invoceView.completeClient}"
+                                var="country" itemLabel="#{country.nombreCompleto}" itemValue="#{country}"
+                                converter="clientConverter" forceSelection="true" scrollHeight="250">
+                    <p:ajax event="itemSelect" listener="#{invoceView.onItemSelect}" />
+                </p:autoComplete>
             </div>
 
 

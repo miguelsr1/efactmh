@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +32,7 @@ import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
+import sv.com.jsoft.efactmh.repository.ClientRepository;
 import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.InvoceService;
 import sv.com.jsoft.efactmh.services.SessionService;
@@ -86,7 +85,7 @@ public class InvoceView implements Serializable {
     private String codigoGeneracion;
     @Getter
     @Setter
-    private String numDocumentoReceptor;
+    private String queryParam;
     @Getter
     @Setter
     private String nombreCliente;
@@ -104,6 +103,9 @@ public class InvoceView implements Serializable {
     private Integer activeStep = 0;
     @Getter
     private Integer advance = 0;
+    @Getter
+    @Setter
+    private Long idCliente = 0l;
 
     @Getter
     @Setter
@@ -134,6 +136,8 @@ public class InvoceView implements Serializable {
     DteService dteServices;
     @Inject
     InvoceService invoceService;
+    @Inject
+    ClientRepository clientRepository;
 
     @Inject
     @Push(channel = "chatChannel")
@@ -185,6 +189,10 @@ public class InvoceView implements Serializable {
         return cliente;
     }
 
+    public void setCliente(ClienteResponse cliente) {
+        this.cliente = cliente;
+    }
+
     public InvoceDto getInvoce() {
         return invoceDto;
     }
@@ -194,6 +202,8 @@ public class InvoceView implements Serializable {
         switch (invoceDto.getCondicionOperacion()) {
             case "1":
                 lstMetodoPago.add(new CatalogoDto("01", "EFECTIVO"));
+                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO/CREDITO"));
+                lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
                 detPago.setTipoPago("01");
                 break;
             case "2":
@@ -219,7 +229,7 @@ public class InvoceView implements Serializable {
                 .builder()
                 .clazz(ClienteResponse.class)
                 .jwtDto(securityService.getToken())
-                .endpoint("/api/secured/client/" + numDocumentoReceptor.replace(" ", ""))
+                .endpoint("/api/secured/client/autocomplete?query=" + queryParam)
                 .build();
         ResponseRestApi obj = rest.callGetOneAuth();
 
@@ -236,11 +246,11 @@ public class InvoceView implements Serializable {
                         .showMessage();
 
                 cliente = new ClienteResponse();
-                numDocumentoReceptor = "";
+                queryParam = "";
                 return;
             }
 
-            nombreCliente = (cliente.getTipoPersoneria() == 1)
+            nombreCliente = (cliente.getTipoPersoneria().equals("N"))
                     ? cliente.getNombreCompleto()
                     : cliente.getRazonSocial();
             invoceDto.setIdCliente(cliente.getIdCliente());
@@ -613,7 +623,7 @@ public class InvoceView implements Serializable {
         if (requiereFactura && invoceDto.getCodigoDte().equals("01")) {
             invoceDto.setClientTemp(new ClientTempDto(nombreClienteReq, correoClienteReq));
             invoceDto.setIdCliente(null);
-        }else if(!requiereFactura){
+        } else if (!requiereFactura) {
             invoceDto.setClientTemp(null);
         }
 
@@ -704,7 +714,27 @@ public class InvoceView implements Serializable {
     }
 
     public void facturaSinDatos() {
-        numDocumentoReceptor = sinDatos ? "00000000-0" : null;
-        findClient();
+        queryParam = sinDatos ? "00000000-0" : null;
+        if (queryParam != null) {
+            findClient();
+        }
     }
+
+    public void requiereFactura() {
+        sinDatos = !sinDatos;
+    }
+
+    public List<ClienteResponse> completeClient(String query) {
+        List<ClienteResponse> countries = clientRepository.findClientBySearch(query, securityService.getEmisor().getCorreo());
+        return countries;
+    }
+
+    public void onItemSelect(SelectEvent<ClienteResponse> event) {
+        if (event.getObject() != null) {
+            cliente = event.getObject();
+        }else{
+            cliente = new ClienteResponse();
+        }
+    }
+
 }
