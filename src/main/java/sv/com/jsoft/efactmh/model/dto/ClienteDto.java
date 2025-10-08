@@ -19,4 +19,5 @@ public class ClienteDto implements Serializable {
     private String nrc;
     private String correo;
     private Long idMunicipio;
+    private String codigoTipoDoc;
 }

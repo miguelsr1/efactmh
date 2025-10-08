@@ -82,7 +82,7 @@
                             <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
                                              icon="pi pi-times" action="#{dlgDetFactura.closeDgl()}" style="max-width: 110px"/>
                             <p:commandButton value="Agregar" update="dvDetFac" 
-                                             process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU"
+                                             process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU,cbItems,cbUni"
                                              icon="pi pi-plus" action="#{dlgDetFactura.addItem()}" style="max-width: 110px"
                                              validateClient="true" styleClass="ui-button-primary"/>
                         </div>

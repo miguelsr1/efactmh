@@ -39,6 +39,8 @@ public class Cliente implements Serializable, EntityPk {
     
     private String municipio;
     private String departamento;
+    
+    private String codigoTipoDoc;
 
     public Cliente() {
     }

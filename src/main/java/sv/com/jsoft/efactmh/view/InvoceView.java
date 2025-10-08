@@ -229,7 +229,7 @@ public class InvoceView implements Serializable {
                 .builder()
                 .clazz(ClienteResponse.class)
                 .jwtDto(securityService.getToken())
-                .endpoint("/api/secured/client/autocomplete?query=" + queryParam)
+                .endpoint("/api/secured/client/" + queryParam)
                 .build();
         ResponseRestApi obj = rest.callGetOneAuth();
 
@@ -277,6 +277,8 @@ public class InvoceView implements Serializable {
                 return BigDecimal.ZERO;
             case "03":
                 return getSumas().multiply(new BigDecimal(0.13)).setScale(2, RoundingMode.HALF_UP);
+            case "14":
+                return BigDecimal.ZERO;
         }
         return BigDecimal.ZERO;
     }
@@ -314,6 +316,8 @@ public class InvoceView implements Serializable {
                 } else {
                     return BigDecimal.ZERO;
                 }
+            case "14":
+                return BigDecimal.ZERO;
         }
 
         return BigDecimal.ZERO;
@@ -325,6 +329,8 @@ public class InvoceView implements Serializable {
                 return getTotalFe();
             case "03":
                 return getTotalCcf();
+            case "14":
+                return getTotalSEx();
         }
 
         return BigDecimal.ZERO;
@@ -352,6 +358,19 @@ public class InvoceView implements Serializable {
                 .add(getIvaRetenido().negate())
                 .add(getRentaRetenido().negate())
                 .setScale(2, RoundingMode.HALF_UP);
+    }
+
+    /**
+     * total para facturas de sujeto excluido
+     *
+     * @return
+     */
+    private BigDecimal getTotalSEx() {
+        if (invoceDto.getDetailInvoce().isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        return getSumas();
     }
 
     public void showDlgDetFactura() {
@@ -732,7 +751,7 @@ public class InvoceView implements Serializable {
     public void onItemSelect(SelectEvent<ClienteResponse> event) {
         if (event.getObject() != null) {
             cliente = event.getObject();
-        }else{
+        } else {
             cliente = new ClienteResponse();
         }
     }

@@ -42,7 +42,7 @@ public class DlgDetFactura implements Serializable {
     @PostConstruct
     public void init() {
         detFactura = new DetalleFacturaDto();
-        detFactura.setCodigoItem("01");
+        detFactura.setCodigoItem("1");
         detFactura.setCodigoUnidad("59");
         
         catalogoService.loadItems();

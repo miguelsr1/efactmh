@@ -12,15 +12,21 @@
                          required="true" class="w-full" styleClass="text-uppercase" />
         </div>
         <div class="field col-12 md:col-3">
-            <p:outputLabel for="txtDuiPn" value="D.U.I."/>
-            <p:inputMask id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}" 
-                         mask="99999999-9" required="true" class="w-full" />
+            <p:outputLabel for="txtTipoDoc" value="Tipo de Documento"/>
+            <p:selectOneMenu id="txtTipoDoc" value="#{clienteView.pn.codigoTipoDoc}" disabled="#{clienteView.disabled}" required="true" class="w-full">
+                <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemLabel="#{doc.nombre}" itemValue="#{doc.id}" />
+            </p:selectOneMenu>
         </div>
         <div class="field col-12 md:col-3">
-            <p:outputLabel for="txtNitPn" value="N.I.T."/>
-            <p:inputMask id="txtNitPn" value="#{clienteView.pn.nit}" disabled="#{clienteView.disabled}" 
-                         mask="9999-999999-999-9" class="w-full" />
+            <p:outputLabel for="txtDuiPn" value="Número de Documento"/>
+            <p:inputText id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}" 
+                         required="true" class="w-full" />
         </div>
+        <!--div class="field col-12 md:col-3" >
+            <p:outputLabel for="txtNitPn" value="N.I.T."/>
+            <p:inputMask id="txtNitPn" value="{clienteView.pn.nit}" disabled="{clienteView.disabled}" 
+                         mask="9999-999999-999-9" class="w-full" />
+        </div-->
 
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtTel" value="Teléfono"/>
@@ -29,7 +35,7 @@
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtEmail" value="Correo"/>
-            <p:inputText id="txtEmail" value="#{clienteView.pn.email}" disabled="#{clienteView.disabled}" 
+            <p:inputText id="txtEmail" value="#{clienteView.pn.email}" disabled="#{clienteView.disabled}" maxlength="100"
                          required="true" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">

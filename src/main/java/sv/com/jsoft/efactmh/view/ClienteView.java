@@ -144,6 +144,9 @@ public class ClienteView implements Serializable {
     public void nuevo() {
         pn = new PerNaturalRequest();
         pn.setPersoneria("N");
+        pn.setDepartamento("06");
+        pn.setMunicipio("14");
+        pn.setCodigoTipoDoc("13");
         disabled = false;
         tipoPersoneria = 1;
     }
@@ -161,8 +164,7 @@ public class ClienteView implements Serializable {
         int codeResponse;
         if (tipoPersoneria == 1) {
             pn.setDepartamento(codigoDepa);
-            pn.setTipoDocumento(1);
-            pn.setDepartamento(codigoDepa);
+            //pn.setTipoDocumento(1);
             pn.setActivo(true);
 
             if (edit) {
@@ -186,7 +188,6 @@ public class ClienteView implements Serializable {
         } else {
             pj.setDepartamentoEmp(codigoDepa);
             if (edit) {
-                pj.setDepartamentoEmp(codigoDepa);
                 pj.setActivo(true);
                 codeResponse = RestUtil
                         .builder()
@@ -253,8 +254,9 @@ public class ClienteView implements Serializable {
                 pn.setNumDocumento(client.getNumDocumento());
                 pn.setPersoneria("N");
                 pn.setTelefono(client.getTelefono());
-                pn.setTipoDocumento(client.getTipoDocumento());
+                //pn.setTipoDocumento(client.getTipoDocumento());
                 pn.setActivo(client.getActivo());
+                pn.setCodigoTipoDoc(client.getCodigoTipoDoc());
             } else {
                 pj = new PerJuridicaRequest();
                 inscritoIva = true;

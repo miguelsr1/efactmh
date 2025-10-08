@@ -18,11 +18,12 @@ public class PerNaturalRequest implements Personeria, Serializable {
     private String numDocumento;
     private String nombreCompleto;
     private Boolean activo;
-    private Integer tipoDocumento;
+    //private Integer tipoDocumento;
     private String codigoActividad;
     private String departamento;
     private String municipio;
     private String direccion;
+    private String codigoTipoDoc;
 
     public PerNaturalRequest() {
         this.personeria = "N";

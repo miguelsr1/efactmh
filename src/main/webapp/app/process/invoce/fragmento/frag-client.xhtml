@@ -13,6 +13,7 @@
                     <f:selectItem itemLabel="SELECCIONE UN DTE" noSelectionOption="true"/>
                     <f:selectItem itemValue="01" itemLabel="FACTURA" />
                     <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL" />
+                    <f:selectItem itemValue="14" itemLabel="SUJETO EXCLUIDO" />
                     <p:ajax process="@this,cboDte" update="dvCliente"/>
                 </p:selectOneMenu>
             </div>
@@ -38,7 +39,7 @@
                 <p:outputLabel for="txtNumDoc" value="Buscar cliente (DUI o NOMBRE)"/>
                 <p:autoComplete id="txtNumDoc" value="#{invoceView.cliente}"
                                 completeMethod="#{invoceView.completeClient}"
-                                var="country" itemLabel="#{country.nombreCompleto}" itemValue="#{country}"
+                                var="client" itemLabel="#{client.nombreCompleto}" itemValue="#{client}"
                                 converter="clientConverter" forceSelection="true" scrollHeight="250">
                     <p:ajax event="itemSelect" listener="#{invoceView.onItemSelect}" />
                 </p:autoComplete>
