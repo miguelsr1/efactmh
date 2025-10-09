@@ -29,7 +29,7 @@
                 </p:selectBooleanCheckbox>
             </div>
             <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
-                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA">
+                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA" disabled="#{not invoceView.sinDatos}">
                     <p:ajax update="dvClient" listener="#{invoceView.requiereFactura()}"  />
                 </p:selectBooleanCheckbox>
             </div>
@@ -37,11 +37,11 @@
             <!--BLOQUE DE CLIENTE GUARDADO -->
             <div class="field col-12" style="display:#{invoceView.sinDatos ?'none':'block'}" >
                 <p:outputLabel for="txtNumDoc" value="Buscar cliente (DUI o NOMBRE)"/>
-                <p:autoComplete id="txtNumDoc" value="#{invoceView.cliente}"
+                <p:autoComplete id="txtNumDoc" value="#{invoceView.cliente}" minQueryLength="4"
                                 completeMethod="#{invoceView.completeClient}"
                                 var="client" itemLabel="#{client.nombreCompleto}" itemValue="#{client}"
                                 converter="clientConverter" forceSelection="true" scrollHeight="250">
-                    <p:ajax event="itemSelect" listener="#{invoceView.onItemSelect}" />
+                    <p:ajax event="itemSelect" listener="#{invoceView.onItemSelect}" update="txtNumDoc" />
                 </p:autoComplete>
             </div>
 

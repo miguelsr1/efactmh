@@ -18,8 +18,8 @@
             </p:selectOneMenu>
         </div>
         <div class="field col-12 md:col-3">
-            <p:outputLabel for="txtDuiPn" value="Número de Documento"/>
-            <p:inputText id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}" 
+            <p:outputLabel for="txtDuiPn" value="Número de Documento (max. 20 caracteres)"/>
+            <p:inputText id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}"  maxlength="20"
                          required="true" class="w-full" />
         </div>
         <!--div class="field col-12 md:col-3" >
@@ -35,7 +35,7 @@
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtEmail" value="Correo"/>
-            <p:inputText id="txtEmail" value="#{clienteView.pn.email}" disabled="#{clienteView.disabled}" maxlength="100"
+            <p:inputText id="txtEmail" value="#{clienteView.pn.email}" disabled="#{clienteView.disabled}" maxlength="150"
                          required="true" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">
@@ -43,7 +43,7 @@
                                      disabled="#{clienteView.disabled}" style="margin-bottom: 0.2rem;">
                 <p:ajax update="txtNrcPn cboGiro" />
             </p:selectBooleanCheckbox>
-            <p:inputText id="txtNrcPn" value="#{clienteView.pn.nrc}" placeholder="N.R.C." maxlength="11" 
+            <p:inputText id="txtNrcPn" value="#{clienteView.pn.nrc}" placeholder="N.R.C." maxlength="10" 
                          disabled="#{clienteView.disabled or !clienteView.inscritoIva}"
                          required="#{clienteView.inscritoIva}" class="w-full" />
         </div>

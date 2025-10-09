@@ -733,6 +733,7 @@ public class InvoceView implements Serializable {
     }
 
     public void facturaSinDatos() {
+        requiereFactura = false;
         queryParam = sinDatos ? "00000000-0" : null;
         if (queryParam != null) {
             findClient();
@@ -740,7 +741,7 @@ public class InvoceView implements Serializable {
     }
 
     public void requiereFactura() {
-        sinDatos = !sinDatos;
+        
     }
 
     public List<ClienteResponse> completeClient(String query) {
@@ -751,6 +752,19 @@ public class InvoceView implements Serializable {
     public void onItemSelect(SelectEvent<ClienteResponse> event) {
         if (event.getObject() != null) {
             cliente = event.getObject();
+
+            if (invoceDto.getCodigoDte().equals("03")) {
+                if (cliente.getInscritoIva()) {
+                    invoceDto.setIdCliente(cliente.getIdCliente());
+                } else {
+                    JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                            MSG_ALERT,
+                            "EL CLIENTE DEBE DE ESTAR INSCRITO AL IVA PARA EMITIRLE UNA FACTURA DE CREDITO FISCAL");
+                    cliente = new ClienteResponse();
+                }
+            } else {
+                invoceDto.setIdCliente(cliente.getIdCliente());
+            }
         } else {
             cliente = new ClienteResponse();
         }

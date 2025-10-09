@@ -16,17 +16,17 @@
         </div>
         <div class="field col-12 md:col-4" >
             <p:outputLabel for="razSoc" value="Razon Social"/>
-            <p:inputText id="razSoc" value="#{clienteView.pj.razonSocial}" disabled="#{clienteView.disabled}" 
+            <p:inputText id="razSoc" value="#{clienteView.pj.razonSocial}" disabled="#{clienteView.disabled}" maxlength="250"
                          class="w-full" required="true" styleClass="text-uppercase"/>
         </div>
         <div class="field col-12 md:col-4" >
             <p:outputLabel for="nomComer" value="Nombre Comercial"/>
-            <p:inputText id="nomComer" value="#{clienteView.pj.nombreComercial}" disabled="#{clienteView.disabled}" 
+            <p:inputText id="nomComer" value="#{clienteView.pj.nombreComercial}" disabled="#{clienteView.disabled}" maxlength="250"
                          class="w-full" required="true" styleClass="text-uppercase"/>
         </div>
         <div class="field col-12 md:col-3" >
             <p:outputLabel for="email" value="Correo electrónico"/>
-            <p:inputText id="email" value="#{clienteView.pj.emailEmp}" maxlength="100" required="true" disabled="#{clienteView.disabled}" 
+            <p:inputText id="email" value="#{clienteView.pj.emailEmp}" maxlength="150" required="true" disabled="#{clienteView.disabled}" 
                          class="w-full" styleClass="text-lowercase"/>
         </div>
         <div class="field col-12 md:col-6" >

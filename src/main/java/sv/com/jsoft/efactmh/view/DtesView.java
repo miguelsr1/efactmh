@@ -1,7 +1,10 @@
 package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -55,6 +58,8 @@ public class DtesView implements Serializable {
     @Getter
     @Setter
     private LocalDate fechaCreacion;
+    
+    private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Getter
     @Setter
@@ -77,6 +82,13 @@ public class DtesView implements Serializable {
     }
 
     public void findDtes() {
+        /*String urlParams = String.format("?nombre=%s&numDocumento=%s&correo=%s&fecha=%s",
+                encode(nombreCliente),
+                encode(numDocCliente),
+                encode(correoCliente),
+                encode(fechaCreacion.format(formato))
+        );*/
+        
         RestUtil rest = RestUtil.builder()
                 .clazz(DtesResponse.class)
                 .jwtDto(sessionService.getToken())
@@ -86,6 +98,11 @@ public class DtesView implements Serializable {
         if (obj.getCodeHttp() == 200) {
             lstDtes = (List<DtesResponse>) obj.getBody();
         }
+    }
+
+    private String encode(String value) {
+        // Si es null, devolver cadena vacía (para no romper la URL)
+        return value == null ? "" : URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
     public String showDlgDetToInvalidate() {
