@@ -75,7 +75,9 @@
                                 <p:datePicker id="txtFecha" locale="es" monthNavigator="true" pattern="dd/MM/yyyy" value="#{dtesView.fechaCreacion}"/>
                             </div>
                         </div>
-                        <div class="card-header">
+                        <div class="card-subtitle">
+                            <p:commandButton value="Limpiar" action="#{dtesView.cleanFilters}" update="tblDtes dvFiltro" 
+                                             style="width: 10rem" icon="pi pi-filter-slash" styleClass="ui-button-flat mr-2"/>
                             <p:commandButton value="Buscar" action="#{dtesView.findDtes()}" update="tblDtes dvFiltro" 
                                              style="width: 10rem" icon="pi pi-search"/>
                         </div>
@@ -102,7 +104,7 @@
                     <p:column headerText="DTE">
                         <p:outputLabel value="#{dte.abrevDte}"/>
                     </p:column>
-                    <p:column headerText="Nombre" >
+                    <p:column headerText="Nombre" sortBy="#{dte.nombre}">
                         <p:outputLabel value="#{dte.nombre}" />
                     </p:column>
                     <p:column headerText="# Documento" >
@@ -111,7 +113,7 @@
                     <p:column headerText="Correo" >
                         <p:outputLabel value="#{dte.correo}"/>
                     </p:column>
-                    <p:column headerText="Fecha Creación" >
+                    <p:column headerText="Fecha Creación" sortBy="#{dte.fechaCreacion}" >
                         <p:outputLabel value="#{dte.fechaCreacion}"/>
                     </p:column>
                     <p:column headerText="Código Generación" >

@@ -6,7 +6,11 @@ package sv.com.jsoft.efactmh.db.util;
  */
 public class NativeQuery {
 
-    public final static String FIND_CLIENT_AUTOCOMPLETE = "select per.id_cliente as \"idCliente\",\n"
+    public final static String FIND_CLIENT_AUTOCOMPLETE = "select "
+            + "                 case cli.tipo_personeria\n"
+            + "                     when 'J' then emp.id_cliente\n"
+            + "                     else per.id_cliente \n"
+            + "			end as \"idCliente\",\n"
             + "            	case cli.tipo_personeria\n"
             + "            		when 'J' then emp.razon_social\n"
             + "            		else null\n"
@@ -30,8 +34,12 @@ public class NativeQuery {
             + "            	   emp.razon_social ilike :query or\n"
             + "            	   emp.nombre_comercial ilike :query)) and\n"
             + "            	con.correo = :correo";
-    
-    public final static String FIND_CLIENT = "select per.id_cliente,\n"
+
+    public final static String FIND_CLIENT = "select "
+            + "                 case cli.tipo_personeria\n" 
+            + "                     when 'J' then emp.id_cliente\n" 
+            + "                     else per.id_cliente \n" 
+            + "			end as \"idCliente\",\n"
             + "            	case cli.tipo_personeria\n"
             + "            		when 'J' then emp.razon_social\n"
             + "            		else null\n"

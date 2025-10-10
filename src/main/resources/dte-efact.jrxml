@@ -57,8 +57,14 @@
 	0 as "no_grabado",
 	0 as "descuento",
 	0 as "no_sujeta",
-	0 as "exenta",
-	df.cantidad * df.precio_unitario as "grabado"
+	case f.codigo_dte 
+		when '14' then df.cantidad * df.precio_unitario
+		else 0
+	end as "exenta",
+	case f.codigo_dte 
+		when '14' then 0
+		else df.cantidad * df.precio_unitario
+	end as "grabado"
 from factura f 
 	inner join detalle_factura df on f.id_factura = df.id_factura
 	inner join cat_014_unidad_medida cum on df.codigo_unidad = cum.codigo_unidad
@@ -175,6 +181,7 @@ order by df.id_detalle_factura asc]]>
 	CASE 
     	WHEN f.codigo_dte = '01' THEN 0
     	WHEN f.codigo_dte  = '03' THEN round(sum(df.cantidad * df.precio_unitario) * 0.13,2)
+    	when f.codigo_dte = '14' then 0
     	ELSE 0.1
   	END
 	) iva,
@@ -182,6 +189,7 @@ order by df.id_detalle_factura asc]]>
 	CASE 
     	WHEN f.codigo_dte = '01' THEN 0
     	WHEN f.codigo_dte  = '03' THEN round(sum(df.cantidad * df.precio_unitario) + round(sum(df.cantidad * df.precio_unitario) * 0.13,2),2)
+    	when f.codigo_dte = '14' then 0
     	ELSE 0.1
   	END
 	) sub_total,
@@ -206,6 +214,7 @@ order by df.id_detalle_factura asc]]>
     	ELSE 0.1
   	END) ,2) ,2)    			
     	)
+    	when f.codigo_dte = '14' then round(sum(df.cantidad * df.precio_unitario),2)
     	ELSE 0.1
   	END
 	) - round(
@@ -217,7 +226,7 @@ order by df.id_detalle_factura asc]]>
 from 
 	contribuyente c 
 	inner join factura f on c.id_contribuyente = f.id_contribuyente
-	inner join bitacora_mh bm on f.id_factura = bm.id_factura and bm.activo = true
+	inner join bitacora_mh bm on f.id_factura = bm.id_factura and bm.activo = true and bm.tipo_dte = 'F'
 	inner join detalle_factura df on f.id_factura = df.id_factura 
 	inner join cat_002_tipo_documentos ctd on ctd.codigo_dte = f.codigo_dte
 	inner join cat_003_modelo_facturacion cmf on f.codigo_facturacion = cmf.codigo_facturacion

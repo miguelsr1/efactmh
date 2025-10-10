@@ -58,7 +58,7 @@ public class DtesView implements Serializable {
     @Getter
     @Setter
     private LocalDate fechaCreacion;
-    
+
     private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Getter
@@ -81,19 +81,33 @@ public class DtesView implements Serializable {
         return lstDtes;
     }
 
-    public void findDtes() {
-        /*String urlParams = String.format("?nombre=%s&numDocumento=%s&correo=%s&fecha=%s",
-                encode(nombreCliente),
-                encode(numDocCliente),
-                encode(correoCliente),
-                encode(fechaCreacion.format(formato))
-        );*/
+    public void cleanFilters() {
+        nombreCliente = null;
+        numDocCliente = null;
+        correoCliente = null;
+        fechaCreacion = null;
         
+        lstDtes.clear();
+    }
+
+    public void findDtes() {
+        String urlParams = null;
+
+        if (nombreCliente != null || numDocCliente != null || correoCliente != null || fechaCreacion != null) {
+            urlParams = String.format("?nombre=%s&numDocumento=%s&correo=%s&fecha=%s",
+                    encode(nombreCliente),
+                    encode(numDocCliente),
+                    encode(correoCliente),
+                    encode(fechaCreacion == null ? null : fechaCreacion.format(formato))
+            );
+        }
+
         RestUtil rest = RestUtil.builder()
                 .clazz(DtesResponse.class)
                 .jwtDto(sessionService.getToken())
-                .endpoint("/api/secured/dte/all")
+                .endpoint("/api/secured/dte/all" + (urlParams == null ? "" : urlParams))
                 .build();
+
         ResponseRestApi obj = rest.callGetAllAuth();
         if (obj.getCodeHttp() == 200) {
             lstDtes = (List<DtesResponse>) obj.getBody();

@@ -39,7 +39,7 @@
                 <p:outputLabel for="txtNumDoc" value="Buscar cliente (DUI o NOMBRE)"/>
                 <p:autoComplete id="txtNumDoc" value="#{invoceView.cliente}" minQueryLength="4"
                                 completeMethod="#{invoceView.completeClient}"
-                                var="client" itemLabel="#{client.nombreCompleto}" itemValue="#{client}"
+                                var="client" itemLabel="#{client.nombreCompleto}#{client.razonSocial}" itemValue="#{client}"
                                 converter="clientConverter" forceSelection="true" scrollHeight="250">
                     <p:ajax event="itemSelect" listener="#{invoceView.onItemSelect}" update="txtNumDoc" />
                 </p:autoComplete>
