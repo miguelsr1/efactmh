@@ -15,6 +15,7 @@ public class InvoicedAmountsDto {
     private String periodo;
     private BigDecimal fe;
     private BigDecimal ccf;
+    private BigDecimal fse;
     private BigDecimal nr;
     private BigDecimal nc;
     private BigDecimal nd;

@@ -48,23 +48,30 @@
                                         <f:convertNumber pattern="#,##0.00"/>
                                     </p:outputLabel>
                                 </p:column>
-                                <p:column headerText="NR" style="text-align: right">
+                                
+                                <p:column headerText="FSJ" style="text-align: right" >
+                                    <p:outputLabel value="#{inv.fse}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </p:outputLabel>
+                                </p:column>
+                                
+                                <p:column headerText="NR" style="text-align: right" rendered="false">
                                     <p:outputLabel value="#{inv.nr}">
                                         <f:convertNumber pattern="#,##0.00"/>
                                     </p:outputLabel>
                                 </p:column>
-                                <p:column headerText="NC" style="text-align: right">
+                                <p:column headerText="NC" style="text-align: right" rendered="false">
                                     <p:outputLabel value="#{inv.nc}">
                                         <f:convertNumber pattern="#,##0.00"/>
                                     </p:outputLabel>
                                 </p:column>
-                                <p:column headerText="ND" style="text-align: right">
+                                <p:column headerText="ND" style="text-align: right" rendered="false">
                                     <p:outputLabel value="#{inv.nd}">
                                         <f:convertNumber pattern="#,##0.00"/>
                                     </p:outputLabel>
                                 </p:column>
                                 <p:column headerText="ANU" style="text-align: right">
-                                    <p:outputLabel value="#{inv.anu}">
+                                    <p:outputLabel value="#{inv.anu}" class="text-red-500">
                                         <f:convertNumber pattern="#,##0.00"/>
                                     </p:outputLabel>
                                 </p:column>

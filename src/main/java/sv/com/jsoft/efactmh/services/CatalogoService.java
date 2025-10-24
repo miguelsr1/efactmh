@@ -67,6 +67,8 @@ public class CatalogoService implements Serializable {
         dtes.put("05", "NC");
         dtes.put("06", "ND");
         
+        dtes.put("14", "FSX");
+        
         dtes.put("99", "ANU");
     }
     

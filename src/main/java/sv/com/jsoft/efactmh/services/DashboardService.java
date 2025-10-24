@@ -7,6 +7,7 @@ import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
 import sv.com.jsoft.efactmh.model.dto.InvoicedAmountsDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
+import sv.com.jsoft.efactmh.model.dto.TotalInvoice7DaysDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -35,6 +36,18 @@ public class DashboardService {
                 .clazz(Invoice7DaysDto.class)
                 .jwtDto(token)
                 .endpoint("/api/secured/dashboard/invoice-last-7-days")
+                .build()
+                .callGetAllAuth();
+
+        return response;
+    }
+    
+    public ResponseRestApi<List<TotalInvoice7DaysDto>> getTotalLast7Days(JwtDto token) {
+        ResponseRestApi<List<TotalInvoice7DaysDto>> response = RestUtil
+                .builder()
+                .clazz(TotalInvoice7DaysDto.class)
+                .jwtDto(token)
+                .endpoint("/api/secured/dashboard/total-last-7-days")
                 .build()
                 .callGetAllAuth();
 

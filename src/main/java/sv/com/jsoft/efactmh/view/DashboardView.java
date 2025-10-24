@@ -45,6 +45,7 @@ import sv.com.jsoft.efactmh.model.dto.BalanceDto;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
 import sv.com.jsoft.efactmh.model.dto.InvoicedAmountsDto;
+import sv.com.jsoft.efactmh.model.dto.TotalInvoice7DaysDto;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.DashboardService;
 import sv.com.jsoft.efactmh.services.SessionService;
@@ -219,7 +220,21 @@ public class DashboardView implements Serializable {
 
     public BigDecimal getTotalBilled() {
         return lst.stream()
-                .map(DashboardDto::getMonto)
+                .map(f -> {
+                    if (null == f.getEstado()) {
+                        return BigDecimal.ZERO;
+                    } else {
+                        switch (f.getEstado()) {
+                            case 1:
+                            case 4:
+                                return f.getMonto();
+                            case 3:
+                                return f.getMonto().negate();
+                            default:
+                                return BigDecimal.ZERO;
+                        }
+                    }
+                })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     }
@@ -229,36 +244,6 @@ public class DashboardView implements Serializable {
                 .filter(dto -> dto.getEstado() == 3)
                 .count();
 
-    }
-
-    public void createBarModel() {
-        Collection<Number> numeros = flujoFacturadoUltimaSemana();
-
-        //Collection<String> dias = obtenerNombresUltimos7Dias();
-        model = new BarChart()
-                .setData(new BarData()
-                        .addDataset(new BarDataset()
-                                .setData(numeros)
-                                .setLabel("Total Facturado")
-                                .setBackgroundColor(new RGBAColor(255, 99, 132, 0.2))
-                                .setBorderColor(new RGBAColor(255, 99, 132))
-                                .setBorderWidth(1))
-                        .setLabels(dias))
-                .setOptions(new BarOptions()
-                        .setResponsive(true)
-                        .setMaintainAspectRatio(false)
-                        .setIndexAxis(IndexAxis.X)
-                        .setScales(new Scales().addScale(Scales.ScaleAxis.Y, new CartesianScaleOptions()
-                                .setStacked(false)
-                                .setTicks(new CartesianTickOptions()
-                                        .setAutoSkip(true)
-                                        .setMirror(true)))
-                        )
-                        .setPlugins(new Plugins()
-                                .setTitle(new Title()
-                                        .setDisplay(false)
-                                        .setText("Facturado de últimos 7 días")))
-                ).toJson();
     }
 
     public void makeChartInvoce() {
@@ -275,12 +260,32 @@ public class DashboardView implements Serializable {
             return;
         }
 
+        LocalDate hoy = LocalDate.now();
+        LocalDate hace7dias = hoy.minusDays(6);
+
+        Map<LocalDate, BigDecimal> totalPorDia = lst.stream()
+                .filter(f -> f.getFechaCreacion() != null)
+                .filter(f -> !f.getFechaCreacion().toLocalDate().isBefore(hace7dias)
+                && !f.getFechaCreacion().toLocalDate().isAfter(hoy))
+                .collect(Collectors.groupingBy(
+                        f -> f.getFechaCreacion().toLocalDate(),
+                        Collectors.mapping(DashboardDto::getMonto,
+                                Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))
+                ));
+
+        List<Number> montos = new ArrayList<>();
+
+        for (int i = 0; i < 7; i++) {
+            LocalDate dia = hace7dias.plusDays(i);
+            montos.add(totalPorDia.getOrDefault(dia, BigDecimal.ZERO));
+        }
+
         Collection<Number> numeros = flujoFacturadoUltimaSemana();
 
         model = new LineChart()
                 .setData(new LineData()
                         .addDataset(new LineDataset()
-                                .setData(numeros)
+                                .setData(montos)
                                 .setLabel("Facturado por día")
                                 .setBorderColor(new RGBAColor(34, 150, 243))
                                 .setLineTension(0.5f)
