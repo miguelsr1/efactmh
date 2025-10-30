@@ -17,8 +17,4 @@ public class ConfigView implements Serializable {
     @Inject
     SessionService sessionService;
 
-    
-
-    
-
 }

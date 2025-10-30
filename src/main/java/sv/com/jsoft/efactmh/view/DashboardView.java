@@ -45,7 +45,6 @@ import sv.com.jsoft.efactmh.model.dto.BalanceDto;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
 import sv.com.jsoft.efactmh.model.dto.InvoicedAmountsDto;
-import sv.com.jsoft.efactmh.model.dto.TotalInvoice7DaysDto;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.DashboardService;
 import sv.com.jsoft.efactmh.services.SessionService;

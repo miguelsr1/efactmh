@@ -21,7 +21,6 @@ import javax.ws.rs.core.MediaType;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.adapter.LocalDateTimeAdapter;
-import sv.com.jsoft.efactmh.model.EntityPk;
 import sv.com.jsoft.efactmh.model.Personeria;
 import sv.com.jsoft.efactmh.model.dto.ErrorResponseDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
@@ -218,54 +217,7 @@ public class RestUtil {
             log.error("ERROR putAuth - " + endpoint, ex);
         }
     }
-
-    public Object callGetById() {
-        try {
-            HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .GET()
-                    .timeout(Duration.ofSeconds(3))
-                    .build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            return new Gson().fromJson(response.body(), clazz);
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR getById - " + endpoint, ex);
-            return null;
-        }
-    }
-
-    public int callPersistir(EntityPk data) {
-        try {
-            HttpRequest.Builder httpBuilder = HttpRequest.newBuilder()
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .uri(new URI(HOST + endpoint + (data.esNuevo() ? "" : data.getId())))
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .timeout(Duration.ofSeconds(3));
-
-            httpBuilder = data.esNuevo()
-                    ? httpBuilder.POST(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())))
-                    : httpBuilder.PUT(HttpRequest.BodyPublishers.ofInputStream(() -> new ByteArrayInputStream(new Gson().toJson(data).getBytes())));
-
-            HttpRequest httpRequest = httpBuilder.build();
-
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            return response.statusCode();
-        } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR persistir - " + endpoint, ex);
-            return 0;
-        }
-    }
-
+    
     public int callUpdClient(Long idCliente, Personeria data) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
