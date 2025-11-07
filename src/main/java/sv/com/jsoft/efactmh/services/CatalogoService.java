@@ -87,7 +87,7 @@ public class CatalogoService implements Serializable {
 
     private void loadTipoUnidadMedida() {
         ResponseRestApi response = RestUtil.builder()
-                .endpoint("/api/catalogo/unidad-medidad")
+                .endpoint("/api/secured/catalogo/unidad-medidad")
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
@@ -100,7 +100,7 @@ public class CatalogoService implements Serializable {
 
     private void loadDatosUbicacion() {
         ResponseRestApi response = RestUtil.builder()
-                .endpoint("/api/catalogo/departamento")
+                .endpoint("/api/secured/catalogo/departamento")
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
@@ -111,7 +111,7 @@ public class CatalogoService implements Serializable {
         }
 
         response = RestUtil.builder()
-                .endpoint("/api/catalogo/municipio")
+                .endpoint("/api/secured/catalogo/municipio")
                 .clazz(MunicipioDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
@@ -132,7 +132,7 @@ public class CatalogoService implements Serializable {
 
     private void loadGiros() {
         ResponseRestApi response = RestUtil.builder()
-                .endpoint("/api/catalogo/giro")
+                .endpoint("/api/secured/catalogo/giro")
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
@@ -144,7 +144,7 @@ public class CatalogoService implements Serializable {
 
     public List<CatalogoDto> getLstEstablecimiento(JwtDto token) {
         ResponseRestApi response = RestUtil.builder()
-                .endpoint("/api/catalogo/establecimiento")
+                .endpoint("/api/secured/catalogo/establecimiento")
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
@@ -155,7 +155,7 @@ public class CatalogoService implements Serializable {
 
     public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(JwtDto token, Long idEstablecimiento) {
         ResponseRestApi response = RestUtil.builder()
-                .endpoint("/api/catalogo/punto-venta/" + idEstablecimiento)
+                .endpoint("/api/secured/catalogo/punto-venta/" + idEstablecimiento)
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()

@@ -60,7 +60,7 @@ public class DlgPuntoVenta implements Serializable {
                 .clazz(IdDto.class)
                 .jwtDto(sessionService.getToken())
                 .body(puntoVentaDto)
-                .endpoint("/api/punto-venta").build();
+                .endpoint("/api/secured/punto-venta").build();
 
         ResponseRestApi response = rest.callPostAuth();
         if (response.getCodeHttp() == 201) {

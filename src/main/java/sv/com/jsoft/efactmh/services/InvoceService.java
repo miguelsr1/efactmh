@@ -21,7 +21,7 @@ public class InvoceService {
                 .clazz(IdDto.class)
                 .jwtDto(token)
                 .body(invoceDto)
-                .endpoint("/api/invoce")
+                .endpoint("/api/secured/invoce")
                 .build()
                 .callPostAuth();
     }

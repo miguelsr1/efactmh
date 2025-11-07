@@ -47,7 +47,7 @@ public class DlgEstablecimiento implements Serializable {
                 .clazz(IdDto.class)
                 .jwtDto(sessionService.getToken())
                 .body(establecimientoDto)
-                .endpoint("/api/establecimiento").build();
+                .endpoint("/api/secured/establecimiento").build();
 
         ResponseRestApi response = rest.callPostAuth();
         if (response.getCodeHttp() == 201) {

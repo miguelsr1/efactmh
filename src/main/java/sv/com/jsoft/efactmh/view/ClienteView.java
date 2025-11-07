@@ -17,11 +17,11 @@ import sv.com.jsoft.efactmh.model.PerJuridicaRequest;
 import sv.com.jsoft.efactmh.model.PerNaturalRequest;
 import sv.com.jsoft.efactmh.model.dto.ClienteDto;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
+import sv.com.jsoft.efactmh.services.ClientService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.services.UbicacionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
-import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
  *
@@ -57,8 +57,6 @@ public class ClienteView implements Serializable {
     @Setter
     private Long idMuni;
 
-    private List<MunicipioDto> lstMunicipio;
-
     private PerNaturalRequest pn;
     private PerJuridicaRequest pj;
     private ClienteDto clienteDto;
@@ -69,6 +67,8 @@ public class ClienteView implements Serializable {
     UbicacionService ubicacionService;
     @Inject
     SessionService sessionService;
+    @Inject
+    ClientService clientService;
 
     @PostConstruct
     public void init() {
@@ -83,16 +83,9 @@ public class ClienteView implements Serializable {
         tipoPersoneria = 0;
         clienteDto = new ClienteDto();
         pn = new PerNaturalRequest();
-        lstMunicipio = new ArrayList<>();
         codigoDepa = "06";
 
-        ResponseRestApi response = RestUtil
-                .builder()
-                .clazz(ClienteDto.class)
-                .jwtDto(sessionService.getToken())
-                .endpoint("/api/secured/client/")
-                .build()
-                .callGetAllAuth();
+        ResponseRestApi response = clientService.findAllClient(sessionService.getToken());
 
         if (response.getCodeHttp() == 200) {
             lstCliente = (List<ClienteDto>) response.getBody();
@@ -168,45 +161,25 @@ public class ClienteView implements Serializable {
             pn.setActivo(true);
 
             if (edit) {
-                codeResponse = RestUtil
-                        .builder()
-                        .clazz(ClienteDto.class)
-                        .jwtDto(sessionService.getToken())
-                        .endpoint("/api/secured/client/pn/")
-                        .build()
-                        .callUpdClient(clienteDto.getIdCliente(), pn);
+                codeResponse = clientService.updClient(sessionService.getToken(), idMuni, pn);
             } else {
-                codeResponse = RestUtil
-                        .builder()
-                        .clazz(String.class)
-                        .jwtDto(sessionService.getToken())
-                        .body(pn)
-                        .endpoint("/api/secured/client/pn/")
-                        .build()
-                        .callPostAuth().getCodeHttp();
+                codeResponse = clientService.insClient(sessionService.getToken(), idMuni, pn);
             }
         } else {
             pj.setDepartamentoEmp(codigoDepa);
             if (edit) {
                 pj.setActivo(true);
-                codeResponse = RestUtil
-                        .builder()
-                        .clazz(ClienteDto.class)
-                        .jwtDto(sessionService.getToken())
-                        .endpoint("/api/secured/client/pj/")
-                        .build()
-                        .callUpdClient(clienteDto.getIdCliente(), pj);
+                codeResponse = clientService.updClient(sessionService.getToken(), idMuni, pj);
             } else {
-
-                codeResponse = RestUtil
-                        .builder()
-                        .clazz(String.class)
-                        .jwtDto(sessionService.getToken())
-                        .body(pj)
-                        .endpoint("/api/secured/client/pj/")
-                        .build()
-                        .callPostAuth().getCodeHttp();
+                codeResponse = clientService.insClient(sessionService.getToken(), idMuni, pj);
             }
+        }
+        
+        switch(codeResponse){
+            case 201:
+                break;
+            case 409:
+                break;
         }
 
         JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
@@ -221,19 +194,12 @@ public class ClienteView implements Serializable {
         disabled = false;
         clienteDto = event.getObject();
         idMuni = clienteDto.getIdMunicipio();
-        MunicipioDto m = (MunicipioDto) RestUtil.builder()
-                .clazz(MunicipioDto.class)
-                .jwtDto(sessionService.getToken())
-                .endpoint("/api/catalogo/municipio/" + idMuni)
-                .build().callGetOneAuth().getBody();
+
+        MunicipioDto m = ubicacionService.findMunicipioById(idMuni);
+        
         codigoDepa = m.getCodDepartamento();
 
-        ResponseRestApi response = RestUtil.builder()
-                .clazz(Cliente.class)
-                .jwtDto(sessionService.getToken())
-                .endpoint("/api/secured/client/update/" + clienteDto.getIdCliente())
-                .build()
-                .callGetOneAuth();
+        ResponseRestApi response = clientService.findClientById(sessionService.getToken(), clienteDto.getIdCliente());
 
         if (response.getCodeHttp() == 200) {
             Cliente client = (Cliente) response.getBody();

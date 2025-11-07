@@ -21,7 +21,7 @@ public class EstablecimientoService {
                 .builder()
                 .clazz(EstablecimientoDto.class)
                 .jwtDto(token)
-                .endpoint("/api/establecimiento")
+                .endpoint("/api/secured/establecimiento")
                 .build()
                 .callGetAllAuth();
 
@@ -33,7 +33,7 @@ public class EstablecimientoService {
                 .builder()
                 .clazz(PuntoVentaDto.class)
                 .jwtDto(token)
-                .endpoint("/api/punto-venta/establecimiento/" + idEstablecimiento)
+                .endpoint("/api/secured/punto-venta/establecimiento/" + idEstablecimiento)
                 .build()
                 .callGetAllAuth();
 

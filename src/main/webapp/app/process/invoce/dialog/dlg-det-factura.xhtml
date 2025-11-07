@@ -16,6 +16,7 @@
 
         <title>Detalle Factura</title>
 
+        
         <h:outputScript name="js/prism.js" library="paradise-layout"/>
         <h:outputStylesheet name="det-factura.css" library="css" />
         <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
@@ -24,6 +25,8 @@
 
     <h:body>
         <h:form prependId="false">
+            <h:outputScript name="fn.js" library="js"/>
+            
             <p:messages showDetail="true" showSummary="false" closable="true">
                 <p:autoUpdate />
             </p:messages>
@@ -58,9 +61,9 @@
                         </div>
                         <div class="field col-8">
                             <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
-                            <p:inputNumber id="txtPU" value="#{dlgDetFactura.detFactura.precioUnitario}" inputStyle="text-align: right;"
-                                           decimalPlaces="2" decimalSeparator="." thousandSeparator="," symbol="$ "
+                            <p:inputText id="txtPU" value="#{dlgDetFactura.detFactura.precioUnitario}" style="text-align: right;" oninput="limitarNumero(this, 8)"
                                            requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
+                            <p:keyFilter for="txtPU" regEx="/[\d\.]/" />
                         </div>
                         <div class="field col-12">
                             <p:outputLabel for="cbItems">Tipo Item</p:outputLabel>

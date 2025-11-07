@@ -27,7 +27,7 @@ public class ProductoService {
                 .builder()
                 .clazz(Producto.class)
                 .jwtDto(token)
-                .endpoint("/api/item")
+                .endpoint("/api/secured/item")
                 .build()
                 .callGetAllAuth();
 

@@ -34,7 +34,7 @@ public class UbicacionService {
                 .builder()
                 .clazz(CatalogoDto.class)
                 .jwtDto(sessionService.getToken())
-                .endpoint("/api/catalogo/departamento/")
+                .endpoint("/api/secured/catalogo/departamento/")
                 .build()
                 .callGetAllAuth();
         
@@ -54,7 +54,7 @@ public class UbicacionService {
                 .builder()
                 .clazz(MunicipioDto.class)
                 .jwtDto(sessionService.getToken())
-                .endpoint("/api/catalogo/municipio/departamento/" + depa)
+                .endpoint("/api/secured/catalogo/municipio/departamento/" + depa)
                 .build()
                 .callGetAllAuth();
         
@@ -63,5 +63,13 @@ public class UbicacionService {
         } else {
             return new ArrayList<>();
         }
+    }
+    
+    public MunicipioDto findMunicipioById(Long idMuni){
+        return (MunicipioDto) RestUtil.builder()
+                .clazz(MunicipioDto.class)
+                .jwtDto(sessionService.getToken())
+                .endpoint("/api/secured/catalogo/municipio/" + idMuni)
+                .build().callGetOneAuth().getBody();
     }
 }

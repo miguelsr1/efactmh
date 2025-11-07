@@ -75,7 +75,7 @@ public class ProductoView implements Serializable {
                     .clazz(Producto.class)
                     .jwtDto(sessionService.getToken())
                     .body(producto)
-                    .endpoint("/api/item/" + producto.getIdProducto())
+                    .endpoint("/api/secured/item/" + producto.getIdProducto())
                     .build()
                     .callPutAuth();
         } else {
@@ -84,7 +84,7 @@ public class ProductoView implements Serializable {
                     .clazz(Producto.class)
                     .jwtDto(sessionService.getToken())
                     .body(producto)
-                    .endpoint("/api/item/")
+                    .endpoint("/api/secured/item/")
                     .build()
                     .callPostAuth();
 
