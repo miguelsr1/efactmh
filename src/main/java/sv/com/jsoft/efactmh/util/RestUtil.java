@@ -42,7 +42,6 @@ public class RestUtil {
     private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
     //private final static String HOST = "http://localhost:8099";
-    //private final static String HOST = "http://3.82.175.148:8099";
 
     public ResponseRestApi callGetOneAuth() {
         try {
@@ -217,7 +216,7 @@ public class RestUtil {
             log.error("ERROR putAuth - " + endpoint, ex);
         }
     }
-    
+
     public int callUpdClient(Long idCliente, Personeria data) {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -261,7 +260,7 @@ public class RestUtil {
 
             return new ResponseDto(response.statusCode(), response.body());
         } catch (URISyntaxException | IOException | InterruptedException ex) {
-            log.error("ERROR postV2 - " + endpoint, ex);
+            log.error("ERROR postV2 - " + HOST + endpoint, ex);
 
             String mensajeError;
             if (ex instanceof java.net.ConnectException) {

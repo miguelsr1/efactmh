@@ -161,17 +161,17 @@ public class ClienteView implements Serializable {
             pn.setActivo(true);
 
             if (edit) {
-                codeResponse = clientService.updClient(sessionService.getToken(), idMuni, pn);
+                codeResponse = clientService.updClient(sessionService.getToken(), clienteDto.getIdCliente(), pn);
             } else {
-                codeResponse = clientService.insClient(sessionService.getToken(), idMuni, pn);
+                codeResponse = clientService.insClient(sessionService.getToken(), clienteDto.getIdCliente(), pn);
             }
         } else {
             pj.setDepartamentoEmp(codigoDepa);
             if (edit) {
                 pj.setActivo(true);
-                codeResponse = clientService.updClient(sessionService.getToken(), idMuni, pj);
+                codeResponse = clientService.updClient(sessionService.getToken(), clienteDto.getIdCliente(), pj);
             } else {
-                codeResponse = clientService.insClient(sessionService.getToken(), idMuni, pj);
+                codeResponse = clientService.insClient(sessionService.getToken(), clienteDto.getIdCliente(), pj);
             }
         }
         
