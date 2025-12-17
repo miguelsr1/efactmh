@@ -39,9 +39,9 @@ public class RestUtil {
     private JwtDto jwtDto;
     private Object body;
     private final Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
-    private final static String HOST = "http://localhost:8082";
+    //private final static String HOST = "http://localhost:8082";
     //private final static String HOST = "http://34.225.63.188:8080";
-    //private final static String HOST = "http://localhost:8099";
+    private final static String HOST = "http://localhost:8099";
 
     public ResponseRestApi callGetOneAuth() {
         try {
@@ -49,7 +49,7 @@ public class RestUtil {
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .timeout(Duration.ofSeconds(3))
+                    .timeout(Duration.ofSeconds(5))
                     .build();
 
             HttpResponse<String> response = HttpClient
