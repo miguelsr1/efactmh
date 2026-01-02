@@ -18,6 +18,11 @@ public class DetalleFacturaDto implements Serializable {
     private BigDecimal precioUnitario;
     private String codigoUnidad;
     private String codigoItem;
+    private Integer tipoVenta;
+
+    public DetalleFacturaDto() {
+        tipoVenta = 1;
+    }
 
     public BigDecimal getSubTotal() {
         return cantidad.multiply(precioUnitario).setScale(6, RoundingMode.HALF_UP);

@@ -6,21 +6,133 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Próximamente</ui:define>
-    <ui:define name="content">
-        <h:form>
-            <div class="block-content-active ">
-                <div class="surface-section px-4 py-8 md:px-6 lg:px-8">
-                    <div style="background: radial-gradient(50% 109137.91% at 50% 50%, rgba(233, 30, 99, 0.1) 0%, rgba(254, 244, 247, 0) 100%);" class="text-center">
-                        <span class="bg-white text-pink-500 font-bold text-2xl inline-block px-3">404</span>
-                    </div>
-                    <div class="mt-6 mb-5 font-bold text-6xl text-900 text-center">EN CONSTRUCCIÓN</div>
-                    <p class="text-700 text-3xl mt-0 mb-6 text-center">Esta opción estará disponible proximamente.</p>
-                    <div class="text-center">
-                        <p:commandButton value="Home" icon="pi pi-arrow-left" class="ui-button-flat" action="/app/home"/>
+    <ui:define name="title">Compras</ui:define>
+    <ui:define name="head">
+        <h:outputScript name="fn.js" library="js"/>
+    </ui:define>
+
+    <ui:define name="content">   
+        <h:form prependId="false">
+            <div class="grid dashboard ">
+                <div class="col-12">
+                    <p:messages showDetail="true" showSummary="false" closable="true">
+                        <p:autoUpdate />
+                    </p:messages>
+                    <div class="card">
+                        <h5>Listado de COMPRAS</h5>
+                        <div class="grid">
+                            <div class="col-12 md:col-12" jsf:id="dvDatos">
+                                <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out">
+                                    <div class="field col-12" >
+                                        <p:outputLabel for="month" value="Año Fiscal" class="mr-2"/> <br/>
+                                        <p:datePicker id="month" view="month" pattern="MM/yyyy" 
+                                                      value="#{buyView.buyDate}" required="true"
+                                                      requiredMessage="ES REQUERIDO MES Y AÑO DE LA COMPRA"
+                                                      yearNavigator="true" style="width: 10rem"
+                                                      yearRange="2025:2027"/>
+                                    </div>
+                                    <div class="field col-12" >
+                                        <p:outputLabel value="Seleccione el archivo JSON" class="mr-2"/> 
+                                        <p:commandButton icon="pi pi-plus" onclick="onClick('upload_input')"  />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p:panel visible="false">
+                            <p:fileUpload id="upload" value="#{buyView.file}" label="" mode="simple" skinSimple="true" 
+                                          auto="true" process="@this"
+                                          listener="#{buyView.handleFileUpload}" 
+                                          allowTypes="/(\.|\/)(json)$/"/>
+                        </p:panel>
+
+                        <div class="field col-12">
+                            <p:commandButton value="Guardar" icon="pi pi-save" 
+                                             update="dvDatos tblPro" style="width: 10rem" styleClass="mr-2"/>
+                            <p:commandButton value="Cancelar" icon="pi pi-times" update="dvDatos" process="@this" 
+                                             style="width: 10rem" styleClass="ui-button-secondary mr-2" oncomplete="PF('tblPro').unselectAllRows()">
+                                <p:ajax update="dvDatos, tblPro" resetValues="true"/>
+                            </p:commandButton>
+                            <p:commandButton value="Nuevo" update="dvDatos" icon="pi pi-plus"
+                                             style="width: 10rem" validateClient="true" styleClass="ui-button-success" process="@this"/>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" 
+                             rowIndexVar="rowId" selectionMode="single"
+                             allowUnsorting="true" sortMode="single"
+                             styleClass="ui-datatable-striped ui-datatable-sm"
+                             reflow="true" size="small" tableStyle="table-layout: auto;"
+                             paginator="true" paginatorPosition="bottom" rows="10" >
+
+                    <f:facet name="header">
+                        <div class="flex justify-content-between align-items-center">
+                            <h5><span style="margin-right: 1rem"></span>Listado de Items</h5>
+
+                            <div>                            
+                                <p:inputText id="globalFilter" onkeyup="PF('tblPro').filter()" style="width:20rem"
+                                             placeholder="Buscar por Código o Nombre" />
+                            </div>
+                        </div>
+                    </f:facet>
+
+                    <p:ajax event="rowSelect" update="dvDatos" />
+
+                    <p:column headerText="Código generaciónn" >
+                    </p:column>
+                    <p:column headerText="Fecha compra" >
+                    </p:column>
+                    <p:column headerText="NIT Emisor" >
+                    </p:column>
+                    <p:column headerText="Nombre Emisor" >
+                    </p:column>
+                    <p:column headerText="Monto compra" >
+                    </p:column>
+                    <p:column headerText="Fecha registro" >
+                    </p:column>
+
+                </p:dataTable>
+            </div>
+
+            <p:dialog id="dlgAddBuy" widgetVar="dlgAddBuy" header="Detalle de compra" modal="true" visible="false" responsive="true" 
+                      width="380"
+                      closable="false" draggable="false" maximizable="false" minimizable="false">
+                <div class="grid">
+                    <div class="col-12 md:col-12" jsf:id="dvDetailBuy">
+                        <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out">
+                            <div class="field col-12" >
+                                <p:outputLabel value="Código generación:" styleClass="mr-2" /><br/>
+                                <p:outputLabel value="#{buyView.codigoGeneracion}" style="font-weight: bold" />
+                            </div>
+                            <div class="field col-12" >
+                                <p:outputLabel value="Fecha compra:" styleClass="mr-2"/><br/>
+                                <p:outputLabel value="#{buyView.fechEmi}" style="font-weight: bold" />
+                            </div>
+                            <div class="field col-12" >
+                                <p:outputLabel value="NIT Emisor:" styleClass="mr-2"/><br/>
+                                <p:outputLabel value="#{buyView.nitEmisor}" style="font-weight: bold" />
+                            </div>
+                            <div class="field col-12" >
+                                <p:outputLabel value="Nombre Emisor:" styleClass="mr-2"/><br/>
+                                <p:outputLabel value="#{buyView.nombreEmisor}" style="font-weight: bold" />
+                            </div>
+                            <div class="field col-12" >
+                                <p:outputLabel value="Monto de compra:" styleClass="mr-2"/><br/>
+                                <p:outputLabel value="#{buyView.monto}" style="font-weight: bold">
+                                    <f:convertNumber pattern="$ #,##0.00" />
+                                </p:outputLabel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <f:facet name="footer">
+                    <p:commandButton value="Cancelar" styleClass="ui-button-flat" onclick="PF('dlgAddBuy').hide();" process="@this"/>
+                    <p:commandButton value="Aceptar" process="@this" action="#{buyView.guardarJson()}"/>
+                </f:facet>
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>

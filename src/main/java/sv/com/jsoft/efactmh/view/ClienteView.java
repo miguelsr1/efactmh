@@ -157,8 +157,13 @@ public class ClienteView implements Serializable {
         int codeResponse;
         if (tipoPersoneria == 1) {
             pn.setDepartamento(codigoDepa);
-            //pn.setTipoDocumento(1);
             pn.setActivo(true);
+            
+            if(!inscritoIva){
+                pn.setNit(null);
+                pn.setNrc(null);
+                pn.setCodigoActividad(null);
+            }
 
             if (edit) {
                 codeResponse = clientService.updClient(sessionService.getToken(), clienteDto.getIdCliente(), pn);

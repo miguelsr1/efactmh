@@ -8,6 +8,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
+import sv.com.jsoft.efactmh.model.dto.TipoVentaDto;
 
 /**
  *
@@ -19,6 +20,8 @@ public class TipoItemService implements Serializable {
 
     @Getter
     private List<CatalogoDto> lstTipoItems;
+    @Getter
+    private List<TipoVentaDto> lstTipoVentas;
 
     @PostConstruct
     public void init() {
@@ -26,6 +29,10 @@ public class TipoItemService implements Serializable {
                 new CatalogoDto("2", "SERVICIO"),
                 new CatalogoDto("3", "AMBOS"),
                 new CatalogoDto("4", "OTROS"));
+        
+        lstTipoVentas = Arrays.asList(new TipoVentaDto(1, "GRAVADA"),
+                new TipoVentaDto(2, "NO SUJETA"),
+                new TipoVentaDto(3, "EXENTA"));
     }
 
 }

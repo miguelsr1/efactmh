@@ -65,7 +65,13 @@
                                            requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
                             <p:keyFilter for="txtPU" regEx="/[\d\.]/" />
                         </div>
-                        <div class="field col-12">
+                        <div class="field col-6">
+                            <p:outputLabel for="cbVenta">Tipo Venta</p:outputLabel>
+                            <p:selectOneMenu id="cbVenta" value="#{dlgDetFactura.detFactura.tipoVenta}" required="true">
+                                <f:selectItems value="#{tipoItemService.lstTipoVentas}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="field col-6">
                             <p:outputLabel for="cbItems">Tipo Item</p:outputLabel>
                             <p:selectOneMenu id="cbItems" value="#{dlgDetFactura.detFactura.codigoItem}" required="true">
                                 <f:selectItems value="#{tipoItemService.lstTipoItems}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
