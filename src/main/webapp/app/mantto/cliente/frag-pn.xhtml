@@ -22,12 +22,6 @@
             <p:inputText id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}"  maxlength="20"
                          required="true" class="w-full" />
         </div>
-        <!--div class="field col-12 md:col-3" >
-            <p:outputLabel for="txtNitPn" value="N.I.T."/>
-            <p:inputMask id="txtNitPn" value="{clienteView.pn.nit}" disabled="{clienteView.disabled}" 
-                         mask="9999-999999-999-9" class="w-full" />
-        </div-->
-
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtTel" value="Teléfono"/>
             <p:inputMask id="txtTel" value="#{clienteView.pn.telefono}" disabled="#{clienteView.disabled}" 
@@ -55,6 +49,11 @@
                 <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
                 <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
             </p:selectOneMenu>
+        </div>
+        <div class="field col-12 md:col-3" >
+            <p:outputLabel for="txtNitPn" value="N.I.T."/>
+            <p:inputMask id="txtNitPn" value="#{clienteView.pn.nit}" disabled="#{clienteView.disabled}" disabled="#{!clienteView.inscritoIva}" required="#{clienteView.inscritoIva}" 
+                         mask="9999-999999-999-9" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="cbDepPn" value="Departamento"/>
