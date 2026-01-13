@@ -10,7 +10,7 @@
         <div >
             <div class="card-header">
                 <h5>Detalle factura</h5>
-                <p:commandButton action="#{invoceView.showDlgDetFactura()}"
+                <p:commandButton action="#{invoceView.showDlgDetFactura()}" value="AGREGAR"
                                  process="@this" icon="pi pi-plus"
                                  validateClient="true" styleClass="ui-button-success">
                     <p:ajax event="dialogReturn" listener="#{invoceView.onDetFactura}" update="msjEmptyItems,tblDetPedido,lblSumas,lblIva,lblSubTotal,lblIvaRet,lblRentaRet,lblTotal"/>

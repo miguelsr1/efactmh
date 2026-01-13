@@ -44,11 +44,14 @@ public class DlgDetFactura implements Serializable {
         detFactura = new DetalleFacturaDto();
         detFactura.setCodigoItem("1");
         detFactura.setCodigoUnidad("59");
+        detFactura.setTipoVenta(1);
         
         catalogoService.loadItems();
     }
     
     public void addItem() {
+        detFactura.setNombre(detFactura.getNombre().toUpperCase());
+        
         PrimeFaces.current().dialog().closeDynamic(detFactura);
     }
     

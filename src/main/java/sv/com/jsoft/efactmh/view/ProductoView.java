@@ -69,6 +69,9 @@ public class ProductoView implements Serializable {
     public void guardar() {
         disabled = true;
         ResponseRestApi response;
+        producto.setNombre(producto.getNombre().toUpperCase());
+        producto.setCodigoProducto(producto.getCodigoProducto().toUpperCase());
+        
         if (edit) {
             RestUtil
                     .builder()

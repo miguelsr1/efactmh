@@ -65,7 +65,7 @@
                 </div>
                 <div class="field col-12" style="margin-top: 1.65rem" >
                     <p:commandButton id="btnAdd" icon="pi pi-plus" action="#{invoceView.addPaymentMethod()}" 
-                                     styleClass="ui-button-success"
+                                     styleClass="ui-button-success" value="AGREGAR" style="width: 100px"
                                      process="@this,cboTipoPago,txtMontoPago,txtNumRef,cboPlazo,txtPeriod"
                                      update="dvPago,tblPagos,tblPagos:lblTotal"/>
                 </div>
@@ -105,7 +105,7 @@
                     </p:column>
                     <p:column headerText="" style="text-align: center">
                         <p:commandButton icon="pi pi-trash" styleClass="rounded-button ui-button-danger ui-button-flat" process="@this" 
-                                         update="tblPagos" action="#{invoceView.removePaymentMethod(id)}" style="width: 22px; height: 22px"/>
+                                         update="tblPagos dvPago" action="#{invoceView.removePaymentMethod(id)}" style="width: 22px; height: 22px"/>
                     </p:column>
 
                     <p:columnGroup type="footer">

@@ -379,9 +379,10 @@ public class InvoceView implements Serializable {
                 .draggable(false)
                 .resizable(false)
                 .maximizable(false)
+                .responsive(true)
                 .modal(true)
-                .width("350px")
-                .height("550px")
+                .width("430px")
+                //.height("550px")
                 .build();
 
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);
@@ -421,6 +422,10 @@ public class InvoceView implements Serializable {
         detPago.setTipoPago("01"); //EFECTIVO
 
         invoceDto.setCondicionOperacion("1");
+        
+       if(lstDetPago.isEmpty()){
+           detPago.setMonto(getTotal());
+       }
     }
 
     public void removeDetInvoce(int index) {

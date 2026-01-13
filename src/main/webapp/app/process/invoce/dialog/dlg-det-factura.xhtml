@@ -18,7 +18,7 @@
 
         <style>
             .som-wrap-text .ui-selectonemenu-item {
-                max-width: 500px;
+                max-width: 600px;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
@@ -82,29 +82,28 @@
                             <p:keyFilter for="txtPU" regEx="/[\d\.]/" />
                         </div>
                         <div class="field col-6">
-                            <p:outputLabel for="cbVenta">Tipo Venta</p:outputLabel>
-                            <p:selectOneMenu id="cbVenta" value="#{dlgDetFactura.detFactura.tipoVenta}" required="true">
-                                <f:selectItems value="#{tipoItemService.lstTipoVentas}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
-                            </p:selectOneMenu>
-                        </div>
-                        <div class="field col-6">
                             <p:outputLabel for="cbItems">Tipo Item</p:outputLabel>
                             <p:selectOneMenu id="cbItems" value="#{dlgDetFactura.detFactura.codigoItem}" required="true">
                                 <f:selectItems value="#{tipoItemService.lstTipoItems}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
                             </p:selectOneMenu>
                         </div>
-                        <div class="field col-12">
+                        <div class="field col-6">
                             <p:outputLabel for="cbUni">Codigo Unidad</p:outputLabel>
                             <p:selectOneMenu id="cbUni" value="#{dlgDetFactura.detFactura.codigoUnidad}" required="true">
                                 <f:selectItems value="#{dlgDetFactura.unidadesMedidas}" var="uni" itemValue="#{uni.id}" itemLabel="#{uni.nombre}" />
                             </p:selectOneMenu>
                         </div>
-
+                        <div class="field col-6" style="display: none">
+                            <p:outputLabel for="cbVenta">Tipo Venta</p:outputLabel>
+                            <p:selectOneMenu id="cbVenta" value="#{dlgDetFactura.detFactura.tipoVenta}" required="true">
+                                <f:selectItems value="#{tipoItemService.lstTipoVentas}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
+                            </p:selectOneMenu>
+                        </div>
                         <div class="field col-12">
                             <p><small>* son campos obligatorios</small></p>
                             <p:spacer height="10"/>
 
-                            <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
+                            <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary mr-2" process="@this"
                                              icon="pi pi-times" action="#{dlgDetFactura.closeDgl()}" style="max-width: 110px"/>
                             <p:commandButton value="Agregar" update="dvDetFac" 
                                              process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU,cbItems,cbUni"

@@ -160,6 +160,9 @@ public class ClienteView implements Serializable {
             pn.setActivo(true);
             
             if(!inscritoIva){
+                pn.setNombreCompleto(pn.getNombreCompleto().toUpperCase());
+                pn.setDireccion(pn.getDireccion().toUpperCase());
+                pn.setEmail(pn.getEmail().toLowerCase());
                 pn.setNit(null);
                 pn.setNrc(null);
                 pn.setCodigoActividad(null);
@@ -171,6 +174,11 @@ public class ClienteView implements Serializable {
                 codeResponse = clientService.insClient(sessionService.getToken(), null, pn);
             }
         } else {
+            pj.setRazonSocial(pj.getRazonSocial().toUpperCase());
+            pj.setNombreComercial(pj.getNombreComercial().toUpperCase());
+            pj.setDireccionEmp(pj.getDireccionEmp().toUpperCase());
+            pj.setEmailEmp(pj.getEmailEmp().toLowerCase());
+            
             pj.setDepartamentoEmp(codigoDepa);
             if (edit) {
                 pj.setActivo(true);
@@ -189,8 +197,6 @@ public class ClienteView implements Serializable {
                 JsfUtil.mensajeFromEnum(TipoMensaje.CONFLICT);
                 break;
         }
-
-        
 
         inicializar();
 
@@ -248,6 +254,17 @@ public class ClienteView implements Serializable {
                 pj.setTelefono(client.getTelefono());
                 pj.setActivo(client.getActivo());
             }
+        }
+    }
+    
+    public int getMaxNumDoc(){
+        switch(pn.getCodigoTipoDoc()){
+            case "13":
+                return 9;
+            case "36":
+                return 14;
+            default:
+                return 30;
         }
     }
 }

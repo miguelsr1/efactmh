@@ -3,6 +3,7 @@ package sv.com.jsoft.efactmh.util;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.adapter.LocalDateTimeAdapter;
 import sv.com.jsoft.efactmh.model.Personeria;
+import sv.com.jsoft.efactmh.model.dto.ErrorMessageDto;
 import sv.com.jsoft.efactmh.model.dto.ErrorResponseDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
@@ -157,7 +159,13 @@ public class RestUtil {
                     break;
                 //RENOVAR JWT KEYCLOAK
                 case 401:
-                    break;
+                    try {
+                        return new ResponseRestApi(401, gson.fromJson(response.body(), ErrorMessageDto.class));
+                    } catch (JsonSyntaxException e) {
+                        log.error("RESPUESTA WS: " + response.body());
+                        log.error("ERROR EN CASTEO POR RESPUESTA 401", e);
+                        break;
+                    }
                 default:
                     return new ResponseRestApi(response.statusCode(), response.body());
             }

@@ -15,12 +15,12 @@
             <p:outputLabel for="txtTipoDoc" value="Tipo de Documento"/>
             <p:selectOneMenu id="txtTipoDoc" value="#{clienteView.pn.codigoTipoDoc}" disabled="#{clienteView.disabled}" required="true" class="w-full">
                 <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemLabel="#{doc.nombre}" itemValue="#{doc.id}" />
+                <p:ajax update="lblDuiPn txtDuiPn" />
             </p:selectOneMenu>
         </div>
         <div class="field col-12 md:col-3">
-            <p:outputLabel for="txtDuiPn" value="Número de Documento (max. 20 caracteres)"/>
-            <p:inputText id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}"  maxlength="20"
-                         required="true" class="w-full" />
+            <p:outputLabel id="lblDuiPn" for="txtDuiPn" value="Número de Documento (max. #{clienteView.maxNumDoc} caracteres)"/>
+            <p:inputText id="txtDuiPn" value="#{clienteView.pn.numDocumento}" disabled="#{clienteView.disabled}" maxlength="#{clienteView.maxNumDoc}" required="true" class="w-full" />
         </div>
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtTel" value="Teléfono"/>
@@ -30,14 +30,14 @@
         <div class="field col-12 md:col-3">
             <p:outputLabel for="txtEmail" value="Correo"/>
             <p:inputText id="txtEmail" value="#{clienteView.pn.email}" disabled="#{clienteView.disabled}" maxlength="150"
-                         required="true" class="w-full" />
+                         required="true" class="w-full" styleClass="text-lowercase" />
         </div>
         <div class="field col-12 md:col-3">
             <p:selectBooleanCheckbox itemLabel="INSCRITO IVA" value="#{clienteView.inscritoIva}" 
                                      disabled="#{clienteView.disabled}" style="margin-bottom: 0.2rem;">
                 <p:ajax update="txtNrcPn cboGiro txtNitPn" />
             </p:selectBooleanCheckbox>
-            <p:inputText id="txtNrcPn" value="#{clienteView.pn.nrc}" placeholder="N.R.C." maxlength="10" 
+            <p:inputText id="txtNrcPn" value="#{clienteView.pn.nrc}" placeholder="N.R.C." maxlength="8"
                          disabled="#{clienteView.disabled or !clienteView.inscritoIva}"
                          required="#{clienteView.inscritoIva}" class="w-full" />
         </div>
@@ -73,7 +73,9 @@
         <div class="field col-12 md:col-6">
             <p:outputLabel for="txtDirPn" value="Dirección"/>
             <p:inputTextarea id="txtDirPn" value="#{clienteView.pn.direccion}" disabled="#{clienteView.disabled}" 
+                             counter="displayTxtDirPn" maxlength="200" counterTemplate="{0} caracteres restantes."
                              required="true" rows="3" class="w-full" styleClass="text-uppercase" />
+            <h:outputText id="displayTxtDirPn" class="block" />
         </div>
     </div>
 </ui:component>

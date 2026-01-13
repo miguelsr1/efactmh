@@ -8,11 +8,11 @@
     <div class="ui-fluid formgrid grid">
         <div class="field col-12 md:col-2" >
             <p:outputLabel for="txtNit" value="N.I.T."/>
-            <p:inputMask id="txtNit" value="#{clienteView.pj.nit}" size="18" mask="9999-999999-999-9" required="true" disabled="#{clienteView.disabled}" class="w-full" />
+            <p:inputMask id="txtNit" value="#{clienteView.pj.nit}" size="17" mask="9999-999999-999-9" required="true" disabled="#{clienteView.disabled}" class="w-full" />
         </div>
         <div class="field col-12 md:col-2" >
             <p:outputLabel for="txtNrc" value="N.R.C."/>
-            <p:inputText id="txtNrc" value="#{clienteView.pj.nrc}" maxlength="10" disabled="#{clienteView.disabled}" class="w-full" />
+            <p:inputText id="txtNrc" value="#{clienteView.pj.nrc}" maxlength="8" disabled="#{clienteView.disabled}" class="w-full" />
         </div>
         <div class="field col-12 md:col-4" >
             <p:outputLabel for="razSoc" value="Razon Social"/>
@@ -59,10 +59,10 @@
             </p:selectOneMenu>
         </div>
         <div class="field col-12 md:col-5" >
-            <p:outputLabel for="txtDir" value="Dirección"/>
-            <p:inputTextarea id="txtDir" counter="displayTxtDir" value="#{clienteView.pj.direccionEmp}" maxlength="200"
-                             counterTemplate="{0} caracteres restantes." styleClass="text-uppercase"
-                             disabled="#{clienteView.disabled}" class="w-full" required="true" rows="3"/>
+            <p:outputLabel for="txtDir" value="Dirección"/>            
+            <p:inputTextarea id="txtDir" value="#{clienteView.pj.direccionEmp}"
+                             counter="displayTxtDir" maxlength="200" counterTemplate="{0} caracteres restantes."
+                             required="true" rows="3" class="w-full" styleClass="text-uppercase" />
             <h:outputText id="displayTxtDir" class="block" />
         </div>
 
