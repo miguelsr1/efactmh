@@ -11,6 +11,7 @@ public enum TipoMensaje {
     INSERT("Registro almacenado satisfactoriamente", FacesMessage.SEVERITY_INFO, "Información"),
     UPDATE("Registro actualizado satisfactoriamente", FacesMessage.SEVERITY_INFO, "Información"),
     ERROR("Ah ocurrido un error", FacesMessage.SEVERITY_ERROR, "Error"),
+    CONFLICT("ESTE REGISTRO YA EXISTE", FacesMessage.SEVERITY_WARN, "Alerta"),
     DELETE("Registro eliminado satisfactoriamente", FacesMessage.SEVERITY_INFO, "Información");
 
     private String mensaje;

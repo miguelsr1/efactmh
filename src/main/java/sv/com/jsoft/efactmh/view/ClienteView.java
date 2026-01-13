@@ -181,13 +181,16 @@ public class ClienteView implements Serializable {
         }
         
         switch(codeResponse){
+            case 200:
             case 201:
+                JsfUtil.mensajeFromEnum(!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE);
                 break;
             case 409:
+                JsfUtil.mensajeFromEnum(TipoMensaje.CONFLICT);
                 break;
         }
 
-        JsfUtil.mensajeFromEnum(codeResponse != 200 ? TipoMensaje.ERROR : (!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE));
+        
 
         inicializar();
 

@@ -29,7 +29,9 @@
                                                       value="#{buyView.buyDate}" required="true"
                                                       requiredMessage="ES REQUERIDO MES Y AÑO DE LA COMPRA"
                                                       yearNavigator="true" style="width: 10rem"
-                                                      yearRange="2025:2027"/>
+                                                      yearRange="2025:2027">
+                                            <p:ajax event="dateSelect" listener="#{buyView.onDateSelect}" update="tblPro" />
+                                        </p:datePicker>
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel value="Seleccione el archivo JSON" class="mr-2"/> 
@@ -61,11 +63,13 @@
             </div>
 
             <div class="card">
-                <p:dataTable id="tblPro" widgetVar="tblPro" var="pro" 
+                <p:dataTable id="tblPro" widgetVar="tblPro" value="#{buyView.lstBuys}" var="buy"
+                             rowKey="#{buy.codigoGeneracion}"
                              rowIndexVar="rowId" selectionMode="single"
                              allowUnsorting="true" sortMode="single"
                              styleClass="ui-datatable-striped ui-datatable-sm"
                              reflow="true" size="small" tableStyle="table-layout: auto;"
+                             emptyMessage="NO SE HAN REGISTRADO COMPRAS"
                              paginator="true" paginatorPosition="bottom" rows="10" >
 
                     <f:facet name="header">
@@ -82,16 +86,26 @@
                     <p:ajax event="rowSelect" update="dvDatos" />
 
                     <p:column headerText="Código generaciónn" >
+                        <p:outputLabel value="#{buy.codigoGeneracion}"/>
                     </p:column>
                     <p:column headerText="Fecha compra" >
+                        <p:outputLabel value="#{buy.fecha}"/>
                     </p:column>
                     <p:column headerText="NIT Emisor" >
+                        <p:outputLabel value="#{buy.nit}"/>
                     </p:column>
                     <p:column headerText="Nombre Emisor" >
+                        <p:outputLabel value="#{buy.nombre}"/>
                     </p:column>
                     <p:column headerText="Monto compra" >
+                        <p:outputLabel value="#{buy.monto}">
+                            <f:convertNumber pattern="#,##0.00"/>
+                        </p:outputLabel>
                     </p:column>
                     <p:column headerText="Fecha registro" >
+                        <p:outputLabel value="#{buy.fechacrea}">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                        </p:outputLabel>
                     </p:column>
 
                 </p:dataTable>

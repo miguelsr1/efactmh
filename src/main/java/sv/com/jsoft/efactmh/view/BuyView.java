@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -17,11 +18,12 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.file.UploadedFile;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
+import sv.com.jsoft.efactmh.model.dto.BuyDtoResponse;
 import sv.com.jsoft.efactmh.services.BuyService;
 import sv.com.jsoft.efactmh.services.SessionService;
-import static sv.com.jsoft.efactmh.util.Constantes.MSG_ERROR;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -52,6 +54,9 @@ public class BuyView implements Serializable {
     private String nombreEmisor;
     @Getter
     private BigDecimal monto;
+
+    @Getter
+    private List<BuyDtoResponse> lstBuys;
 
     @Inject
     SessionService securityService;
@@ -104,8 +109,14 @@ public class BuyView implements Serializable {
         log.info("FILE: " + event.getFile().getFileName());
     }
 
+    public void onDateSelect(SelectEvent<LocalDate> event) {
+        lstBuys = buyService.getList(event.getObject(), securityService.getToken());
+    }
+
     public void guardarJson() {
-        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(jsonObject), securityService.getToken());
+        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(jsonObject), buyDate, securityService.getToken());
+
+        PrimeFaces.current().executeScript("PF('dlgAddBuy').hide();");
 
         switch (responseSendMh.getCodeHttp()) {
             case 201:

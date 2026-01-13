@@ -16,7 +16,17 @@
 
         <title>Detalle Factura</title>
 
-        
+        <style>
+            .som-wrap-text .ui-selectonemenu-item {
+                max-width: 500px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .wrap-column {
+                white-space: normal !important;
+            }
+        </style>
+
         <h:outputScript name="js/prism.js" library="paradise-layout"/>
         <h:outputStylesheet name="det-factura.css" library="css" />
         <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
@@ -26,7 +36,7 @@
     <h:body>
         <h:form prependId="false">
             <h:outputScript name="fn.js" library="js"/>
-            
+
             <p:messages showDetail="true" showSummary="false" closable="true">
                 <p:autoUpdate />
             </p:messages>
@@ -37,11 +47,17 @@
                         <div class="field col-12" >
                             <p:outputLabel for="txtCodigo" value="Código"/>
                             <p:selectOneMenu id="txtCodigo" value="#{dlgDetFactura.detFactura.codigoProducto}" appendTo="@this"
-                                             filter="true" filterMatchMode="contains">
+                                             filter="true" filterMatchMode="contains" panelStyle="width: 90%">
                                 <f:selectItem itemLabel=" SELECCIONAR " noSelectionOption="true"/>
+
                                 <f:selectItems value="#{catalogoService.lstProducto}"
                                                itemLabel="#{prod.codigoProducto} - #{prod.nombre}"
                                                itemValue="#{prod.codigoProducto}" var="prod"/>
+
+                                <p:column styleClass="wrap-column">
+                                    <p:outputLabel value="#{prod.codigoProducto} - #{prod.nombre}"/>
+                                </p:column>
+
                                 <p:ajax event="itemSelect" listener="#{dlgDetFactura.selProductoListener}" update="dvDetFac"/>
                             </p:selectOneMenu>
                         </div>
@@ -62,7 +78,7 @@
                         <div class="field col-8">
                             <p:outputLabel for="txtPU">Precio Unitario</p:outputLabel>
                             <p:inputText id="txtPU" value="#{dlgDetFactura.detFactura.precioUnitario}" style="text-align: right;" oninput="limitarNumero(this, 8)"
-                                           requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
+                                         requiredMessage="Debe de ingresar el precio unitario del producto" required="true"/>
                             <p:keyFilter for="txtPU" regEx="/[\d\.]/" />
                         </div>
                         <div class="field col-6">

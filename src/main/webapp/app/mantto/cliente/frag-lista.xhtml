@@ -10,6 +10,7 @@
         <p:dataTable id="tblCli" widgetVar="tblCli" var="cli" value="#{clienteView.lstCliente}" selectionMode="single"
                      allowUnsorting="true" sortMode="single"
                      reflow="true" size="small" tableStyle="table-layout: auto;"
+                     emptyMessage="NO SE HAN AGREGADO CLIENTES"
                      rowKey="#{cli.idCliente}" rowIndexVar="rowId" selection="#{clienteView.clienteDto}">
             <f:facet name="header">
                 <div class="flex justify-content-between align-items-center">
