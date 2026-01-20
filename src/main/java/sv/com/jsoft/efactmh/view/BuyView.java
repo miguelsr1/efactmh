@@ -22,6 +22,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.file.UploadedFile;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.BuyDtoResponse;
+import sv.com.jsoft.efactmh.model.dto.ErrorMessageDto;
 import sv.com.jsoft.efactmh.services.BuyService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
@@ -37,13 +38,17 @@ import sv.com.jsoft.efactmh.util.ResponseRestApi;
 @Slf4j
 public class BuyView implements Serializable {
 
+    private String codigoDte;
+    private LocalDate fechaEmi;
+
     @Getter
     @Setter
     private LocalDate buyDate;
     @Getter
     @Setter
     private UploadedFile file;
-
+    @Getter
+    private String nombreDte;
     @Getter
     private String codigoGeneracion;
     @Getter
@@ -54,6 +59,8 @@ public class BuyView implements Serializable {
     private String nombreEmisor;
     @Getter
     private BigDecimal monto;
+    @Getter
+    private LocalDate fecha;
 
     @Getter
     private List<BuyDtoResponse> lstBuys;
@@ -85,18 +92,37 @@ public class BuyView implements Serializable {
 
         jsonObject = JsonParser.parseString(json).getAsJsonObject();
 
+        fechEmi = jsonObject.get("identificacion").getAsJsonObject().get("fecEmi").getAsString();
+        fechaEmi = LocalDate.parse(fechEmi);
+
+        if (fechaEmi.getMonth() != fecha.getMonth()
+                || fechaEmi.getYear() != fecha.getYear()) {
+             MessageUtil.builder()
+                        .severity(FacesMessage.SEVERITY_WARN)
+                        .title("ALERTA")
+                        .message("EL DTE INGRESADO NO ES DEL MES Y AÑO SELECCIONADO. FECHA DOCUMENTO: " + fechEmi)
+                        .build()
+                        .showMessage();
+             return;
+        }
+
         jsonObject.remove("firmaElectronica");
 
+        codigoDte = jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString();
         codigoGeneracion = jsonObject.get("identificacion").getAsJsonObject().get("codigoGeneracion").getAsString();
-        fechEmi = jsonObject.get("identificacion").getAsJsonObject().get("fecEmi").getAsString();
         nitEmisor = jsonObject.get("emisor").getAsJsonObject().get("nit").getAsString();
         nombreEmisor = jsonObject.get("emisor").getAsJsonObject().get("nombre").getAsString();
 
         switch (jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString()) {
+            case "01":
+                nombreDte = "FACTURA ELECTRONICA";
+                break;
             case "03":
+                nombreDte = "COMPROBANTE CREDITO FISCAL";
                 monto = new BigDecimal(jsonObject.get("resumen").getAsJsonObject().get("montoTotalOperacion").getAsString());
                 break;
             case "09":
+                nombreDte = "DOCUMENTO CONTABLE DE LIQUIDACION";
                 monto = new BigDecimal(jsonObject.get("cuerpoDocumento").getAsJsonObject().get("liquidoApagar").getAsString());
                 break;
             default:
@@ -107,10 +133,17 @@ public class BuyView implements Serializable {
         PrimeFaces.current().executeScript("PF('dlgAddBuy').show();");
 
         log.info("FILE: " + event.getFile().getFileName());
+
+        loadBuys();
     }
 
     public void onDateSelect(SelectEvent<LocalDate> event) {
-        lstBuys = buyService.getList(event.getObject(), securityService.getToken());
+        fecha = event.getObject();
+        loadBuys();
+    }
+
+    private void loadBuys() {
+        lstBuys = buyService.getList(fecha, securityService.getToken());
     }
 
     public void guardarJson() {
@@ -128,18 +161,11 @@ public class BuyView implements Serializable {
                         .showMessage();
                 break;
             case 401:
-                MessageUtil.builder()
-                        .severity(FacesMessage.SEVERITY_WARN)
-                        .title("ALERTA")
-                        .message("EL JSON pertenece a otro contribuyente")
-                        .build()
-                        .showMessage();
-                break;
             case 409:
                 MessageUtil.builder()
                         .severity(FacesMessage.SEVERITY_WARN)
                         .title("ALERTA")
-                        .message("Ya exite una compra con el código de generación: " + codigoGeneracion)
+                        .message(responseSendMh.getErrorMessageDto().getErrorMessage())
                         .build()
                         .showMessage();
                 break;

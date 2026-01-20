@@ -159,8 +159,9 @@ public class RestUtil {
                     break;
                 //RENOVAR JWT KEYCLOAK
                 case 401:
+                case 409:
                     try {
-                        return new ResponseRestApi(401, gson.fromJson(response.body(), ErrorMessageDto.class));
+                        return new ResponseRestApi(response.statusCode(), null, gson.fromJson(response.body(), ErrorMessageDto.class));
                     } catch (JsonSyntaxException e) {
                         log.error("RESPUESTA WS: " + response.body());
                         log.error("ERROR EN CASTEO POR RESPUESTA 401", e);

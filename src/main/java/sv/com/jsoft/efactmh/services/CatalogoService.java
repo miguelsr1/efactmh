@@ -60,7 +60,7 @@ public class CatalogoService implements Serializable {
     
     private void loadDtes(){
         dtes = new HashMap<>();
-        dtes.put("01", "FE");
+        dtes.put("01", "FACTURA ELECTRONICA");
         dtes.put("03", "CCF");
         
         dtes.put("04", "NR");

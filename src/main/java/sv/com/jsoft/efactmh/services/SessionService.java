@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.Emisor;
+import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
@@ -86,5 +87,15 @@ public class SessionService implements Serializable {
             List<ParametroDto> lst = (List<ParametroDto>) rest.getBody();
             parametroDto = lst.stream().filter(param -> param.getActivo()).findFirst().orElse(null);
         }
+    }
+    
+    public ResponseRestApi<PlanMensual> getPlanMensual() {
+        return RestUtil
+                .builder()
+                .clazz(PlanMensual.class)
+                .jwtDto(token)
+                .endpoint("/api/secured/plan")
+                .build()
+                .callGetOneAuth();
     }
 }

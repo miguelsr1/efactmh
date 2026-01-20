@@ -1,0 +1,12 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+    <div class="layout-footer">
+        <p:staticMessage severity="warn" summary="ALERTA" detail="LE RECORDAMOS REALIZAR EL PAGO CORRESPONDIENTE A LA SUSCRIPCIÓN MENSUAL" style="width: 100%" rendered="#{not sessionView.planMensual.pagado}"/>
+        <p:staticMessage severity="info" detail="SUSCRIPCIÓN MENSUAL ACTIVA." rendered="#{sessionView.planMensual.pagado}"/>
+    </div>
+</ui:composition>

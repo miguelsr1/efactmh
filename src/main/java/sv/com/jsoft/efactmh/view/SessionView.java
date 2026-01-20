@@ -21,6 +21,7 @@ import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.services.SessionService;
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
@@ -50,11 +51,14 @@ public class SessionView implements Serializable {
 
     @Getter
     private MenuModel model;
+    @Getter
+    private PlanMensual planMensual;
 
     @PostConstruct
     public void init() {
         loadCookies();
         loadMenu();
+        loadPlanMensual();
     }
 
     public String getOpcion() {
@@ -65,6 +69,10 @@ public class SessionView implements Serializable {
         if (opcion != null) {
             this.opcion = opcion;
         }
+    }
+    
+    private void loadPlanMensual(){
+        planMensual = sessionService.getPlanMensual().getBody();
     }
 
     private void loadCookies() {
@@ -197,5 +205,5 @@ public class SessionView implements Serializable {
             return new ArrayList<>();
         }
         return sessionService.getLstPuntoVenta(Long.valueOf(idEstablecimiento));
-    }
+    }    
 }

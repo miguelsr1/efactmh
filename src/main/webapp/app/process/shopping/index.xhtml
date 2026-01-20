@@ -30,12 +30,12 @@
                                                       requiredMessage="ES REQUERIDO MES Y AÑO DE LA COMPRA"
                                                       yearNavigator="true" style="width: 10rem"
                                                       yearRange="2025:2027">
-                                            <p:ajax event="dateSelect" listener="#{buyView.onDateSelect}" update="tblPro" />
+                                            <p:ajax event="dateSelect" listener="#{buyView.onDateSelect}" update="tblPro dvDatos" />
                                         </p:datePicker>
                                     </div>
                                     <div class="field col-12" >
                                         <p:outputLabel value="Seleccione el archivo JSON" class="mr-2"/> 
-                                        <p:commandButton icon="pi pi-plus" onclick="onClick('upload_input')"  />
+                                        <p:commandButton icon="pi pi-plus" onclick="onClick('upload_input')" disabled="#{buyView.fecha eq null}" />
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
 
                         <p:panel visible="false">
                             <p:fileUpload id="upload" value="#{buyView.file}" label="" mode="simple" skinSimple="true" 
-                                          auto="true" process="@this"
+                                          auto="true" process="@this" update="tblPro"
                                           listener="#{buyView.handleFileUpload}" 
                                           allowTypes="/(\.|\/)(json)$/"/>
                         </p:panel>
@@ -117,6 +117,10 @@
                 <div class="grid">
                     <div class="col-12 md:col-12" jsf:id="dvDetailBuy">
                         <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out">
+                            <div class="field col-12" >
+                                <p:outputLabel value="Tipo de DTE:" styleClass="mr-2" /><br/>
+                                <p:outputLabel value="#{buyView.nombreDte}" style="font-weight: bold" />
+                            </div>
                             <div class="field col-12" >
                                 <p:outputLabel value="Código generación:" styleClass="mr-2" /><br/>
                                 <p:outputLabel value="#{buyView.codigoGeneracion}" style="font-weight: bold" />
