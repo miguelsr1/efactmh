@@ -15,72 +15,82 @@
         </div>
 
         <div class="col-12">
+
+            <div class="flex flex-column align-items-center flex-or mb-4">
+                <p:graphicImage value="/DynamicImageServlet?file=#{emisorView.emisor.nit.replace('-', '')}" width="250" />
+                <p:commandButton icon="pi pi-pencil" class="ui-button-icon-only rounded-button" oncomplete="onClick('pnUpd_input')"/>
+                <small style="text-align: center;margin-top: 0.5rem">Peso máxima: 100KB</small>
+                <small style="text-align: center;">La imagen no debe de superar 150x150</small>
+            </div>
+
             <div class="formgrid grid ui-fluid" jsf:id="divDatos">
-                <div class="field col-9">
+                <div class="field col-12 md:col-6">
                     <p:outputLabel for="nomComer" value="Nombre Comercial"/>
                     <p:inputText id="nomComer" value="#{emisorView.emisor.nombreComercial}" required="true" class="mb-2"/>
+                </div>
+                <div class="field col-12 md:col-6">
                     <p:outputLabel for="razSoc" value="Razon Social"/>
                     <p:inputText id="razSoc" value="#{emisorView.emisor.razonSocial}" required="true" class="mb-2"/>
+                </div>
+                <div class="field col-12 md:col-6">
                     <p:outputLabel for="tel" value="Teléfono"/>
                     <p:inputMask id="tel" maxlength="9" value="#{emisorView.emisor.telefono}" required="true" mask="9999-9999" class="mb-2"/>
+                </div>
+                <div class="field col-12 md:col-6">
                     <p:outputLabel for="email" value="Correo electrónico"/>
                     <p:inputText id="email" value="#{emisorView.emisor.correo}" maxlength="22" required="true" class="mb-2"/>
+                </div>
+                <div class="field col-12 md:col-6">
                     <p:outputLabel for="cboDepa" value="Departamento"/>
                     <p:selectOneMenu id="cboDepa" value="#{emisorView.emisor.codigoDepartamento}" required="true" class="mb-2">
                         <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN DEPARTAMENTO" />
                         <f:selectItems value="#{emisorView.lstDepartamentos}" var="depa" itemValue="#{depa.id}" itemLabel="#{depa.nombre}"/>
                         <p:ajax update="cboMuni" listener="#{emisorView.updateListaMunicipios()}"/>
                     </p:selectOneMenu>
+                </div>
+                <div class="field col-12 md:col-6">
                     <p:outputLabel for="cboMuni" value="Municipio"/>
                     <p:selectOneMenu id="cboMuni" value="#{emisorView.emisor.codigoMunicipio}" required="true" class="mb-2">
                         <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN MUNICIPIO" />
                         <f:selectItems value="#{emisorView.lstMunicipios}" var="muni" itemValue="#{muni.codigoMunicipio}" itemLabel="#{muni.nombre}"/>
                     </p:selectOneMenu>
                 </div>
-                <div class="field col-3">
-                    <div class="flex flex-column align-items-center flex-or">
-                        <span class="font-normal text-900 mb-2">Mi logo</span>
-                        <!--p:graphicImage name="escudo.png" library="images"/-->
-                        <p:graphicImage value="/DynamicImageServlet?file=#{emisorView.emisor.nit.replace('-', '')}" width="250" />
-                        <p:commandButton icon="pi pi-pencil" class="ui-button-icon-only rounded-button mt-4" oncomplete="onClick('pnUpd_input')"/>
-                        <small style="text-align: center;margin-top: 1rem">Peso máxima: 100KB</small>
-                        <small style="text-align: center;margin-top: 1rem">La imagen no debe de superar 150x150</small>
-                    </div>
-                </div>
                 <div class="field col-12">
                     <p:outputLabel for="txtDir" value="Dirección"/>
                     <p:inputTextarea id="txtDir" value="#{emisorView.emisor.direccion}" required="true" rows="3"/>
                 </div>
-                <div class="field col-12" >
-                    <p:outputLabel for="cboGiro" value="Código de Actividad Económica"/>
+                <div class="field col-12 md:col-4">
+                    <p:outputLabel for="cboGiro" value="Actividad Económica Primaria"/>
                     <p:selectOneMenu id="cboGiro" value="#{emisorView.emisor.codigoActividad}" required="true">
                         <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
                         <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
                     </p:selectOneMenu>
                 </div>
-                <div class="field col-12" >
+                <div class="field col-12 md:col-4">
                     <p:outputLabel for="txtNit" value="NIT"/>
                     <p:inputMask id="txtNit" value="#{emisorView.emisor.nit}" mask="9999-999999-999-9" required="true" />
                 </div>
-                <div class="field col-12" >
+                <div class="field col-12 md:col-4">
                     <p:outputLabel for="txtNrc" value="NRC"/>
                     <p:inputMask id="txtNrc" value="#{emisorView.emisor.nrc}" mask="999999-9" required="true" />
                 </div>
 
-                <p:separator />
+                <p:divider>
+                     <span class="ui-tag">DATOS PARA ANULACION DE DTE</span>
+                </p:divider>
 
-                <div class="field col-12" >
+                <div class="field col-12 md:col-4">
                     <p:outputLabel for="txtnomRes" value="Nombre Responsable"/>
                     <p:inputText id="txtnomRes" value="#{emisorView.emisor.nombreResponsable}" required="true" maxlength="100" />
                 </div>
-                <div class="field col-12" >
+                <div class="field col-12 md:col-4">
                     <p:outputLabel for="txtTipoDocRes" value="Tipo Documento de Responsable"/>
                     <p:selectOneMenu id="txtTipoDocRes" value="#{emisorView.emisor.tipoDocResponsable}" required="true">
                         <f:selectItem noSelectionOption="true" itemLabel="" />
                         <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc" itemValue="#{doc.id}" itemLabel="#{doc.nombre}" />
                     </p:selectOneMenu>
                 </div>
-                <div class="field col-12" >
+                <div class="field col-12 md:col-4">
                     <p:outputLabel for="txtNumDocRes" value="Número de Documento de Responsable"/>
                     <p:inputText id="txtNumDocRes" value="#{emisorView.emisor.numeroDocResponsable}" required="true" maxlength="25"/>
                 </div>
