@@ -1,0 +1,37 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:p="http://primefaces.org/ui"
+              xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <h:form prependId="false" style="width: 100%;">
+        <p:messages showDetail="true" showSummary="false" closable="true">
+            <p:autoUpdate />
+        </p:messages>
+        <div class="flex gap-8 flex-column-reverse md:flex-row">
+            <div class="grid formgrid ui-fluid mb-5">
+                <span>Busque y seleccioe las actividades económicas (giros) que realiza</span>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="formgrid grid ui-fluid" jsf:id="divDatosGiro">
+                <div class="field col-12 md:col-12">
+                    <p:outputLabel for="cboGiroAct" value="Actividad Económica Primaria"/>
+                    <p:selectOneMenu id="cboGiroAct" value="#{emisorView.emisor.codigoActividad}" required="true">
+                        <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
+                        <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="field col-12">
+                    <p:commandButton value="Agregar" icon="pi pi-plus" update="dvDatos"  styleClass="ui-button-success mr-2" style="width: 100px" />
+                    <p:spacer height="10px"/>
+                </div>
+            </div>
+        </div>
+    </h:form>    
+
+
+</ui:component>

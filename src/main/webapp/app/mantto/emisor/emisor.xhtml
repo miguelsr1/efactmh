@@ -44,6 +44,31 @@
                 background: var(--yellow-100);
                 color: var(--yellow-800);
             }
+
+            .hideTabHeader > .ui-tabs-nav{
+                width: 100%;
+            }
+            .hideTabHeader > .ui-tabs-nav > li.ui-tabs-header{
+                width: 25%;
+                justify-content: center
+            }
+            .hideTabHeader > .ui-tabs-nav li.ui-tabs-header.ui-state-active {
+                background: #f0f7ff !important;
+                border: 1.5px solid #0070ba !important;
+                border-radius: 5px 5px 0px 0px;
+            }
+            .hideTabHeader > .ui-tabs-nav li.ui-tabs-header {
+                border-bottom: 0.5px solid #D3D5D6 !important
+            }
+            .hideTabHeader > .ui-tabs-nav li.ui-tabs-header.ui-state-hover  {
+                transform: translateY(-2px) !important;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-bottom: 1.5px solid !important;
+                border-radius: 5px 5px 0px 0px;
+            }
+            .hideTabHeader > .ui-tabs-nav .pi {
+                font-size: 1.25rem;
+            }
         </style>
     </ui:define>
 
@@ -51,21 +76,50 @@
         <div class="grid dashboard ">
             <div class="col-12">                    
                 <div class="card" jsf:id="dvDatos">
-                    <p:tabView dynamic="true" cache="true" prependId="false">
-                        <p:tab title="Datos Generales">
+                    <p:tabView dynamic="true" cache="true" prependId="false" touchable="true" styleClass="hideTabHeader">
+                        <p:tab>
+                            <f:facet name="title">
+                                <div style="display: flex">
+                                    <i class="pi pi-id-card mr-2"></i>
+                                    <div id="title" style="font-size: 1.25rem;">Datos Generales</div>
+                                </div>
+                            </f:facet>
+
                             <div class="grid">
                                 <ui:include src="fragmento/frag-emisor.xhtml"/>
                             </div>
                         </p:tab>
-                        <p:tab title="Actividades Económicas">
-                            
+                        <p:tab>
+                            <f:facet name="title">
+                                <div style="display: flex">
+                                    <i class="pi pi-id-card mr-2"></i>
+                                    <div id="title" style="font-size: 1.25rem;">Actividades Económicas</div>
+                                </div>
+                            </f:facet>
+
+                            <div class="grid">
+                                <ui:include src="fragmento/frag-giro.xhtml"/>
+                            </div>
                         </p:tab>
-                        <p:tab title="Establecimiento">
+                        <p:tab>
+                            <f:facet name="title">
+                                <div style="display: flex">
+                                    <i class="pi pi-id-card mr-2"></i>
+                                    <div id="title" style="font-size: 1.25rem;">Establecimiento</div>
+                                </div>
+                            </f:facet>
+                            
                             <div class="grid">
                                 <ui:include src="fragmento/frag-estructura.xhtml"/>
                             </div>
                         </p:tab>
-                        <p:tab title="Parametros MH">
+                        <p:tab>
+                            <f:facet name="title">
+                                <div style="display: flex">
+                                    <i class="pi pi-id-card mr-2"></i>
+                                    <div id="title" style="font-size: 1.25rem;">Parametros MH</div>
+                                </div>
+                            </f:facet>
                             <div class="grid">
                                 <ui:include src="fragmento/frag-parametro.xhtml"/>
                             </div>
