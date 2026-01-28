@@ -3,33 +3,55 @@
               xmlns:f="http://java.sun.com/jsf/core"
               xmlns:ui="http://java.sun.com/jsf/facelets"
               xmlns:p="http://primefaces.org/ui"
-              xmlns:jsf="http://xmlns.jcp.org/jsf">
+              xmlns:jsf="http://xmlns.jcp.org/jsf"
+              xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <h:form prependId="false" style="width: 100%;">
         <p:messages showDetail="true" showSummary="false" closable="true">
             <p:autoUpdate />
         </p:messages>
-        <div class="flex gap-8 flex-column-reverse md:flex-row">
-            <div class="grid formgrid ui-fluid mb-5">
-                <span>Busque y seleccioe las actividades económicas (giros) que realiza</span>
-            </div>
-        </div>
-
-        <div class="col-12">
-            <div class="formgrid grid ui-fluid" jsf:id="divDatosGiro">
-                <div class="field col-12 md:col-12">
-                    <p:outputLabel for="cboGiroAct" value="Actividad Económica Primaria"/>
-                    <p:selectOneMenu id="cboGiroAct" value="#{emisorView.emisor.codigoActividad}" required="true">
-                        <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
-                        <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
-                    </p:selectOneMenu>
-                </div>
-
-                <div class="field col-12">
-                    <p:commandButton value="Agregar" icon="pi pi-plus" update="dvDatos"  styleClass="ui-button-success mr-2" style="width: 100px" />
-                    <p:spacer height="10px"/>
+        <div jsf:id="divDatosGiro" class="mt-4">
+            <div class="flex gap-8 flex-column-reverse md:flex-row">
+                <div class="grid formgrid ui-fluid">
+                    <div class="field col-12">
+                        <h5>Actividad Económica Primaria: #{emisorView.actPrimaria}</h5>
+                    </div>
+                    <div class="field col-12">
+                        <span>Busque y seleccioe las actividades económicas (giros) que realiza</span>
+                    </div>
                 </div>
             </div>
+
+            <div class="col-12">
+                <div class="formgrid grid ui-fluid">
+                    <div class="field col-12 md:col-12">
+                        <p:outputLabel for="cboGiroAct" value="Actividad Económica:"/>
+                        <p:selectOneMenu id="cboGiroAct" value="#{emisorView.codigoActividad}" required="true">
+                            <f:selectItem noSelectionOption="true" itemLabel="SELECCIONE UN GIRO" />
+                            <f:selectItems value="#{emisorView.lstGiros}" var="giro" itemLabel="#{giro.nombre}" itemValue="#{giro.id}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="field col-12">
+                        <p:commandButton value="Agregar" icon="pi pi-plus" styleClass="ui-button-success mr-2" 
+                                         action="#{emisorView.agregarGiro()}" update="divDatosGiro" style="width: 100px" />
+                        <p:spacer height="10px"/>
+                    </div>
+                </div>
+            </div>
+            
+            <span>Listado de otras Actividades Económicas asociadas</span>
+
+            <c:forEach items="#{emisorView.lstActivadesEco}" var="giro">
+                <div class="card status-box down col-12 md:col-6">
+                    <div class="status-info">
+                        <h5>#{giro.orden} - #{giro.actividadEconomica.toUpperCase() }</h5>
+                        <span>#{giro.codigoActividad}</span>
+                    </div>
+                    <p:commandButton icon="pi pi-trash" styleClass="rounded-button" action="#{emisorView.removerActividad(giro.codigoActividad)}"
+                                     style="background: #e96443cc;border-color: #d32f2f" update="divDatosGiro"/>
+                </div>
+            </c:forEach>
         </div>
     </h:form>    
 
