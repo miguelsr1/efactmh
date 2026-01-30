@@ -266,6 +266,13 @@ public class InvoceView implements Serializable {
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(2, RoundingMode.HALF_UP);
     }
+    public BigDecimal getSumasCcf() {
+        return invoceDto.getDetailInvoce().stream()
+                .filter(det -> det.getTipoVenta() == 1)
+                .map(DetalleFacturaDto::getSubTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
+    }
 
     public BigDecimal getSubTotal() {
         return getSumas().add(getIva()).setScale(2, RoundingMode.HALF_UP);
@@ -276,7 +283,7 @@ public class InvoceView implements Serializable {
             case "01":
                 return BigDecimal.ZERO;
             case "03":
-                return getSumas().multiply(new BigDecimal(0.13)).setScale(2, RoundingMode.HALF_UP);
+                return getSumasCcf().multiply(new BigDecimal(0.13)).setScale(2, RoundingMode.HALF_UP);
             case "14":
                 return BigDecimal.ZERO;
         }

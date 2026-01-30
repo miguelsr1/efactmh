@@ -93,7 +93,7 @@
                                 <f:selectItems value="#{dlgDetFactura.unidadesMedidas}" var="uni" itemValue="#{uni.id}" itemLabel="#{uni.nombre}" />
                             </p:selectOneMenu>
                         </div>
-                        <div class="field col-6" style="display: none">
+                        <div class="field col-12" >
                             <p:outputLabel for="cbVenta">Tipo Venta</p:outputLabel>
                             <p:selectOneMenu id="cbVenta" value="#{dlgDetFactura.detFactura.tipoVenta}" required="true">
                                 <f:selectItems value="#{tipoItemService.lstTipoVentas}" var="item" itemValue="#{item.id}" itemLabel="#{item.nombre}" />
@@ -106,7 +106,7 @@
                             <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary mr-2" process="@this"
                                              icon="pi pi-times" action="#{dlgDetFactura.closeDgl()}" style="max-width: 110px"/>
                             <p:commandButton value="Agregar" update="dvDetFac" 
-                                             process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU,cbItems,cbUni"
+                                             process="@this,txtCodigo,txtDescripcion,txtCantidad,txtPU,cbItems,cbUni,cbVenta"
                                              icon="pi pi-plus" action="#{dlgDetFactura.addItem()}" style="max-width: 110px"
                                              validateClient="true" styleClass="ui-button-primary"/>
                         </div>
