@@ -16,5 +16,7 @@ public class ClientTempDto implements Serializable {
 
     private String nombre;
     private String correo;
+    private String codigoTipoDocumento;
+    private String numeroDocumento;
 
 }

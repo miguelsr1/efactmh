@@ -14,6 +14,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +39,9 @@ import sv.com.jsoft.efactmh.services.DteService;
 import sv.com.jsoft.efactmh.services.InvoceService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.Constantes;
+
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
+
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -59,9 +63,9 @@ public class InvoceView implements Serializable {
     @Getter
     private boolean existeCliente = false;
     private boolean makeInvoce = false;
-    /*@Getter
+    @Getter
     @Setter
-    private boolean aplicaRetencionIsr = false;*/
+    private boolean existClient = true;
 
     private SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -94,6 +98,12 @@ public class InvoceView implements Serializable {
     private String nombreClienteReq;
     @Getter
     @Setter
+    private String numDocClienteReq;
+    @Getter
+    @Setter
+    private String codigoTipoDocClienteReq;
+    @Getter
+    @Setter
     private String correoClienteReq;
     @Getter
     @Setter
@@ -123,6 +133,9 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private List<CatalogoDto> lstMetodoPago;
+    @Getter
+    @Setter
+    private List<String> lstObservacionesMH;
 
     private Date fechaPedido;
     private ClienteResponse cliente;
@@ -157,6 +170,10 @@ public class InvoceView implements Serializable {
         lstDetPago = new ArrayList<>();
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
+
+        codigoTipoDocClienteReq = "13";
+
+        lstObservacionesMH =  new ArrayList<>();
 
         taskSave = "taskPending";
         taskSendDte = "taskPending";
@@ -266,6 +283,7 @@ public class InvoceView implements Serializable {
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(2, RoundingMode.HALF_UP);
     }
+
     public BigDecimal getSumasCcf() {
         return invoceDto.getDetailInvoce().stream()
                 .filter(det -> det.getTipoVenta() == 1)
@@ -413,8 +431,8 @@ public class InvoceView implements Serializable {
     public BigDecimal getTotalPagos() {
         totalPagos = BigDecimal.ZERO;
         lstDetPago.forEach(pago -> {
-            totalPagos = totalPagos.add(pago.getMonto()).setScale(2, RoundingMode.HALF_UP);
-        }
+                    totalPagos = totalPagos.add(pago.getMonto()).setScale(2, RoundingMode.HALF_UP);
+                }
         );
         return totalPagos;
     }
@@ -429,10 +447,10 @@ public class InvoceView implements Serializable {
         detPago.setTipoPago("01"); //EFECTIVO
 
         invoceDto.setCondicionOperacion("1");
-        
-       if(lstDetPago.isEmpty()){
-           detPago.setMonto(getTotal());
-       }
+
+        if (lstDetPago.isEmpty()) {
+            detPago.setMonto(getTotal());
+        }
     }
 
     public void removeDetInvoce(int index) {
@@ -478,11 +496,13 @@ public class InvoceView implements Serializable {
             case 0:
                 switch (invoceDto.getCodigoDte()) {
                     case "01": //FE
-                        if (cliente.getIdCliente() == null) {
-                            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
-                                    MSG_ALERT,
-                                    "POR FAVOR AGREGE UN CLIENTE");
-                            return false;
+                        if (!requiereFactura) {
+                            if (cliente.getIdCliente() == null) {
+                                JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
+                                        MSG_ALERT,
+                                        "POR FAVOR AGREGE UN CLIENTE");
+                                return false;
+                            }
                         }
                         return true;
                     case "03": //CCF
@@ -574,6 +594,13 @@ public class InvoceView implements Serializable {
 
                             dteServices.sendMail(idFac, securityService.getToken());
                             break;
+                        case 400:
+                            lstObservacionesMH.clear();
+                            lstObservacionesMH = responseSendMh.getBody().getObservaciones();
+                            PrimeFaces.current().ajax().update("dlgErrorMh");
+                            PrimeFaces.current().executeScript("PF('dlgDteError').show();");
+
+                            break;
                         case 504:
                             /*
                             reintento despues de 8 segundos:
@@ -652,7 +679,7 @@ public class InvoceView implements Serializable {
             return false;
         }
         if (requiereFactura && invoceDto.getCodigoDte().equals("01")) {
-            invoceDto.setClientTemp(new ClientTempDto(nombreClienteReq, correoClienteReq));
+            invoceDto.setClientTemp(new ClientTempDto(nombreClienteReq, correoClienteReq, codigoTipoDocClienteReq, numDocClienteReq));
             invoceDto.setIdCliente(null);
         } else if (!requiereFactura) {
             invoceDto.setClientTemp(null);
@@ -753,12 +780,16 @@ public class InvoceView implements Serializable {
     }
 
     public void requiereFactura() {
-        
+
     }
 
     public List<ClienteResponse> completeClient(String query) {
-        List<ClienteResponse> countries = clientRepository.findClientBySearch(query, securityService.getEmisor().getCorreo());
-        return countries;
+        List<ClienteResponse> clients = clientRepository.findClientBySearch(query, securityService.getEmisor().getCorreo());
+        //se valida que exitan clientes
+        /*existClient = !clients.isEmpty();
+
+        PrimeFaces.current().executeScript("PF('dglNewClient').show();");*/
+        return clients;
     }
 
     public void onItemSelect(SelectEvent<ClienteResponse> event) {
@@ -782,4 +813,14 @@ public class InvoceView implements Serializable {
         }
     }
 
+    public int getMaxNumDoc() {
+        switch (codigoTipoDocClienteReq) {
+            case "13":
+                return 9;
+            case "36":
+                return 14;
+            default:
+                return 30;
+        }
+    }
 }

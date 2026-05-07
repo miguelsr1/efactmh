@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:pe="primefaces.extensions">
 
     <h:head>
         <f:facet name="first">
@@ -47,7 +47,7 @@
     <h:body>
         <h:form prependId="false">
             <p:outputPanel id="panelPrint">
-                <p:media value="/viewReport/" width="900" height="700" player="pdf"/>
+                <pe:documentViewer height="700" value="/viewReport/"/>
             </p:outputPanel>
         </h:form>
     </h:body>

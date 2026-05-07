@@ -55,7 +55,7 @@ public class ClientRepository {
 
             return lst;
         } catch (Exception e) {
-            log.error("OCURRIO UN ERROR", e);
+            log.error("SIN COINCIDENCIAS", e);
             return List.of();
         }
     }

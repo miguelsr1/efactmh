@@ -21,6 +21,7 @@ import org.primefaces.model.DialogFrameworkOptions;
 import sv.com.jsoft.efactmh.model.ItemDto;
 import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
 import sv.com.jsoft.efactmh.model.dto.DtesResponse;
+import sv.com.jsoft.efactmh.model.dto.ReSendMailDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 import sv.com.jsoft.efactmh.services.InvalidateService;
 import sv.com.jsoft.efactmh.services.SessionService;
@@ -55,6 +56,9 @@ public class DtesView implements Serializable {
     @Getter
     @Setter
     private String correoCliente;
+    @Getter
+    @Setter
+    private String to;
     @Getter
     @Setter
     private LocalDate fechaCreacion;
@@ -159,10 +163,25 @@ public class DtesView implements Serializable {
                 .draggable(false)
                 .dynamic(true)
                 .responsive(true)
-                .width("800")
+                .minWidth(800)
                 .modal(false)
                 .build();
 
         PrimeFaces.current().dialog().openDynamic("process/dialog/dlg-pdf", options, null);
+    }
+
+    public void reSendMail(){
+        ReSendMailDto reSendMailDto = new ReSendMailDto();
+        reSendMailDto.setEmail(to);
+        reSendMailDto.setIdInvoce(idFactura);
+
+           RestUtil rest = RestUtil.builder()
+                .clazz(DtesResponse.class)
+                .jwtDto(sessionService.getToken())
+                .endpoint("/api/secured/dte/resend-mail")
+                .body(reSendMailDto)
+                .build();
+        //validar respuesta
+        rest.callPostAuth();
     }
 }

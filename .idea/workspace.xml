@@ -10,13 +10,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ReSendMailDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-client-new.xhtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/images/etg.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/faces-config.NavData" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/ClientTempDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/ClientTempDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/lstDtes.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/lstDtes.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-pdf.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-pdf.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="406" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -34,14 +61,22 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://miguelsr1%40gmail.com@github.com/miguelsr1/efactmh.git&quot;,
-    &quot;accountId&quot;: &quot;a463f2fe-0522-4510-95e1-507b862de99a&quot;
+    &quot;url&quot;: &quot;https://miguelsr1@github.com/miguelsr1/efactmh.git&quot;,
+    &quot;accountId&quot;: &quot;843a49d4-b83f-481d-ab05-2acf50815a39&quot;
   }
 }</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="$PROJECT_DIR$/../../../../../../php/php.exe" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -53,26 +88,59 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor": "Run",
+    "JBoss/WildFly Server.WildFly 24.executor": "Run",
+    "JBoss/WildFly Server.WildFly 26.executor": "Debug",
+    "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.google.cloudcode.ide_session_index": "20260401_0001",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "feature/dui-null-sin-datos",
     "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/migue/Documents/NetBeansProjects/efactmh",
+    "last_opened_file_path": "C:/Users/msanchez/Documents/PERSONAL/JAVA/efactmh/src/main/webapp/app/process/invoce/fragmento",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Problems",
+    "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.3505747",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "settings.editor.selected.configurable": "configurable.group.tools",
+    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="JBoss/WildFly 34.0.1.Final" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss/WildFly 34.0.1.Final" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\src\main\webapp\app\process\invoce\fragmento" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\src\main\webapp\resources\images" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationStatuses">
+      <map>
+        <entry key="JBossConfiguration">
+          <value>
+            <map>
+              <entry key="WildFly 24" value="STOPPED" />
+              <entry key="WildFly 26" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="RunManager" selected="JBoss/WildFly Server.WildFly 26">
+    <configuration name="WildFly 24" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="WildFly 24" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="corretto-11">
+      <option name="COMMON_VM_ARGUMENTS" value=" -Djboss.socket.binding.port-offset=1" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="efactmh:war exploded">
@@ -84,12 +152,12 @@
         <option name="SERVER" />
         <option name="DOMAIN" value="false" />
         <option name="SERVER_GROUP" value="main-server-group" />
-        <option name="USERNAME" value="" />
-        <option name="CREDENTIAL_ALIAS" />
+        <option name="USERNAME" value="admin" />
+        <option name="CREDENTIAL_ALIAS" value="11d1da3c-0f83-45e1-8786-9584b8461f7e" />
       </server-settings>
       <predefined_log_file enabled="true" id="JBoss" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="54130" />
+        <option name="DEBUG_PORT" value="53520" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -143,23 +211,183 @@
         </option>
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="efactmh" />
+    <configuration name="WildFly 26" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="WildFly 26" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+      <option name="COMMON_VM_ARGUMENTS" value=" -Djboss.socket.binding.port-offset=1" />
+      <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
+      <option name="UPDATING_POLICY" value="update-resources" />
+      <deployment>
+        <artifact name="efactmh:war exploded">
+          <settings />
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BINDING_SET_NAME" value="" />
+        <option name="SERVER" />
+        <option name="DOMAIN" value="false" />
+        <option name="SERVER_GROUP" value="main-server-group" />
+        <option name="USERNAME" value="admin" />
+        <option name="CREDENTIAL_ALIAS" value="7b727080-63a0-493d-b473-4c9ebc4aaeaf" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="JBoss" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="50982" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="efactmh:war exploded" />
+        </option>
+      </method>
+    </configuration>
+    <configuration default="true" type="JBossConfiguration" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment />
+      <server-settings>
+        <option name="BINDING_SET_NAME" value="" />
+        <option name="SERVER" />
+        <option name="DOMAIN" value="false" />
+        <option name="SERVER_GROUP" />
+        <option name="USERNAME" value="" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="JBoss" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="53633" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="efactmh" />
-      <option name="filePath" />
-      <method v="2" />
+    <configuration default="true" type="JBossConfiguration" factoryName="Remote" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="LOCAL" value="false" />
+      <deployment />
+      <server-settings>
+        <data>
+          <option name="stagingRemotePath" value="" />
+          <option name="transportHostId" value="" />
+          <option name="transportStagingTarget">
+            <TransportTarget>
+              <option name="id" value="305bf75c-c530-489d-bce5-a385d204ed76" />
+              <id>305bf75c-c530-489d-bce5-a385d204ed76</id>
+            </TransportTarget>
+          </option>
+          <transport-target>
+            <TransportTarget>
+              <option name="id" value="305bf75c-c530-489d-bce5-a385d204ed76" />
+              <id>305bf75c-c530-489d-bce5-a385d204ed76</id>
+            </TransportTarget>
+          </transport-target>
+          <staging-path />
+          <host-id />
+        </data>
+      </server-settings>
+      <predefined_log_file enabled="true" id="JBoss" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="53634" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
+    <list>
+      <item itemvalue="JBoss/WildFly Server.WildFly 24" />
+      <item itemvalue="JBoss/WildFly Server.WildFly 26" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.153" />
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.153" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
       </set>
     </attachedChunks>
   </component>
@@ -175,10 +403,55 @@
       <workItem from="1752806526963" duration="606000" />
       <workItem from="1752807176921" duration="8316000" />
       <workItem from="1759108048476" duration="69000" />
+      <workItem from="1773110507827" duration="1171000" />
+      <workItem from="1773196543034" duration="16000" />
+      <workItem from="1773196563467" duration="3518000" />
+      <workItem from="1773248577604" duration="191000" />
+      <workItem from="1773518456310" duration="11000" />
+      <workItem from="1773518559567" duration="1908000" />
+      <workItem from="1773598417960" duration="2504000" />
+      <workItem from="1773633431221" duration="1683000" />
+      <workItem from="1773723127313" duration="3481000" />
+      <workItem from="1773807342853" duration="871000" />
+      <workItem from="1773808234362" duration="92000" />
+      <workItem from="1773808336823" duration="3152000" />
+      <workItem from="1773811552627" duration="3665000" />
+      <workItem from="1773983076144" duration="687000" />
+      <workItem from="1774147909879" duration="10364000" />
+      <workItem from="1775020663245" duration="596000" />
+      <workItem from="1775079361691" duration="2901000" />
+      <workItem from="1775082797931" duration="314000" />
+      <workItem from="1775083357760" duration="659000" />
+      <workItem from="1775101977927" duration="5005000" />
+      <workItem from="1775150691244" duration="32000" />
+      <workItem from="1775192368121" duration="30000" />
+      <workItem from="1775250539875" duration="1834000" />
+      <workItem from="1775360799583" duration="614000" />
+      <workItem from="1775522826526" duration="693000" />
+      <workItem from="1776399025762" duration="4152000" />
+      <workItem from="1776405844318" duration="848000" />
+      <workItem from="1776568570085" duration="32000" />
+      <workItem from="1776744086976" duration="337000" />
+      <workItem from="1777326194099" duration="1204000" />
+      <workItem from="1777347728718" duration="93000" />
+      <workItem from="1778114559917" duration="4783000" />
+      <workItem from="1778125536975" duration="9279000" />
+      <workItem from="1778171099068" duration="3735000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

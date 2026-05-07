@@ -27,7 +27,7 @@ import javax.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
                 useForwardToLoginExpression = ""
         )
 )
-
+@Deprecated
 public class ApplicationConfig {
 
     /*public String[] getDyna() {

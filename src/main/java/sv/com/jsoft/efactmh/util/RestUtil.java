@@ -51,7 +51,7 @@ public class RestUtil {
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .header("Authorization", "Bearer " + jwtDto.getAccessToken())
-                    .timeout(Duration.ofSeconds(5))
+                    .timeout(Duration.ofSeconds(60))
                     .build();
 
             HttpResponse<String> response = HttpClient

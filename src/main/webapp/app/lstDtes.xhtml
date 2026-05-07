@@ -40,15 +40,15 @@
                 width: 150px !important;
             }
 
-            iframe{
-                width: 850px !important;
+            iframe {
+                width: 120vh !important;
                 height: 665px !important;
             }
         </style>
     </ui:define>
     <ui:define name="title">LISTADO DTE</ui:define>
 
-    <ui:define name="content">   
+    <ui:define name="content">
         <h:form prependId="false">
             <div class="grid dashboard ">
                 <div class="col-12">
@@ -72,13 +72,15 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <p:outputLabel for="txtFecha" value="Fecha creación"/>
-                                <p:datePicker id="txtFecha" locale="es" monthNavigator="true" pattern="dd/MM/yyyy" value="#{dtesView.fechaCreacion}"/>
+                                <p:datePicker id="txtFecha" locale="es" monthNavigator="true" pattern="dd/MM/yyyy"
+                                              value="#{dtesView.fechaCreacion}"/>
                             </div>
                         </div>
                         <div class="card-subtitle">
-                            <p:commandButton value="Limpiar" action="#{dtesView.cleanFilters}" update="tblDtes dvFiltro" 
-                                             style="width: 10rem" icon="pi pi-filter-slash" styleClass="ui-button-flat mr-2"/>
-                            <p:commandButton value="Buscar" action="#{dtesView.findDtes()}" update="tblDtes dvFiltro" 
+                            <p:commandButton value="Limpiar" action="#{dtesView.cleanFilters}" update="tblDtes dvFiltro"
+                                             style="width: 10rem" icon="pi pi-filter-slash"
+                                             styleClass="ui-button-flat mr-2"/>
+                            <p:commandButton value="Buscar" action="#{dtesView.findDtes()}" update="tblDtes dvFiltro"
                                              style="width: 10rem" icon="pi pi-search"/>
                         </div>
                     </div>
@@ -86,7 +88,7 @@
             </div>
 
             <p:messages id="msg" showDetail="true" showSummary="false" closable="true">
-                <p:autoUpdate />
+                <p:autoUpdate/>
             </p:messages>
 
             <div class="card">
@@ -105,26 +107,28 @@
                         <p:outputLabel value="#{dte.abrevDte}"/>
                     </p:column>
                     <p:column headerText="Nombre" sortBy="#{dte.nombre}">
-                        <p:outputLabel value="#{dte.nombre}" />
+                        <p:outputLabel value="#{dte.nombre}"/>
                     </p:column>
-                    <p:column headerText="# Documento" >
+                    <p:column headerText="# Documento">
                         <p:outputLabel value="#{dte.numDocumento}"/>
                     </p:column>
-                    <p:column headerText="Correo" >
+                    <p:column headerText="Correo">
                         <p:outputLabel value="#{dte.correo}"/>
                     </p:column>
-                    <p:column headerText="Fecha Creación" sortBy="#{dte.fechaCreacion}" >
+                    <p:column headerText="Fecha Creación" sortBy="#{dte.fechaCreacion}">
                         <p:outputLabel value="#{dte.fechaCreacion}"/>
                     </p:column>
-                    <p:column headerText="Código Generación" >
+                    <p:column headerText="Código Generación">
                         <div class="col-12 grid align-items-center">
                             <div class="col-10" style="text-align: center">
                                 <p:outputLabel id="txtCodGen" value="#{dte.codigoGeneracion}" class="mr-4"/>
                             </div>
                             <div class="col-2">
-                                <p:commandButton type="button" id="btnCopy" widgetVar="btnCopy" icon="pi pi-copy" class="ui-button-outlined"/>
-                                <pe:clipboard id="clipCopy" trigger="tblDtes:#{row}:btnCopy" action="copy" target="tblDtes:#{row}:txtCodGen">
-                                    <p:ajax event="success" />
+                                <p:commandButton type="button" id="btnCopy" widgetVar="btnCopy" icon="pi pi-copy"
+                                                 class="ui-button-outlined"/>
+                                <pe:clipboard id="clipCopy" trigger="tblDtes:#{row}:btnCopy" action="copy"
+                                              target="tblDtes:#{row}:txtCodGen">
+                                    <p:ajax event="success"/>
                                 </pe:clipboard>
                             </div>
                         </div>
@@ -135,21 +139,56 @@
                                                                                   (dte.estado eq 2 ? 'dte-rechazado' :
                                                                                   (dte.estado eq 3 ? 'dte-anulado' : 'dte-recibido-observado')))}">#{dte.estadoDescripcion}</span>
                     </p:column>
-                    <p:column headerText="Operaciones" style="text-align: center" >
-                        <p:commandButton icon="pi pi-print" styleClass="mr-2" action="#{dtesView.createPdf(dte)}" >
+                    <p:column headerText="Operaciones" style="text-align: center">
+                        <p:commandButton icon="pi pi-print" styleClass="mr-2" action="#{dtesView.createPdf(dte)}">
                         </p:commandButton>
 
-                        <p:commandButton icon="pi pi-ban" styleClass="mr-2 ui-button-secondary" disabled="#{dte.estado ne 1 and dte.estado ne 4}"
+                        <p:commandButton icon="pi pi-ban" styleClass="mr-2 ui-button-secondary"
+                                         disabled="#{dte.estado ne 1 and dte.estado ne 4}"
                                          action="#{dtesView.showDlgDetToInvalidate}">
                             <!--p:ajax event="dialogReturn" listener="{dtesView.onDteInvalidate}" update="tblDtes,msg" /-->
                             <f:setPropertyActionListener target="#{dtesView.idFactura}" value="#{dte.idFactura}"/>
                             <f:setPropertyActionListener target="#{dtesView.codigoDte}" value="#{dte.codigoDte}"/>
-                            <f:setPropertyActionListener target="#{dtesView.codigoGeneracion}" value="#{dte.codigoGeneracion}"/>
+                            <f:setPropertyActionListener target="#{dtesView.codigoGeneracion}"
+                                                         value="#{dte.codigoGeneracion}"/>
                         </p:commandButton>
-                        <p:commandButton icon="pi pi-download" styleClass="ui-button-success" />                        
+                        <p:commandButton icon="pi pi-download" styleClass="mr-2 ui-button-success"
+                                         disabled="#{dte.estado ne 1 and dte.estado ne 4}"/>
+                        <p:commandButton icon="pi pi-send" styleClass="ui-button-warning"
+                                         disabled="#{dte.estado ne 1 and dte.estado ne 4}"
+                                         onclick="PF('dlgSend').show();">
+                            <f:setPropertyActionListener target="#{dtesView.idFactura}" value="#{dte.idFactura}"/>
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
             </div>
+
+            <p:dialog id="dlgSend" widgetVar="dlgSend" header="Reenvio de factura eléctronica" modal="true" width="400"
+                      responsive="true">
+                <p:outputPanel id="panel">
+                    <div class="formgrid grid">
+                        <div class="field col-12">
+                            <p:outputLabel value="Ingrese el correo eléctronico:"/>
+                            <p:inputText id="txtCorreoResend" styleClass="w-full" value="#{dtesView.to}"/>
+                            <p:outputLabel
+                                    value="Se enviar un correo eléctronico con el PDF y JSON de la factura eléctronica seleccionada"
+                                    styleClass="mt-4" style="text-align: center"/>
+                        </div>
+                    </div>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Cancelar" styleClass="ui-button-flat ui-button-secondary" process="@this"
+                                     icon="pi pi-times" onclick="PF('dlgSend').hide();" style="max-width: 110px">
+                        <p:ajax update="panel" resetValues="true"/>
+                    </p:commandButton>
+                    <p:commandButton value="Enviar"
+                                     process="@this,txtCorreoResend"
+                                     action="#{dtesView.reSendMail}"
+                                     icon="pi pi-send" style="max-width: 110px"
+                                     validateClient="true" styleClass="ui-button-primary"/>
+                </f:facet>
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>
