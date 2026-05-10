@@ -10,21 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ReSendMailDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-client-new.xhtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/resources/images/etg.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/ClientTempDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/ClientTempDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/servlet/JasperReportServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/servlet/JasperReportServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/template.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/template.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/app/lstDtes.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/lstDtes.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-pdf.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-pdf.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-det-payment.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-det-payment.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,37 +82,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor": "Run",
-    "JBoss/WildFly Server.WildFly 24.executor": "Run",
-    "JBoss/WildFly Server.WildFly 26.executor": "Debug",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.google.cloudcode.ide_session_index": "20260401_0001",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "feature/dui-null-sin-datos",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/msanchez/Documents/PERSONAL/JAVA/efactmh/src/main/webapp/app/process/invoce/fragmento",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.3505747",
-    "settings.editor.selected.configurable": "configurable.group.tools",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor&quot;: &quot;Run&quot;,
+    &quot;JBoss/WildFly Server.WildFly 24.executor&quot;: &quot;Run&quot;,
+    &quot;JBoss/WildFly Server.WildFly 26.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.google.cloudcode.ide_session_index&quot;: &quot;20260401_0001&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/dui-null-sin-datos&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/msanchez/Documents/PERSONAL/JAVA/efactmh/src/main/webapp/app/process/invoce/fragmento&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.3505747&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\src\main\webapp\app\process\invoce\fragmento" />
@@ -437,6 +434,9 @@
       <workItem from="1778114559917" duration="4783000" />
       <workItem from="1778125536975" duration="9279000" />
       <workItem from="1778171099068" duration="3735000" />
+      <workItem from="1778213884599" duration="6814000" />
+      <workItem from="1778256352513" duration="9314000" />
+      <workItem from="1778431904329" duration="375000" />
     </task>
     <servers />
   </component>
@@ -453,5 +453,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java</url>
+          <line>598</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

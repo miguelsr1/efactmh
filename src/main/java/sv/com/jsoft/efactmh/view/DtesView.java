@@ -158,16 +158,23 @@ public class DtesView implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", dte.getIdFactura());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("jwt", sessionService.getToken());
 
-        DialogFrameworkOptions options = DialogFrameworkOptions.builder()
-                .resizable(false)
+        PrimeFaces.current().ajax().update("panelPrint");
+        PrimeFaces.current().executeScript("PF('dlgPdfRpt').show();");
+
+        /*DialogFrameworkOptions options = DialogFrameworkOptions.builder()
+                .resizable(true)
                 .draggable(false)
                 .dynamic(true)
                 .responsive(true)
-                .minWidth(800)
                 .modal(false)
                 .build();
 
-        PrimeFaces.current().dialog().openDynamic("process/dialog/dlg-pdf", options, null);
+        PrimeFaces.current().dialog().openDynamic("process/dialog/dlg-pdf", options, null);*/
+    }
+    
+    public void downloadPdf(DtesResponse dte) {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", dte.getIdFactura());
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoGeneracion", dte.getCodigoGeneracion());
     }
 
     public void reSendMail(){

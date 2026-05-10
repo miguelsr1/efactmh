@@ -108,6 +108,17 @@
 
             <p:dialog header="Error" id="dlgError" widgetVar="dlgDteError" modal="true" closable="false" draggable="false" resizable="false" >
                 <span>OCURRIO UN ERROR EN LA CREACION DE LA FACTURA</span>
+                <br/>
+                <p:outputPanel id="pnlOutErrorMh" styleClass="mt-2">
+                    <ui:repeat value="#{invoceView.lstObservacionesMH}" var="obs">
+                        <div style="margin-bottom:10px">
+                            <i class="pi pi-exclamation-triangle" style="color:orange"></i>
+
+                            #{obs}
+                        </div>
+                    </ui:repeat>
+                </p:outputPanel>
+
                 <f:facet name="footer">
                     <p:commandButton value="Aceptar" icon="pi pi-check" action="#{invoceView.cleanFull}" onclick="location.reload(); return false;"/>
                 </f:facet>

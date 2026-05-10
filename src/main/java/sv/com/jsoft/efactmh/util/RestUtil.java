@@ -150,8 +150,13 @@ public class RestUtil {
             switch (response.statusCode()) {
                 case 201:
                 case 200:
+                case 400:
                     if (response.body() != null) {
-                        log.info("RESPONSE " + endpoint + ": " + response.body());
+                        if(response.statusCode() == 400) {
+                            log.error("RESPONSE " + endpoint + ": " + response.body());
+                        }else {
+                            log.info("RESPONSE " + endpoint + ": " + response.body());
+                        }
 
                         return new ResponseRestApi(response.statusCode(),
                                 gson.fromJson(response.body(), clazz));

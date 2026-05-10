@@ -597,9 +597,9 @@ public class InvoceView implements Serializable {
                         case 400:
                             lstObservacionesMH.clear();
                             lstObservacionesMH = responseSendMh.getBody().getObservaciones();
-                            PrimeFaces.current().ajax().update("dlgErrorMh");
-                            PrimeFaces.current().executeScript("PF('dlgDteError').show();");
 
+                            PrimeFaces.current().ajax().update("pnlOutErrorMh");
+                            PrimeFaces.current().executeScript("PF('dlgDteError').show();");
                             break;
                         case 504:
                             /*

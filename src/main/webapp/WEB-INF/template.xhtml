@@ -7,75 +7,75 @@
       xmlns:o="http://omnifaces.org/ui"
       lang="en">
 
-    <h:head>
-        <f:facet name="first">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes"/>
-            <link rel="shortcut icon" href="#{request.contextPath}/icon.png" sizes="192x192" />
-        </f:facet>
-        <title><ui:insert name="title">Facturame sv</ui:insert></title>
-        <h:outputScript name="js/layout.js" library="paradise-layout"/>
-        <h:outputScript name="js/prism.js" library="paradise-layout"/>
-        <ui:insert name="head"/>
-    </h:head>
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <link rel="shortcut icon" href="#{request.contextPath}/icon.png" sizes="192x192"/>
+    </f:facet>
+    <title><ui:insert name="title">Facturame sv</ui:insert></title>
+    <h:outputScript name="js/layout.js" library="paradise-layout"/>
+    <h:outputScript name="js/prism.js" library="paradise-layout"/>
+    <ui:insert name="head"/>
+</h:head>
 
-    <h:body styleClass="#{guestPreferences.inputStyleClass}">
-        
-        <f:metadata>
-		<o:enableRestorableView />
-	</f:metadata>
+<h:body styleClass="#{guestPreferences.inputStyleClass}">
 
-        <h:form>
-            <p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="450000" />
+    <f:metadata>
+        <o:enableRestorableView/>
+    </f:metadata>
 
-            <p:dialog id="sessionTimeOutDialog" modal="true" closable="false"
-                      header="Sesión finalizada" widgetVar="sessionTimeOutDialog">
-                <p>La sesión a caducado por inactividad, por favor, pulse sobre el siguiente botón para volver a acceder a la aplicación</p> 
-                <p:commandButton id="Logout" value="Iniciar sesión"
-                                 icon="pi pi-sign-out" ajax="false" 
-                                 action="#{monitorDeSessionView.cerrarSession()}"/>
-            </p:dialog>
-        </h:form>
+    <h:form>
+        <p:idleMonitor onactive="PF('sessionTimeOutDialog').show();" timeout="450000"/>
 
-        <div class="layout-wrapper layout-menu-static ">
-            <ui:include src="./topbar.xhtml"/>
-            <ui:include src="./config.xhtml"/>
+        <p:dialog id="sessionTimeOutDialog" modal="true" closable="false"
+                  header="Sesión finalizada" widgetVar="sessionTimeOutDialog">
+            <p>La sesión a caducado por inactividad, por favor, pulse sobre el siguiente botón para volver a acceder a la aplicación</p>
+            <p:commandButton id="Logout" value="Iniciar sesión"
+                             icon="pi pi-sign-out" ajax="false"
+                             action="#{monitorDeSessionView.cerrarSession()}"/>
+        </p:dialog>
+    </h:form>
 
-            <div class="layout-main">
-                <ui:include src="./menu.xhtml"/>
+    <div class="layout-wrapper layout-menu-static ">
+        <ui:include src="./topbar.xhtml"/>
+        <ui:include src="./config.xhtml"/>
 
-                <div class="layout-content">
-                    <ui:insert name="content"/>
-                    <!--ui:include src="#{sessionView.opcion}" id="workspace"/-->
-                    
-                    <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" 
-                                            update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
+        <div class="layout-main">
+            <ui:include src="./menu.xhtml"/>
 
-                    <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px">
-                        <h3>Reloading page</h3>
-                    </p:dialog>
-                </div>
-                
-                 <ui:include src="./footer.xhtml" />
+            <div class="layout-content">
+                <ui:insert name="content"/>
+                <!--ui:include src="#{sessionView.opcion}" id="workspace"/-->
+
+                <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException"
+                                        update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();"/>
+
+                <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px">
+                    <h3>Reloading page</h3>
+                </p:dialog>
             </div>
+
+            <ui:include src="./footer.xhtml"/>
         </div>
+    </div>
 
-        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
-            <f:facet name="start">
-                <i class="pi pi-spin pi-spinner layout-ajax-loader-icon" aria-hidden="true"></i>
-            </f:facet>
+    <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+        <f:facet name="start">
+            <i class="pi pi-spin pi-spinner layout-ajax-loader-icon" aria-hidden="true"></i>
+        </f:facet>
 
-            <f:facet name="complete">
-                <h:outputText value=""/>
-            </f:facet>
-        </p:ajaxStatus>
-        <div class="layout-mask modal-in"></div>
-        <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
-        <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
-        <h:outputStylesheet name="css/demo.css" library="demo"/>
-        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
-    </h:body>
+        <f:facet name="complete">
+            <h:outputText value=""/>
+        </f:facet>
+    </p:ajaxStatus>
+    <div class="layout-mask modal-in"></div>
+    <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
+    <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+    <h:outputStylesheet name="css/demo.css" library="demo"/>
+    <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
+</h:body>
 
 </html>
