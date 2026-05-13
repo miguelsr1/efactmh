@@ -59,4 +59,28 @@ public class ClientRepository {
             return List.of();
         }
     }
+
+    public Long findContribuyenteByIdFactura(Long idFactura){
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery("select id_contribuyente from factura where id_factura = :idFactura")
+                    .bind("idFactura", idFactura)
+                    .mapTo(Long.class)
+                    .one();
+        } catch (Exception e) {
+            log.error("ERROR AL OBTENER CONTRIBUYENTE POR ID DE FACTURA", e);
+            return null;
+        }
+    }
+
+    public Long findContribuyenteByUser(String user){
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery("select id_contribuyente from contribuyente where correo = :correo")
+                    .bind("correo", user)
+                    .mapTo(Long.class)
+                    .one();
+        } catch (Exception e) {
+            log.error("ERROR AL OBTENER CONTRIBUYENTE POR USER", e);
+            return null;
+        }
+    }
 }

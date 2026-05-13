@@ -4,10 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -98,10 +95,10 @@ public class InvoceView implements Serializable {
     private String nombreClienteReq;
     @Getter
     @Setter
-    private String numDocClienteReq;
+    private String codigoTipoDocClienteReq;
     @Getter
     @Setter
-    private String codigoTipoDocClienteReq;
+    private String numDocClienteReq;
     @Getter
     @Setter
     private String correoClienteReq;
@@ -171,7 +168,7 @@ public class InvoceView implements Serializable {
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
 
-        codigoTipoDocClienteReq = "13";
+        codigoTipoDocClienteReq = null;
 
         lstObservacionesMH =  new ArrayList<>();
 
@@ -814,6 +811,10 @@ public class InvoceView implements Serializable {
     }
 
     public int getMaxNumDoc() {
+        if (codigoTipoDocClienteReq == null) {
+            return 0;
+        }
+
         switch (codigoTipoDocClienteReq) {
             case "13":
                 return 9;

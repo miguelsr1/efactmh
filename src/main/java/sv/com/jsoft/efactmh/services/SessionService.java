@@ -1,13 +1,19 @@
 package sv.com.jsoft.efactmh.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.Emisor;
 import sv.com.jsoft.efactmh.model.PlanMensual;
@@ -25,6 +31,8 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @SessionScoped
 public class SessionService implements Serializable {
 
+    @Getter
+    private String rolUsuario;
     @Getter
     private Emisor emisor;
     @Getter
@@ -49,11 +57,46 @@ public class SessionService implements Serializable {
             String jwtData = new String(Base64.getDecoder().decode(token.getAccessToken().split("\\.")[1]));
             userName = new Gson().fromJson(jwtData, JsonObject.class).get("name").getAsString();
 
-            cargarParametrosMh();
-            loadEstablecimiento();
-            loadEmisor();
+            setRol();
+
+            if(rolUsuario.equals("ROLE_EMISOR")) {
+                cargarParametrosMh();
+                loadEstablecimiento();
+                loadEmisor();
+            }
         }
     }
+
+    private void setRol() {
+        try {
+            String[] chunks = token.getAccessToken().split("\\.");
+
+            String payload = new String(
+                    Base64.getUrlDecoder().decode(chunks[1])
+            );
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            JsonNode jsonNode = null;
+
+            jsonNode = mapper.readTree(payload);
+
+            JsonNode rolesNode = jsonNode
+                    .path("resource_access")
+                    .path("efactura-ws")
+                    .path("roles");
+
+            if (rolesNode.isArray()) {
+
+                for (JsonNode role : rolesNode) {
+                    rolUsuario = role.asText();
+                }
+            }
+        } catch (JsonProcessingException e) {
+            rolUsuario = null;
+        }
+    }
+
 
     private void loadEmisor() {
         ResponseRestApi<Emisor> response = emisorService.getEmisor(token);
@@ -88,7 +131,7 @@ public class SessionService implements Serializable {
             parametroDto = lst.stream().filter(param -> param.getActivo()).findFirst().orElse(null);
         }
     }
-    
+
     public ResponseRestApi<PlanMensual> getPlanMensual() {
         return RestUtil
                 .builder()

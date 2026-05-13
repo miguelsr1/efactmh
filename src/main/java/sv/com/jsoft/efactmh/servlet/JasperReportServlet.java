@@ -1,5 +1,6 @@
 package sv.com.jsoft.efactmh.servlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
 import sv.com.jsoft.efactmh.db.DataSourceApp;
+import sv.com.jsoft.efactmh.repository.ClientRepository;
 
 @WebServlet(name = "JasperReportServlet", urlPatterns = {"/viewReport/*"})
 @Slf4j
@@ -22,14 +24,30 @@ public class JasperReportServlet extends HttpServlet {
 
     @Inject
     private DataSourceApp dataSourceApp;
+    @Inject
+    private ClientRepository clientRepository;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
+            String pathLogo;
+            String pathRelativo = System.getProperty("user.home") + File.separator + "report" + File.separator + "images" + File.separator + "logos" + File.separator ;
+
             Long idFactura = (Long) request.getSession().getAttribute("idFactura");
+
+            Long idContribuyente = clientRepository.findContribuyenteByIdFactura(idFactura);
+
+            File fLogo = new File(pathRelativo + idContribuyente+ ".jpg");
+
+            if(fLogo.exists()){
+                pathLogo = pathRelativo + idContribuyente+ ".jpg";
+            }else {
+                pathLogo = pathRelativo + "logo-dte.jpg";
+            }
+
             String codigoGeneracion = (String) request.getSession().getAttribute("codigoGeneracion");
             
-            String pathReporte = System.getProperty("user.home").concat("/opt/efact/report/dte-efact-1.1.jasper");
-            String pathImg = System.getProperty("user.home").concat("/opt/efact/report/images/logos/logo-dte.jpg");
+            String pathReporte = System.getProperty("user.home").concat("/report/dte-efact-1.1.jasper");
+            String pathImg = pathLogo;
             
             Map<String, Object> params = new HashMap<>();
             params.put("P_PATH_IMG", pathImg);

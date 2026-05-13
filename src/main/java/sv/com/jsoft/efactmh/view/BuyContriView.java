@@ -4,18 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import javax.faces.application.FacesMessage;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +15,25 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.BuyDtoResponse;
-import sv.com.jsoft.efactmh.repository.ClientRepository;
 import sv.com.jsoft.efactmh.repository.ComprasRepository;
 import sv.com.jsoft.efactmh.services.BuyService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  *
@@ -42,9 +42,14 @@ import sv.com.jsoft.efactmh.util.ResponseRestApi;
 @Named
 @ViewScoped
 @Slf4j
-public class BuyView implements Serializable {
+public class BuyContriView implements Serializable {
 
-    private String codigoDte;
+    @Getter
+    @Setter
+    private int idTipoDocumento;
+    @Getter
+    @Setter
+    private String numeroDocumento;
     private LocalDate fechaEmi;
 
     @Getter
@@ -76,10 +81,11 @@ public class BuyView implements Serializable {
     @Inject
     BuyService buyService;
     @Inject
-    ComprasRepository comprasRepository;
-    @Inject
-    ClientRepository clientRepository;
+    private ComprasRepository comprasRepository;
 
+    public BuyContriView() {
+        idTipoDocumento = 13;
+    }
 
     private Gson gson = new GsonBuilder()
             .serializeNulls()
@@ -108,18 +114,18 @@ public class BuyView implements Serializable {
 
         if (fechaEmi.getMonth() != fecha.getMonth()
                 || fechaEmi.getYear() != fecha.getYear()) {
-             MessageUtil.builder()
-                        .severity(FacesMessage.SEVERITY_WARN)
-                        .title("ALERTA")
-                        .message("EL DTE INGRESADO NO ES DEL MES Y AÑO SELECCIONADO. FECHA DOCUMENTO: " + fechEmi)
-                        .build()
-                        .showMessage();
-             return;
+            MessageUtil.builder()
+                    .severity(FacesMessage.SEVERITY_WARN)
+                    .title("ALERTA")
+                    .message("EL DTE INGRESADO NO ES DEL MES Y AÑO SELECCIONADO. FECHA DOCUMENTO: " + fechEmi)
+                    .build()
+                    .showMessage();
+            return;
         }
 
         jsonObject.remove("firmaElectronica");
 
-        codigoDte = jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString();
+        String codigoDte = jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString();
         codigoGeneracion = jsonObject.get("identificacion").getAsJsonObject().get("codigoGeneracion").getAsString();
         nitEmisor = jsonObject.get("emisor").getAsJsonObject().get("nit").getAsString();
         nombreEmisor = jsonObject.get("emisor").getAsJsonObject().get("nombre").getAsString();
@@ -154,11 +160,11 @@ public class BuyView implements Serializable {
     }
 
     private void loadBuys() {
-        lstBuys = buyService.getList(fecha, securityService.getToken());
+        lstBuys = buyService.getListContri(fecha, idTipoDocumento, numeroDocumento, securityService.getToken());
     }
 
     public void guardarJson() {
-        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(jsonObject), buyDate, securityService.getToken());
+        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(jsonObject), buyDate, idTipoDocumento, numeroDocumento, securityService.getToken());
 
         PrimeFaces.current().executeScript("PF('dlgAddBuy').hide();");
 
@@ -170,6 +176,8 @@ public class BuyView implements Serializable {
                         .message("Compra registrada correctamente")
                         .build()
                         .showMessage();
+                loadBuys();
+
                 break;
             case 401:
             case 409:
@@ -190,6 +198,14 @@ public class BuyView implements Serializable {
                 break;
         }
     }
+
+    public int getMaxNumDoc() {
+        if (idTipoDocumento == 13) {
+            return 9;
+        } else {
+            return 14;
+        }
+    }
     
     public StreamedContent getFileCsv() {
         if (fecha == null) {
@@ -202,9 +218,7 @@ public class BuyView implements Serializable {
             return null;
         }
 
-        Long idContribuyente =  clientRepository.findContribuyenteByUser(securityService.getEmisor().getCorreo());
-
-        String csvData = comprasRepository.getCsvCompras(idContribuyente, fecha.getYear(), fecha.getMonthValue());
+        String csvData = comprasRepository.getCsvCompras(idTipoDocumento, numeroDocumento, fecha.getYear(), fecha.getMonthValue());
 
         if (csvData == null || csvData.isEmpty()) {
             MessageUtil.builder()

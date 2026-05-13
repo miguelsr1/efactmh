@@ -143,7 +143,7 @@
                          update="step, dvClient, dvDetInvoce, tblDetPedido, invoice-content, dvDetPayment"
                          icon="pi pi-angle-left" action="#{invoceView.backStep()}"/>
         <p:commandButton value="Generar DTE" styleClass="mr-2 ui-button-info" icon="pi pi-file-export"
-                         process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.preSave()}"
+                         process="@this,cboDte,txtNumDoc" action="#{invoceView.preSave()}"
                          style="margin-top: 1rem">
         </p:commandButton>
     </p:outputPanel>

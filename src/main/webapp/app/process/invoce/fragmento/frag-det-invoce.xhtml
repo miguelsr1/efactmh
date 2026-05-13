@@ -133,6 +133,6 @@
         <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" process="@this"
                          update="step, dvClient, dvDetInvoce, dvDetPayment" icon="pi pi-angle-left" action="#{invoceView.backStep()}" />
         <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary" update="step, dvClient, dvDetInvoce, dvDetPayment"
-                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec" action="#{invoceView.nextStep()}" />
+                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc" action="#{invoceView.nextStep()}" />
     </p:outputPanel>
 </ui:component>

@@ -156,7 +156,6 @@ public class DtesView implements Serializable {
 
     public void createPdf(DtesResponse dte) {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", dte.getIdFactura());
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("jwt", sessionService.getToken());
 
         PrimeFaces.current().ajax().update("panelPrint");
         PrimeFaces.current().executeScript("PF('dlgPdfRpt').show();");

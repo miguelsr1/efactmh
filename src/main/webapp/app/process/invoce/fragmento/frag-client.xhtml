@@ -7,81 +7,112 @@
 
     <p:outputPanel id="dvClient" style="display: #{invoceView.activeStep eq 0? 'block':'none'}">
         <div class="ui-fluid formgrid grid" jsf:id="dvCliente">
-            <div class="field col-12" >
+            <div class="field col-12">
                 <p:outputLabel for="cboDte" value="Tipo de documento"/>
-                <p:selectOneMenu id="cboDte" value="#{invoceView.invoce.codigoDte}" required="true" requiredMessage="ES NECESARIO SELECCIONAR UN TIPO DE DTE">
+                <p:selectOneMenu id="cboDte" value="#{invoceView.invoce.codigoDte}" required="true"
+                                 requiredMessage="ES NECESARIO SELECCIONAR UN TIPO DE DTE">
                     <f:selectItem itemLabel="SELECCIONE UN DTE" noSelectionOption="true"/>
-                    <f:selectItem itemValue="01" itemLabel="FACTURA" />
-                    <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL" />
-                    <f:selectItem itemValue="14" itemLabel="SUJETO EXCLUIDO" />
+                    <f:selectItem itemValue="01" itemLabel="FACTURA"/>
+                    <f:selectItem itemValue="03" itemLabel="CREDITO FISCAL"/>
+                    <f:selectItem itemValue="14" itemLabel="SUJETO EXCLUIDO"/>
                     <p:ajax process="@this,cboDte" update="dvCliente"/>
                 </p:selectOneMenu>
             </div>
-            <div class="field col-12" >
+            <div class="field col-12">
                 <p:outputLabel for="txtFecha" value="Fecha de factura"/>
-                <p:datePicker id="txtFecha" value="#{invoceView.dateInvoce}" hourFormat="24" pattern="dd/MM/yyyy HH:mm:ss" showTime="true" required="true" maxdate="#{invoceView.dateInvoce}"/>
+                <p:datePicker id="txtFecha" value="#{invoceView.dateInvoce}" hourFormat="24"
+                              pattern="dd/MM/yyyy HH:mm:ss" showTime="true" required="true"
+                              maxdate="#{invoceView.dateInvoce}"/>
             </div>
 
-            <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
+            <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
 
-                <p:selectBooleanCheckbox id="chbSinDatos" value="#{invoceView.sinDatos}" itemLabel="SIN DATOS" styleClass="mb-2">
-                    <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}" process="@this,txtFecha,chbSinDatos"/>
+                <p:selectBooleanCheckbox id="chbSinDatos" value="#{invoceView.sinDatos}" itemLabel="SIN DATOS"
+                                         styleClass="mb-2">
+                    <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}"
+                            process="@this,txtFecha,chbSinDatos"/>
                 </p:selectBooleanCheckbox>
             </div>
-            <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}" >
-                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA" disabled="#{not invoceView.sinDatos}">
-                    <p:ajax update="dvClient" listener="#{invoceView.requiereFactura()}"  />
+            <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
+                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA"
+                                         disabled="#{not invoceView.sinDatos}">
+                    <p:ajax update="dvClient" listener="#{invoceView.requiereFactura()}"/>
                 </p:selectBooleanCheckbox>
             </div>
 
             <!--BLOQUE DE CLIENTE GUARDADO -->
-            <div class="field col-12" style="display:#{invoceView.sinDatos ?'none':'block'}" >
-                <p:outputLabel for="txtNumDoc" value="Buscar cliente (DUI o NOMBRE)"/>
-                <p:autoComplete id="txtNumDoc" value="#{invoceView.cliente}" minQueryLength="4"
+            <div class="field col-12" style="display:#{invoceView.sinDatos ?'none':'block'}">
+                <p:outputLabel for="txtQuery" value="Buscar cliente (DUI o NOMBRE)"/>
+                <p:autoComplete id="txtQuery" value="#{invoceView.cliente}" minQueryLength="4"
                                 completeMethod="#{invoceView.completeClient}"
-                                var="client" itemLabel="#{client.nombreCompleto}#{client.razonSocial}" itemValue="#{client}"
+                                var="client" itemLabel="#{client.nombreCompleto}#{client.razonSocial}"
+                                itemValue="#{client}"
                                 converter="clientConverter" forceSelection="true" scrollHeight="250">
-                    <p:ajax event="itemSelect" listener="#{invoceView.onItemSelect}" update="txtNumDoc" />
+                    <p:ajax event="itemSelect" listener="#{invoceView.onItemSelect}" update="txtQuery"/>
                 </p:autoComplete>
             </div>
+        </div>
 
 
-            <!-- BLOQUE SIN DATOS PERO CON FACTURA NOMBRE -->
-            <div class="field col-12 md:col-4" style="display:#{invoceView.requiereFactura?'block':'none'}">
+        <!-- BLOQUE SIN DATOS PERO CON FACTURA NOMBRE -->
+        <div class="ui-fluid formgrid grid border-2 border-dashed surface-border mt-2 p-4" style="display:#{invoceView.requiereFactura?'flex':'none'}">
+            <div class="field col-12 md:col-6" >
                 <p:outputLabel for="txtNomReq" value="Nombre cliente"/>
-                <p:inputText id="txtNomReq" value="#{invoceView.nombreClienteReq}" required="#{invoceView.requiereFactura}"
+                <p:inputText id="txtNomReq" value="#{invoceView.nombreClienteReq}" styleClass="uppercase"
+                             required="#{invoceView.requiereFactura}"
                              disabled="#{invoceView.invoce.codigoDte ne '01'}"
                              requiredMessage="DEBE DE INGRESAR EL NOMBRE DEL CLIENTE"/>
             </div>
-            <div class="field col-12 md:col-4" style="display:#{invoceView.requiereFactura?'block':'none'}">
+            <div class="field col-12 md:col-6" >
                 <p:outputLabel for="txtCorreoReq" value="Correo electrónico"/>
-                <p:inputText id="txtCorreoReq" value="#{invoceView.correoClienteReq}" required="#{invoceView.requiereFactura}"
+                <p:inputText id="txtCorreoReq" value="#{invoceView.correoClienteReq}"
+                             required="#{invoceView.requiereFactura}"
                              disabled="#{invoceView.invoce.codigoDte ne '01'}"
                              validatorMessage="FORMATO DE CORREO NO VALIDO"
                              requiredMessage="DEBE DE INGRESAR EL CORREO DEL CLIENTE">
                     <f:validateRegex
-                        pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
                 </p:inputText>
             </div>
-            <div class="field col-12 md:col-4" style="display:#{invoceView.requiereFactura?'block':'none'}">
+            <div class="field col-12 md:col-6" >
+                <p:outputLabel for="cboTipoDoc" value="Tipo de Documento"/>
+                <p:selectOneMenu id="cboTipoDoc" value="#{invoceView.codigoTipoDocClienteReq}"
+                                 disabled="#{invoceView.invoce.codigoDte ne '01'}" class="w-full">
+                    <f:selectItem itemLabel="SIN DOCUMENTO" itemValue="#{null}"/>
+                    <f:selectItems value="#{catalogoService.lstTipoDocumentosId}" var="doc"
+                                   itemLabel="#{doc.nombre}" itemValue="#{doc.id}"/>
+                    <p:ajax update="lblNumDoc txtNumDoc"/>
+                </p:selectOneMenu>
             </div>
-
-
-            <div class="field col-2" style="margin-top: 1rem">
-                <p:selectBooleanCheckbox id="bchIva" itemLabel="Retención IVA" value="#{invoceView.invoce.aplicaIvaRetenido}">
-                    <p:ajax process="bchIva" />
-                </p:selectBooleanCheckbox>
-            </div>
-            <div class="col-10" style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
-                <p:selectBooleanCheckbox id="bchRenta" itemLabel="Retención ISR" value="#{invoceView.invoce.aplicaRentaRetenido}">
-                    <p:ajax process="bchRenta" />
-                </p:selectBooleanCheckbox>
+            <div class="field col-12 md:col-6" >
+                <p:outputLabel id="lblNumDoc" for="txtNumDoc"
+                               value="Número de Documento (max. #{invoceView.maxNumDoc} caracteres)"/>
+                <p:inputText id="txtNumDoc" value="#{invoceView.numDocClienteReq}"
+                             disabled="#{invoceView.maxNumDoc eq 0}" maxlength="#{invoceView.maxNumDoc}"
+                             required="true" class="w-full"/>
             </div>
         </div>
 
-        <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary" 
+        <div class="field col-2" style="margin-top: 1rem">
+            <p:selectBooleanCheckbox id="bchIva" itemLabel="Retención IVA"
+                                     value="#{invoceView.invoce.aplicaIvaRetenido}">
+                <p:ajax process="bchIva"/>
+            </p:selectBooleanCheckbox>
+        </div>
+        <div class="col-10"
+             style="display: #{invoceView.invoce.codigoDte eq '03' ? 'block': 'none'}; margin-top: 1rem">
+            <p:selectBooleanCheckbox id="bchRenta" itemLabel="Retención ISR"
+                                     value="#{invoceView.invoce.aplicaRentaRetenido}">
+                <p:ajax process="bchRenta"/>
+            </p:selectBooleanCheckbox>
+        </div>
+
+        <p:commandButton value="Atras" styleClass="mr-2 ui-button-flat ui-button-secondary"
                          icon="pi pi-angle-left" disabled="#{invoceView.activeStep eq 0}"/>
-        <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary" update="step, dvClient, dvDetInvoce, dvDetPayment" 
-                         icon="pi pi-angle-right" process="@this,cboDte,txtNumDoc,nomRec,txtFecha,txtNomReq,txtCorreoReq" action="#{invoceView.nextStep()}" />
+        <p:commandButton value="Continuar" styleClass="mr-2 ui-button-primary"
+                         update="step, dvClient, dvDetInvoce, dvDetPayment"
+                         icon="pi pi-angle-right"
+                         process="@this,cboDte,txtFecha,txtNumDoc,txtNomReq,txtCorreoReq,cboTipoDoc"
+                         action="#{invoceView.nextStep()}"/>
     </p:outputPanel>
 </ui:component>

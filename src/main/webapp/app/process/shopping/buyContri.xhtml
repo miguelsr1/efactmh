@@ -23,28 +23,44 @@
                         <div class="grid">
                             <div class="col-12 md:col-12" jsf:id="dvDatos">
                                 <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out">
+                                    <div class="field col-12 md:col-3" >
+                                        <p:outputLabel for="cboTipoDoc" value="Tipo de Documento"/>
+                                        <p:selectOneMenu id="cboTipoDoc" value="#{buyContriView.idTipoDocumento}" class="w-full">
+                                            <f:selectItem itemLabel="DUI" itemValue="13"/>
+                                            <f:selectItem itemLabel="NIT" itemValue="36"/>
+                                            <p:ajax update="lblNumDoc,txtNumDoc"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="field col-12 md:col-3" >
+                                        <p:outputLabel id="lblNumDoc" for="txtNumDoc"
+                                                       value="Número de Documento (max. #{buyContriView.maxNumDoc} caracteres)"/>
+                                        <p:inputText id="txtNumDoc" value="#{buyContriView.numeroDocumento}"
+                                                     maxlength="#{buyContriView.maxNumDoc}"
+                                                     required="true" class="w-full"/>
+                                    </div>
                                     <div class="field col-12" >
                                         <p:outputLabel for="month" value="Año Fiscal" class="mr-2"/> <br/>
-                                        <p:datePicker id="month" view="month" pattern="MM/yyyy" 
-                                                      value="#{buyView.buyDate}" required="true"
+                                        <p:datePicker id="month" view="month" pattern="MM/yyyy"
+                                                      value="#{buyContriView.buyDate}" required="true"
                                                       requiredMessage="ES REQUERIDO MES Y AÑO DE LA COMPRA"
                                                       yearNavigator="true" style="width: 10rem"
                                                       yearRange="2025:2027">
-                                            <p:ajax event="dateSelect" listener="#{buyView.onDateSelect}" update="tblPro dvDatos btnCsv" />
+                                            <p:ajax event="dateSelect" listener="#{buyContriView.onDateSelect}" update="tblPro dvDatos btnCsv" process="@this,cboTipoDoc,txtNumDoc,month" />
                                         </p:datePicker>
                                     </div>
+
                                     <div class="field col-12" >
                                         <p:outputLabel value="Seleccione el archivo JSON" class="mr-2"/> 
-                                        <p:commandButton icon="pi pi-plus" onclick="onClick('upload_input')" disabled="#{buyView.fecha eq null}" />
+                                        <p:commandButton icon="pi pi-plus" onclick="onClick('upload_input')" disabled="#{buyContriView.fecha eq null}" />
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <p:panel visible="false">
-                            <p:fileUpload id="upload" value="#{buyView.file}" label="" mode="simple" skinSimple="true" 
+                            <p:fileUpload id="upload" value="#{buyContriView.file}" label="" mode="simple" skinSimple="true"
                                           auto="true" process="@this" update="tblPro"
-                                          listener="#{buyView.handleFileUpload}" 
+                                          listener="#{buyContriView.handleFileUpload}"
                                           allowTypes="/(\.|\/)(json)$/"/>
                         </p:panel>
 
@@ -59,8 +75,8 @@
                                              style="width: 10rem" validateClient="true" styleClass="ui-button-success mr-2" process="@this"/>
                             <p:commandButton id="btnCsv" value="Descargar CSV" icon="pi pi-file-excel"
                                              styleClass="ui-button-help" ajax="false"
-                                             disabled="#{buyView.fecha eq null}">
-                                <p:fileDownload value="#{buyView.fileCsv}" />
+                                             disabled="#{buyContriView.fecha eq null}">
+                                <p:fileDownload value="#{buyContriView.fileCsv}" />
                             </p:commandButton>
                         </div>
                     </div>
@@ -68,7 +84,7 @@
             </div>
 
             <div class="card">
-                <p:dataTable id="tblPro" widgetVar="tblPro" value="#{buyView.lstBuys}" var="buy"
+                <p:dataTable id="tblPro" widgetVar="tblPro" value="#{buyContriView.lstBuys}" var="buy"
                              rowKey="#{buy.codigoGeneracion}"
                              rowIndexVar="rowId" selectionMode="single"
                              allowUnsorting="true" sortMode="single"
@@ -99,7 +115,7 @@
                     <p:column headerText="NIT Emisor" >
                         <p:outputLabel value="#{buy.nit}"/>
                     </p:column>
-                    <p:column headerText="Nombre Emisor" >
+                    <p:column headerText="Nombre Emisor" filterMatchMode="contains" filterBy="#{buy.nombre}" >
                         <p:outputLabel value="#{buy.nombre}"/>
                     </p:column>
                     <p:column headerText="Monto compra" >
@@ -124,27 +140,27 @@
                         <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out">
                             <div class="field col-12" >
                                 <p:outputLabel value="Tipo de DTE:" styleClass="mr-2" /><br/>
-                                <p:outputLabel value="#{buyView.nombreDte}" style="font-weight: bold" />
+                                <p:outputLabel value="#{buyContriView.nombreDte}" style="font-weight: bold" />
                             </div>
                             <div class="field col-12" >
                                 <p:outputLabel value="Código generación:" styleClass="mr-2" /><br/>
-                                <p:outputLabel value="#{buyView.codigoGeneracion}" style="font-weight: bold" />
+                                <p:outputLabel value="#{buyContriView.codigoGeneracion}" style="font-weight: bold" />
                             </div>
                             <div class="field col-12" >
                                 <p:outputLabel value="Fecha compra:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyView.fechEmi}" style="font-weight: bold" />
+                                <p:outputLabel value="#{buyContriView.fechEmi}" style="font-weight: bold" />
                             </div>
                             <div class="field col-12" >
                                 <p:outputLabel value="NIT Emisor:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyView.nitEmisor}" style="font-weight: bold" />
+                                <p:outputLabel value="#{buyContriView.nitEmisor}" style="font-weight: bold" />
                             </div>
                             <div class="field col-12" >
                                 <p:outputLabel value="Nombre Emisor:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyView.nombreEmisor}" style="font-weight: bold" />
+                                <p:outputLabel value="#{buyContriView.nombreEmisor}" style="font-weight: bold" />
                             </div>
                             <div class="field col-12" >
                                 <p:outputLabel value="Monto de compra:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyView.monto}" style="font-weight: bold">
+                                <p:outputLabel value="#{buyContriView.monto}" style="font-weight: bold">
                                     <f:convertNumber pattern="$ #,##0.00" />
                                 </p:outputLabel>
                             </div>
@@ -153,7 +169,7 @@
                 </div>
                 <f:facet name="footer">
                     <p:commandButton value="Cancelar" styleClass="ui-button-flat" onclick="PF('dlgAddBuy').hide();" process="@this"/>
-                    <p:commandButton value="Aceptar" process="@this" action="#{buyView.guardarJson()}"/>
+                    <p:commandButton value="Aceptar" process="@this" action="#{buyContriView.guardarJson()}" update="tblPro"/>
                 </f:facet>
             </p:dialog>
         </h:form>

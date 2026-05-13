@@ -15,7 +15,7 @@
                     <span>de establecimiento y punto de venta.</span>
                 </div>
 
-                <p:outputPanel id="menumodes-panel" styleClass="layout-config-section options">
+                <p:outputPanel id="menumodes-panel" styleClass="layout-config-section options" rendered="#{sessionView.emisorRol}">
                     <span class="section-name">Establecimiento</span>
                     <div class="grid layout-config-options">                        
                         <h:selectOneMenu value="#{sessionView.idEstablecimiento}" 
@@ -27,7 +27,7 @@
                     </div>
                 </p:outputPanel>
 
-                <p:outputPanel id="lightdark-panel" styleClass="layout-config-section options">
+                <p:outputPanel id="lightdark-panel" styleClass="layout-config-section options" rendered="#{sessionView.emisorRol}">
                     <span class="section-name">Punto de venta</span>
                     <div class="grid layout-config-options">
                         <h:selectOneMenu value="#{sessionView.idPuntoVenta}" styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all" style="width: 100%">

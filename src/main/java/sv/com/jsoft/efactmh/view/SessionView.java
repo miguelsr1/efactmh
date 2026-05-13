@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,9 @@ import org.primefaces.model.menu.MenuModel;
 import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.services.SessionService;
+
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
+
 import sv.com.jsoft.efactmh.util.JsfUtil;
 
 /**
@@ -53,12 +56,16 @@ public class SessionView implements Serializable {
     private MenuModel model;
     @Getter
     private PlanMensual planMensual;
+    @Getter
+    private List<String> roles;
 
     @PostConstruct
     public void init() {
-        loadCookies();
-        loadMenu();
-        loadPlanMensual();
+        if (sessionService.getRolUsuario().equals("ROLE_EMISOR")) {
+            loadCookies();
+            loadMenu();
+            loadPlanMensual();
+        }
     }
 
     public String getOpcion() {
@@ -70,8 +77,8 @@ public class SessionView implements Serializable {
             this.opcion = opcion;
         }
     }
-    
-    private void loadPlanMensual(){
+
+    private void loadPlanMensual() {
         planMensual = sessionService.getPlanMensual().getBody();
     }
 
@@ -94,7 +101,7 @@ public class SessionView implements Serializable {
                 .icon("pi pi-home")
                 .expanded(true)
                 .build();
-        
+
         addSubMenu(subMenuFav, "Dashboard", "pi pi-chart-bar", "/app/dashboard.xhtml");
 
         model.getElements().add(DefaultMenuItem.builder()
@@ -115,19 +122,19 @@ public class SessionView implements Serializable {
         addSubMenu(subMenuOpe, "Factura", "pi pi-inbox", "/app/process/invoce/invoce.xhtml");
         addSubMenu(subMenuOpe, "DTE's", "pi pi-list", "/app/lstDtes.xhtml");
         addSubMenu(subMenuOpe, "Ingreso de compras", "pi pi-shopping-bag", "/app/process/shopping/index.xhtml");
-        
+
         model.getElements().add(subMenuOpe);
-        
+
         DefaultSubMenu subMenuMan = DefaultSubMenu.builder()
                 .label("Mantenimientos")
                 .icon("pi pi-fw pi-prime")
                 .expanded(true)
                 .build();
-        
+
         addSubMenu(subMenuMan, "Items", "pi pi-th-large", "/app/mantto/items.xhtml");
         addSubMenu(subMenuMan, "Mis Datos", "pi pi-user", "/app/mantto/emisor/emisor.xhtml");
         addSubMenu(subMenuMan, "Clientes", "pi pi-id-card", "/app/mantto/cliente.xhtml");
-        
+
         model.getElements().add(subMenuMan);
     }
 
@@ -205,5 +212,13 @@ public class SessionView implements Serializable {
             return new ArrayList<>();
         }
         return sessionService.getLstPuntoVenta(Long.valueOf(idEstablecimiento));
-    }    
+    }
+
+    public boolean isEmisorRol() {
+        return sessionService.getRolUsuario().equals("ROLE_EMISOR");
+    }
+
+    public boolean isContadorRol() {
+        return sessionService.getRolUsuario().equals("ROLE_CONTADOR");
+    }
 }
