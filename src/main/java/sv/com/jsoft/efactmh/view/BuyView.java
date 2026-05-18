@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,22 +12,28 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.FilesUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
+import org.primefaces.model.file.UploadedFiles;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.BuyDtoResponse;
+import sv.com.jsoft.efactmh.model.dto.CostClassificationDto;
 import sv.com.jsoft.efactmh.repository.ClientRepository;
 import sv.com.jsoft.efactmh.repository.ComprasRepository;
 import sv.com.jsoft.efactmh.services.BuyService;
@@ -49,10 +56,18 @@ public class BuyView implements Serializable {
 
     @Getter
     @Setter
+    private int idCostClassification;
+    @Getter
+    @Setter
     private LocalDate buyDate;
     @Getter
     @Setter
     private UploadedFile file;
+    
+    @Getter
+    @Setter
+    private UploadedFiles files;
+    
     @Getter
     private String nombreDte;
     @Getter
@@ -69,88 +84,185 @@ public class BuyView implements Serializable {
     private LocalDate fecha;
 
     @Getter
+    @Setter
+    private Integer currentYear;
+    
+    @Getter
+    @Setter
+    private Integer selectedMonth;
+
+    @Getter
     private List<BuyDtoResponse> lstBuys;
+
+    @Getter
+    private List<String> failedFiles;
 
     @Inject
     SessionService securityService;
+    
     @Inject
+    @Getter
     BuyService buyService;
+    
     @Inject
     ComprasRepository comprasRepository;
-    @Inject
-    ClientRepository clientRepository;
 
+    @PostConstruct
+    public void init() {
+        lstBuys = new ArrayList<>();
+        failedFiles = new ArrayList<>();
+        idCostClassification = 1;
+        currentYear = LocalDate.now().getYear();
+    }
+
+    public String getIconCost() {
+        return getLstCost()
+                .stream()
+                .filter(cost -> cost.getId() == idCostClassification)
+                .findFirst().get().getIcon();
+    }
 
     private Gson gson = new GsonBuilder()
             .serializeNulls()
             .create();
     private JsonObject jsonObject;
 
-    public void handleFileUpload(FileUploadEvent event) {
-        try {
-            cargarJson(event);
-        } catch (IOException ex) {
-            log.error("OCURRIO UN ERROR CARGANDO EL JSON", ex);
-            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_ERROR, "ERROR", "EL ARCHIVO CARGADO ESTA DAÑADO");
+    public void handleFilesUpload(FilesUploadEvent event) {
+        failedFiles.clear();
+        int successCount = 0;
+        
+        if (event.getFiles() != null && event.getFiles().getFiles() != null) {
+            for (UploadedFile uploadedFile : event.getFiles().getFiles()) {
+                try {
+                    boolean success = procesarYGuardarJson(uploadedFile);
+                    if (success) {
+                        successCount++;
+                    }
+                } catch (Exception ex) {
+                    log.error("OCURRIO UN ERROR CARGANDO EL JSON: " + uploadedFile.getFileName(), ex);
+                    failedFiles.add(uploadedFile.getFileName() + " (Error de lectura)");
+                }
+            }
         }
-    }
-
-    private void cargarJson(FileUploadEvent event) throws IOException {
-        if (!"application/json".equals(event.getFile().getContentType())) {
-            throw new IllegalArgumentException("Solo se permiten archivos JSON");
-        }
-        String json = new String(event.getFile().getInputStream().readAllBytes());
-
-        jsonObject = JsonParser.parseString(json).getAsJsonObject();
-
-        fechEmi = jsonObject.get("identificacion").getAsJsonObject().get("fecEmi").getAsString();
-        fechaEmi = LocalDate.parse(fechEmi);
-
-        if (fechaEmi.getMonth() != fecha.getMonth()
-                || fechaEmi.getYear() != fecha.getYear()) {
+        
+        if (failedFiles.isEmpty()) {
              MessageUtil.builder()
-                        .severity(FacesMessage.SEVERITY_WARN)
-                        .title("ALERTA")
-                        .message("EL DTE INGRESADO NO ES DEL MES Y AÑO SELECCIONADO. FECHA DOCUMENTO: " + fechEmi)
+                        .severity(FacesMessage.SEVERITY_INFO)
+                        .title("INFORMACIÓN")
+                        .message("Se han procesado " + successCount + " archivos correctamente.")
                         .build()
                         .showMessage();
-             return;
+        } else {
+            String fallidos = String.join(", ", failedFiles);
+            MessageUtil.builder()
+                        .severity(FacesMessage.SEVERITY_WARN)
+                        .title("ALERTA")
+                        .message("Se guardaron " + successCount + " archivos. Fallaron: " + fallidos)
+                        .build()
+                        .showMessage();
         }
-
-        jsonObject.remove("firmaElectronica");
-
-        codigoDte = jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString();
-        codigoGeneracion = jsonObject.get("identificacion").getAsJsonObject().get("codigoGeneracion").getAsString();
-        nitEmisor = jsonObject.get("emisor").getAsJsonObject().get("nit").getAsString();
-        nombreEmisor = jsonObject.get("emisor").getAsJsonObject().get("nombre").getAsString();
-
-        switch (jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString()) {
-            case "01":
-                nombreDte = "FACTURA ELECTRONICA";
-                break;
-            case "03":
-                nombreDte = "COMPROBANTE CREDITO FISCAL";
-                monto = new BigDecimal(jsonObject.get("resumen").getAsJsonObject().get("montoTotalOperacion").getAsString());
-                break;
-            case "09":
-                nombreDte = "DOCUMENTO CONTABLE DE LIQUIDACION";
-                monto = new BigDecimal(jsonObject.get("cuerpoDocumento").getAsJsonObject().get("liquidoApagar").getAsString());
-                break;
-            default:
-                throw new AssertionError();
-        }
-
-        PrimeFaces.current().ajax().update("dvDetailBuy");
-        PrimeFaces.current().executeScript("PF('dlgAddBuy').show();");
-
-        log.info("FILE: " + event.getFile().getFileName());
-
+        
         loadBuys();
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        // En PrimeFaces, si usas auto="false" o si envias archivos uno por uno, a veces se dispara
+        // este evento individual en lugar del masivo (FilesUploadEvent).
+        // Lo redirigimos a nuestra logica unitaria de guardado.
+        failedFiles.clear();
+        
+        UploadedFile uploadedFile = event.getFile();
+        if (uploadedFile != null) {
+            try {
+                boolean success = procesarYGuardarJson(uploadedFile);
+                if (success) {
+                    MessageUtil.builder()
+                        .severity(FacesMessage.SEVERITY_INFO)
+                        .title("INFORMACIÓN")
+                        .message("Archivo " + uploadedFile.getFileName() + " procesado correctamente.")
+                        .build()
+                        .showMessage();
+                } else {
+                    String fallo = failedFiles.isEmpty() ? "Error desconocido" : failedFiles.get(0);
+                    MessageUtil.builder()
+                        .severity(FacesMessage.SEVERITY_WARN)
+                        .title("ALERTA")
+                        .message("No se pudo guardar " + uploadedFile.getFileName() + ". " + fallo)
+                        .build()
+                        .showMessage();
+                }
+            } catch (Exception ex) {
+                log.error("OCURRIO UN ERROR CARGANDO EL JSON: " + uploadedFile.getFileName(), ex);
+                MessageUtil.builder()
+                        .severity(FacesMessage.SEVERITY_ERROR)
+                        .title("ERROR")
+                        .message("Error interno procesando " + uploadedFile.getFileName())
+                        .build()
+                        .showMessage();
+            }
+        }
+        loadBuys();
+    }
+
+    public List<CostClassificationDto> getLstCost() {
+        return buyService.getLstCost();
+    }
+
+    private boolean procesarYGuardarJson(UploadedFile uploadedFile) throws IOException {
+        if (!"application/json".equals(uploadedFile.getContentType())) {
+             failedFiles.add(uploadedFile.getFileName() + " (No es un JSON válido)");
+             return false;
+        }
+        String json = new String(uploadedFile.getInputStream().readAllBytes());
+
+        JsonObject currentJsonObject = JsonParser.parseString(json).getAsJsonObject();
+
+        String currentFechEmi = currentJsonObject.get("identificacion").getAsJsonObject().get("fecEmi").getAsString();
+        LocalDate currentFechaEmi = LocalDate.parse(currentFechEmi);
+
+        if (currentFechaEmi.getMonth() != fecha.getMonth()
+                || currentFechaEmi.getYear() != fecha.getYear()) {
+            failedFiles.add(uploadedFile.getFileName() + " (Mes/Año incorrecto)");
+            return false;
+        }
+
+        currentJsonObject.remove("firmaElectronica");
+        
+        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(currentJsonObject), buyDate, securityService.getToken());
+
+        if (responseSendMh.getCodeHttp() == 201) {
+            return true;
+        } else {
+             failedFiles.add(uploadedFile.getFileName() + " (" + (responseSendMh.getErrorMessageDto() != null ? responseSendMh.getErrorMessageDto().getErrorMessage() : "Error API") + ")");
+             return false;
+        }
+    }
+    
+    public void prepareViewDetail(BuyDtoResponse buy) {
+         // Logica para obtener y mostrar detalle. Por ahora asignamos campos basicos si estan disponibles o requeriremos una llamada a base de datos si el Dto no tiene todo.
+         this.codigoGeneracion = buy.getCodigoGeneracion();
+         this.fechEmi = buy.getFecha() != null ? buy.getFecha().toString() : "";
+         this.nitEmisor = buy.getNit();
+         this.nombreEmisor = buy.getNombre();
+         this.monto = buy.getMonto();
+         // En un escenario real, tendrias que obtener el JSON original y extraer los valores exactos, o tener un endpoint para obtener el detalle de una compra.
+         // Aqui reusamos las propiedades actuales del bean para que dlgAddBuy (renombrado a algo como dlgViewBuy) pueda mostrarlos.
+         PrimeFaces.current().executeScript("PF('dlgViewBuy').show();");
     }
 
     public void onDateSelect(SelectEvent<LocalDate> event) {
+        lstBuys.clear();
         fecha = event.getObject();
         loadBuys();
+    }
+
+    public void onMonthSelect() {
+        if (selectedMonth != null && currentYear != null) {
+            lstBuys.clear();
+            fecha = LocalDate.of(currentYear, selectedMonth, 1);
+            buyDate = fecha;
+            loadBuys();
+        }
     }
 
     private void loadBuys() {
@@ -158,39 +270,9 @@ public class BuyView implements Serializable {
     }
 
     public void guardarJson() {
-        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(jsonObject), buyDate, securityService.getToken());
-
-        PrimeFaces.current().executeScript("PF('dlgAddBuy').hide();");
-
-        switch (responseSendMh.getCodeHttp()) {
-            case 201:
-                MessageUtil.builder()
-                        .severity(FacesMessage.SEVERITY_INFO)
-                        .title("INFORMACIÓN")
-                        .message("Compra registrada correctamente")
-                        .build()
-                        .showMessage();
-                break;
-            case 401:
-            case 409:
-                MessageUtil.builder()
-                        .severity(FacesMessage.SEVERITY_WARN)
-                        .title("ALERTA")
-                        .message(responseSendMh.getErrorMessageDto().getErrorMessage())
-                        .build()
-                        .showMessage();
-                break;
-            case 500:
-                MessageUtil.builder()
-                        .severity(FacesMessage.SEVERITY_ERROR)
-                        .title("ERROR")
-                        .message("Ocurrio un error interno")
-                        .build()
-                        .showMessage();
-                break;
-        }
+        // Este metodo ya no se usaria con la nueva logica de carga masiva directa, pero se deja por compatibilidad si aun es llamado
     }
-    
+
     public StreamedContent getFileCsv() {
         if (fecha == null) {
             MessageUtil.builder()
@@ -202,7 +284,7 @@ public class BuyView implements Serializable {
             return null;
         }
 
-        Long idContribuyente =  clientRepository.findContribuyenteByUser(securityService.getEmisor().getCorreo());
+        Long idContribuyente = securityService.getIdContribuyente();
 
         String csvData = comprasRepository.getCsvCompras(idContribuyente, fecha.getYear(), fecha.getMonthValue());
 

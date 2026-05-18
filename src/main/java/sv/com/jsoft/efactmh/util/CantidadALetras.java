@@ -1,6 +1,7 @@
 package sv.com.jsoft.efactmh.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class CantidadALetras {
 
@@ -9,7 +10,7 @@ public class CantidadALetras {
 
         String str8 = "";
 
-        paramBigDecimal = paramBigDecimal.setScale(2, 4);
+        paramBigDecimal = paramBigDecimal.setScale(2, RoundingMode.HALF_UP);
 
         String str1 = paramBigDecimal.toString();
 
@@ -72,7 +73,7 @@ public class CantidadALetras {
 
         String str8 = "";
 
-        paramBigDecimal = paramBigDecimal.setScale(2, 4);
+        paramBigDecimal = paramBigDecimal.setScale(2, RoundingMode.HALF_UP);
 
         String str1 = paramBigDecimal.toString();
 

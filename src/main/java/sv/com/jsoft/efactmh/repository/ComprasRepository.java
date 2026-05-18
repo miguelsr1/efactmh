@@ -55,4 +55,36 @@ public class ComprasRepository {
             return null;
         }
     }
+
+    public String getCsvConsumidorFinal(Integer idContribuyente, Integer anio, Integer mes) {
+        String sql = "SELECT * FROM public.fn_rpt_csv_consumidor_final(:p_id_contribuyente, :p_year, :p_month)";
+        try (Handle handle = jdbi.open()) {
+            List<String> lines = handle.createQuery(sql)
+                    .bind("p_id_contribuyente", idContribuyente)
+                    .bind("p_year", anio)
+                    .bind("p_month", mes)
+                    .mapTo(String.class)
+                    .list();
+            return String.join("\n", lines);
+        } catch (Exception e) {
+            log.error("Error al ejecutar la función fn_rpt_csv_consumidor_final", e);
+            return null;
+        }
+    }
+
+    public String getCsvContribuyente(Integer idContribuyente, Integer anio, Integer mes) {
+        String sql = "SELECT * FROM public.fn_rpt_csv_contribuyente(:p_id_contribuyente, :p_anho, :p_mes)";
+        try (Handle handle = jdbi.open()) {
+            List<String> lines = handle.createQuery(sql)
+                    .bind("p_id_contribuyente", idContribuyente)
+                    .bind("p_anho", anio)
+                    .bind("p_mes", mes)
+                    .mapTo(String.class)
+                    .list();
+            return String.join("\n", lines);
+        } catch (Exception e) {
+            log.error("Error al ejecutar la función fn_rpt_csv_contribuyente", e);
+            return null;
+        }
+    }
 }

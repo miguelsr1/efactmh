@@ -17,15 +17,16 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
 import sv.com.jsoft.efactmh.db.DataSourceApp;
 import sv.com.jsoft.efactmh.repository.ClientRepository;
+import sv.com.jsoft.efactmh.services.SessionService;
 
 @WebServlet(name = "JasperReportServlet", urlPatterns = {"/viewReport/*"})
 @Slf4j
 public class JasperReportServlet extends HttpServlet {
 
     @Inject
-    private DataSourceApp dataSourceApp;
+    DataSourceApp dataSourceApp;
     @Inject
-    private ClientRepository clientRepository;
+    SessionService sessionService;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -34,7 +35,7 @@ public class JasperReportServlet extends HttpServlet {
 
             Long idFactura = (Long) request.getSession().getAttribute("idFactura");
 
-            Long idContribuyente = clientRepository.findContribuyenteByIdFactura(idFactura);
+            Long idContribuyente = sessionService.getIdContribuyente();
 
             File fLogo = new File(pathRelativo + idContribuyente+ ".jpg");
 

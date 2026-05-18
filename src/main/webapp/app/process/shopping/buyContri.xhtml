@@ -65,14 +65,6 @@
                         </p:panel>
 
                         <div class="field col-12">
-                            <p:commandButton value="Guardar" icon="pi pi-save" 
-                                             update="dvDatos tblPro" style="width: 10rem" styleClass="mr-2"/>
-                            <p:commandButton value="Cancelar" icon="pi pi-times" update="dvDatos" process="@this" 
-                                             style="width: 10rem" styleClass="ui-button-secondary mr-2" oncomplete="PF('tblPro').unselectAllRows()">
-                                <p:ajax update="dvDatos, tblPro" resetValues="true"/>
-                            </p:commandButton>
-                            <p:commandButton value="Nuevo" update="dvDatos" icon="pi pi-plus"
-                                             style="width: 10rem" validateClient="true" styleClass="ui-button-success mr-2" process="@this"/>
                             <p:commandButton id="btnCsv" value="Descargar CSV" icon="pi pi-file-excel"
                                              styleClass="ui-button-help" ajax="false"
                                              disabled="#{buyContriView.fecha eq null}">

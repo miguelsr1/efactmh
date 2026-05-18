@@ -20,6 +20,7 @@ import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
+import sv.com.jsoft.efactmh.repository.ClientRepository;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -39,17 +40,19 @@ public class SessionService implements Serializable {
     private ParametroDto parametroDto;
     @Getter
     private String userName;
+    @Getter
+    private Long idContribuyente;
+    @Getter
     private JwtDto token;
+    @Getter
     private List<CatalogoDto> lstEstablecimiento;
 
     @Inject
     CatalogoService catalogoService;
     @Inject
     EmisorService emisorService;
-
-    public JwtDto getToken() {
-        return token;
-    }
+    @Inject
+    ClientRepository clientRepository;
 
     public void setToken(JwtDto token) {
         if (token != null) {
@@ -71,15 +74,11 @@ public class SessionService implements Serializable {
         try {
             String[] chunks = token.getAccessToken().split("\\.");
 
-            String payload = new String(
-                    Base64.getUrlDecoder().decode(chunks[1])
-            );
+            String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
 
             ObjectMapper mapper = new ObjectMapper();
 
-            JsonNode jsonNode = null;
-
-            jsonNode = mapper.readTree(payload);
+            JsonNode jsonNode = mapper.readTree(payload);
 
             JsonNode rolesNode = jsonNode
                     .path("resource_access")
@@ -102,6 +101,8 @@ public class SessionService implements Serializable {
         ResponseRestApi<Emisor> response = emisorService.getEmisor(token);
         if (response.getCodeHttp() == 200) {
             emisor = response.getBody();
+
+            idContribuyente =  clientRepository.findContribuyenteByUser(emisor.getCorreo());
         }
     }
 
@@ -109,9 +110,6 @@ public class SessionService implements Serializable {
         lstEstablecimiento = catalogoService.getLstEstablecimiento(token);
     }
 
-    public List<CatalogoDto> getLstEstablecimiento() {
-        return lstEstablecimiento;
-    }
 
     public List<CatalogoDto> getLstPuntoVenta(Long idEstablecimiento) {
         return catalogoService.getLstPuntoVentaByEstablecimiento(token, idEstablecimiento);

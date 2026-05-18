@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Compras</ui:define>
+    <ui:define name="head">
+        <h:outputScript name="fn.js" library="js"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form prependId="false">
+            <div class="grid dashboard ">
+                <div class="col-12">
+                    <p:messages showDetail="true" showSummary="false" closable="true">
+                        <p:autoUpdate/>
+                    </p:messages>
+                    <div class="card">
+                        <h5>Reporte de Ventas CSV</h5>
+                        <div class="grid">
+                            <div class="col-12 md:col-12" jsf:id="dvDatos">
+                                <div class="field col-12">
+                                    <p:outputLabel for="month" value="Mes y Año Fiscal (MM/YYYY)" class="mr-2"/>
+                                    <p:datePicker id="month" view="month" pattern="MM/yyyy"
+                                                  value="#{saleView.fechaEmi}" required="true"
+                                                  requiredMessage="ES REQUERIDO MES Y AÑO DE LA COMPRA"
+                                                  yearNavigator="true" style="width: 10rem"
+                                                  yearRange="2025:2027">
+                                        <p:ajax update="dvDatos"/>
+                                    </p:datePicker>
+                                </div>
+                                <div class="field col-12">
+                                    <p:commandButton id="btnCcf" value="CONSUMIDOR FINAL" icon="pi pi-file-excel"
+                                                     ajax="false"
+                                                     disabled="#{saleView.fechaEmi eq null}"
+                                                     style="width: 15rem" styleClass="mr-2 ui-button-success">
+                                        <p:fileDownload value="#{saleView.fileConsumidorFinal}" />
+                                    </p:commandButton>
+
+                                    <p:commandButton id="btnFe" value="CONTRIBUYENTE" icon="pi pi-file-excel"
+                                                     ajax="false"
+                                                     disabled="#{saleView.fechaEmi eq null}"
+                                                     style="width: 15rem" styleClass="mr-2 ui-button-success">
+                                        <p:fileDownload value="#{saleView.fileContribuyente}" />
+                                    </p:commandButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

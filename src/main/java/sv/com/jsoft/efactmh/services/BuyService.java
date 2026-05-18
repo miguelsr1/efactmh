@@ -3,9 +3,12 @@ package sv.com.jsoft.efactmh.services;
 import com.google.gson.JsonObject;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
+import lombok.Getter;
 import sv.com.jsoft.efactmh.model.dto.*;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -16,6 +19,42 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  */
 @ApplicationScoped
 public class BuyService {
+
+    @Getter
+    private List<CostClassificationDto> lstCost;
+    
+    @Getter
+    private List<MesDto> lstMeses;
+    
+    @Getter
+    private List<AnioDto> lstAnios;
+
+    @PostConstruct
+    public void init(){
+        lstCost = new ArrayList();
+
+        lstCost.add(new CostClassificationDto(1, "COSTO", "pi pi-sync"));
+        lstCost.add(new CostClassificationDto(2, "GASTO", "pi pi-wallet"));
+        
+        lstMeses = new ArrayList();
+        lstMeses.add(new MesDto(1, "Enero"));
+        lstMeses.add(new MesDto(2, "Febrero"));
+        lstMeses.add(new MesDto(3, "Marzo"));
+        lstMeses.add(new MesDto(4, "Abril"));
+        lstMeses.add(new MesDto(5, "Mayo"));
+        lstMeses.add(new MesDto(6, "Junio"));
+        lstMeses.add(new MesDto(7, "Julio"));
+        lstMeses.add(new MesDto(8, "Agosto"));
+        lstMeses.add(new MesDto(9, "Septiembre"));
+        lstMeses.add(new MesDto(10, "Octubre"));
+        lstMeses.add(new MesDto(11, "Noviembre"));
+        lstMeses.add(new MesDto(12, "Diciembre"));
+        
+        lstAnios = new ArrayList();
+        int currentYear = LocalDate.now().getYear();
+        lstAnios.add(new AnioDto(currentYear, String.valueOf(currentYear)));
+        lstAnios.add(new AnioDto(currentYear - 1, String.valueOf(currentYear - 1)));
+    }
 
     public ResponseRestApi<ApiMhDteResponse> save(String json, LocalDate buyDate, JwtDto token) {
 

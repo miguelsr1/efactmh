@@ -31,7 +31,10 @@
                         <p:menuitem value="Anulaciones" icon="pi pi-ban" outcome="/app/process/invalidate/invalidate" process="@this" rendered="false"/>
                         <p:menuitem value="Ingreso de compras" icon="pi pi-shopping-bag"
                                     rendered="#{sessionView.emisorRol}"
-                                    process="@this" outcome="/app/process/shopping/index"/>
+                                    process="@this" outcome="/app/process/shopping/buy"/>
+                        <p:menuitem value="Reporte de Ventas" icon="pi pi-file-excel"
+                                    rendered="#{sessionView.emisorRol}"
+                                    process="@this" outcome="/app/process/sales/sales"/>
                         <p:menuitem value="Ingreso de compras" icon="pi pi-shopping-bag"
                                     rendered="#{sessionView.contadorRol}"
                                     process="@this" outcome="/app/process/shopping/buyContri"/>

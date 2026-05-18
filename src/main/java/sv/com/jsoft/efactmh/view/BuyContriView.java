@@ -22,6 +22,7 @@ import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -33,6 +34,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,10 +83,12 @@ public class BuyContriView implements Serializable {
     @Inject
     BuyService buyService;
     @Inject
-    private ComprasRepository comprasRepository;
+    ComprasRepository comprasRepository;
 
-    public BuyContriView() {
+    @PostConstruct
+    public void init(){
         idTipoDocumento = 13;
+        lstBuys = new ArrayList<>();
     }
 
     private Gson gson = new GsonBuilder()
@@ -160,6 +164,7 @@ public class BuyContriView implements Serializable {
     }
 
     private void loadBuys() {
+        lstBuys.clear();
         lstBuys = buyService.getListContri(fecha, idTipoDocumento, numeroDocumento, securityService.getToken());
     }
 

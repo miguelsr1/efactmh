@@ -9,19 +9,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="muchas mejoras">
+      <change afterPath="$PROJECT_DIR$/compras.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/AnioDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/CostClassificationDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/MesDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/SalesRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SaleView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/app/process/sales/sales.xhtml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/app/process/shopping/buy.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/primefaces/paradise/component/ParadiseMenuRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/primefaces/paradise/component/ParadiseMenuRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ComprasRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ComprasRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/BuyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/BuyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/servlet/JasperReportServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/servlet/JasperReportServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/CantidadALetras.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/CantidadALetras.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/template.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/template.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/lstDtes.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/lstDtes.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-pdf.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/dialog/dlg-pdf.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-det-payment.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-det-payment.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyContriView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyContriView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/config.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/config.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/menu.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/menu.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/shopping/buyContri.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/shopping/buyContri.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/shopping/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/shopping/index.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,13 +52,14 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="jsf_jakarta_8" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="feature/neon-db" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -82,46 +96,64 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor&quot;: &quot;Run&quot;,
-    &quot;JBoss/WildFly Server.WildFly 24.executor&quot;: &quot;Run&quot;,
-    &quot;JBoss/WildFly Server.WildFly 26.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.google.cloudcode.ide_session_index&quot;: &quot;20260401_0001&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/dui-null-sin-datos&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/msanchez/Documents/PERSONAL/JAVA/efactmh/src/main/webapp/app/process/invoce/fragmento&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.3505747&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor": "Run",
+    "JBoss/WildFly Server.WildFly 24.executor": "Run",
+    "JBoss/WildFly Server.WildFly 26.executor": "Run",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.google.cloudcode.ide_session_index": "20260401_0001",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "feature/dui-null-sin-datos",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/msanchez/Documents/PERSONAL/JAVA/efactmh",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.3505747",
+    "settings.editor.selected.configurable": "configurable.group.tools",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh" />
+      <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\src\main\webapp\app\process\report" />
+      <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\src\main\webapp\app\process\shopping" />
       <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\src\main\webapp\app\process\invoce\fragmento" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\src\main\webapp\resources\images" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="sv.com.jsoft.efactmh.view" />
+    </key>
   </component>
   <component name="RunDashboard">
+    <option name="hiddenConfigurations">
+      <map>
+        <entry key="JBossConfiguration">
+          <value>
+            <set>
+              <option value="WildFly 24" />
+            </set>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="configurationStatuses">
       <map>
         <entry key="JBossConfiguration">
@@ -227,7 +259,7 @@
       </server-settings>
       <predefined_log_file enabled="true" id="JBoss" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="50982" />
+        <option name="DEBUG_PORT" value="50983" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -437,11 +469,45 @@
       <workItem from="1778213884599" duration="6814000" />
       <workItem from="1778256352513" duration="9314000" />
       <workItem from="1778431904329" duration="375000" />
+      <workItem from="1778434313289" duration="7933000" />
+      <workItem from="1778475471252" duration="2562000" />
+      <workItem from="1778481650510" duration="659000" />
+      <workItem from="1778529131946" duration="3087000" />
+      <workItem from="1778549574598" duration="4098000" />
+      <workItem from="1778615187942" duration="3499000" />
+      <workItem from="1778625393391" duration="4266000" />
+      <workItem from="1778644202396" duration="3820000" />
+      <workItem from="1778682545866" duration="11745000" />
+      <workItem from="1778697598866" duration="3449000" />
+      <workItem from="1778731909134" duration="1650000" />
+      <workItem from="1778772251137" duration="6757000" />
+      <workItem from="1778854835929" duration="17858000" />
+      <workItem from="1778907311094" duration="4697000" />
     </task>
+    <task id="LOCAL-00001" summary="muchas mejoras">
+      <option name="closed" value="true" />
+      <created>1778697317817</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1778697317817</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:junit:junit" />
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.enterprise:jakarta.enterprise.cdi-api" />
+    <option featureType="dependencySupport" implementationName="java:org.omnifaces:omnifaces" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
+    <option featureType="dependencySupport" implementationName="java:org.jdbi:jdbi3-core" />
+    <option featureType="dependencySupport" implementationName="maven-packaging:war" />
+    <option featureType="dependencySupport" implementationName="java:org.primefaces:primefaces" />
+    <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -454,13 +520,38 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="previo a implementar registro de cliente en factura" />
+    <MESSAGE value="muchas mejoras" />
+    <option name="LAST_COMMIT_MESSAGE" value="muchas mejoras" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java</url>
-          <line>598</line>
+          <line>595</line>
           <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DashboardView.java</url>
+          <line>220</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DashboardView.java</url>
+          <line>249</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ComprasRepository.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyView.java</url>
+          <line>130</line>
+          <option name="timeStamp" value="39" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

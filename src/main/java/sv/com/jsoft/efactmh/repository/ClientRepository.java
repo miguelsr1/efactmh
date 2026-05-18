@@ -1,5 +1,6 @@
 package sv.com.jsoft.efactmh.repository;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -20,14 +21,12 @@ import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
  */
 @Stateless
 @Slf4j
-public class ClientRepository {
+public class ClientRepository implements Serializable {
 
     Jdbi jdbi;
 
     @Inject
-    private DataSourceApp dsApp;
-    @Inject
-    private DataBaseSupport databaseSupport;
+    DataBaseSupport databaseSupport;
 
     private ClientDao clientDao;
 
@@ -46,14 +45,12 @@ public class ClientRepository {
         try (Handle handle = jdbi.open()) {
             handle.registerRowMapper(ConstructorMapper.factory(ClienteResponse.class));
 
-            List<ClienteResponse> lst = handle
+            return handle
                     .createQuery(NativeQuery.FIND_CLIENT_AUTOCOMPLETE)
                     .bind("query", "%" + query + "%")
                     .bind("correo", correo)
                     .mapTo(ClienteResponse.class)
                     .list();
-
-            return lst;
         } catch (Exception e) {
             log.error("SIN COINCIDENCIAS", e);
             return List.of();
