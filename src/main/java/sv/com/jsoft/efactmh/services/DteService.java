@@ -15,9 +15,10 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import java.io.Serializable;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,7 +39,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  */
 @ApplicationScoped
 @Slf4j
-public class DteService {
+public class DteService implements Serializable {
 
     private final static ResourceBundle VARIABLES = ResourceBundle.getBundle("variables");
 

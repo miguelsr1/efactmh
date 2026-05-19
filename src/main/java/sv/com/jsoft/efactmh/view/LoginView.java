@@ -1,14 +1,14 @@
 package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotEmpty;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import sv.com.jsoft.efactmh.model.dto.LoginDto;
@@ -26,12 +26,8 @@ import sv.com.jsoft.efactmh.util.MessageUtil;
 @RequestScoped
 public class LoginView implements Serializable {
 
-    @Getter
-    @Setter
     @NotEmpty
     private String usuario;
-    @Getter
-    @Setter
     @NotEmpty
     private String claveAcceso;
 
@@ -39,6 +35,22 @@ public class LoginView implements Serializable {
     LoginServices loginServices;
     @Inject
     SessionService securityService;
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getClaveAcceso() {
+        return claveAcceso;
+    }
+
+    public void setClaveAcceso(String claveAcceso) {
+        this.claveAcceso = claveAcceso;
+    }
 
     public String validarProveedor() {
         return validarLogin("app/index");
@@ -89,4 +101,6 @@ public class LoginView implements Serializable {
         httpSession.setAttribute("clientUserAgent", request.getHeader("User-Agent"));
         httpSession.setAttribute("loggedIn", true);
     }
+
+
 }

@@ -1,7 +1,7 @@
 package sv.com.jsoft.efactmh.model.enums;
 
 import java.util.Arrays;
-import javax.faces.application.FacesMessage;
+import jakarta.faces.application.FacesMessage;
 
 /**
  *

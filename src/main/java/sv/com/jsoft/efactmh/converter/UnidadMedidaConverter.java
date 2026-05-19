@@ -1,10 +1,10 @@
 package sv.com.jsoft.efactmh.converter;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.FacesConverter;
-import javax.faces.convert.Converter;
-import javax.inject.Inject;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.convert.FacesConverter;
+import jakarta.faces.convert.Converter;
+import jakarta.inject.Inject;
 import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.view.ProductoView;
@@ -24,8 +24,8 @@ public class UnidadMedidaConverter implements Converter {
         if (value == null || value.length() == 0) {
             return new TipoUnidadMedida();
         }
-        ProductoView controller = (ProductoView) fc.getApplication().getELResolver().
-                getValue(fc.getELContext(), null, "productoView");
+        /*ProductoView controller = (ProductoView) fc.getApplication().getELResolver().
+                getValue(fc.getELContext(), null, "productoView");*/
         return null;
     }
 

@@ -15,7 +15,7 @@
  */
 package org.primefaces.paradise.filter;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
 import java.io.IOException;
 
 public class CharacterEncodingFilter implements Filter {

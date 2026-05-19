@@ -5,19 +5,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import com.google.gson.Gson;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.omnifaces.cdi.Push;
-import org.omnifaces.cdi.PushContext;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DialogFrameworkOptions;
@@ -148,10 +144,6 @@ public class InvoceView implements Serializable {
     InvoceService invoceService;
     @Inject
     ClientRepository clientRepository;
-
-    @Inject
-    @Push(channel = "chatChannel")
-    private PushContext push;
 
     private Long idFac;
 
@@ -698,13 +690,6 @@ public class InvoceView implements Serializable {
     }
 
     private void addProgressAvance() throws InterruptedException {
-        push.send("" + var);
-        var++;
-        if (advance < 60) {
-            advance += 30;
-        } else {
-            advance = 100;
-        }
         Thread.sleep(1000);
     }
 

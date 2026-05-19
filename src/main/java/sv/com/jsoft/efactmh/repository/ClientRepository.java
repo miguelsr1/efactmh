@@ -2,16 +2,15 @@ package sv.com.jsoft.efactmh.repository;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.mapper.reflect.ConstructorMapper;
 import sv.com.jsoft.efactmh.dao.ClientDao;
 import sv.com.jsoft.efactmh.db.DataBaseSupport;
-import sv.com.jsoft.efactmh.db.DataSourceApp;
 import sv.com.jsoft.efactmh.db.util.NativeQuery;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
 
@@ -19,7 +18,7 @@ import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
  *
  * @author msanchez
  */
-@Stateless
+@ApplicationScoped
 @Slf4j
 public class ClientRepository implements Serializable {
 

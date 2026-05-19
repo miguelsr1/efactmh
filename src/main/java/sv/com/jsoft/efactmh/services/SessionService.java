@@ -7,12 +7,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.Emisor;
@@ -48,8 +47,6 @@ public class SessionService implements Serializable {
     private List<CatalogoDto> lstEstablecimiento;
 
     @Inject
-    CatalogoService catalogoService;
-    @Inject
     EmisorService emisorService;
     @Inject
     ClientRepository clientRepository;
@@ -64,7 +61,6 @@ public class SessionService implements Serializable {
 
             if(rolUsuario.equals("ROLE_EMISOR")) {
                 cargarParametrosMh();
-                loadEstablecimiento();
                 loadEmisor();
             }
         }
@@ -106,13 +102,8 @@ public class SessionService implements Serializable {
         }
     }
 
-    private void loadEstablecimiento() {
-        lstEstablecimiento = catalogoService.getLstEstablecimiento(token);
-    }
-
-
-    public List<CatalogoDto> getLstPuntoVenta(Long idEstablecimiento) {
-        return catalogoService.getLstPuntoVentaByEstablecimiento(token, idEstablecimiento);
+    public void loadEstablecimiento(List<CatalogoDto> lst) {
+        lstEstablecimiento = lst;
     }
 
     private void cargarParametrosMh() {

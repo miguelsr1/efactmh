@@ -2,10 +2,11 @@ package sv.com.jsoft.efactmh.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
@@ -18,7 +19,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  */
 @Named
 @ApplicationScoped
-public class UbicacionService {
+public class UbicacionService implements Serializable {
 
     @Getter
     List<CatalogoDto> lstDepartamento;

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:o="http://omnifaces.org/ui"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces"
       lang="en">
 
 <h:head>
@@ -30,7 +29,7 @@
 <h:body styleClass="#{guestPreferences.inputStyleClass}">
 
     <f:metadata>
-        <o:enableRestorableView/>
+        <!--o:enableRestorableView/-->
     </f:metadata>
 
     <h:form>
@@ -56,7 +55,7 @@
                 <ui:insert name="content"/>
                 <!--ui:include src="#{sessionView.opcion}" id="workspace"/-->
 
-                <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException"
+                <p:ajaxExceptionHandler type="jakarta.faces.application.ViewExpiredException"
                                         update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();"/>
 
                 <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px">

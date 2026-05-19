@@ -7,10 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.Producto;
@@ -56,23 +56,31 @@ public class CatalogoService implements Serializable {
         loadTipoDocumentosId();
         loadItems();
         loadDtes();
+
+        loadEstablecimiento();
     }
-    
-    private void loadDtes(){
+
+    private void loadDtes() {
         dtes = new HashMap<>();
         dtes.put("01", "FACTURA ELECTRONICA");
         dtes.put("03", "CCF");
-        
+
         dtes.put("04", "NR");
         dtes.put("05", "NC");
         dtes.put("06", "ND");
-        
+
         dtes.put("14", "FSX");
-        
+
         dtes.put("99", "ANU");
     }
-    
-    public void loadItems(){
+
+    private void loadEstablecimiento() {
+        if (securityService.getRolUsuario().equals("ROLE_EMISOR")) {
+            securityService.loadEstablecimiento(getLstEstablecimiento(securityService.getToken()));
+        }
+    }
+
+    public void loadItems() {
         lstProducto = productoService.findAll(securityService.getToken());
     }
 
@@ -149,18 +157,18 @@ public class CatalogoService implements Serializable {
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGetAllAuth();
-        
+
         return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 
-    public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(JwtDto token, Long idEstablecimiento) {
+    public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(Long idEstablecimiento) {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/punto-venta/" + idEstablecimiento)
                 .clazz(CatalogoDto.class)
                 .jwtDto(securityService.getToken())
                 .build()
                 .callGetAllAuth();
-        
+
         return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 }

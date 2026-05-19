@@ -2,8 +2,9 @@ package sv.com.jsoft.efactmh.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -14,7 +15,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  * @author migue
  */
 @ApplicationScoped
-public class ProductoService {
+public class ProductoService implements Serializable {
 
 
     @PostConstruct

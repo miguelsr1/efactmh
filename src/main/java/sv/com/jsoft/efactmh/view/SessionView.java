@@ -5,15 +5,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +24,7 @@ import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
+import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.SessionService;
 
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
@@ -41,6 +42,8 @@ public class SessionView implements Serializable {
 
     @Inject
     SessionService sessionService;
+    @Inject
+    CatalogoService catalogoService;
 
     private String idEstablecimiento;
     private String idPuntoVenta;
@@ -211,7 +214,7 @@ public class SessionView implements Serializable {
         if (idEstablecimiento == null) {
             return new ArrayList<>();
         }
-        return sessionService.getLstPuntoVenta(Long.valueOf(idEstablecimiento));
+        return catalogoService.getLstPuntoVentaByEstablecimiento(Long.valueOf(idEstablecimiento));
     }
 
     public boolean isEmisorRol() {
