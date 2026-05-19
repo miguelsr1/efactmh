@@ -16,4 +16,5 @@ public class BuyDtoResponse {
     private String nombre;
     private BigDecimal monto;
     private Timestamp fechacrea;
+    private int tipoCompra;
 }

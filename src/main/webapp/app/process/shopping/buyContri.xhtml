@@ -120,7 +120,11 @@
                             <f:convertDateTime pattern="yyyy-MM-dd"/>
                         </p:outputLabel>
                     </p:column>
-
+                    <p:column headerText="Tipo compra">
+                        <p:outputLabel value="#{buy.tipoCompra eq 1 ? 'COSTO' : 'GASTO'}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
+                        </p:outputLabel>
+                    </p:column>
                 </p:dataTable>
             </div>
 

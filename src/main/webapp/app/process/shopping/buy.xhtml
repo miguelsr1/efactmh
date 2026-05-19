@@ -106,13 +106,13 @@
                                 <div class="flex flex-column md:flex-row justify-content-between align-items-center">
                                     <h5 class="m-0"><i class="pi pi-list mr-2"></i>Archivos Cargados</h5>
                                     <span class="p-input-icon-left mt-2 md:mt-0">
-                                        <i class="pi pi-search" />
+                                        <i class="pi pi-search mr-2"  />
                                         <p:inputText id="globalFilter" onkeyup="PF('tblPro').filter()" placeholder="Buscar documento..." style="width: 300px;"/>
                                     </span>
                                 </div>
                             </f:facet>
 
-                            <p:column headerText="Cód. Generación" filterBy="#{buy.codigoGeneracion}" filterMatchMode="contains">
+                            <p:column headerText="Cód. Generación" filterBy="#{buy.codigoGeneracion}" filterMatchMode="contains" filterStyle="display: none;">
                                 <p:outputLabel value="#{buy.codigoGeneracion}" styleClass="font-bold text-primary"/>
                             </p:column>
 
@@ -124,7 +124,7 @@
                                 <p:outputLabel value="#{buy.nit}"/>
                             </p:column>
 
-                            <p:column headerText="Nombre Emisor" filterBy="#{buy.nombre}" filterMatchMode="contains">
+                            <p:column headerText="Nombre Emisor" filterBy="#{buy.nombre}" filterMatchMode="contains" filterStyle="display: none;">
                                 <p:outputLabel value="#{buy.nombre}"/>
                             </p:column>
 
@@ -138,6 +138,12 @@
                                 <p:outputLabel value="#{buy.fechacrea}">
                                     <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
                                 </p:outputLabel>
+                            </p:column>
+
+                            <p:column headerText="Tipo compra" style="text-align: center;">
+                                <p:tag value="#{buy.tipoCompra eq 1 ? 'COSTO' : 'GASTO'}"
+                                       severity="#{buy.tipoCompra eq 1 ? '' : 'warning'}"
+                                       rounded="true" />
                             </p:column>
 
                             <p:column headerText="Estado" style="text-align: center;">
@@ -160,7 +166,7 @@
                       responsive="true" width="450" closable="true" draggable="false" maximizable="false" minimizable="false">
                 <div class="grid">
                     <div class="col-12 md:col-12" jsf:id="dvDetailBuy">
-                        <div class="text-center mb-4">
+                        <div class="text-center mb-7">
                             <i class="pi pi-file text-blue-500" style="font-size: 3rem"></i>
                             <h5 class="mt-3">Resumen de Compra</h5>
                         </div>
