@@ -6,166 +6,212 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Compras</ui:define>
+    <ui:define name="title">Compras por Contribuyente</ui:define>
     <ui:define name="head">
         <h:outputScript name="fn.js" library="js"/>
+        <style>
+            .ui-fileupload-content {
+                min-height: 150px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px dashed #d1d5db !important;
+                border-radius: 6px;
+                background-color: #f8fafc;
+                margin-top: 10px;
+                padding: 2rem !important;
+            }
+            .ui-fileupload-content.ui-state-drag {
+                background-color: #e0e7ff;
+                border-color: #6366f1 !important;
+            }
+            .ui-fileupload-buttonbar {
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        </style>
     </ui:define>
 
-    <ui:define name="content">   
-        <h:form prependId="false">
-            <div class="grid dashboard ">
-                <div class="col-12">
-                    <p:messages showDetail="true" showSummary="false" closable="true">
-                        <p:autoUpdate />
-                    </p:messages>
-                    <div class="card">
-                        <h5>Listado de COMPRAS</h5>
-                        <div class="grid">
-                            <div class="col-12 md:col-12" jsf:id="dvDatos">
-                                <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out">
-                                    <div class="field col-12 md:col-3" >
-                                        <p:outputLabel for="cboTipoDoc" value="Tipo de Documento"/>
-                                        <p:selectOneMenu id="cboTipoDoc" value="#{buyContriView.idTipoDocumento}" class="w-full">
-                                            <f:selectItem itemLabel="DUI" itemValue="13"/>
-                                            <f:selectItem itemLabel="NIT" itemValue="36"/>
-                                            <p:ajax update="lblNumDoc,txtNumDoc"/>
-                                        </p:selectOneMenu>
-                                    </div>
-                                    <div class="field col-12 md:col-3" >
-                                        <p:outputLabel id="lblNumDoc" for="txtNumDoc"
-                                                       value="Número de Documento (max. #{buyContriView.maxNumDoc} caracteres)"/>
-                                        <p:inputText id="txtNumDoc" value="#{buyContriView.numeroDocumento}"
-                                                     maxlength="#{buyContriView.maxNumDoc}"
-                                                     required="true" class="w-full"/>
-                                    </div>
-                                    <div class="field col-12" >
-                                        <p:outputLabel for="month" value="Año Fiscal" class="mr-2"/> <br/>
-                                        <p:datePicker id="month" view="month" pattern="MM/yyyy"
-                                                      value="#{buyContriView.buyDate}" required="true"
-                                                      requiredMessage="ES REQUERIDO MES Y AÑO DE LA COMPRA"
-                                                      yearNavigator="true" style="width: 10rem"
-                                                      yearRange="2025:2027">
-                                            <p:ajax event="dateSelect" listener="#{buyContriView.onDateSelect}" update="tblPro dvDatos btnCsv" process="@this,cboTipoDoc,txtNumDoc,month" />
-                                        </p:datePicker>
-                                    </div>
+    <ui:define name="content">
+        <h:form prependId="false" enctype="multipart/form-data">
+            <p:messages id="msg" showDetail="true" showSummary="false" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
 
-                                    <div class="field col-12" >
-                                        <p:outputLabel value="Seleccione el archivo JSON" class="mr-2"/> 
-                                        <p:commandButton icon="pi pi-plus" onclick="onClick('upload_input')" disabled="#{buyContriView.fecha eq null}" />
-                                    </div>
-                                </div>
+            <div class="grid dashboard">
+                <!-- Panel de Configuración (Izquierda) -->
+                <div class="col-12 md:col-4">
+                    <div class="card h-full">
+                        <h5><i class="pi pi-cog mr-2"></i>Configuración de Compra</h5>
+                        <p class="text-secondary mb-4">Seleccione el periodo y el tipo de clasificación antes de cargar los archivos.</p>
+
+                        <div class="formgrid grid ui-fluid">
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="year" value="Año" styleClass="font-bold"/>
+                                <p:selectOneMenu id="year" value="#{buyContriView.currentYear}" required="true">
+                                    <f:selectItems value="#{buyContriView.buyService.lstAnios}" var="anio" itemLabel="#{anio.nombre}" itemValue="#{anio.id}"/>
+                                    <p:ajax listener="#{buyContriView.onMonthSelect}" update="tblPro panelUpload"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="month" value="Mes" styleClass="font-bold"/>
+                                <p:selectOneMenu id="month" value="#{buyContriView.selectedMonth}" required="true" requiredMessage="Debe seleccionar un mes">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{buyContriView.buyService.lstMeses}" var="mes" itemLabel="#{mes.nombre}" itemValue="#{mes.id}"/>
+                                    <p:ajax listener="#{buyContriView.onMonthSelect}" update="tblPro panelUpload"/>
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="cboTipoDoc" value="Tipo de Documento"/>
+                                <p:selectOneMenu id="cboTipoDoc" value="#{buyContriView.idTipoDocumento}" styleClass="w-full">
+                                    <f:selectItem itemLabel="DUI" itemValue="13"/>
+                                    <f:selectItem itemLabel="NIT" itemValue="36"/>
+                                    <p:ajax update="txtNumDoc" listener="#{buyContriView.onMonthSelect}"/>
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="txtNumDoc" value="Número de Documento"/>
+                                <p:inputText id="txtNumDoc" value="#{buyContriView.numeroDocumento}"
+                                             maxlength="#{buyContriView.maxNumDoc}"
+                                             required="true" styleClass="w-full">
+                                     <p:ajax listener="#{buyContriView.onMonthSelect}" update="tblPro panelUpload"/>
+                                </p:inputText>
+                            </div>
+
+                            <div class="field col-12 mt-3">
+                                <p:outputLabel value="Clasificación de la Compra" styleClass="font-bold"/>
+                                <p:selectOneButton id="btnTipoCompra" value="#{buyContriView.idCostClassification}" styleClass="w-full mt-2">
+                                    <f:selectItems value="#{buyContriView.buyService.lstCost}" var="cost" itemLabel="#{cost.name}" itemValue="#{cost.id}"/>
+                                    <p:ajax process="@this" oncomplete="PF('fileUploadWidget').clear();" />
+                                </p:selectOneButton>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <p:panel visible="false">
-                            <p:fileUpload id="upload" value="#{buyContriView.file}" label="" mode="simple" skinSimple="true"
-                                          auto="true" process="@this" update="tblPro"
-                                          listener="#{buyContriView.handleFileUpload}"
-                                          allowTypes="/(\.|\/)(json)$/"/>
-                        </p:panel>
+                <!-- Panel de Carga de Archivos (Derecha) -->
+                <div class="col-12 md:col-8">
+                    <div class="card h-full" jsf:id="panelUpload">
+                        <h5><i class="pi pi-cloud-upload mr-2"></i>Carga de Archivos JSON</h5>
+                        <p class="text-secondary mb-4">Arrastre y suelte sus archivos JSON en el área designada.</p>
 
-                        <div class="field col-12">
-                            <p:commandButton id="btnCsv" value="Descargar CSV" icon="pi pi-file-excel"
-                                             styleClass="ui-button-help" ajax="false"
-                                             disabled="#{buyContriView.fecha eq null}">
-                                <p:fileDownload value="#{buyContriView.fileCsv}" />
-                            </p:commandButton>
-                        </div>
+                        <p:fileUpload widgetVar="fileUploadWidget" id="fileUpload" listener="#{buyContriView.handleFileUpload}" mode="advanced"
+                                      dragDropSupport="true" multiple="true"
+                                      update="msg tblPro" auto="false"
+                                      fileLimit="20"
+                                      allowTypes="/(\.|\/)(json)$/"
+                                      label="Elegir Archivos" uploadLabel="Subir y Procesar" cancelLabel="Cancelar"
+                                      invalidFileMessage="Tipo de archivo inválido. Solo se permiten archivos .json"
+                                      disabled="#{buyContriView.selectedMonth eq null or buyContriView.numeroDocumento eq null}"/>
+                    </div>
+                </div>
+
+                <!-- Panel de Tabla (Inferior) -->
+                <div class="col-12">
+                    <div class="card">
+                        <p:dataTable id="tblPro" widgetVar="tblPro" value="#{buyContriView.lstBuys}" var="buy"
+                                     rowKey="#{buy.codigoGeneracion}"
+                                     emptyMessage="NO SE HAN CARGADO COMPRAS EN ESTE PERIODO"
+                                     paginator="true" paginatorPosition="bottom" rows="10"
+                                     styleClass="ui-datatable-striped ui-datatable-sm mt-2"
+                                     reflow="true" size="small" tableStyle="table-layout: auto;">
+
+                            <f:facet name="header">
+                                <div class="flex flex-column md:flex-row justify-content-between align-items-center">
+                                    <h5 class="m-0"><i class="pi pi-list mr-2"></i>Archivos Cargados</h5>
+                                    <span class="p-input-icon-left mt-2 md:mt-0">
+                                        <i class="pi pi-search mr-2" />
+                                        <p:inputText id="globalFilter" onkeyup="PF('tblPro').filter()" placeholder="Buscar documento..." style="width: 300px;"/>
+                                    </span>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="Cód. Generación" filterBy="#{buy.codigoGeneracion}" filterMatchMode="contains" filterStyle="display: none;">
+                                <p:outputLabel value="#{buy.codigoGeneracion}" styleClass="font-bold text-primary"/>
+                            </p:column>
+
+                            <p:column headerText="Fecha Emisión" sortBy="#{buy.fecha}">
+                                <p:outputLabel value="#{buy.fecha}"/>
+                            </p:column>
+
+                            <p:column headerText="NIT Emisor">
+                                <p:outputLabel value="#{buy.nit}"/>
+                            </p:column>
+
+                            <p:column headerText="Nombre Emisor" filterBy="#{buy.nombre}" filterMatchMode="contains" filterStyle="display: none;">
+                                <p:outputLabel value="#{buy.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Monto" sortBy="#{buy.monto}" style="text-align: right;">
+                                <p:outputLabel value="#{buy.monto}">
+                                    <f:convertNumber pattern="$ #,##0.00"/>
+                                </p:outputLabel>
+                            </p:column>
+
+                            <p:column headerText="Tipo compra" style="text-align: center;">
+                                <p:tag value="#{buy.tipoCompra eq 1 ? 'COSTO' : 'GASTO'}"
+                                       severity="#{buy.tipoCompra eq 1 ? '' : 'warning'}"
+                                       rounded="true" />
+                            </p:column>
+
+                            <p:column headerText="Estado" style="text-align: center;">
+                                <p:tag severity="success" value="PROCESADO" rounded="true" />
+                            </p:column>
+
+                            <p:column headerText="Acciones" style="text-align: center; width: 80px;">
+                                <p:commandButton icon="pi pi-eye" styleClass="rounded-button ui-button-info ui-button-flat"
+                                                 action="#{buyContriView.prepareViewDetail(buy)}" update="dvDetailBuy"
+                                                 title="Ver Detalle" process="@this"/>
+                            </p:column>
+
+                        </p:dataTable>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <p:dataTable id="tblPro" widgetVar="tblPro" value="#{buyContriView.lstBuys}" var="buy"
-                             rowKey="#{buy.codigoGeneracion}"
-                             rowIndexVar="rowId" selectionMode="single"
-                             allowUnsorting="true" sortMode="single"
-                             styleClass="ui-datatable-striped ui-datatable-sm"
-                             reflow="true" size="small" tableStyle="table-layout: auto;"
-                             emptyMessage="NO SE HAN REGISTRADO COMPRAS"
-                             paginator="true" paginatorPosition="bottom" rows="10" >
-
-                    <f:facet name="header">
-                        <div class="flex justify-content-between align-items-center">
-                            <h5><span style="margin-right: 1rem"></span>Listado de Items</h5>
-
-                            <div>                            
-                                <p:inputText id="globalFilter" onkeyup="PF('tblPro').filter()" style="width:20rem"
-                                             placeholder="Buscar por Código o Nombre" />
-                            </div>
-                        </div>
-                    </f:facet>
-
-                    <p:ajax event="rowSelect" update="dvDatos" />
-
-                    <p:column headerText="Código generaciónn" >
-                        <p:outputLabel value="#{buy.codigoGeneracion}"/>
-                    </p:column>
-                    <p:column headerText="Fecha compra" >
-                        <p:outputLabel value="#{buy.fecha}"/>
-                    </p:column>
-                    <p:column headerText="NIT Emisor" >
-                        <p:outputLabel value="#{buy.nit}"/>
-                    </p:column>
-                    <p:column headerText="Nombre Emisor" filterMatchMode="contains" filterBy="#{buy.nombre}" >
-                        <p:outputLabel value="#{buy.nombre}"/>
-                    </p:column>
-                    <p:column headerText="Monto compra" >
-                        <p:outputLabel value="#{buy.monto}">
-                            <f:convertNumber pattern="#,##0.00"/>
-                        </p:outputLabel>
-                    </p:column>
-                    <p:column headerText="Fecha registro" >
-                        <p:outputLabel value="#{buy.fechacrea}">
-                            <f:convertDateTime pattern="yyyy-MM-dd"/>
-                        </p:outputLabel>
-                    </p:column>
-                    <p:column headerText="Tipo compra">
-                        <p:outputLabel value="#{buy.tipoCompra eq 1 ? 'COSTO' : 'GASTO'}">
-                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm"/>
-                        </p:outputLabel>
-                    </p:column>
-                </p:dataTable>
-            </div>
-
-            <p:dialog id="dlgAddBuy" widgetVar="dlgAddBuy" header="Detalle de compra" modal="true" visible="false" responsive="true" 
-                      width="380"
-                      closable="false" draggable="false" maximizable="false" minimizable="false">
+            <!-- Diálogo de Visualización Individual (Solo lectura) -->
+            <p:dialog id="dlgViewBuy" widgetVar="dlgViewBuy" header="Detalle de DTE" modal="true" visible="false"
+                      responsive="true" width="450" closable="true" draggable="false" maximizable="false" minimizable="false">
                 <div class="grid">
                     <div class="col-12 md:col-12" jsf:id="dvDetailBuy">
-                        <div class="formgrid grid ui-fluid overflow-hidden transition-all duration-500 ease-in-out">
-                            <div class="field col-12" >
-                                <p:outputLabel value="Tipo de DTE:" styleClass="mr-2" /><br/>
-                                <p:outputLabel value="#{buyContriView.nombreDte}" style="font-weight: bold" />
+                        <div class="text-center mb-4">
+                            <i class="pi pi-file text-blue-500" style="font-size: 3rem"></i>
+                            <h5 class="mt-3">Resumen de Compra</h5>
+                        </div>
+
+                        <div class="formgrid grid ui-fluid">
+                            <div class="field col-12 border-bottom-1 border-300 pb-2">
+                                <p:outputLabel value="Cód. Generación:" styleClass="text-secondary mr-2"/>
+                                <p:outputLabel value="#{buyContriView.codigoGeneracion}" styleClass="font-bold"/>
                             </div>
-                            <div class="field col-12" >
-                                <p:outputLabel value="Código generación:" styleClass="mr-2" /><br/>
-                                <p:outputLabel value="#{buyContriView.codigoGeneracion}" style="font-weight: bold" />
+                            <div class="field col-12 border-bottom-1 border-300 pb-2">
+                                <p:outputLabel value="Fecha DTE:" styleClass="text-secondary mr-2"/>
+                                <p:outputLabel value="#{buyContriView.fechEmi}" styleClass="font-bold"/>
                             </div>
-                            <div class="field col-12" >
-                                <p:outputLabel value="Fecha compra:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyContriView.fechEmi}" style="font-weight: bold" />
+                            <div class="field col-12 border-bottom-1 border-300 pb-2">
+                                <p:outputLabel value="NIT Emisor:" styleClass="text-secondary mr-2"/>
+                                <p:outputLabel value="#{buyContriView.nitEmisor}" styleClass="font-bold"/>
                             </div>
-                            <div class="field col-12" >
-                                <p:outputLabel value="NIT Emisor:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyContriView.nitEmisor}" style="font-weight: bold" />
+                            <div class="field col-12 border-bottom-1 border-300 pb-2">
+                                <p:outputLabel value="Emisor:" styleClass="text-secondary mr-2"/>
+                                <p:outputLabel value="#{buyContriView.nombreEmisor}" styleClass="font-bold"/>
                             </div>
-                            <div class="field col-12" >
-                                <p:outputLabel value="Nombre Emisor:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyContriView.nombreEmisor}" style="font-weight: bold" />
-                            </div>
-                            <div class="field col-12" >
-                                <p:outputLabel value="Monto de compra:" styleClass="mr-2"/><br/>
-                                <p:outputLabel value="#{buyContriView.monto}" style="font-weight: bold">
-                                    <f:convertNumber pattern="$ #,##0.00" />
+                            <div class="field col-12 pt-2">
+                                <p:outputLabel value="Monto:" styleClass="text-secondary mr-2"/>
+                                <p:outputLabel value="#{buyContriView.monto}" styleClass="font-bold text-xl text-primary">
+                                    <f:convertNumber pattern="$ #,##0.00"/>
                                 </p:outputLabel>
                             </div>
                         </div>
                     </div>
                 </div>
                 <f:facet name="footer">
-                    <p:commandButton value="Cancelar" styleClass="ui-button-flat" onclick="PF('dlgAddBuy').hide();" process="@this"/>
-                    <p:commandButton value="Aceptar" process="@this" action="#{buyContriView.guardarJson()}" update="tblPro"/>
+                    <div class="flex justify-content-end">
+                        <p:commandButton value="Cerrar" icon="pi pi-times" styleClass="ui-button-flat ui-button-secondary"
+                                         onclick="PF('dlgViewBuy').hide();" type="button" />
+                    </div>
                 </f:facet>
             </p:dialog>
         </h:form>

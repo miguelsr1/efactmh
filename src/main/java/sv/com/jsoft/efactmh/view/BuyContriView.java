@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
@@ -18,7 +17,6 @@ import sv.com.jsoft.efactmh.model.dto.BuyDtoResponse;
 import sv.com.jsoft.efactmh.repository.ComprasRepository;
 import sv.com.jsoft.efactmh.services.BuyService;
 import sv.com.jsoft.efactmh.services.SessionService;
-import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 
@@ -37,10 +35,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author msanchez
- */
 @Named
 @ViewScoped
 @Slf4j
@@ -52,16 +46,10 @@ public class BuyContriView implements Serializable {
     @Getter
     @Setter
     private String numeroDocumento;
-    private LocalDate fechaEmi;
 
     @Getter
     @Setter
     private LocalDate buyDate;
-    @Getter
-    @Setter
-    private UploadedFile file;
-    @Getter
-    private String nombreDte;
     @Getter
     private String codigoGeneracion;
     @Getter
@@ -76,132 +64,124 @@ public class BuyContriView implements Serializable {
     private LocalDate fecha;
 
     @Getter
+    @Setter
+    private Integer currentYear;
+    @Getter
+    @Setter
+    private Integer selectedMonth;
+    @Getter
+    @Setter
+    private int idCostClassification;
+
+    @Getter
     private List<BuyDtoResponse> lstBuys;
+    @Getter
+    private List<String> failedFiles;
+
+    private final Gson gson = new GsonBuilder().serializeNulls().create();
 
     @Inject
     SessionService securityService;
     @Inject
+    @Getter
     BuyService buyService;
-    @Inject
-    ComprasRepository comprasRepository;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         idTipoDocumento = 13;
         lstBuys = new ArrayList<>();
+        failedFiles = new ArrayList<>();
+        idCostClassification = 1;
+        currentYear = LocalDate.now().getYear();
     }
-
-    private Gson gson = new GsonBuilder()
-            .serializeNulls()
-            .create();
-    private JsonObject jsonObject;
 
     public void handleFileUpload(FileUploadEvent event) {
-        try {
-            cargarJson(event);
-        } catch (IOException ex) {
-            log.error("OCURRIO UN ERROR CARGANDO EL JSON", ex);
-            JsfUtil.showMessageDialog(FacesMessage.SEVERITY_ERROR, "ERROR", "EL ARCHIVO CARGADO ESTA DAÑADO");
-        }
-    }
-
-    private void cargarJson(FileUploadEvent event) throws IOException {
-        if (!"application/json".equals(event.getFile().getContentType())) {
-            throw new IllegalArgumentException("Solo se permiten archivos JSON");
-        }
-        String json = new String(event.getFile().getInputStream().readAllBytes());
-
-        jsonObject = JsonParser.parseString(json).getAsJsonObject();
-
-        fechEmi = jsonObject.get("identificacion").getAsJsonObject().get("fecEmi").getAsString();
-        fechaEmi = LocalDate.parse(fechEmi);
-
-        if (fechaEmi.getMonth() != fecha.getMonth()
-                || fechaEmi.getYear() != fecha.getYear()) {
-            MessageUtil.builder()
-                    .severity(FacesMessage.SEVERITY_WARN)
-                    .title("ALERTA")
-                    .message("EL DTE INGRESADO NO ES DEL MES Y AÑO SELECCIONADO. FECHA DOCUMENTO: " + fechEmi)
-                    .build()
-                    .showMessage();
-            return;
-        }
-
-        jsonObject.remove("firmaElectronica");
-
-        String codigoDte = jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString();
-        codigoGeneracion = jsonObject.get("identificacion").getAsJsonObject().get("codigoGeneracion").getAsString();
-        nitEmisor = jsonObject.get("emisor").getAsJsonObject().get("nit").getAsString();
-        nombreEmisor = jsonObject.get("emisor").getAsJsonObject().get("nombre").getAsString();
-
-        switch (jsonObject.get("identificacion").getAsJsonObject().get("tipoDte").getAsString()) {
-            case "01":
-                nombreDte = "FACTURA ELECTRONICA";
-                break;
-            case "03":
-                nombreDte = "COMPROBANTE CREDITO FISCAL";
-                monto = new BigDecimal(jsonObject.get("resumen").getAsJsonObject().get("montoTotalOperacion").getAsString());
-                break;
-            case "09":
-                nombreDte = "DOCUMENTO CONTABLE DE LIQUIDACION";
-                monto = new BigDecimal(jsonObject.get("cuerpoDocumento").getAsJsonObject().get("liquidoApagar").getAsString());
-                break;
-            default:
-                throw new AssertionError();
-        }
-
-        PrimeFaces.current().ajax().update("dvDetailBuy");
-        PrimeFaces.current().executeScript("PF('dlgAddBuy').show();");
-
-        log.info("FILE: " + event.getFile().getFileName());
-
-        loadBuys();
-    }
-
-    public void onDateSelect(SelectEvent<LocalDate> event) {
-        fecha = event.getObject();
-        loadBuys();
-    }
-
-    private void loadBuys() {
-        lstBuys.clear();
-        lstBuys = buyService.getListContri(fecha, idTipoDocumento, numeroDocumento, securityService.getToken());
-    }
-
-    public void guardarJson() {
-        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(jsonObject), buyDate, idTipoDocumento, numeroDocumento, securityService.getToken());
-
-        PrimeFaces.current().executeScript("PF('dlgAddBuy').hide();");
-
-        switch (responseSendMh.getCodeHttp()) {
-            case 201:
-                MessageUtil.builder()
+        failedFiles.clear();
+        UploadedFile uploadedFile = event.getFile();
+        if (uploadedFile != null) {
+            try {
+                boolean success = procesarYGuardarJson(uploadedFile);
+                if (success) {
+                    MessageUtil.builder()
                         .severity(FacesMessage.SEVERITY_INFO)
                         .title("INFORMACIÓN")
-                        .message("Compra registrada correctamente")
+                        .message("Archivo " + uploadedFile.getFileName() + " procesado correctamente.")
                         .build()
                         .showMessage();
-                loadBuys();
-
-                break;
-            case 401:
-            case 409:
-                MessageUtil.builder()
+                } else {
+                    String fallo = failedFiles.isEmpty() ? "Error desconocido" : failedFiles.get(0);
+                    MessageUtil.builder()
                         .severity(FacesMessage.SEVERITY_WARN)
                         .title("ALERTA")
-                        .message(responseSendMh.getErrorMessageDto().getErrorMessage())
+                        .message("No se pudo guardar " + uploadedFile.getFileName() + ". " + fallo)
                         .build()
                         .showMessage();
-                break;
-            case 500:
+                }
+            } catch (Exception ex) {
+                log.error("OCURRIO UN ERROR CARGANDO EL JSON: " + uploadedFile.getFileName(), ex);
                 MessageUtil.builder()
                         .severity(FacesMessage.SEVERITY_ERROR)
                         .title("ERROR")
-                        .message("Ocurrio un error interno")
+                        .message("Error interno procesando " + uploadedFile.getFileName())
                         .build()
                         .showMessage();
-                break;
+            }
         }
+        loadBuys();
+    }
+
+    private boolean procesarYGuardarJson(UploadedFile uploadedFile) throws IOException {
+        if (!"application/json".equals(uploadedFile.getContentType())) {
+            failedFiles.add(uploadedFile.getFileName() + " (No es un JSON válido)");
+            return false;
+        }
+        String json = new String(uploadedFile.getInputStream().readAllBytes());
+
+        JsonObject currentJsonObject = JsonParser.parseString(json).getAsJsonObject();
+
+        String currentFechEmi = currentJsonObject.get("identificacion").getAsJsonObject().get("fecEmi").getAsString();
+        LocalDate currentFechaEmi = LocalDate.parse(currentFechEmi);
+
+        if (currentFechaEmi.getMonthValue() != selectedMonth || currentFechaEmi.getYear() != currentYear) {
+            failedFiles.add(uploadedFile.getFileName() + " (Mes/Año incorrecto)");
+            return false;
+        }
+
+        currentJsonObject.remove("firmaElectronica");
+
+        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(currentJsonObject), buyDate, idTipoDocumento, numeroDocumento, securityService.getToken());
+
+        if (responseSendMh.getCodeHttp() == 201) {
+            return true;
+        } else {
+            failedFiles.add(uploadedFile.getFileName() + " (" + (responseSendMh.getErrorMessageDto() != null ? responseSendMh.getErrorMessageDto().getErrorMessage() : "Error API") + ")");
+            return false;
+        }
+    }
+
+    public void onMonthSelect() {
+        if (selectedMonth != null && currentYear != null) {
+            fecha = LocalDate.of(currentYear, selectedMonth, 1);
+            buyDate = fecha;
+            loadBuys();
+        }
+    }
+
+    private void loadBuys() {
+        if (fecha != null && numeroDocumento != null && !numeroDocumento.trim().isEmpty()) {
+            lstBuys = buyService.getListContri(fecha, idTipoDocumento, numeroDocumento, securityService.getToken());
+        } else {
+            lstBuys.clear();
+        }
+    }
+
+    public void prepareViewDetail(BuyDtoResponse buy) {
+        this.codigoGeneracion = buy.getCodigoGeneracion();
+        this.fechEmi = buy.getFecha() != null ? buy.getFecha() : "";
+        this.nitEmisor = buy.getNit();
+        this.nombreEmisor = buy.getNombre();
+        this.monto = buy.getMonto();
+        PrimeFaces.current().executeScript("PF('dlgViewBuy').show();");
     }
 
     public int getMaxNumDoc() {
@@ -210,38 +190,5 @@ public class BuyContriView implements Serializable {
         } else {
             return 14;
         }
-    }
-    
-    public StreamedContent getFileCsv() {
-        if (fecha == null) {
-            MessageUtil.builder()
-                    .severity(FacesMessage.SEVERITY_WARN)
-                    .title("ALERTA")
-                    .message("Debe seleccionar una fecha")
-                    .build()
-                    .showMessage();
-            return null;
-        }
-
-        String csvData = comprasRepository.getCsvCompras(idTipoDocumento, numeroDocumento, fecha.getYear(), fecha.getMonthValue());
-
-        if (csvData == null || csvData.isEmpty()) {
-            MessageUtil.builder()
-                    .severity(FacesMessage.SEVERITY_WARN)
-                    .title("ALERTA")
-                    .message("No se encontraron datos para generar el reporte.")
-                    .build()
-                    .showMessage();
-            return null;
-        }
-
-        InputStream stream = new ByteArrayInputStream(csvData.getBytes());
-        String fileName = String.format("compra-%s.csv", fecha.format(DateTimeFormatter.ofPattern("yyMM")));
-
-        return DefaultStreamedContent.builder()
-                .name(fileName)
-                .contentType("text/csv")
-                .stream(() -> stream)
-                .build();
     }
 }
