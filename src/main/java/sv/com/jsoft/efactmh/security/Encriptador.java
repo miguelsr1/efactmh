@@ -12,15 +12,15 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
  *
  * @author migue
  */
-@ApplicationScoped
+//@ApplicationScoped
 public class Encriptador implements Serializable {
 
     private Map<String, String> parameters = new HashMap<>();
 
-    @Inject
+    //@Inject
     Pbkdf2PasswordHash passwordHash;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         parameters.put("Pbkdf2PasswordHash.Iterations", "3072");
         parameters.put("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA512");

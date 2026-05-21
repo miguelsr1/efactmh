@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import java.io.Serializable;
 import java.util.Base64;
 import java.util.List;
+
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -43,32 +45,40 @@ public class SessionService implements Serializable {
     private Long idContribuyente;
     @Getter
     private JwtDto token;
+    private String jwtData;
     @Getter
     private List<CatalogoDto> lstEstablecimiento;
 
-    @Inject
     EmisorService emisorService;
-    @Inject
     ClientRepository clientRepository;
+    SecurityService securityService;
 
-    public void setToken(JwtDto token) {
-        if (token != null) {
-            this.token = token;
-            String jwtData = new String(Base64.getDecoder().decode(token.getAccessToken().split("\\.")[1]));
-            userName = new Gson().fromJson(jwtData, JsonObject.class).get("name").getAsString();
+    public SessionService() {
+    }
 
-            setRol();
+    @Inject
+    public SessionService(EmisorService emisorService, ClientRepository clientRepository, SecurityService securityService){
+        this.emisorService = emisorService;
+        this.clientRepository = clientRepository;
+        this.securityService = securityService;
+    }
 
-            if(rolUsuario.equals("ROLE_EMISOR")) {
-                cargarParametrosMh();
-                loadEmisor();
-            }
+    @PostConstruct
+    public void init(){
+        jwtData = securityService.getJwt();
+        userName = new Gson().fromJson(jwtData, JsonObject.class).get("name").getAsString();
+
+        setRol();
+
+        if(rolUsuario.equals("ROLE_EMISOR")) {
+            cargarParametrosMh();
+            loadEmisor();
         }
     }
 
     private void setRol() {
         try {
-            String[] chunks = token.getAccessToken().split("\\.");
+            String[] chunks = jwtData.split("\\.");
 
             String payload = new String(Base64.getUrlDecoder().decode(chunks[1]));
 

@@ -22,6 +22,7 @@ import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import org.wildfly.security.http.oidc.OidcPrincipal;
 import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.services.CatalogoService;
@@ -39,6 +40,10 @@ import sv.com.jsoft.efactmh.util.JsfUtil;
 @SessionScoped
 @Slf4j
 public class SessionView implements Serializable {
+
+    @Inject
+    HttpServletRequest request;
+
 
     @Inject
     SessionService sessionService;

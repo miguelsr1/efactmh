@@ -14,6 +14,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <version.wildfly>31.0.0.Final</version.wildfly>
         <version.server.bom>${version.wildfly}</version.server.bom>
+        <version.plugin.wildfly>4.2.1.Final</version.plugin.wildfly>
         <jakartaee-api.version>10.0.0</jakartaee-api.version>
     </properties>
     
@@ -137,6 +138,13 @@
             <artifactId>batik-all</artifactId>
             <version>1.16</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.security</groupId>
+            <artifactId>wildfly-elytron-http-oidc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <repositories>
@@ -154,10 +162,10 @@
             </releases>
         </repository>
     </repositories>
-    
-    <build>
-        <plugins>
 
+    <build>
+        <finalName>efactmh</finalName>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>

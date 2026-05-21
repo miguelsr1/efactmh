@@ -78,7 +78,7 @@ public class LoginView implements Serializable {
                 break;
             case 200:
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", usuario);
-                securityService.setToken(loginServices.getToken(response));
+                //securityService.setToken(loginServices.getToken(response));
                 setIpAddessAndUserAgent();
                 return urlWelcome + "?faces-redirect=true";
             default:

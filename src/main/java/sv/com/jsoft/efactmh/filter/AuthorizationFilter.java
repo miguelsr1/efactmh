@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /*@WebFilter(filterName = "AuthFilter", urlPatterns = "/app/*")*/
 @Slf4j
-public class AuthorizationFilter implements Filter {
+public class AuthorizationFilter /*implements Filter*/ {
 
     private FilterConfig config = null;
     private ServletContext servletContext = null;
@@ -26,7 +26,7 @@ public class AuthorizationFilter implements Filter {
     public AuthorizationFilter() {
     }
 
-    @Override
+    //@Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.config = filterConfig;
         this.servletContext = config.getServletContext();
@@ -44,12 +44,12 @@ public class AuthorizationFilter implements Filter {
         }
     }
 
-    @Override
+    //@Override
     public void destroy() {
-        Filter.super.destroy();
+        //Filter.super.destroy();
     }
 
-    @Override
+    //@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletResponse res = (HttpServletResponse) response;

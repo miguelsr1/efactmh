@@ -8,7 +8,7 @@ import jakarta.security.enterprise.identitystore.DatabaseIdentityStoreDefinition
  *
  * @author hantsy
  */
-@DatabaseIdentityStoreDefinition(
+/*@DatabaseIdentityStoreDefinition(
         dataSourceLookup = "java:/FacturaDS",
         callerQuery = "select password from usuario where correo_electronico = ?",
         //groupsQuery = "select rol from operador where user = ?",
@@ -18,7 +18,7 @@ import jakarta.security.enterprise.identitystore.DatabaseIdentityStoreDefinition
             "Pbkdf2PasswordHash.Iterations=3072",
             "${applicationConfig.dyna}"
         }*/ // just for test / example
-)
+/*)
 @CustomFormAuthenticationMechanismDefinition(
         loginToContinue = @LoginToContinue(
                 loginPage = "/index.xhtml",
@@ -26,7 +26,7 @@ import jakarta.security.enterprise.identitystore.DatabaseIdentityStoreDefinition
                 useForwardToLogin = false,
                 useForwardToLoginExpression = ""
         )
-)
+)*/
 @Deprecated
 public class ApplicationConfig {
 

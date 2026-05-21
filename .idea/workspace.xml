@@ -10,8 +10,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="se migra a jakarta faces 4">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SecurityService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/oidc.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jboss-web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jboss-web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/AuthorizationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/AuthorizationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/SecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/SecurityFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/Encriptador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/Encriptador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/LoginView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jboss-web.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/access.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/access.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/home.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/home.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,15 +42,15 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="jsf_jakarta_8" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="feature/mejoras-en-compras" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -79,7 +93,7 @@
     &quot;JBoss/WildFly Server.WildFly 24.executor&quot;: &quot;Run&quot;,
     &quot;JBoss/WildFly Server.WildFly 26.executor&quot;: &quot;Run&quot;,
     &quot;JBoss/WildFly Server.WildFly 31.0.1.executor&quot;: &quot;Run&quot;,
-    &quot;JBoss/WildFly Server.WildFly 39.0.3.executor&quot;: &quot;Run&quot;,
+    &quot;JBoss/WildFly Server.WildFly 39.0.3.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
@@ -128,6 +142,8 @@
           <value>
             <set>
               <option value="WildFly 24" />
+              <option value="WildFly 26" />
+              <option value="WildFly 39.0.3" />
             </set>
           </value>
         </entry>
@@ -138,17 +154,14 @@
         <entry key="JBossConfiguration">
           <value>
             <map>
-              <entry key="WildFly 24" value="STOPPED" />
-              <entry key="WildFly 26" value="STOPPED" />
               <entry key="WildFly 31.0.1" value="STOPPED" />
-              <entry key="WildFly 39.0.3" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="JBoss/WildFly Server.WildFly 31.0.1">
+  <component name="RunManager" selected="JBoss/WildFly Server.WildFly 39.0.3">
     <configuration default="true" type="JBossConfiguration" factoryName="Local" ALTERNATIVE_JRE_ENABLED="false">
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment />
@@ -623,7 +636,7 @@
       </server-settings>
       <predefined_log_file enabled="true" id="JBoss" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="53633" />
+        <option name="DEBUG_PORT" value="53700" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -859,6 +872,11 @@
       <workItem from="1779145018994" duration="71000" />
       <workItem from="1779148000585" duration="1030000" />
       <workItem from="1779156393531" duration="4745000" />
+      <workItem from="1779308389991" duration="11368000" />
+      <workItem from="1779334527365" duration="4288000" />
+      <workItem from="1779391012408" duration="4826000" />
+      <workItem from="1779397595474" duration="185000" />
+      <workItem from="1779397909131" duration="4999000" />
     </task>
     <task id="LOCAL-00001" summary="muchas mejoras">
       <option name="closed" value="true" />
@@ -954,6 +972,16 @@
           <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/CatalogoService.java</url>
           <line>51</line>
           <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/Encriptador.java</url>
+          <line>14</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java</url>
+          <line>67</line>
+          <option name="timeStamp" value="57" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

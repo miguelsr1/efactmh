@@ -12,9 +12,7 @@
             <secure>true</secure>
         </cookie-config>
     </session-config>
-    <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
-    </welcome-file-list>
+
     <context-param>
         <param-name>jakarta.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
@@ -48,14 +46,40 @@
         <param-value>true</param-value>
     </context-param>
 
-    <!--filter>
-        <filter-name>AuthFilter</filter-name>
-        <filter-class>sv.com.jsoft.efactmh.filter.AuthorizationFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AuthFilter</filter-name>
-        <url-pattern>/app/*</url-pattern>
-    </filter-mapping-->
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+
+    <!-- Rutas protegidas -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Area protegida</web-resource-name>
+            <url-pattern>/app/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>**</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- Recursos públicos (no requieren login) -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Recursos públicos</web-resource-name>
+            <url-pattern>/jakarta.faces.resource/*</url-pattern>
+            <url-pattern>/resources/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+
+    <security-role>
+        <description>EMISOR DE DTE</description>
+        <role-name>ROL_EMISOR</role-name>
+    </security-role>
+
+    <login-config>
+        <!-- OIDC con Elytron, NO usar FORM ni BASIC -->
+        <auth-method>OIDC</auth-method>
+    </login-config>
+
 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -81,10 +105,10 @@
         <location>/index.xhtml</location>
     </error-page>
 
-    <error-page>
+    <!--error-page>
         <error-code>403</error-code>
         <location>/access.xhtml</location>
-    </error-page>
+    </error-page-->
 
     <mime-mapping>
         <extension>ttf</extension>
