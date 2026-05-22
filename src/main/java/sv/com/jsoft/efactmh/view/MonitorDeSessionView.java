@@ -1,10 +1,10 @@
 package sv.com.jsoft.efactmh.view;
 
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import javax.servlet.http.HttpSession;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpSession;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 
 /**

@@ -9,29 +9,24 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.BuyDtoResponse;
-import sv.com.jsoft.efactmh.repository.ComprasRepository;
 import sv.com.jsoft.efactmh.services.BuyService;
 import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.ByteArrayInputStream;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 

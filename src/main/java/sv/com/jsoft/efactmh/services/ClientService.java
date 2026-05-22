@@ -1,8 +1,8 @@
 package sv.com.jsoft.efactmh.services;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.PerNaturalRequest;
 import sv.com.jsoft.efactmh.model.Personeria;

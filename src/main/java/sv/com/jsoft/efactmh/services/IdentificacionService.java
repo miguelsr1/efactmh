@@ -3,7 +3,7 @@ package sv.com.jsoft.efactmh.services;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.json.simple.JSONObject;
 
 /**

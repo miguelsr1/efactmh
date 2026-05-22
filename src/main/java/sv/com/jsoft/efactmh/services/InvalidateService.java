@@ -2,7 +2,7 @@ package sv.com.jsoft.efactmh.services;
 
 import java.text.MessageFormat;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;

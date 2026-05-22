@@ -14,11 +14,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,11 +34,9 @@ import org.primefaces.model.file.UploadedFiles;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.BuyDtoResponse;
 import sv.com.jsoft.efactmh.model.dto.CostClassificationDto;
-import sv.com.jsoft.efactmh.repository.ClientRepository;
 import sv.com.jsoft.efactmh.repository.ComprasRepository;
 import sv.com.jsoft.efactmh.services.BuyService;
 import sv.com.jsoft.efactmh.services.SessionService;
-import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 

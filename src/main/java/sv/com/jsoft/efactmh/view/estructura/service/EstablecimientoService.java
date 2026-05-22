@@ -2,7 +2,7 @@ package sv.com.jsoft.efactmh.view.estructura.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.PuntoVentaDto;

@@ -1,7 +1,7 @@
 package sv.com.jsoft.efactmh.services;
 
 import com.google.gson.FieldNamingPolicy;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.LoginDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;

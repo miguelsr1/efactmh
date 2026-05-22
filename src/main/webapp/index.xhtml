@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="primefaces"
+      xmlns:jsf="jakarta.faces">
 
     <h:head>
         <f:facet name="first">
@@ -55,7 +55,7 @@
             </div>
 
 
-            <p:ajaxExceptionHandler type="javax.faces.application.ViewExpiredException" update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
+            <p:ajaxExceptionHandler type="jakarta.faces.application.ViewExpiredException" update="viewExpiredDialog" onexception="PF('viewExpiredDialog').show();" />
 
             <p:dialog id="viewExpiredDialog" header="Session expired" widgetVar="viewExpiredDialog" height="500px" onShow="document.location.href = document.location.href;">
                 <h3>Reloading page</h3>

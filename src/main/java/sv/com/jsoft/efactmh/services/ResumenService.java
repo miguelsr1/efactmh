@@ -3,7 +3,7 @@ package sv.com.jsoft.efactmh.services;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import sv.com.jsoft.efactmh.model.DetallePago;

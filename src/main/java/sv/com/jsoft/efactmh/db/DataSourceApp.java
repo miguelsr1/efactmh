@@ -1,7 +1,7 @@
 package sv.com.jsoft.efactmh.db;
 
-import javax.annotation.Resource;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.annotation.Resource;
+import jakarta.enterprise.context.ApplicationScoped;
 import javax.sql.DataSource;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

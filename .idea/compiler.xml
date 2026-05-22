@@ -13,7 +13,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="efactmh" options="-endorseddirs C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh\target/endorsed" />
+      <module name="efactmh" options="" />
     </option>
   </component>
 </project>

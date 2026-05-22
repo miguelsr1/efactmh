@@ -1,0 +1,9 @@
+{
+  "client-id": "efactmh_id",
+  "provider-url": "https://kc.efacturame.cloud/realms/efactura-realm",
+  "ssl-required": "none",
+  "public-client": false,
+  "credentials": {
+    "secret": "d7BY2VFZEKGdvI3zWknJhU9UawELc1tm"
+  }
+}

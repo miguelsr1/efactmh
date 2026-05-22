@@ -1,7 +1,7 @@
 package sv.com.jsoft.efactmh.services;
 
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import sv.com.jsoft.efactmh.model.dto.BalanceDto;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;

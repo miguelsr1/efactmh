@@ -15,11 +15,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import lombok.Getter;
 import software.xdev.chartjs.model.charts.BarChart;
 import software.xdev.chartjs.model.charts.DoughnutChart;
@@ -328,7 +328,7 @@ public class DashboardView implements Serializable {
     }
 
     public Collection<String> obtenerNombresUltimos7Dias() {
-        Locale locale = new Locale("es", "ES"); // Cambia a "en" para inglés
+        Locale locale = Locale.of("es", "ES"); // Cambia a "en" para inglés
         LocalDate hoy = LocalDate.now();
 
         return IntStream.rangeClosed(0, 6)

@@ -1,6 +1,6 @@
 package sv.com.jsoft.efactmh.services;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;

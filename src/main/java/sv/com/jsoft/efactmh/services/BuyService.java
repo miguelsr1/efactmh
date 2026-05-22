@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.dto.*;

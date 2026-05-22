@@ -1,10 +1,10 @@
 package sv.com.jsoft.efactmh.converter;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.FacesConverter;
-import javax.faces.convert.Converter;
-import javax.inject.Inject;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.convert.FacesConverter;
+import jakarta.faces.convert.Converter;
+import jakarta.inject.Inject;
 import sv.com.jsoft.efactmh.model.TipoUnidadMedida;
 import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.view.ProductoView;

@@ -1,11 +1,11 @@
 package sv.com.jsoft.efactmh.filter;
 
-import javax.faces.application.ViewExpiredException;
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.faces.application.ViewExpiredException;
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class AuthorizationFilter implements Filter {
                     chain.doFilter(request, response);
                 } else if (uri.indexOf("/updatePassword.xhtml") > 0) {
                     chain.doFilter(request, response);
-                } else if (uri.indexOf("javax.faces.resource") > 0) {
+                } else if (uri.indexOf("jakarta.faces.resource") > 0) {
                     chain.doFilter(request, response);
                 } else if (isLogueado) {
                     chain.doFilter(request, response);

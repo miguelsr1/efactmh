@@ -3,9 +3,9 @@ package sv.com.jsoft.efactmh.db;
 import lombok.Getter;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -27,7 +27,7 @@ public class DataBaseSupport {
             jdbi = Jdbi.create(dsApp.getEfactDS());
             jdbi.installPlugin(new SqlObjectPlugin());
         } catch (Exception ex) {
-            log.error(Thread.currentThread().getId() + ": OCURRIO UN ERROR EN DataBaseSupport.init()", ex);
+            log.error(Thread.currentThread() + ": OCURRIO UN ERROR EN DataBaseSupport.init()", ex);
         }
     }
 }

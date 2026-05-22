@@ -2,11 +2,11 @@ package sv.com.jsoft.efactmh.util;
 
 import java.io.File;
 import java.io.IOException;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.primefaces.PrimeFaces;
 import sv.com.jsoft.efactmh.model.enums.TipoMensaje;
