@@ -19,14 +19,14 @@ import sv.com.jsoft.efactmh.view.SessionView;
  *
  * @author 
  */
-@WebFilter("/ope/*")
+/*@WebFilter("/ope/*")*/
 @Slf4j
-public class SecurityFilter implements Filter {
+public class SecurityFilter /*implements Filter*/ {
     
     @Inject
     SessionView sessionView;
 
-    @Override
+    //@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         validateSession(request, response, chain);
     }

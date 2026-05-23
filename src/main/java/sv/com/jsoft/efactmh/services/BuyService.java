@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.dto.*;
@@ -18,7 +19,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  * @author msanchez
  */
 @ApplicationScoped
-public class BuyService {
+public class BuyService implements Serializable {
 
     @Getter
     private List<CostClassificationDto> lstCost;

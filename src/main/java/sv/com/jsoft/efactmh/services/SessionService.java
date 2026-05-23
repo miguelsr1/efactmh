@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import jakarta.enterprise.context.SessionScoped;
@@ -112,7 +111,7 @@ public class SessionService implements Serializable {
 
 
     public List<CatalogoDto> getLstPuntoVenta(Long idEstablecimiento) {
-        return catalogoService.getLstPuntoVentaByEstablecimiento(token, idEstablecimiento);
+        return catalogoService.getLstPuntoVentaByEstablecimiento(idEstablecimiento);
     }
 
     private void cargarParametrosMh() {

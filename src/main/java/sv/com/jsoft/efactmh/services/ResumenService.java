@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import sv.com.jsoft.efactmh.model.DetallePago;
@@ -14,7 +15,7 @@ import sv.com.jsoft.efactmh.util.CantidadALetras;
  * @author msanchez
  */
 @ApplicationScoped
-public class ResumenService {
+public class ResumenService implements Serializable {
 
     public JSONObject getResumen(String codigoDte, BigDecimal montoTotalAPagar, BigDecimal montoTotal, BigDecimal totalIva, List<DetallePago> lstPagos) {
         JSONObject jsonResumen = new JSONObject();

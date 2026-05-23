@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import org.json.simple.JSONObject;
 
 /**
@@ -11,7 +12,7 @@ import org.json.simple.JSONObject;
  * @author migue
  */
 @ApplicationScoped
-public class IdentificacionService {
+public class IdentificacionService implements Serializable {
 
     private final SimpleDateFormat sdDate = new SimpleDateFormat("yyyy-MM-dd");
     private final SimpleDateFormat sdTime = new SimpleDateFormat("HH:mm:ss");

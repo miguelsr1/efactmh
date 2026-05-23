@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
@@ -13,7 +14,7 @@ import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
  * @author msanchez
  */
 @ApplicationScoped
-public class ComprobanteCreditoFiscalService {
+public class ComprobanteCreditoFiscalService implements Serializable {
 
     private int count;
 

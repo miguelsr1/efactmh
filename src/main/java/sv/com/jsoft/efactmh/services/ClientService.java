@@ -3,6 +3,7 @@ package sv.com.jsoft.efactmh.services;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.io.Serializable;
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.PerNaturalRequest;
 import sv.com.jsoft.efactmh.model.Personeria;
@@ -19,7 +20,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  */
 @Named
 @ApplicationScoped
-public class ClientService {
+public class ClientService implements Serializable {
 
     @Inject
     ClientRepository clientRepository;

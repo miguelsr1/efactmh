@@ -27,7 +27,7 @@ public class DataBaseSupport {
             jdbi = Jdbi.create(dsApp.getEfactDS());
             jdbi.installPlugin(new SqlObjectPlugin());
         } catch (Exception ex) {
-            log.error(Thread.currentThread() + ": OCURRIO UN ERROR EN DataBaseSupport.init()", ex);
+            log.error("OCURRIO UN ERROR EN DataBaseSupport.init()", ex);
         }
     }
 }

@@ -3,6 +3,7 @@ package sv.com.jsoft.efactmh.view;
 import com.google.gson.Gson;
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.view.ViewScoped;

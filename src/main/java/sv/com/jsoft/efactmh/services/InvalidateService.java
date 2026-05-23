@@ -3,6 +3,7 @@ package sv.com.jsoft.efactmh.services;
 import java.text.MessageFormat;
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
@@ -18,7 +19,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  */
 @ApplicationScoped
 @Slf4j
-public class InvalidateService {
+public class InvalidateService implements Serializable {
 
     public ResponseRestApi createInvalidate(InvalidateRequest request, JwtDto token) {
         RestUtil rest = RestUtil.builder()

@@ -1,6 +1,7 @@
 package sv.com.jsoft.efactmh.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.dto.IdDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
@@ -12,7 +13,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  * @author msanchez
  */
 @ApplicationScoped
-public class InvoceService {
+public class InvoceService implements Serializable {
 
     public ResponseRestApi saveInvoce(JwtDto token, InvoceDto invoceDto) {
         //Persistiendo factura

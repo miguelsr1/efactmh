@@ -3,6 +3,7 @@ package sv.com.jsoft.efactmh.view.estructura.service;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.PuntoVentaDto;
@@ -14,7 +15,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  * @author msanchez
  */
 @ApplicationScoped
-public class EstablecimientoService {
+public class EstablecimientoService implements Serializable{
 
     public List<EstablecimientoDto> getLstEstablecimiento(JwtDto token) {
         ResponseRestApi rest = RestUtil

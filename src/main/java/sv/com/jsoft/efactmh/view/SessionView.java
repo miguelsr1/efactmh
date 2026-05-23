@@ -22,8 +22,10 @@ import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import org.wildfly.security.http.oidc.OidcPrincipal;
 import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
+import sv.com.jsoft.efactmh.services.CatalogoService;
 import sv.com.jsoft.efactmh.services.SessionService;
 
 import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
@@ -40,7 +42,13 @@ import sv.com.jsoft.efactmh.util.JsfUtil;
 public class SessionView implements Serializable {
 
     @Inject
+    HttpServletRequest request;
+
+
+    @Inject
     SessionService sessionService;
+    @Inject
+    CatalogoService catalogoService;
 
     private String idEstablecimiento;
     private String idPuntoVenta;
@@ -211,7 +219,7 @@ public class SessionView implements Serializable {
         if (idEstablecimiento == null) {
             return new ArrayList<>();
         }
-        return sessionService.getLstPuntoVenta(Long.valueOf(idEstablecimiento));
+        return catalogoService.getLstPuntoVentaByEstablecimiento(Long.valueOf(idEstablecimiento));
     }
 
     public boolean isEmisorRol() {

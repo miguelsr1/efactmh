@@ -2,6 +2,7 @@ package sv.com.jsoft.efactmh.services;
 
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
+import java.io.Serializable;
 import sv.com.jsoft.efactmh.model.dto.BalanceDto;
 import sv.com.jsoft.efactmh.model.dto.DashboardDto;
 import sv.com.jsoft.efactmh.model.dto.Invoice7DaysDto;
@@ -16,7 +17,7 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  * @author msanchez
  */
 @ApplicationScoped
-public class DashboardService {
+public class DashboardService implements Serializable {
 
     public ResponseRestApi<List<DashboardDto>> findAllData(JwtDto token) {
         ResponseRestApi<List<DashboardDto>> response = RestUtil

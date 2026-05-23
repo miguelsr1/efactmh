@@ -2,7 +2,6 @@ package sv.com.jsoft.efactmh.repository;
 
 import java.io.Serializable;
 import java.util.List;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

@@ -153,7 +153,7 @@ public class CatalogoService implements Serializable {
         return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
     }
 
-    public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(JwtDto token, Long idEstablecimiento) {
+    public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(Long idEstablecimiento) {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/punto-venta/" + idEstablecimiento)
                 .clazz(CatalogoDto.class)
