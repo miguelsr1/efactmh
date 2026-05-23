@@ -28,89 +28,74 @@ import sv.com.jsoft.efactmh.model.dto.ErrorResponseDto;
 import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 
-/**
- *
- * @author migue
- */
 @SuperBuilder
 @Slf4j
 public class RestUtil {
 
     private String endpoint;
     private Class clazz;
-    private JwtDto jwtDto;
+    private String accessToken;
     private Object body;
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
-    //private final static String HOST = "http://localhost:8082";
-    //private final static String HOST = "http://34.225.63.188:8080";
-    private final static String HOST = "http://localhost:8099";
+    
+    private static final String HOST = "http://localhost:8099";
 
-    public ResponseRestApi callGetOneAuth() {
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .connectTimeout(Duration.ofSeconds(10))
+            .build();
+
+    public <T> ResponseRestApi<T> callGetOneAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .header("Authorization", "Bearer " + accessToken)
                     .timeout(Duration.ofSeconds(60))
                     .build();
 
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            switch (response.statusCode()) {
-                case 200:
+            return switch (response.statusCode()) {
+                case 200 -> {
                     if (response.body() != null) {
                         if (clazz.equals(String.class)) {
-                            return new ResponseRestApi(response.statusCode(),
-                                    response.body());
+                            yield new ResponseRestApi<>(response.statusCode(), (T) response.body());
                         }
-                        return new ResponseRestApi(response.statusCode(),
-                                gson.fromJson(response.body(), clazz));
+                        yield new ResponseRestApi<>(response.statusCode(), (T) gson.fromJson(response.body(), clazz));
                     }
-                    break;
-                case 404:
-                    return new ResponseRestApi(response.statusCode(),
-                            "DATO NO ENCONTRADO");
-                case 401:
-                    return new ResponseRestApi(response.statusCode(),
-                            "ACCESO NO AUTORIZADO");
-                default:
-                    break;
-            }
+                    yield new ResponseRestApi<>(response.statusCode(), null);
+                }
+                case 404 -> new ResponseRestApi<>(response.statusCode(), (T) "DATO NO ENCONTRADO");
+                case 401 -> new ResponseRestApi<>(response.statusCode(), (T) "ACCESO NO AUTORIZADO");
+                default -> new ResponseRestApi<>(response.statusCode(), (T) response.body());
+            };
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR postAuth - " + endpoint, ex);
             return null;
         }
-
-        return null;
     }
 
-    public ResponseRestApi callGetAllAuth() {
+    public <T> ResponseRestApi<List<T>> callGetAllAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .header("Authorization", "Bearer " + accessToken)
                     .timeout(Duration.ofSeconds(3))
                     .build();
 
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
                 if (response.body() != null) {
                     Type lst = TypeToken.getParameterized(List.class, clazz).getType();
-                    return new ResponseRestApi(response.statusCode(),
-                            gson.fromJson(response.body(), lst));
+                    return new ResponseRestApi<>(response.statusCode(), gson.fromJson(response.body(), lst));
                 }
             } else if (response.statusCode() == 404) {
-                return new ResponseRestApi(response.statusCode(), null);
+                return new ResponseRestApi<>(response.statusCode(), null);
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR get - " + endpoint, ex);
@@ -124,65 +109,50 @@ public class RestUtil {
                 mensajeError = "ERROR INESPERADO";
             }
 
-            return new ResponseRestApi(-1, mensajeError);
+            return new ResponseRestApi<>(-1, (List<T>) List.of(mensajeError));
         }
         return null;
     }
 
-    /**
-     * LISTO
-     *
-     * @return
-     */
-    public ResponseRestApi callPostAuth() {
+    public <T> ResponseRestApi<T> callPostAuth() {
         try {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .version(HttpClient.Version.HTTP_1_1)
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .header("Authorization", "Bearer " + accessToken)
                     .POST(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .timeout(Duration.ofSeconds(6))
                     .build();
 
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-            switch (response.statusCode()) {
-                case 201:
-                case 200:
-                case 400:
+            return switch (response.statusCode()) {
+                case 201, 200, 400 -> {
                     if (response.body() != null) {
-                        if(response.statusCode() == 400) {
+                        if (response.statusCode() == 400) {
                             log.error("RESPONSE " + endpoint + ": " + response.body());
-                        }else {
+                        } else {
                             log.info("RESPONSE " + endpoint + ": " + response.body());
                         }
-
-                        return new ResponseRestApi(response.statusCode(),
-                                gson.fromJson(response.body(), clazz));
+                        yield new ResponseRestApi<>(response.statusCode(), (T) gson.fromJson(response.body(), clazz));
                     }
-                    break;
-                //RENOVAR JWT KEYCLOAK
-                case 401:
-                case 409:
+                    yield new ResponseRestApi<>(response.statusCode(), null);
+                }
+                case 401, 409 -> {
                     try {
-                        return new ResponseRestApi(response.statusCode(), null, gson.fromJson(response.body(), ErrorMessageDto.class));
+                        yield new ResponseRestApi<>(response.statusCode(), null, gson.fromJson(response.body(), ErrorMessageDto.class));
                     } catch (JsonSyntaxException e) {
                         log.error("RESPUESTA WS: " + response.body());
                         log.error("ERROR EN CASTEO POR RESPUESTA 401", e);
-                        break;
+                        yield new ResponseRestApi<>(response.statusCode(), null);
                     }
-                default:
-                    return new ResponseRestApi(response.statusCode(), response.body());
-            }
+                }
+                default -> new ResponseRestApi<>(response.statusCode(), (T) response.body());
+            };
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR postAuth - " + endpoint, ex);
             return null;
         }
-
-        return null;
     }
 
     public void callPutAuth() {
@@ -190,15 +160,12 @@ public class RestUtil {
             HttpRequest httpRequest = HttpRequest.newBuilder(new URI(HOST + endpoint))
                     .version(HttpClient.Version.HTTP_1_1)
                     .header("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .header("Authorization", "Bearer " + accessToken)
                     .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(body)))
                     .timeout(Duration.ofSeconds(3))
                     .build();
 
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             log.info("response: " + response.body());
 
@@ -215,8 +182,8 @@ public class RestUtil {
                     ErrorResponseDto errorResponse = new Gson().fromJson(response.body(), ErrorResponseDto.class);
 
                     List<String> messages = errorResponse.getViolations().stream()
-                            .map(ErrorResponseDto.Violation::getMessage) // Mapeamos cada Violation a su mensaje
-                            .collect(Collectors.toList());
+                            .map(ErrorResponseDto.Violation::getMessage)
+                            .toList();
 
                     String result = String.join("\n", messages);
 
@@ -239,15 +206,12 @@ public class RestUtil {
                     .version(HttpClient.Version.HTTP_1_1)
                     .uri(new URI(HOST + endpoint + idCliente))
                     .PUT(HttpRequest.BodyPublishers.ofString(new Gson().toJson(data)))
-                    .header("Authorization", "Bearer " + jwtDto.getAccessToken())
+                    .header("Authorization", "Bearer " + accessToken)
                     .headers("Content-Type", MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .timeout(Duration.ofSeconds(3))
                     .build();
 
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             return response.statusCode();
         } catch (URISyntaxException | IOException | InterruptedException ex) {
@@ -268,11 +232,7 @@ public class RestUtil {
                     .timeout(Duration.ofSeconds(3))
                     .build();
 
-            HttpResponse<String> response = HttpClient
-                    .newBuilder()
-                    .connectTimeout(Duration.ofSeconds(10))
-                    .build()
-                    .send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HTTP_CLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             return new ResponseDto(response.statusCode(), response.body());
         } catch (URISyntaxException | IOException | InterruptedException ex) {
