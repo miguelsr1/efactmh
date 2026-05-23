@@ -53,8 +53,6 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @Slf4j
 public class InvoceView implements Serializable {
 
-    private final static ResourceBundle VARIABLES = ResourceBundle.getBundle("variables");
-
     private BigDecimal totalPagos;
 
     @Getter
@@ -112,7 +110,7 @@ public class InvoceView implements Serializable {
     private Integer advance = 0;
     @Getter
     @Setter
-    private Long idCliente = 0l;
+    private Long idCliente = 0L;
 
     @Getter
     @Setter
@@ -181,8 +179,6 @@ public class InvoceView implements Serializable {
         fontWeightComplete = "";
 
         loadMetodoPago();
-
-        //facturaSinDatos();
     }
 
     public DetallePago getDetPago() {
@@ -777,7 +773,9 @@ public class InvoceView implements Serializable {
     }
 
     public void requiereFactura() {
+        sinDatos = false;
 
+        cliente = new ClienteResponse();
     }
 
     public List<ClienteResponse> completeClient(String query) {

@@ -25,23 +25,22 @@
                               maxdate="#{invoceView.dateInvoce}"/>
             </div>
 
-            <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
+            <div class="field col-6 md:col-6 lg:col-3" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
 
-                <p:selectBooleanCheckbox id="chbSinDatos" value="#{invoceView.sinDatos}" itemLabel="SIN DATOS"
-                                         styleClass="mb-2">
+                <p:selectBooleanCheckbox id="chbSinDatos" value="#{invoceView.sinDatos}" itemLabel="SIN DATOS" styleClass="mb-2">
                     <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}"
                             process="@this,txtFecha,chbSinDatos"/>
                 </p:selectBooleanCheckbox>
             </div>
-            <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
-                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA"
-                                         disabled="#{not invoceView.sinDatos}">
-                    <p:ajax update="dvClient" listener="#{invoceView.requiereFactura()}"/>
+            <div class="field col-6 md:col-6 lg:col-9" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
+                <p:selectBooleanCheckbox id="chbNewClient" value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA">
+                    <p:ajax update="dvClient" listener="#{invoceView.requiereFactura()}"
+                            process="@this,txtFecha,chbNewClient"/>
                 </p:selectBooleanCheckbox>
             </div>
 
             <!--BLOQUE DE CLIENTE GUARDADO -->
-            <div class="field col-12" style="display:#{invoceView.sinDatos ?'none':'block'}">
+            <div class="field col-12" style="display:#{(invoceView.sinDatos or invoceView.requiereFactura) ?'none':'block'}">
                 <p:outputLabel for="txtQuery" value="Buscar cliente (DUI o NOMBRE)"/>
                 <p:autoComplete id="txtQuery" value="#{invoceView.cliente}" minQueryLength="4"
                                 completeMethod="#{invoceView.completeClient}"
@@ -93,7 +92,7 @@
             </div>
         </div>
 
-        <div class="field col-2" style="margin-top: 1rem">
+        <div class="field col-12" style="margin-top: 1rem">
             <p:selectBooleanCheckbox id="bchIva" itemLabel="Retención IVA"
                                      value="#{invoceView.invoce.aplicaIvaRetenido}">
                 <p:ajax process="bchIva"/>
