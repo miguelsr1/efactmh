@@ -4,11 +4,12 @@ import java.text.MessageFormat;
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
+
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
 import sv.com.jsoft.efactmh.model.dto.DteToInvalidate;
 import sv.com.jsoft.efactmh.model.dto.InvalidateRequest;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -21,22 +22,25 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @Slf4j
 public class InvalidateService implements Serializable {
 
-    public ResponseRestApi createInvalidate(InvalidateRequest request, JwtDto token) {
+    @Inject
+    SessionService sessionService;
+
+    public ResponseRestApi createInvalidate(InvalidateRequest request) {
         RestUtil rest = RestUtil.builder()
                 .endpoint("/api/secured/invalidate")
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .clazz(ApiMhDteResponse.class)
                 .body(request)
                 .build();
         return rest.callPostAuth();
     }
 
-    public ResponseDto findDteToInvalidate(Long idFactura, String codigoDte, String codigoGeneracion, JwtDto token) {
+    public ResponseDto findDteToInvalidate(Long idFactura, String codigoDte, String codigoGeneracion) {
         //validar tiempo de validez de anulacion
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/secured/invalidate/all/" + codigoDte)
                 .clazz(String.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
 
@@ -50,7 +54,7 @@ public class InvalidateService implements Serializable {
             response = RestUtil.builder()
                     .endpoint("/api/secured/invalidate/" + idFactura)
                     .clazz(DteToInvalidate.class)
-                    .jwtDto(token)
+                    .accessToken(sessionService.getAccessTokenString())
                     .build()
                     .callGetOneAuth();
             if (response.getCodeHttp() == 200) {
@@ -67,14 +71,13 @@ public class InvalidateService implements Serializable {
      * se busca dte apartir del tipo de DTE y codigo de generacion, validando los tiempo, segun el DTE, para la validacion
      * @param codigoDte
      * @param codigoGeneracion
-     * @param token
      * @return 
      */
-    public ResponseDto findDteToInvalidateByReplace(String codigoDte, String codigoGeneracion, JwtDto token) {
+    public ResponseDto findDteToInvalidateByReplace(String codigoDte, String codigoGeneracion) {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint(MessageFormat.format("/api/secured/invalidate/dte/{0}/{1}", codigoDte, codigoGeneracion))
                 .clazz(String.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
 

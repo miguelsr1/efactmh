@@ -16,7 +16,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+
 import jakarta.faces.application.FacesMessage;
 import jakarta.ws.rs.core.MediaType;
 import lombok.experimental.SuperBuilder;
@@ -25,7 +25,6 @@ import sv.com.jsoft.efactmh.adapter.LocalDateTimeAdapter;
 import sv.com.jsoft.efactmh.model.Personeria;
 import sv.com.jsoft.efactmh.model.dto.ErrorMessageDto;
 import sv.com.jsoft.efactmh.model.dto.ErrorResponseDto;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 
 @SuperBuilder

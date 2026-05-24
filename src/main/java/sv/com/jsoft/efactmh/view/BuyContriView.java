@@ -144,7 +144,7 @@ public class BuyContriView implements Serializable {
 
         currentJsonObject.remove("firmaElectronica");
 
-        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(currentJsonObject), buyDate, idTipoDocumento, numeroDocumento, securityService.getToken());
+        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(currentJsonObject), buyDate, idTipoDocumento, numeroDocumento);
 
         if (responseSendMh.getCodeHttp() == 201) {
             return true;
@@ -164,7 +164,7 @@ public class BuyContriView implements Serializable {
 
     private void loadBuys() {
         if (fecha != null && numeroDocumento != null && !numeroDocumento.trim().isEmpty()) {
-            lstBuys = buyService.getListContri(fecha, idTipoDocumento, numeroDocumento, securityService.getToken());
+            lstBuys = buyService.getListContri(fecha, idTipoDocumento, numeroDocumento);
         } else {
             lstBuys.clear();
         }

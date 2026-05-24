@@ -58,7 +58,7 @@ public class DlgPuntoVenta implements Serializable {
         RestUtil rest = RestUtil
                 .builder()
                 .clazz(IdDto.class)
-                .jwtDto(sessionService.getToken())
+                .accessToken(sessionService.getAccessTokenString())
                 .body(puntoVentaDto)
                 .endpoint("/api/secured/punto-venta").build();
 

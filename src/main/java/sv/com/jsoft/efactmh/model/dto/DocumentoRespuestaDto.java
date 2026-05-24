@@ -2,13 +2,17 @@ package sv.com.jsoft.efactmh.model.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author migue
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DocumentoRespuestaDto implements Serializable {
 
     private String codigoGeneracion;

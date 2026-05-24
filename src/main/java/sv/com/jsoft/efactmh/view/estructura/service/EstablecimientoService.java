@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
+
+import jakarta.inject.Inject;
 import sv.com.jsoft.efactmh.model.dto.EstablecimientoDto;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.PuntoVentaDto;
+import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -17,11 +19,14 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @ApplicationScoped
 public class EstablecimientoService implements Serializable{
 
-    public List<EstablecimientoDto> getLstEstablecimiento(JwtDto token) {
+    @Inject
+    SessionService sessionService;
+
+    public List<EstablecimientoDto> getLstEstablecimiento() {
         ResponseRestApi rest = RestUtil
                 .builder()
                 .clazz(EstablecimientoDto.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/establecimiento")
                 .build()
                 .callGetAllAuth();
@@ -29,11 +34,11 @@ public class EstablecimientoService implements Serializable{
         return rest.getCodeHttp() == 200 ? (List<EstablecimientoDto>) rest.getBody() : new ArrayList<>();
     }
 
-    public List<PuntoVentaDto> getLstPuntosVentas(JwtDto token, Long idEstablecimiento) {
+    public List<PuntoVentaDto> getLstPuntosVentas(Long idEstablecimiento) {
         ResponseRestApi rest = RestUtil
                 .builder()
                 .clazz(PuntoVentaDto.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/punto-venta/establecimiento/" + idEstablecimiento)
                 .build()
                 .callGetAllAuth();

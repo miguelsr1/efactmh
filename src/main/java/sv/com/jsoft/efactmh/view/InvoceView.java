@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -65,7 +66,6 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private Date dateInvoce = new Date();
-    private int var = 1;
     @Getter
     private String taskSave;
     @Getter
@@ -119,6 +119,7 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private Producto producto;
+    @Getter
     private DetallePago detPago;
     @Getter
     @Setter
@@ -129,9 +130,10 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private List<String> lstObservacionesMH;
-
-    private Date fechaPedido;
+    @Getter
+    @Setter
     private ClienteResponse cliente;
+    @Getter
     private InvoceDto invoceDto;
 
     @Inject
@@ -149,7 +151,6 @@ public class InvoceView implements Serializable {
 
     @PostConstruct
     public void init() {
-        fechaPedido = new Date();
         cliente = new ClienteResponse();
         invoceDto = new InvoceDto();
         invoceDto.setCodigoDte("01");
@@ -162,7 +163,7 @@ public class InvoceView implements Serializable {
 
         codigoTipoDocClienteReq = null;
 
-        lstObservacionesMH =  new ArrayList<>();
+        lstObservacionesMH = new ArrayList<>();
 
         taskSave = "taskPending";
         taskSendDte = "taskPending";
@@ -173,13 +174,8 @@ public class InvoceView implements Serializable {
         fontWeightComplete = "";
 
         loadMetodoPago();
-
-        //facturaSinDatos();
     }
 
-    public DetallePago getDetPago() {
-        return detPago;
-    }
 
     public void setDetPago(DetallePago detPago) {
         if (detPago != null) {
@@ -187,38 +183,24 @@ public class InvoceView implements Serializable {
         }
     }
 
-    public Date getFechaPedido() {
-        return fechaPedido;
-    }
-
-    public ClienteResponse getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(ClienteResponse cliente) {
-        this.cliente = cliente;
-    }
-
-    public InvoceDto getInvoce() {
-        return invoceDto;
-    }
-
     public void loadMetodoPago() {
         lstMetodoPago = new ArrayList<>();
         switch (invoceDto.getCondicionOperacion()) {
             case "1":
                 lstMetodoPago.add(new CatalogoDto("01", "EFECTIVO"));
-                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO/CREDITO"));
+                lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
+                lstMetodoPago.add(new CatalogoDto("03", "TARJETA DE CREDITO"));
                 lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
                 detPago.setTipoPago("01");
                 break;
-            case "2":
-            case "3":
+            case "2", "3":
                 lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
                 lstMetodoPago.add(new CatalogoDto("03", "TARJETA DE CREDITO"));
                 lstMetodoPago.add(new CatalogoDto("04", "CHEQUE"));
                 lstMetodoPago.add(new CatalogoDto("05", "TRANSFERENCIA-DEPOSITO BANCARIO"));
                 detPago.setTipoPago("02");
+                break;
+            default:
                 break;
         }
     }
@@ -231,16 +213,10 @@ public class InvoceView implements Serializable {
 
     //==========================================================================
     public void findClient() {
-        RestUtil rest = RestUtil
-                .builder()
-                .clazz(ClienteResponse.class)
-                .jwtDto(securityService.getToken())
-                .endpoint("/api/secured/client/" + queryParam)
-                .build();
-        ResponseRestApi obj = rest.callGetOneAuth();
+        ResponseRestApi<ClienteResponse> obj = invoceService.findClient(queryParam);
 
         if (obj.getCodeHttp() == 200) {
-            cliente = (ClienteResponse) obj.getBody();
+            cliente = obj.getBody();
 
             if (invoceDto.getCodigoDte().equals("03") && !cliente.getInscritoIva()) {
 
@@ -286,34 +262,29 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getIva() {
-        switch (invoceDto.getCodigoDte()) {
-            case "01":
-                return BigDecimal.ZERO;
-            case "03":
-                return getSumasCcf().multiply(new BigDecimal(0.13)).setScale(2, RoundingMode.HALF_UP);
-            case "14":
-                return BigDecimal.ZERO;
-        }
-        return BigDecimal.ZERO;
+        return switch (invoceDto.getCodigoDte()) {
+            case "01", "14" -> BigDecimal.ZERO;
+            case "03" -> getSumasCcf().multiply(BigDecimal.valueOf(0.13))
+                    .setScale(2, RoundingMode.HALF_UP);
+            default -> BigDecimal.ZERO;
+        };
     }
 
     public BigDecimal getIvaRetenido() {
-        switch (invoceDto.getCodigoDte()) {
-            case "01":
-                if (invoceDto.isAplicaIvaRetenido()) {
-                    BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
-                    return invoceDto.isAplicaIvaRetenido() ? getSumas().divide(new BigDecimal("1.13"), RoundingMode.HALF_UP).multiply(porcentajeIva) : getSumas().setScale(2, RoundingMode.HALF_UP);
-                } else {
-                    return BigDecimal.ZERO;
-                }
-
-            case "03":
-                if (invoceDto.isAplicaIvaRetenido()) {
-                    BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
-                    return invoceDto.isAplicaIvaRetenido() ? getSumas().multiply(porcentajeIva) : getSumas().setScale(2, RoundingMode.HALF_UP);
-                } else {
-                    return BigDecimal.ZERO;
-                }
+        if (invoceDto.getCodigoDte().equals("01")) {
+            if (invoceDto.isAplicaIvaRetenido()) {
+                BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
+                return getSumas().divide(BigDecimal.valueOf(1.13), RoundingMode.HALF_UP).multiply(porcentajeIva);
+            } else {
+                return BigDecimal.ZERO;
+            }
+        } else if (invoceDto.getCodigoDte().equals("03")) {
+            if (invoceDto.isAplicaIvaRetenido()) {
+                BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
+                return getSumas().multiply(porcentajeIva);
+            } else {
+                return BigDecimal.ZERO;
+            }
         }
 
         return BigDecimal.ZERO;
@@ -326,28 +297,22 @@ public class InvoceView implements Serializable {
             case "03":
                 if (invoceDto.isAplicaRentaRetenido()) {
                     BigDecimal porcentajeIsr = BigDecimal.valueOf(10).divide(BigDecimal.valueOf(100));
-                    return invoceDto.isAplicaRentaRetenido() ? getSumas().multiply(porcentajeIsr) : getSumas().setScale(2, RoundingMode.HALF_UP);
+                    return getSumas().multiply(porcentajeIsr);
                 } else {
                     return BigDecimal.ZERO;
                 }
-            case "14":
+            default:
                 return BigDecimal.ZERO;
         }
-
-        return BigDecimal.ZERO;
     }
 
     public BigDecimal getTotal() {
-        switch (invoceDto.getCodigoDte()) {
-            case "01":
-                return getTotalFe();
-            case "03":
-                return getTotalCcf();
-            case "14":
-                return getTotalSEx();
-        }
-
-        return BigDecimal.ZERO;
+        return switch (invoceDto.getCodigoDte()) {
+            case "01" -> getTotalFe();
+            case "03" -> getTotalCcf();
+            case "14" -> getTotalSEx();
+            default -> BigDecimal.ZERO;
+        };
     }
 
     private BigDecimal getTotalFe() {
@@ -396,7 +361,6 @@ public class InvoceView implements Serializable {
                 .responsive(true)
                 .modal(true)
                 .width("430px")
-                //.height("550px")
                 .build();
 
         PrimeFaces.current().dialog().openDynamic("dialog/dlg-det-factura", options, null);
@@ -449,10 +413,8 @@ public class InvoceView implements Serializable {
     public void backStep() {
         switch (activeStep) {
             case 0:
-
                 break;
-            case 1:
-            case 2:
+            case 1, 2:
                 lstDetPago.clear();
                 activeStep--;
                 break;
@@ -464,15 +426,12 @@ public class InvoceView implements Serializable {
     public void nextStep() {
         if (stepValidate()) {
             switch (activeStep) {
-                case 0:
+                case 0, 2:
                     activeStep++;
                     break;
                 case 1:
                     activeStep++;
                     detPago.setMonto(getTotal());
-                    break;
-                case 2:
-                    activeStep++;
                     break;
                 default:
                     break;
@@ -528,69 +487,57 @@ public class InvoceView implements Serializable {
         if (makeInvoce) {
             lstDetPago.forEach(det -> det.getMonto());
 
-            try {
-                invoceDto.setDateInvoce(sfd.format(dateInvoce));
-                invoceDto.setDetailPayments(lstDetPago);
-                invoceDto.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
-                invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
+            invoceDto.setDateInvoce(sfd.format(dateInvoce));
+            invoceDto.setDetailPayments(lstDetPago);
+            invoceDto.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
+            invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
 
-                //Persistiendo factura
-                log.info("PERSISTIENDO FACTURA: " + invoceDto.toString());
-                ResponseRestApi response = invoceService.saveInvoce(securityService.getToken(), invoceDto);
+            //Persistiendo factura
+            log.info("PERSISTIENDO FACTURA: " + invoceDto.toString());
+            ResponseRestApi<IdDto> response = invoceService.saveInvoce(invoceDto);
 
-                if (response.getCodeHttp() == 201) {
-                    IdDto newInvoce = (IdDto) response.getBody();
-                    idFac = newInvoce.getId();
+            if (response.getCodeHttp() == 201) {
+                IdDto newInvoce = response.getBody();
+                idFac = newInvoce.getId();
 
-                    /*//advance 30%
-                    addProgressAvance();*/
-                    invoceDto.setIdFactura(idFac);
+                invoceDto.setIdFactura(idFac);
 
-                    /*//advance 60%
-                    addProgressAvance();*/
-                    //enviando a MH
-                    log.info("ENVIANDO DTE: " + idFac + " A MH");
-                    ResponseRestApi<ApiMhDteResponse> responseSendMh = dteServices.getSendMh(new SendDteRequest(idFac), securityService.getToken());
+                //enviando a MH
+                log.info("ENVIANDO DTE: " + idFac + " A MH");
+                ResponseRestApi<ApiMhDteResponse> responseSendMh = dteServices.getSendMh(new SendDteRequest(idFac));
 
-                    if (responseSendMh == null) {
-                        log.error("ERROR ENVIANDO DTE: " + idFac);
-                        log.error("API: /api/secured/dte/send");
-                        log.error("CODIGO ERROR: " + Constantes.COD_ERROR_NULL_RESPONSE);
-                        log.info("LA FACTURA ID: " + idFac + " - SE ENVIARA POR CRON");
-                        addProgressAvance();
+                if (responseSendMh == null) {
+                    log.error("ERROR ENVIANDO DTE: " + idFac);
+                    log.error("API: /api/secured/dte/send");
+                    log.error("CODIGO ERROR: " + Constantes.COD_ERROR_NULL_RESPONSE);
+                    log.info("LA FACTURA ID: " + idFac + " - SE ENVIARA POR CRON");
 
-                        log.error("OCURRIO UN ERROR EN EL ENVIO DEL DTE - SE INTENTARÁ ENVIAR EN BREVE. " + Constantes.COD_ERROR_NULL_RESPONSE);
+                    log.error("OCURRIO UN ERROR EN EL ENVIO DEL DTE - SE INTENTARÁ ENVIAR EN BREVE. " + Constantes.COD_ERROR_NULL_RESPONSE);
+                    PrimeFaces.current().executeScript("PF('dlgDteError').show();");
+                    return;
+                }
+
+                log.info("Finalizando");
+
+                clearStatus();
+
+                switch (responseSendMh.getCodeHttp()) {
+                    case 200:
+                        codigoGeneracion = responseSendMh.getBody().getCodigoGeneracion();
+
+                        PrimeFaces.current().ajax().update("pnMsg");
+                        PrimeFaces.current().executeScript("PF('dlgDteSave').show();");
+
+                        dteServices.sendMail(idFac);
+                        break;
+                    case 400:
+                        lstObservacionesMH.clear();
+                        lstObservacionesMH = responseSendMh.getBody().getObservaciones();
+
+                        PrimeFaces.current().ajax().update("pnlOutErrorMh");
                         PrimeFaces.current().executeScript("PF('dlgDteError').show();");
-                        return;
-                    }
-
-                    //finalizar el proceso, aunque no se genere el DTE a MH
-                    //advance 100%
-                    //addProgressAvance();
-                    log.info("Finalizando");
-
-                    clearStatus();
-
-                    switch (responseSendMh.getCodeHttp()) {
-                        case 200:
-                            codigoGeneracion = responseSendMh.getBody().getCodigoGeneracion();
-
-                            /*JsfUtil.showMessageDialog(FacesMessage.SEVERITY_INFO,
-                                    MSG_INFO,
-                                    "FACTURA CREADA Y RECIBIDA EN MH. FACTURA: " + codigoGeneracion);*/
-                            PrimeFaces.current().ajax().update("pnMsg");
-                            PrimeFaces.current().executeScript("PF('dlgDteSave').show();");
-
-                            dteServices.sendMail(idFac, securityService.getToken());
-                            break;
-                        case 400:
-                            lstObservacionesMH.clear();
-                            lstObservacionesMH = responseSendMh.getBody().getObservaciones();
-
-                            PrimeFaces.current().ajax().update("pnlOutErrorMh");
-                            PrimeFaces.current().executeScript("PF('dlgDteError').show();");
-                            break;
-                        case 504:
+                        break;
+                    case 504:
                             /*
                             reintento despues de 8 segundos:
                             1. hacer consulta del estado del dte.
@@ -598,8 +545,8 @@ public class InvoceView implements Serializable {
                             esto hacerlo dos veces máximo
                              */
 
-                            break;
-                        default:
+                        break;
+                    default:
                             /*
                             si falla el envio, reintentar:
                             1. hacer consulta del estado del dte.
@@ -607,27 +554,25 @@ public class InvoceView implements Serializable {
                             esto hacerlo dos veces máximo
                              */
 
-                            log.error("ERROR ENVIANDO DTE: " + idFac);
-                            log.error("CODIGO HTTP: " + responseSendMh.getCodeHttp());
-                            log.error("MENSAJE ERROR: " + responseSendMh.getBody());
+                        log.error("ERROR ENVIANDO DTE: " + idFac);
+                        log.error("CODIGO HTTP: " + responseSendMh.getCodeHttp());
+                        log.error("MENSAJE ERROR: " + responseSendMh.getBody());
 
-                            log.error("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
+                        log.error("OCURRIO UN ERROR EN EL ENVIO DEL DTE. " + Constantes.COD_ERROR_501_RESPONSE);
 
-                            PrimeFaces.current().executeScript("PF('dlgDteError').show();");
-                            break;
-                    }
-
-                } else {
-                    log.error("ERROR CREANDO FACTURA: " + invoceDto.toString());
-                    log.error("CODIGO HTTP: " + response.getCodeHttp());
-                    log.error("MENSAJE ERROR: " + response.getBody());
-
-                    log.error("OCURRIO UN ERROR EN LA CREACION DE LA FACTURA");
-                    PrimeFaces.current().executeScript("PF('dlgError').show();");
+                        PrimeFaces.current().executeScript("PF('dlgDteError').show();");
+                        break;
                 }
-            } catch (InterruptedException ex) {
-                log.error("ERROR ENVIANDO DTE", ex);
+
+            } else {
+                log.error("ERROR CREANDO FACTURA: " + invoceDto.toString());
+                log.error("CODIGO HTTP: " + response.getCodeHttp());
+                log.error("MENSAJE ERROR: " + response.getBody());
+
+                log.error("OCURRIO UN ERROR EN LA CREACION DE LA FACTURA");
+                PrimeFaces.current().executeScript("PF('dlgError').show();");
             }
+
         }
     }
 
@@ -676,7 +621,7 @@ public class InvoceView implements Serializable {
 
         BigDecimal total = lstDetPago.stream()
                 .map(DetallePago::getMonto)
-                .filter(monto -> monto != null) // Opcional, si puede haber montos nulos
+                .filter(Objects::nonNull) // Opcional, si puede haber montos nulos
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         if (getTotal().compareTo(total) != 0) {
@@ -687,16 +632,6 @@ public class InvoceView implements Serializable {
         }
 
         return true;
-    }
-
-    private void addProgressAvance() throws InterruptedException {
-        var++;
-        if (advance < 60) {
-            advance += 30;
-        } else {
-            advance = 100;
-        }
-        Thread.sleep(1000);
     }
 
     public void showActiveStep() {
@@ -732,14 +667,11 @@ public class InvoceView implements Serializable {
         fontWeightSave = "";
         fontWeightSendDte = "";
         fontWeightComplete = "";
-
-        var = 1;
     }
 
     public void cleanFull() {
         loadMetodoPago();
 
-        fechaPedido = new Date();
         cliente = new ClienteResponse();
         invoceDto = new InvoceDto();
         invoceDto.setCodigoDte("01");
@@ -772,12 +704,7 @@ public class InvoceView implements Serializable {
     }
 
     public List<ClienteResponse> completeClient(String query) {
-        List<ClienteResponse> clients = clientRepository.findClientBySearch(query, securityService.getEmisor().getCorreo());
-        //se valida que exitan clientes
-        /*existClient = !clients.isEmpty();
-
-        PrimeFaces.current().executeScript("PF('dglNewClient').show();");*/
-        return clients;
+        return clientRepository.findClientBySearch(query, securityService.getEmisor().getCorreo());
     }
 
     public void onItemSelect(SelectEvent<ClienteResponse> event) {
@@ -806,13 +733,10 @@ public class InvoceView implements Serializable {
             return 0;
         }
 
-        switch (codigoTipoDocClienteReq) {
-            case "13":
-                return 9;
-            case "36":
-                return 14;
-            default:
-                return 30;
-        }
+        return switch (codigoTipoDocClienteReq) {
+            case "13" -> 9;
+            case "36" -> 14;
+            default -> 30;
+        };
     }
 }

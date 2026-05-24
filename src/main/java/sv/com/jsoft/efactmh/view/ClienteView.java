@@ -85,7 +85,7 @@ public class ClienteView implements Serializable {
         pn = new PerNaturalRequest();
         codigoDepa = "06";
 
-        ResponseRestApi response = clientService.findAllClient(sessionService.getToken());
+        ResponseRestApi response = clientService.findAllClient();
 
         if (response.getCodeHttp() == 200) {
             lstCliente = (List<ClienteDto>) response.getBody();
@@ -169,9 +169,9 @@ public class ClienteView implements Serializable {
             }
 
             if (edit) {
-                codeResponse = clientService.updClient(sessionService.getToken(), clienteDto.getIdCliente(), pn);
+                codeResponse = clientService.updClient(clienteDto.getIdCliente(), pn);
             } else {
-                codeResponse = clientService.insClient(sessionService.getToken(), null, pn);
+                codeResponse = clientService.insClient(null, pn);
             }
         } else {
             pj.setRazonSocial(pj.getRazonSocial().toUpperCase());
@@ -182,9 +182,9 @@ public class ClienteView implements Serializable {
             pj.setDepartamentoEmp(codigoDepa);
             if (edit) {
                 pj.setActivo(true);
-                codeResponse = clientService.updClient(sessionService.getToken(), clienteDto.getIdCliente(), pj);
+                codeResponse = clientService.updClient(clienteDto.getIdCliente(), pj);
             } else {
-                codeResponse = clientService.insClient(sessionService.getToken(), null, pj);
+                codeResponse = clientService.insClient(null, pj);
             }
         }
         
@@ -213,7 +213,7 @@ public class ClienteView implements Serializable {
         
         codigoDepa = m.getCodDepartamento();
 
-        ResponseRestApi response = clientService.findClientById(sessionService.getToken(), clienteDto.getIdCliente());
+        ResponseRestApi response = clientService.findClientById(clienteDto.getIdCliente());
 
         if (response.getCodeHttp() == 200) {
             Cliente client = (Cliente) response.getBody();

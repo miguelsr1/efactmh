@@ -9,10 +9,11 @@ import java.io.Serializable;
 import java.util.Base64;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
+import sv.com.jsoft.efactmh.services.SessionService;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -23,6 +24,9 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @Named
 @RequestScoped
 public class ReporteView implements Serializable {
+
+    @Inject
+    SessionService sessionService;
 
     private StreamedContent media;
 
@@ -38,20 +42,18 @@ public class ReporteView implements Serializable {
 
         try {
             Long idFactura = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("idFactura");
-            JwtDto jwt = (JwtDto) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("jwt");
 
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("idFactura");
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("jwt");
 
-            ResponseRestApi rest = RestUtil.builder()
+            ResponseRestApi<String> rest = RestUtil.builder()
                     .clazz(String.class)
                     .endpoint("/api/secured/dte/report/pdf/" + idFactura)
-                    .jwtDto(jwt)
+                    .accessToken(sessionService.getAccessTokenString())
                     .build()
                     .callGetOneAuth();
 
             if (rest.getCodeHttp() == 200) {
-                String pdfBase64 = rest.getBody().toString();
+                String pdfBase64 = rest.getBody();
                 JsonObject jsonPdf = new Gson().fromJson(pdfBase64, JsonObject.class);
                 byte[] byteRpt = Base64.getDecoder().decode(jsonPdf.get("pdf").getAsString());
                 if (byteRpt != null) {

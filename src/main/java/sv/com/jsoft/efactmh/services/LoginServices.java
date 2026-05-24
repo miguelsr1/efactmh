@@ -3,7 +3,7 @@ package sv.com.jsoft.efactmh.services;
 import com.google.gson.FieldNamingPolicy;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
+
 import sv.com.jsoft.efactmh.model.dto.LoginDto;
 import sv.com.jsoft.efactmh.model.dto.ResponseDto;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -18,9 +18,5 @@ public class LoginServices implements Serializable {
     public ResponseDto login(LoginDto login) {
         RestUtil rest = RestUtil.builder().endpoint("/api/security/login").build();
         return rest.callPost(login);
-    }
-
-    public JwtDto getToken(ResponseDto responseDto) {
-        return RestUtil.builder().build().getDataByTypeClass(responseDto, JwtDto.class, FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     }
 }

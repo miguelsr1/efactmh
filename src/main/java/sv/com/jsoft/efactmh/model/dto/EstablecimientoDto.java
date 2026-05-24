@@ -2,13 +2,17 @@ package sv.com.jsoft.efactmh.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author migue
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EstablecimientoDto implements Serializable {
 
     private Long idEstablecimiento;

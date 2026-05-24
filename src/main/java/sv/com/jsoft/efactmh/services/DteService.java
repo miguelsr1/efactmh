@@ -27,7 +27,6 @@ import org.json.simple.parser.ParseException;
 import sv.com.jsoft.efactmh.model.DetalleFacturaDto;
 import sv.com.jsoft.efactmh.model.InvoceDto;
 import sv.com.jsoft.efactmh.model.dto.ApiMhDteResponse;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.model.dto.ParametroDto;
 import sv.com.jsoft.efactmh.model.dto.SendDteRequest;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -61,7 +60,7 @@ public class DteService implements Serializable {
         IVA = new BigDecimal(VARIABLES.getString("mh.iva")).divide(new BigDecimal(100));
     }
 
-    public JSONObject getDteJson(InvoceDto invoce, String numDocEmisor, Long idEstablecimiento, Long idPuntoVenta, String numDocReceptor, JwtDto token) {
+    public JSONObject getDteJson(InvoceDto invoce, String numDocEmisor, Long idEstablecimiento, Long idPuntoVenta, String numDocReceptor) {
         String uuid = UUID.randomUUID().toString().toUpperCase();
 
         BigDecimal montoTotal = getTotal(invoce);
@@ -78,8 +77,8 @@ public class DteService implements Serializable {
 
         JSONObject jsonRoot = new JSONObject();
 
-        JSONObject jsonEmisor = contribuyenteServices.getJsonEmisor(numDocEmisor, idEstablecimiento, idPuntoVenta, token);
-        JSONObject jsonReceptor = contribuyenteServices.getJsonReceptor(invoce.getCodigoDte(), numDocReceptor, token);
+        JSONObject jsonEmisor = contribuyenteServices.getJsonEmisor(numDocEmisor, idEstablecimiento, idPuntoVenta);
+        JSONObject jsonReceptor = contribuyenteServices.getJsonReceptor(invoce.getCodigoDte(), numDocReceptor);
 
         JSONObject jsonIdentificacion = identificacionServices.getIdentificacion(uuid,
                 invoce.getCodigoDte(),
@@ -267,22 +266,22 @@ public class DteService implements Serializable {
         }
     }
 
-    public ResponseRestApi<ApiMhDteResponse> getSendMh(SendDteRequest send, JwtDto token) {
+    public ResponseRestApi<ApiMhDteResponse> getSendMh(SendDteRequest send) {
         RestUtil restUtil = RestUtil.builder()
                 .endpoint("/api/secured/dte/send")
                 .clazz(ApiMhDteResponse.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .body(send)
                 .build();
 
         return restUtil.callPostAuth();
     }
 
-    public ResponseRestApi sendMail(Long idFactura, JwtDto token) {
+    public ResponseRestApi sendMail(Long idFactura) {
         RestUtil restUtil = RestUtil.builder()
                 .endpoint("/api/secured/dte/send-mail/" + idFactura)
                 .clazz(String.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .build();
 
         return restUtil.callGetOneAuth();

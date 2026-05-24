@@ -1,13 +1,19 @@
 package sv.com.jsoft.efactmh.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  *
  * @author msanchez
  */
 @Data
-public class DtesResponse {
+@AllArgsConstructor
+@NoArgsConstructor
+public class DtesResponse implements Serializable {
 
     private Long idFactura;
     private String abrevDte;

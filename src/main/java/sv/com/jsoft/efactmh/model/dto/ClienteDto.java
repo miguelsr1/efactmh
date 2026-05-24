@@ -1,13 +1,17 @@
 package sv.com.jsoft.efactmh.model.dto;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author migue
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClienteDto implements Serializable {
 
     private Long idCliente;

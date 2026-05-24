@@ -42,9 +42,5 @@
         <exception-handler-factory>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerFactory</exception-handler-factory>
         <lifecycle-factory>org.primefaces.clientwindow.PrimeClientWindowLifecycleFactory</lifecycle-factory>
     </factory>
-    
-    <factory>
-        <exception-handler-factory>sv.com.jsoft.efactmh.exceptionhandler.ViewExpiredExceptionHandlerFactory</exception-handler-factory>
-    </factory>
 
 </faces-config>

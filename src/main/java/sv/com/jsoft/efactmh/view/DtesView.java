@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -90,7 +91,7 @@ public class DtesView implements Serializable {
         numDocCliente = null;
         correoCliente = null;
         fechaCreacion = null;
-        
+
         lstDtes.clear();
     }
 
@@ -108,7 +109,7 @@ public class DtesView implements Serializable {
 
         RestUtil rest = RestUtil.builder()
                 .clazz(DtesResponse.class)
-                .jwtDto(sessionService.getToken())
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dte/all" + (urlParams == null ? "" : urlParams))
                 .build();
 
@@ -124,7 +125,7 @@ public class DtesView implements Serializable {
     }
 
     public String showDlgDetToInvalidate() {
-        ResponseDto response = invalidateService.findDteToInvalidate(idFactura, codigoDte, codigoGeneracion, sessionService.getToken());
+        ResponseDto response = invalidateService.findDteToInvalidate(idFactura, codigoDte, codigoGeneracion);
 
         if (response.getStatusCode() == 0) {
             DteToInvalidate dte = (DteToInvalidate) response.getBody();
@@ -150,7 +151,6 @@ public class DtesView implements Serializable {
 
     public void viewPdf(DtesResponse dte) {
         idFactura = dte.getIdFactura();
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("jwt", sessionService.getToken());
         PrimeFaces.current().ajax().update("panelPrint");
     }
 
@@ -170,20 +170,20 @@ public class DtesView implements Serializable {
 
         PrimeFaces.current().dialog().openDynamic("process/dialog/dlg-pdf", options, null);*/
     }
-    
+
     public void downloadPdf(DtesResponse dte) {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("idFactura", dte.getIdFactura());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("codigoGeneracion", dte.getCodigoGeneracion());
     }
 
-    public void reSendMail(){
+    public void reSendMail() {
         ReSendMailDto reSendMailDto = new ReSendMailDto();
         reSendMailDto.setEmail(to);
         reSendMailDto.setIdInvoce(idFactura);
 
-           RestUtil rest = RestUtil.builder()
+        RestUtil rest = RestUtil.builder()
                 .clazz(DtesResponse.class)
-                .jwtDto(sessionService.getToken())
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dte/resend-mail")
                 .body(reSendMailDto)
                 .build();

@@ -45,7 +45,7 @@ public class DlgEstablecimiento implements Serializable {
         RestUtil rest = RestUtil
                 .builder()
                 .clazz(IdDto.class)
-                .jwtDto(sessionService.getToken())
+                .accessToken(sessionService.getAccessTokenString())
                 .body(establecimientoDto)
                 .endpoint("/api/secured/establecimiento").build();
 

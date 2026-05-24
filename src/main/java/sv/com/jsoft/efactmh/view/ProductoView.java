@@ -54,7 +54,7 @@ public class ProductoView implements Serializable {
     @PostConstruct
     public void init() {
         producto = new Producto();
-        lstProducto = productoService.findAll(sessionService.getToken());
+        lstProducto = productoService.findAll();
     }
 
     public Producto getProducto() {
@@ -77,7 +77,7 @@ public class ProductoView implements Serializable {
             RestUtil
                     .builder()
                     .clazz(Producto.class)
-                    .jwtDto(sessionService.getToken())
+                    .accessToken(sessionService.getAccessTokenString())
                     .body(producto)
                     .endpoint("/api/secured/item/" + producto.getIdProducto())
                     .build()
@@ -86,7 +86,7 @@ public class ProductoView implements Serializable {
             response = RestUtil
                     .builder()
                     .clazz(Producto.class)
-                    .jwtDto(sessionService.getToken())
+                    .accessToken(sessionService.getAccessTokenString())
                     .body(producto)
                     .endpoint("/api/secured/item/")
                     .build()
@@ -120,7 +120,7 @@ public class ProductoView implements Serializable {
         disabled = true;
         edit = false;
 
-        lstProducto = productoService.findAll(sessionService.getToken());
+        lstProducto = productoService.findAll();
     }
 
     public void onRowSelect(SelectEvent<Producto> event) {

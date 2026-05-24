@@ -9,37 +9,73 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="unificando KC + Jakarta faces">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/jboss-deployment-structure.xml" afterDir="false" />
+    <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="se dio inicio a mejoras en restutil">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/db/DataBaseSupport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/db/DataBaseSupport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/exceptionhandler/ViewExpiredExceptionHandlerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/exceptionhandler/ViewExpiredExceptionHandlerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/AuthorizationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/AuthorizationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/SecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/filter/SecurityFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/repository/ClientRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/ApplicationConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/Encriptador.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/security/Encriptador.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/exceptionhandler/ViewExpiredExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/exceptionhandler/ViewExpiredExceptionHandlerFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ApiMhDteResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ApiMhDteResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/BuyContriDtoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/BuyContriDtoRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/BuyDtoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/BuyDtoRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/BuyDtoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/BuyDtoResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/CatalogoDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/CatalogoDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ClienteDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ClienteDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DashboardDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DashboardDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DocumentoRespuestaDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DocumentoRespuestaDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DteToInvalidate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DteToInvalidate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DtesResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/DtesResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/EmisorDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/EmisorDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ErrorMessageDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ErrorMessageDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ErrorResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ErrorResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/EstablecimientoDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/EstablecimientoDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/IdDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/IdDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/InvalidateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/InvalidateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/InvoicedAmountsDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/InvoicedAmountsDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/JwtDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/LoginDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/LoginDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/MotivoInvalidarDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ParametroDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ParametroDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/PuntoVentaDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/PuntoVentaDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ReSendMailDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ReSendMailDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ReceptorDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ReceptorDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/ResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/SendDteRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/SendDteRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/TipoVentaDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/model/dto/TipoVentaDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/BuyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/BuyService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/CatalogoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/CatalogoService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ClientService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ComprobanteCreditoFiscalService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ComprobanteCreditoFiscalService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ContribuyenteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ContribuyenteService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/DashboardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/DashboardService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/DteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/DteService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/IdentificacionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/IdentificacionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/EmisorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/EmisorService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/InvalidateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/InvalidateService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/InvoceService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/InvoceService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/LoginServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/LoginServices.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ProductoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ProductoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ResumenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ResumenService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/JsfUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/JsfUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/UbicacionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/UbicacionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyContriView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyContriView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/BuyView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ClienteView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ClienteView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DashboardView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DashboardView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/EmisorView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/EmisorView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/LoginView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/LoginView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ParametrosView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ParametrosView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ProductoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ProductoView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ReporteView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ReporteView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/dialog/DlgInvalidarDte.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/dialog/DlgInvalidarDte.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/DlgEstablecimiento.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/DlgEstablecimiento.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/DlgPuntoVenta.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/DlgPuntoVenta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/EstructuraView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/EstructuraView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/service/EstablecimientoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/estructura/service/EstablecimientoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/primefaces-paradise.taglib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/primefaces-paradise.taglib.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/faces-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/faces-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/template.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/template.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/index.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/index.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +100,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/kc-integration" />
+        <entry key="$PROJECT_DIR$" value="feature/mejoras-en-compras" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -101,39 +137,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor&quot;: &quot;Run&quot;,
-    &quot;JBoss/WildFly Server.WildFly 24.executor&quot;: &quot;Run&quot;,
-    &quot;JBoss/WildFly Server.WildFly 26.executor&quot;: &quot;Run&quot;,
-    &quot;JBoss/WildFly Server.WildFly 39.0.3.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.google.cloudcode.ide_session_index&quot;: &quot;20260401_0001&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/mejoras-en-compras-jakarta&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/msanchez/Documents/PERSONAL/JAVA/efactmh&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.3505747&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.tools&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JBoss/WildFly Server.JBoss/WildFly 34.0.1.Final.executor": "Run",
+    "JBoss/WildFly Server.WildFly 24.executor": "Run",
+    "JBoss/WildFly Server.WildFly 26.executor": "Run",
+    "JBoss/WildFly Server.WildFly 39.0.3.executor": "Debug",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.google.cloudcode.ide_session_index": "20260401_0001",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "feature/mejoras-en-compras-jakarta",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/msanchez/Documents/PERSONAL/JAVA/efactmh",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Problems",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.3505747",
+    "settings.editor.selected.configurable": "configurable.group.tools",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\msanchez\Documents\PERSONAL\JAVA\efactmh" />
@@ -552,6 +588,7 @@
       <workItem from="1778854835929" duration="17858000" />
       <workItem from="1778907311094" duration="4697000" />
       <workItem from="1779239102898" duration="1800000" />
+      <workItem from="1779591229551" duration="12158000" />
     </task>
     <task id="LOCAL-00001" summary="muchas mejoras">
       <option name="closed" value="true" />
@@ -569,22 +606,30 @@
       <option name="project" value="LOCAL" />
       <updated>1779229431899</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="se dio inicio a mejoras en restutil">
+      <option name="closed" value="true" />
+      <created>1779574492335</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1779574492335</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="UnknownFeatures">
-    <option featureType="dependencySupport" implementationName="java:jakarta.enterprise:jakarta.enterprise.cdi-api" />
-    <option featureType="dependencySupport" implementationName="executable:kubectl" />
-    <option featureType="dependencySupport" implementationName="java:org.primefaces:primefaces" />
-    <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
     <option featureType="dependencySupport" implementationName="java:junit:junit" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.enterprise:jakarta.enterprise.cdi-api" />
     <option featureType="dependencySupport" implementationName="executable:docker" />
     <option featureType="dependencySupport" implementationName="java:org.omnifaces:omnifaces" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
     <option featureType="dependencySupport" implementationName="java:org.jdbi:jdbi3-core" />
     <option featureType="dependencySupport" implementationName="maven-packaging:war" />
+    <option featureType="dependencySupport" implementationName="java:org.primefaces:primefaces" />
+    <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -602,14 +647,15 @@
     <MESSAGE value="muchas mejoras" />
     <MESSAGE value="lista la consulta de compras" />
     <MESSAGE value="funcionando compras" />
-    <option name="LAST_COMMIT_MESSAGE" value="funcionando compras" />
+    <MESSAGE value="se dio inicio a mejoras en restutil" />
+    <option name="LAST_COMMIT_MESSAGE" value="se dio inicio a mejoras en restutil" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java</url>
-          <line>587</line>
+          <line>534</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -634,13 +680,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/BuyService.java</url>
-          <line>102</line>
+          <line>108</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java</url>
-          <line>105</line>
-          <option name="timeStamp" value="41" />
+          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java</url>
+          <line>211</line>
+          <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

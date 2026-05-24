@@ -100,7 +100,7 @@ public class DashboardView implements Serializable {
     }
 
     private void loadUsePlan() {
-        ResponseRestApi<BalanceDto> response = dashboardService.getBalanceDte(securityService.getToken());
+        ResponseRestApi<BalanceDto> response = dashboardService.getBalanceDte();
 
         if (response.getCodeHttp() == 200) {
             balanceDto = response.getBody();
@@ -121,7 +121,7 @@ public class DashboardView implements Serializable {
     }
 
     private void loadInvoicedAmounts() {
-        ResponseRestApi<List<InvoicedAmountsDto>> response = dashboardService.getInvoicedAmounts(securityService.getToken());
+        ResponseRestApi<List<InvoicedAmountsDto>> response = dashboardService.getInvoicedAmounts();
 
         if (response.getCodeHttp() == 200) {
             lstInvoiced = response.getBody();
@@ -130,7 +130,7 @@ public class DashboardView implements Serializable {
 
     private void loadDataInvoice7Days() {
         List<Invoice7DaysDto> lstData = new ArrayList<>();
-        ResponseRestApi<List<Invoice7DaysDto>> response = dashboardService.getInvoice7Days(securityService.getToken());
+        ResponseRestApi<List<Invoice7DaysDto>> response = dashboardService.getInvoice7Days();
 
         if (response.getCodeHttp() == 200) {
             lstData = response.getBody();
@@ -246,7 +246,7 @@ public class DashboardView implements Serializable {
     }
 
     public void makeChartInvoce() {
-        ResponseRestApi<List<DashboardDto>> response = dashboardService.findAllData(securityService.getToken());
+        ResponseRestApi<List<DashboardDto>> response = dashboardService.findAllData();
         if (response.getCodeHttp() == 200) {
             lst = response.getBody();
         } else if (response.getCodeHttp() == 404) {

@@ -66,7 +66,7 @@ public class EmisorView implements Serializable {
         ResponseRestApi response = RestUtil
                 .builder()
                 .clazz(Emisor.class)
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .endpoint("/api/secured/emisor")
                 .build()
                 .callGetOneAuth();
@@ -92,7 +92,7 @@ public class EmisorView implements Serializable {
     public void guardar() {
         RestUtil rest = RestUtil
                 .builder()
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .body(emisor)
                 .endpoint("/api/secured/emisor/").build();
 

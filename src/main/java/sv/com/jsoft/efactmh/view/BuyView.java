@@ -228,7 +228,7 @@ public class BuyView implements Serializable {
 
         currentJsonObject.remove("firmaElectronica");
         
-        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(currentJsonObject), buyDate, securityService.getToken());
+        ResponseRestApi<ApiMhDteResponse> responseSendMh = buyService.save(gson.toJson(currentJsonObject), buyDate);
 
         if (responseSendMh.getCodeHttp() == 201) {
             return true;
@@ -266,7 +266,7 @@ public class BuyView implements Serializable {
     }
 
     private void loadBuys() {
-        lstBuys = buyService.getList(fecha, securityService.getToken());
+        lstBuys = buyService.getList(fecha);
     }
 
     public void guardarJson() {

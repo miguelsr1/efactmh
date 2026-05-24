@@ -1,13 +1,19 @@
 package sv.com.jsoft.efactmh.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  *
  * @author msanchez
  */
 @Data
-public class InvalidateRequest {
+@AllArgsConstructor
+@NoArgsConstructor
+public class InvalidateRequest implements Serializable {
 
     /*private int tipoAnulacion;
     private String nombreSolicita;

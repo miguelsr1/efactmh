@@ -9,6 +9,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
 
+import jakarta.inject.Inject;
 import lombok.Getter;
 import sv.com.jsoft.efactmh.model.dto.*;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
@@ -20,6 +21,10 @@ import sv.com.jsoft.efactmh.util.RestUtil;
  */
 @ApplicationScoped
 public class BuyService implements Serializable {
+
+
+    @Inject
+    SessionService sessionService;
 
     @Getter
     private List<CostClassificationDto> lstCost;
@@ -57,7 +62,7 @@ public class BuyService implements Serializable {
         lstAnios.add(new AnioDto(currentYear - 1, String.valueOf(currentYear - 1)));
     }
 
-    public ResponseRestApi<ApiMhDteResponse> save(String json, LocalDate buyDate, JwtDto token) {
+    public ResponseRestApi<ApiMhDteResponse> save(String json, LocalDate buyDate) {
 
         BuyDtoRequest request = new BuyDtoRequest();
         request.setJson(json);
@@ -67,14 +72,14 @@ public class BuyService implements Serializable {
         RestUtil restUtil = RestUtil.builder()
                 .endpoint("/api/secured/buy")
                 .clazz(ApiMhDteResponse.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .body(request)
                 .build();
 
         return restUtil.callPostAuth();
     }
 
-    public ResponseRestApi<ApiMhDteResponse> save(String json, LocalDate buyDate, int idTipoDocumento, String numDocumento, JwtDto token) {
+    public ResponseRestApi<ApiMhDteResponse> save(String json, LocalDate buyDate, int idTipoDocumento, String numDocumento) {
 
         BuyContriDtoRequest request = new BuyContriDtoRequest();
         request.setJson(json);
@@ -86,30 +91,32 @@ public class BuyService implements Serializable {
         RestUtil restUtil = RestUtil.builder()
                 .endpoint("/api/secured/buy/contri")
                 .clazz(ApiMhDteResponse.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .body(request)
                 .build();
 
         return restUtil.callPostAuth();
     }
 
-    public List<BuyDtoResponse> getList(LocalDate buyDate, JwtDto token) {
-        RestUtil restUtil = RestUtil.builder()
+    public List<BuyDtoResponse> getList(LocalDate buyDate) {
+        ResponseRestApi<List<BuyDtoResponse>> response = RestUtil.builder()
                 .endpoint("/api/secured/buy/" + buyDate.getYear() + "/" + buyDate.getMonthValue() + "/")
                 .clazz(BuyDtoResponse.class)
-                .jwtDto(token)
-                .build();
+                .accessToken(sessionService.getAccessTokenString())
+                .build()
+                .callGetAllAuth();
 
-        return (List<BuyDtoResponse>) restUtil.callGetAllAuth().getBody();
+        return response.getBody();
     }
 
-    public List<BuyDtoResponse> getListContri(LocalDate buyDate, int idTipoDocumento, String numDocumento, JwtDto token) {
-        RestUtil restUtil = RestUtil.builder()
+    public List<BuyDtoResponse> getListContri(LocalDate buyDate, int idTipoDocumento, String numDocumento) {
+        ResponseRestApi<List<BuyDtoResponse>> response = RestUtil.builder()
                 .endpoint("/api/secured/buy/contri/" + idTipoDocumento + "/" + numDocumento + "/" + buyDate.getYear() + "/" + buyDate.getMonthValue() + "/")
                 .clazz(BuyDtoResponse.class)
-                .jwtDto(token)
-                .build();
+                .accessToken(sessionService.getAccessTokenString())
+                .build()
+                .callGetAllAuth();
 
-        return (List<BuyDtoResponse>) restUtil.callGetAllAuth().getBody();
+        return response.getBody();
     }
 }

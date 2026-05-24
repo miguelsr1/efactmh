@@ -108,7 +108,7 @@ public class DlgInvalidarDte implements Serializable {
         request.setIdPuntoVenta(sessionView.getIdPuntoVenta() == null ? null : Long.valueOf(sessionView.getIdPuntoVenta()));
         request.setIdFactura(idFactura);
 
-        ResponseRestApi response = invalidateService.createInvalidate(request, sessionService.getToken());
+        ResponseRestApi response = invalidateService.createInvalidate(request);
 
         PrimeFaces.current().dialog().closeDynamic(null);
 
@@ -138,7 +138,7 @@ public class DlgInvalidarDte implements Serializable {
     }
 
     private Boolean validarDteR() {
-        ResponseDto resposeDto = invalidateService.findDteToInvalidateByReplace(codigoDte, dteR, sessionService.getToken());
+        ResponseDto resposeDto = invalidateService.findDteToInvalidateByReplace(codigoDte, dteR);
         if (resposeDto.getStatusCode() == 1) {
             MessageUtil.builder()
                     .severity(FacesMessage.SEVERITY_WARN)

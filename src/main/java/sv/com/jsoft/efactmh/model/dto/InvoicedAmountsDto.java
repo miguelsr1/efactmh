@@ -1,8 +1,10 @@
 package sv.com.jsoft.efactmh.model.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -10,7 +12,8 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class InvoicedAmountsDto {
+@NoArgsConstructor
+public class InvoicedAmountsDto implements Serializable {
 
     private String periodo;
     private BigDecimal fe;

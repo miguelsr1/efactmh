@@ -5,8 +5,9 @@ import java.util.List;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
+
+import jakarta.inject.Inject;
 import sv.com.jsoft.efactmh.model.Producto;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -17,17 +18,19 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @ApplicationScoped
 public class ProductoService implements Serializable {
 
+    @Inject
+    SessionService sessionService;
 
     @PostConstruct
     public void init() {
 
     }
 
-    public List<Producto> findAll(JwtDto token) {
+    public List<Producto> findAll() {
         ResponseRestApi response = RestUtil
                 .builder()
                 .clazz(Producto.class)
-                .jwtDto(token)
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/item")
                 .build()
                 .callGetAllAuth();

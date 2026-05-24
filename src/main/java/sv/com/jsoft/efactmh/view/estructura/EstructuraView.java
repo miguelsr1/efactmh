@@ -58,11 +58,11 @@ public class EstructuraView implements Serializable {
     }
 
     public void loadPuntosVenta() {
-        lstPuntosVentas = estableService.getLstPuntosVentas(securityService.getToken(), idEstablecimiento);
+        lstPuntosVentas = estableService.getLstPuntosVentas(idEstablecimiento);
     }
 
     private void loadEstablecimientos() {
-        lstEstable = estableService.getLstEstablecimiento(securityService.getToken());
+        lstEstable = estableService.getLstEstablecimiento();
     }
 
     public void showDlgEstablecimiento() {

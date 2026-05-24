@@ -1,13 +1,19 @@
 package sv.com.jsoft.efactmh.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  *
  * @author migue
  */
 @Data
-public class ReceptorDto {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ReceptorDto implements Serializable {
 
     private String nrc;
     private String tipoDocumento;
@@ -21,6 +27,8 @@ public class ReceptorDto {
     private String correo;
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public class Direccion {
         private String departamento;
         private String municipio;

@@ -15,7 +15,6 @@ import lombok.Getter;
 import sv.com.jsoft.efactmh.model.MunicipioDto;
 import sv.com.jsoft.efactmh.model.Producto;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -73,7 +72,7 @@ public class CatalogoService implements Serializable {
     }
     
     public void loadItems(){
-        lstProducto = productoService.findAll(securityService.getToken());
+        lstProducto = productoService.findAll();
     }
 
     private void loadTipoDocumentosId() {
@@ -86,15 +85,15 @@ public class CatalogoService implements Serializable {
     }
 
     private void loadTipoUnidadMedida() {
-        ResponseRestApi response = RestUtil.builder()
+        ResponseRestApi<List<CatalogoDto>> response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/unidad-medidad")
                 .clazz(CatalogoDto.class)
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
 
         if (response.getCodeHttp() == 200) {
-            lstTipoUnidadMedida = (List<CatalogoDto>) response.getBody();
+            lstTipoUnidadMedida = response.getBody();
         }
     }
 
@@ -102,7 +101,7 @@ public class CatalogoService implements Serializable {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/departamento")
                 .clazz(CatalogoDto.class)
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
 
@@ -113,7 +112,7 @@ public class CatalogoService implements Serializable {
         response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/municipio")
                 .clazz(MunicipioDto.class)
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
 
@@ -134,7 +133,7 @@ public class CatalogoService implements Serializable {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/giro")
                 .clazz(CatalogoDto.class)
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
         if (response.getCodeHttp() == 200) {
@@ -142,11 +141,11 @@ public class CatalogoService implements Serializable {
         }
     }
 
-    public List<CatalogoDto> getLstEstablecimiento(JwtDto token) {
+    public List<CatalogoDto> getLstEstablecimiento() {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/establecimiento")
                 .clazz(CatalogoDto.class)
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
         
@@ -157,7 +156,7 @@ public class CatalogoService implements Serializable {
         ResponseRestApi response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/punto-venta/" + idEstablecimiento)
                 .clazz(CatalogoDto.class)
-                .jwtDto(securityService.getToken())
+                .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
         

@@ -2,6 +2,9 @@ package sv.com.jsoft.efactmh.view;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +26,7 @@ import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import org.wildfly.security.http.oidc.OidcPrincipal;
+import org.wildfly.security.http.oidc.OidcSecurityContext;
 import sv.com.jsoft.efactmh.model.PlanMensual;
 import sv.com.jsoft.efactmh.model.dto.CatalogoDto;
 import sv.com.jsoft.efactmh.services.CatalogoService;
@@ -32,10 +36,6 @@ import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
 
 import sv.com.jsoft.efactmh.util.JsfUtil;
 
-/**
- *
- * @author migue
- */
 @Named
 @SessionScoped
 @Slf4j
@@ -43,7 +43,6 @@ public class SessionView implements Serializable {
 
     @Inject
     HttpServletRequest request;
-
 
     @Inject
     SessionService sessionService;
@@ -69,7 +68,7 @@ public class SessionView implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (sessionService.getRolUsuario().equals("ROLE_EMISOR")) {
+        if (sessionService.getRoles() != null && sessionService.getRoles().contains("ROLE_EMISOR")) {
             loadCookies();
             loadMenu();
             loadPlanMensual();
@@ -103,7 +102,6 @@ public class SessionView implements Serializable {
     private void loadMenu() {
         model = new DefaultMenuModel();
 
-        //First submenu
         DefaultSubMenu subMenuFav = DefaultSubMenu.builder()
                 .label("Favoritos")
                 .icon("pi pi-home")
@@ -185,7 +183,6 @@ public class SessionView implements Serializable {
         } else {
             JsfUtil.crearCookie("idEstable", idEstablecimiento);
             JsfUtil.eliminarCookie("idPuntoV");
-            //sinParametrosIniciales = false;
         }
         this.idEstablecimiento = idEstablecimiento;
     }
@@ -199,7 +196,6 @@ public class SessionView implements Serializable {
             JsfUtil.eliminarCookie("idPuntoV");
         } else {
             JsfUtil.crearCookie("idPuntoV", idPuntoVenta);
-            //sinParametrosIniciales = false;
         }
         this.idPuntoVenta = idPuntoVenta;
     }
@@ -210,8 +206,26 @@ public class SessionView implements Serializable {
 
     public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getSessionMap().clear();
-        context.getExternalContext().invalidateSession();
+        ExternalContext externalContext = context.getExternalContext();
+        OidcPrincipal principal = sessionService.getOidcPrincipal();
+
+        if (principal != null) {
+            String idToken = principal.getOidcSecurityContext().getIDTokenString();
+            String keycloakLogoutUrl = "https://kc.efacturame.cloud/realms/efactura-realm/protocol/openid-connect/logout";
+            
+            try {
+                String postLogoutRedirectUri = URLEncoder.encode(request.getContextPath(), StandardCharsets.UTF_8.name());
+                String logoutUrl = String.format("%s?id_token_hint=%s&post_logout_redirect_uri=%s", 
+                                                 keycloakLogoutUrl, idToken, postLogoutRedirectUri);
+
+                externalContext.invalidateSession();
+                return logoutUrl + "&faces-redirect=true";
+            } catch (UnsupportedEncodingException e) {
+                log.error("Error encoding redirect URL for Keycloak logout", e);
+            }
+        }
+
+        externalContext.invalidateSession();
         return "/index.xhtml?faces-redirect=true";
     }
 
@@ -223,10 +237,10 @@ public class SessionView implements Serializable {
     }
 
     public boolean isEmisorRol() {
-        return sessionService.getRolUsuario().equals("ROLE_EMISOR");
+        return sessionService.getRoles().contains("ROLE_EMISOR");
     }
 
     public boolean isContadorRol() {
-        return sessionService.getRolUsuario().equals("ROLE_CONTADOR");
+        return sessionService.getRoles().contains("ROLE_CONTADOR");
     }
 }

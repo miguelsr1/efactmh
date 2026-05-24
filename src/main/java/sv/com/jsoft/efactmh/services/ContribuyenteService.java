@@ -1,11 +1,11 @@
 package sv.com.jsoft.efactmh.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
 
@@ -17,14 +17,17 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 @Slf4j
 public class ContribuyenteService {
 
-    public JSONObject getJsonEmisor(String nit, Long idEstablecimiento, Long idPuntoVenta, JwtDto token) {
+    @Inject
+    SessionService sessionService;
+
+    public JSONObject getJsonEmisor(String nit, Long idEstablecimiento, Long idPuntoVenta) {
         try {
             JSONParser parser = new JSONParser();
 
             RestUtil rest = RestUtil
                     .builder()
                     .clazz(String.class)
-                    .jwtDto(token)
+                    .accessToken(sessionService.getAccessTokenString())
                     .endpoint("/api/secured/dte/emisor/" + nit + "/" + idEstablecimiento + "/" + idPuntoVenta)
                     .build();
 
@@ -37,14 +40,14 @@ public class ContribuyenteService {
         }
     }
 
-    public JSONObject getJsonReceptor(String codigoDte, String numDocumento, JwtDto token) {
+    public JSONObject getJsonReceptor(String codigoDte, String numDocumento) {
         try {
             JSONParser parser = new JSONParser();
 
             RestUtil rest = RestUtil
                     .builder()
                     .clazz(String.class)
-                    .jwtDto(token)
+                    .accessToken(sessionService.getAccessTokenString())
                     .endpoint("/api/secured/dte/receptor/" + codigoDte + "/" + numDocumento)
                     .build();
 

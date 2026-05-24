@@ -9,7 +9,6 @@ import sv.com.jsoft.efactmh.model.PerNaturalRequest;
 import sv.com.jsoft.efactmh.model.Personeria;
 import sv.com.jsoft.efactmh.model.dto.ClienteDto;
 import sv.com.jsoft.efactmh.model.dto.ClienteResponse;
-import sv.com.jsoft.efactmh.model.dto.JwtDto;
 import sv.com.jsoft.efactmh.repository.ClientRepository;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
 import sv.com.jsoft.efactmh.util.RestUtil;
@@ -23,46 +22,49 @@ import sv.com.jsoft.efactmh.util.RestUtil;
 public class ClientService implements Serializable {
 
     @Inject
+    SessionService sessionService;
+
+    @Inject
     ClientRepository clientRepository;
 
     public ClienteResponse get(Long idCliente) {
         return clientRepository.get(idCliente);
     }
 
-    public ResponseRestApi<ClienteDto> findAllClient(JwtDto jwt) {
+    public ResponseRestApi<ClienteDto> findAllClient() {
         return RestUtil
                 .builder()
                 .clazz(ClienteDto.class)
-                .jwtDto(jwt)
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/client/")
                 .build()
-                .callGetAllAuth();
+                .callGetOneAuth();
     }
 
-    public ResponseRestApi<Cliente> findClientById(JwtDto jwt, Long idClient) {
+    public ResponseRestApi<Cliente> findClientById(Long idClient) {
         return RestUtil.builder()
                 .clazz(Cliente.class)
-                .jwtDto(jwt)
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/client/update/" + idClient)
                 .build()
                 .callGetOneAuth();
     }
 
-    public int updClient(JwtDto jwt, Long idClient, Personeria p) {
+    public int updClient(Long idClient, Personeria p) {
         return RestUtil
                 .builder()
                 .clazz(ClienteDto.class)
-                .jwtDto(jwt)
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/client/" + ((p instanceof PerNaturalRequest) ? "pn" : "pj") + "/")
                 .build()
                 .callUpdClient(idClient, p);
     }
 
-    public int insClient(JwtDto jwt, Long idClient, Personeria p) {
+    public int insClient(Long idClient, Personeria p) {
         return RestUtil
                 .builder()
                 .clazz(String.class)
-                .jwtDto(jwt)
+                .accessToken(sessionService.getAccessTokenString())
                 .body(p)
                 .endpoint("/api/secured/client/" + ((p instanceof PerNaturalRequest) ? "pn" : "pj") + "/")
                 .build()

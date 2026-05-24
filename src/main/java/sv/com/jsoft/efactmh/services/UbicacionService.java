@@ -33,7 +33,7 @@ public class UbicacionService {
         ResponseRestApi rest = RestUtil
                 .builder()
                 .clazz(CatalogoDto.class)
-                .jwtDto(sessionService.getToken())
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/catalogo/departamento/")
                 .build()
                 .callGetAllAuth();
@@ -53,7 +53,7 @@ public class UbicacionService {
         ResponseRestApi rest = RestUtil
                 .builder()
                 .clazz(MunicipioDto.class)
-                .jwtDto(sessionService.getToken())
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/catalogo/municipio/departamento/" + depa)
                 .build()
                 .callGetAllAuth();
@@ -68,7 +68,7 @@ public class UbicacionService {
     public MunicipioDto findMunicipioById(Long idMuni){
         return (MunicipioDto) RestUtil.builder()
                 .clazz(MunicipioDto.class)
-                .jwtDto(sessionService.getToken())
+                .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/catalogo/municipio/" + idMuni)
                 .build().callGetOneAuth().getBody();
     }

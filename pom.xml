@@ -144,7 +144,6 @@
             <artifactId>wildfly-elytron-http-oidc</artifactId>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <repositories>

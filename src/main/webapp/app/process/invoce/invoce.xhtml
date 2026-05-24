@@ -4,8 +4,6 @@
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:p="primefaces"
                 xmlns:jsf="jakarta.faces"
-                xmlns:o="http://omnifaces.org/ui"
-                xmlns:of="http://omnifaces.org/functions"
                 xmlns:pe="primefaces.extensions"
                 template="/WEB-INF/template.xhtml">
 
@@ -38,22 +36,11 @@
                 text-transform: uppercase;
             }
         </style>
-        <!-- JS que actualiza el contenido del diálogo cuando llega un mensaje -->
-        <script>
-            function recibirMensaje(message) {
-                console.log('Mensaje recibido Omnifaces o:socket:', message);
-                ejecutarGrowl([{name: 'data', value: message}]);
-            }
-        </script>
     </ui:define>
 
     <ui:define name="content">
 
         <h:form prependId="false">
-            <o:socket channel="chatChannel" 
-                      onmessage="recibirMensaje"
-                      scope="view"/>
-
             <p:remoteCommand name="ejecutarGrowl" 
                              actionListener="#{invoceView.showActiveStep()}" 
                              update="mensajesPanel"/>
