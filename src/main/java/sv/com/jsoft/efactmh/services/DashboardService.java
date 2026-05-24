@@ -24,62 +24,52 @@ public class DashboardService implements Serializable {
     SessionService sessionService;
 
     public ResponseRestApi<List<DashboardDto>> findAllData() {
-        ResponseRestApi<List<DashboardDto>> response = RestUtil
+        return RestUtil
                 .builder()
                 .clazz(DashboardDto.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dashboard")
                 .build()
                 .callGetAllAuth();
-
-        return response;
     }
 
     public ResponseRestApi<List<Invoice7DaysDto>> getInvoice7Days() {
-        ResponseRestApi<List<Invoice7DaysDto>> response = RestUtil
+        return RestUtil
                 .builder()
                 .clazz(Invoice7DaysDto.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dashboard/invoice-last-7-days")
                 .build()
                 .callGetAllAuth();
-
-        return response;
     }
     
     public ResponseRestApi<List<TotalInvoice7DaysDto>> getTotalLast7Days() {
-        ResponseRestApi<List<TotalInvoice7DaysDto>> response = RestUtil
+        return RestUtil
                 .builder()
                 .clazz(TotalInvoice7DaysDto.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dashboard/total-last-7-days")
                 .build()
                 .callGetAllAuth();
-
-        return response;
     }
     
     public ResponseRestApi<List<InvoicedAmountsDto>> getInvoicedAmounts() {
-        ResponseRestApi<List<InvoicedAmountsDto>> response = RestUtil
+        return RestUtil
                 .builder()
                 .clazz(InvoicedAmountsDto.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dashboard/invoiced-amounts")
                 .build()
                 .callGetAllAuth();
-
-        return response;
     }
     
     public ResponseRestApi<BalanceDto> getBalanceDte() {
-        ResponseRestApi<BalanceDto> response = RestUtil
+        return RestUtil
                 .builder()
                 .clazz(BalanceDto.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dashboard/balance-dte")
                 .build()
                 .callGetOneAuth();
-
-        return response;
     }
 }

@@ -30,7 +30,7 @@ public class UbicacionService {
 
     @PostConstruct
     public void init() {
-        ResponseRestApi rest = RestUtil
+        ResponseRestApi<List<CatalogoDto>> rest = RestUtil
                 .builder()
                 .clazz(CatalogoDto.class)
                 .accessToken(sessionService.getAccessTokenString())
@@ -39,7 +39,7 @@ public class UbicacionService {
                 .callGetAllAuth();
         
         if (rest.getCodeHttp() == 200) {
-            lstDepartamento = (List<CatalogoDto>) rest.getBody();
+            lstDepartamento = rest.getBody();
         } else {
             lstDepartamento = new ArrayList<>();
         }
@@ -50,7 +50,7 @@ public class UbicacionService {
             return new ArrayList<>();
         }
         
-        ResponseRestApi rest = RestUtil
+        ResponseRestApi<List<MunicipioDto>> rest = RestUtil
                 .builder()
                 .clazz(MunicipioDto.class)
                 .accessToken(sessionService.getAccessTokenString())
@@ -59,7 +59,7 @@ public class UbicacionService {
                 .callGetAllAuth();
         
         if (rest.getCodeHttp() == 200) {
-            return (List<MunicipioDto>) rest.getBody();
+            return rest.getBody();
         } else {
             return new ArrayList<>();
         }

@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -98,26 +97,26 @@ public class CatalogoService implements Serializable {
     }
 
     private void loadDatosUbicacion() {
-        ResponseRestApi response = RestUtil.builder()
+        ResponseRestApi<List<CatalogoDto>> responseDepas = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/departamento")
                 .clazz(CatalogoDto.class)
                 .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
 
-        if (response.getCodeHttp() == 200) {
-            lstDepartamentos = (List<CatalogoDto>) response.getBody();
+        if (responseDepas.getCodeHttp() == 200) {
+            lstDepartamentos = responseDepas.getBody();
         }
 
-        response = RestUtil.builder()
+        ResponseRestApi<List<MunicipioDto>> responseMunis = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/municipio")
                 .clazz(MunicipioDto.class)
                 .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
 
-        if (response.getCodeHttp() == 200) {
-            lstMunicipios = (List<MunicipioDto>) response.getBody();
+        if (responseMunis.getCodeHttp() == 200) {
+            lstMunicipios = responseMunis.getBody();
         }
     }
 
@@ -126,40 +125,41 @@ public class CatalogoService implements Serializable {
                 .stream()
                 .filter(mun -> mun.getCodDepartamento().compareTo(codDepa) == 0)
                 .sorted(Comparator.comparing(MunicipioDto::getNombre))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private void loadGiros() {
-        ResponseRestApi response = RestUtil.builder()
+        ResponseRestApi<List<CatalogoDto>> response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/giro")
                 .clazz(CatalogoDto.class)
                 .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
+
         if (response.getCodeHttp() == 200) {
-            lstGiros = (List<CatalogoDto>) response.getBody();
+            lstGiros = response.getBody();
         }
     }
 
     public List<CatalogoDto> getLstEstablecimiento() {
-        ResponseRestApi response = RestUtil.builder()
+        ResponseRestApi<List<CatalogoDto>> response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/establecimiento")
                 .clazz(CatalogoDto.class)
                 .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
         
-        return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
+        return (response.getCodeHttp() == 200) ? response.getBody() : new ArrayList<>();
     }
 
     public List<CatalogoDto> getLstPuntoVentaByEstablecimiento(Long idEstablecimiento) {
-        ResponseRestApi response = RestUtil.builder()
+        ResponseRestApi<List<CatalogoDto>> response = RestUtil.builder()
                 .endpoint("/api/secured/catalogo/punto-venta/" + idEstablecimiento)
                 .clazz(CatalogoDto.class)
                 .accessToken(securityService.getAccessTokenString())
                 .build()
                 .callGetAllAuth();
         
-        return (response.getCodeHttp() == 200) ? (List<CatalogoDto>) response.getBody() : new ArrayList<>();
+        return (response.getCodeHttp() == 200) ? response.getBody() : new ArrayList<>();
     }
 }

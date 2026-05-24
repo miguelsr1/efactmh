@@ -27,7 +27,7 @@ public class ProductoService implements Serializable {
     }
 
     public List<Producto> findAll() {
-        ResponseRestApi response = RestUtil
+        ResponseRestApi<List<Producto>> response = RestUtil
                 .builder()
                 .clazz(Producto.class)
                 .accessToken(sessionService.getAccessTokenString())
@@ -36,7 +36,7 @@ public class ProductoService implements Serializable {
                 .callGetAllAuth();
 
         if (response.getCodeHttp() == 200) {
-            return (List<Producto>) response.getBody();
+            return response.getBody();
         } else {
             return new ArrayList<>();
         }

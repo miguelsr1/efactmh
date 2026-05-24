@@ -36,11 +36,9 @@ public class ComprobanteCreditoFiscalService implements Serializable {
             jsonDoc.put("ventaNoSuj", 0);
             jsonDoc.put("ventaExenta", 0);
             jsonDoc.put("ventaGravada", detFac.getCantidad().multiply(detFac.getPrecioUnitario()).setScale(2, RoundingMode.UP));
-            
-            switch(codigoDte){
-                case "01":
-                    jsonDoc.put("ivaItem", getMontoIva(codigoDte, (BigDecimal) jsonDoc.get("ventaGravada"), iva));
-                    break;
+
+            if (codigoDte.equals("01")) {
+                jsonDoc.put("ivaItem", getMontoIva(codigoDte, (BigDecimal) jsonDoc.get("ventaGravada"), iva));
             }            
             
             jsonDoc.put("tributos", "01".equals(codigoDte) ? codsTributo : jsonCodsTributos);
@@ -60,11 +58,9 @@ public class ComprobanteCreditoFiscalService implements Serializable {
     }
 
     private BigDecimal getMontoIva(String codigoDte, BigDecimal ventaGravada, BigDecimal iva) {
-        switch (codigoDte) {
-            case "01":
-                return ventaGravada.multiply(iva).divide(new BigDecimal("1.13"),2, RoundingMode.UP);
-            default:
-                return BigDecimal.ZERO;
+        if (codigoDte.equals("01")) {
+            return ventaGravada.multiply(iva).divide(BigDecimal.valueOf(1.13), 2, RoundingMode.UP);
         }
+        return BigDecimal.ZERO;
     }
 }

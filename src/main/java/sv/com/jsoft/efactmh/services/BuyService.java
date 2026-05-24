@@ -56,7 +56,7 @@ public class BuyService implements Serializable {
         lstMeses.add(new MesDto(11, "Noviembre"));
         lstMeses.add(new MesDto(12, "Diciembre"));
         
-        lstAnios = new ArrayList();
+        lstAnios = new ArrayList<>();
         int currentYear = LocalDate.now().getYear();
         lstAnios.add(new AnioDto(currentYear, String.valueOf(currentYear)));
         lstAnios.add(new AnioDto(currentYear - 1, String.valueOf(currentYear - 1)));
@@ -69,14 +69,13 @@ public class BuyService implements Serializable {
         request.setAnho((short) buyDate.getYear());
         request.setMes((short) buyDate.getMonthValue());
 
-        RestUtil restUtil = RestUtil.builder()
+        return RestUtil.builder()
                 .endpoint("/api/secured/buy")
                 .clazz(ApiMhDteResponse.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .body(request)
-                .build();
-
-        return restUtil.callPostAuth();
+                .build()
+                .callPostAuth();
     }
 
     public ResponseRestApi<ApiMhDteResponse> save(String json, LocalDate buyDate, int idTipoDocumento, String numDocumento) {
@@ -88,14 +87,13 @@ public class BuyService implements Serializable {
         request.setIdTipoDocumento(idTipoDocumento);
         request.setNumDocumento(numDocumento);
 
-        RestUtil restUtil = RestUtil.builder()
+        return RestUtil.builder()
                 .endpoint("/api/secured/buy/contri")
                 .clazz(ApiMhDteResponse.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .body(request)
-                .build();
-
-        return restUtil.callPostAuth();
+                .build()
+                .callPostAuth();
     }
 
     public List<BuyDtoResponse> getList(LocalDate buyDate) {

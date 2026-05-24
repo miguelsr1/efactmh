@@ -35,6 +35,8 @@ public class ResumenService implements Serializable {
 
                 jsonResumen.put("ivaPerci1", 0); //ccfe, nce Y nde
                 break;
+            default:
+                break;
         }
         jsonResumen.put("ivaRete1", 0); //fe, ccfe, nce, nde, y fsee
 

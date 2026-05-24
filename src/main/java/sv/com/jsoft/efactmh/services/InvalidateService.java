@@ -25,19 +25,19 @@ public class InvalidateService implements Serializable {
     @Inject
     SessionService sessionService;
 
-    public ResponseRestApi createInvalidate(InvalidateRequest request) {
-        RestUtil rest = RestUtil.builder()
+    public ResponseRestApi<ApiMhDteResponse> createInvalidate(InvalidateRequest request) {
+        return RestUtil.builder()
                 .endpoint("/api/secured/invalidate")
                 .accessToken(sessionService.getAccessTokenString())
                 .clazz(ApiMhDteResponse.class)
                 .body(request)
-                .build();
-        return rest.callPostAuth();
+                .build()
+                .callPostAuth();
     }
 
     public ResponseDto findDteToInvalidate(Long idFactura, String codigoDte, String codigoGeneracion) {
         //validar tiempo de validez de anulacion
-        ResponseRestApi response = RestUtil.builder()
+        ResponseRestApi<List<String>> response = RestUtil.builder()
                 .endpoint("/api/secured/invalidate/all/" + codigoDte)
                 .clazz(String.class)
                 .accessToken(sessionService.getAccessTokenString())
@@ -48,17 +48,17 @@ public class InvalidateService implements Serializable {
             return new ResponseDto(1, "NO SE ENCONTRARON DTES");
         }
 
-        List<String> lstDtes = (List<String>) response.getBody();
+        List<String> lstDtes = response.getBody();
 
         if (lstDtes.stream().filter(dte -> dte.equals(codigoGeneracion)).findFirst().isPresent()) {
-            response = RestUtil.builder()
+            ResponseRestApi<DteToInvalidate> responseInv = RestUtil.builder()
                     .endpoint("/api/secured/invalidate/" + idFactura)
                     .clazz(DteToInvalidate.class)
                     .accessToken(sessionService.getAccessTokenString())
                     .build()
                     .callGetOneAuth();
-            if (response.getCodeHttp() == 200) {
-                return new ResponseDto(0, (DteToInvalidate) response.getBody());
+            if (responseInv.getCodeHttp() == 200) {
+                return new ResponseDto(0, responseInv.getBody());
             } else {
                 return new ResponseDto(1, "NO SE ENCONTRO EL DTE: " + codigoGeneracion);
             }
@@ -74,7 +74,7 @@ public class InvalidateService implements Serializable {
      * @return 
      */
     public ResponseDto findDteToInvalidateByReplace(String codigoDte, String codigoGeneracion) {
-        ResponseRestApi response = RestUtil.builder()
+        ResponseRestApi<List<String>> response = RestUtil.builder()
                 .endpoint(MessageFormat.format("/api/secured/invalidate/dte/{0}/{1}", codigoDte, codigoGeneracion))
                 .clazz(String.class)
                 .accessToken(sessionService.getAccessTokenString())

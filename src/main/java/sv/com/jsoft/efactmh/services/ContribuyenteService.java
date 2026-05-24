@@ -24,16 +24,15 @@ public class ContribuyenteService {
         try {
             JSONParser parser = new JSONParser();
 
-            RestUtil rest = RestUtil
+            ResponseRestApi<String> strEmisor = RestUtil
                     .builder()
                     .clazz(String.class)
                     .accessToken(sessionService.getAccessTokenString())
                     .endpoint("/api/secured/dte/emisor/" + nit + "/" + idEstablecimiento + "/" + idPuntoVenta)
-                    .build();
+                    .build()
+                    .callGetOneAuth();
 
-            ResponseRestApi strEmisor = rest.callGetOneAuth();
-
-            return (JSONObject) parser.parse(strEmisor.getBody().toString());
+            return (JSONObject) parser.parse(strEmisor.getBody());
         } catch (ParseException ex) {
             log.error("ERROR OBTENIENDO EMISOR: " + nit);
             return null;
@@ -44,23 +43,18 @@ public class ContribuyenteService {
         try {
             JSONParser parser = new JSONParser();
 
-            RestUtil rest = RestUtil
+            ResponseRestApi<String> strReceptor = RestUtil
                     .builder()
                     .clazz(String.class)
                     .accessToken(sessionService.getAccessTokenString())
                     .endpoint("/api/secured/dte/receptor/" + codigoDte + "/" + numDocumento)
-                    .build();
+                    .build()
+                    .callGetOneAuth();
 
-            ResponseRestApi strReceptor = rest.callGetOneAuth();
-
-            return (JSONObject) parser.parse(strReceptor.getBody().toString());
+            return (JSONObject) parser.parse(strReceptor.getBody());
         } catch (ParseException ex) {
             log.error("ERROR OBTENIENDO RECEPTOR: " + numDocumento);
             return null;
         }
-    }
-
-    public void actualizar() {
-
     }
 }
