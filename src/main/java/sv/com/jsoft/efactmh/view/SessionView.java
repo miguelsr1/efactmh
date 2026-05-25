@@ -49,44 +49,34 @@ public class SessionView implements Serializable {
     @Inject
     CatalogoService catalogoService;
 
+    @Getter
     private String idEstablecimiento;
+    @Getter
     private String idPuntoVenta;
 
     @Getter
     @Setter
     private Boolean aceptaPagoPlazo = true;
-
+    @Getter
+    @Setter
     private String opcion = "/app/home.xhtml";
-    //private boolean sinParametrosIniciales = false;
 
     @Getter
     private MenuModel model;
     @Getter
     private PlanMensual planMensual;
-    @Getter
-    private List<String> roles;
 
     @PostConstruct
     public void init() {
         if (sessionService.getRoles() != null && sessionService.getRoles().contains("ROLE_EMISOR")) {
             loadCookies();
             loadMenu();
-            loadPlanMensual();
+            planMensual = sessionService.getPlanMensual().getBody();
+
+            sessionService.cargarParametrosMh();
+            sessionService.loadEstablecimiento();
+            sessionService.loadEmisor();
         }
-    }
-
-    public String getOpcion() {
-        return opcion;
-    }
-
-    public void setOpcion(String opcion) {
-        if (opcion != null) {
-            this.opcion = opcion;
-        }
-    }
-
-    private void loadPlanMensual() {
-        planMensual = sessionService.getPlanMensual().getBody();
     }
 
     private void loadCookies() {
@@ -171,10 +161,6 @@ public class SessionView implements Serializable {
         }
     }
 
-    public String getIdEstablecimiento() {
-        return idEstablecimiento;
-    }
-
     public void setIdEstablecimiento(String idEstablecimiento) {
         JsfUtil.eliminarCookie("idPuntoV");
         idPuntoVenta = null;
@@ -185,10 +171,6 @@ public class SessionView implements Serializable {
             JsfUtil.eliminarCookie("idPuntoV");
         }
         this.idEstablecimiento = idEstablecimiento;
-    }
-
-    public String getIdPuntoVenta() {
-        return idPuntoVenta;
     }
 
     public void setIdPuntoVenta(String idPuntoVenta) {

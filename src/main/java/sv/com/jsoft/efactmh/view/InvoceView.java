@@ -39,7 +39,6 @@ import static sv.com.jsoft.efactmh.util.Constantes.MSG_ALERT;
 import sv.com.jsoft.efactmh.util.JsfUtil;
 import sv.com.jsoft.efactmh.util.MessageUtil;
 import sv.com.jsoft.efactmh.util.ResponseRestApi;
-import sv.com.jsoft.efactmh.util.RestUtil;
 
 /**
  *
@@ -134,7 +133,7 @@ public class InvoceView implements Serializable {
     @Setter
     private ClienteResponse cliente;
     @Getter
-    private InvoceDto invoceDto;
+    private InvoceDto invoce;
 
     @Inject
     SessionView sessionView;
@@ -152,10 +151,10 @@ public class InvoceView implements Serializable {
     @PostConstruct
     public void init() {
         cliente = new ClienteResponse();
-        invoceDto = new InvoceDto();
-        invoceDto.setCodigoDte("01");
+        invoce = new InvoceDto();
+        invoce.setCodigoDte("01");
 
-        invoceDto.setCondicionOperacion("1"); //CONTADO POR DEFECTO
+        invoce.setCondicionOperacion("1"); //CONTADO POR DEFECTO
 
         lstDetPago = new ArrayList<>();
         detPago = new DetallePago();
@@ -185,7 +184,7 @@ public class InvoceView implements Serializable {
 
     public void loadMetodoPago() {
         lstMetodoPago = new ArrayList<>();
-        switch (invoceDto.getCondicionOperacion()) {
+        switch (invoce.getCondicionOperacion()) {
             case "1":
                 lstMetodoPago.add(new CatalogoDto("01", "EFECTIVO"));
                 lstMetodoPago.add(new CatalogoDto("02", "TARJETA DE DEBITO"));
@@ -218,7 +217,7 @@ public class InvoceView implements Serializable {
         if (obj.getCodeHttp() == 200) {
             cliente = obj.getBody();
 
-            if (invoceDto.getCodigoDte().equals("03") && !cliente.getInscritoIva()) {
+            if (invoce.getCodigoDte().equals("03") && !cliente.getInscritoIva()) {
 
                 MessageUtil.builder()
                         .severity(FacesMessage.SEVERITY_WARN)
@@ -235,7 +234,7 @@ public class InvoceView implements Serializable {
             nombreCliente = (cliente.getTipoPersoneria().equals("N"))
                     ? cliente.getNombreCompleto()
                     : cliente.getRazonSocial();
-            invoceDto.setIdCliente(cliente.getIdCliente());
+            invoce.setIdCliente(cliente.getIdCliente());
         } else {
             PrimeFaces.current().executeScript("PF('dlgAddCustomer').show()");
         }
@@ -243,14 +242,14 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getSumas() {
-        return invoceDto.getDetailInvoce().stream()
+        return invoce.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getSumasCcf() {
-        return invoceDto.getDetailInvoce().stream()
+        return invoce.getDetailInvoce().stream()
                 .filter(det -> det.getTipoVenta() == 1)
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
@@ -262,7 +261,7 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getIva() {
-        return switch (invoceDto.getCodigoDte()) {
+        return switch (invoce.getCodigoDte()) {
             case "01", "14" -> BigDecimal.ZERO;
             case "03" -> getSumasCcf().multiply(BigDecimal.valueOf(0.13))
                     .setScale(2, RoundingMode.HALF_UP);
@@ -271,15 +270,15 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getIvaRetenido() {
-        if (invoceDto.getCodigoDte().equals("01")) {
-            if (invoceDto.isAplicaIvaRetenido()) {
+        if (invoce.getCodigoDte().equals("01")) {
+            if (invoce.isAplicaIvaRetenido()) {
                 BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
                 return getSumas().divide(BigDecimal.valueOf(1.13), RoundingMode.HALF_UP).multiply(porcentajeIva);
             } else {
                 return BigDecimal.ZERO;
             }
-        } else if (invoceDto.getCodigoDte().equals("03")) {
-            if (invoceDto.isAplicaIvaRetenido()) {
+        } else if (invoce.getCodigoDte().equals("03")) {
+            if (invoce.isAplicaIvaRetenido()) {
                 BigDecimal porcentajeIva = BigDecimal.valueOf(1).divide(BigDecimal.valueOf(100));
                 return getSumas().multiply(porcentajeIva);
             } else {
@@ -291,11 +290,11 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getRentaRetenido() {
-        switch (invoceDto.getCodigoDte()) {
+        switch (invoce.getCodigoDte()) {
             case "01":
                 return BigDecimal.ZERO;
             case "03":
-                if (invoceDto.isAplicaRentaRetenido()) {
+                if (invoce.isAplicaRentaRetenido()) {
                     BigDecimal porcentajeIsr = BigDecimal.valueOf(10).divide(BigDecimal.valueOf(100));
                     return getSumas().multiply(porcentajeIsr);
                 } else {
@@ -307,7 +306,7 @@ public class InvoceView implements Serializable {
     }
 
     public BigDecimal getTotal() {
-        return switch (invoceDto.getCodigoDte()) {
+        return switch (invoce.getCodigoDte()) {
             case "01" -> getTotalFe();
             case "03" -> getTotalCcf();
             case "14" -> getTotalSEx();
@@ -316,11 +315,11 @@ public class InvoceView implements Serializable {
     }
 
     private BigDecimal getTotalFe() {
-        if (invoceDto.getDetailInvoce().isEmpty()) {
+        if (invoce.getDetailInvoce().isEmpty()) {
             return BigDecimal.ZERO;
         }
 
-        return invoceDto.getDetailInvoce().stream()
+        return invoce.getDetailInvoce().stream()
                 .map(DetalleFacturaDto::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .add(getIvaRetenido().negate())
@@ -328,7 +327,7 @@ public class InvoceView implements Serializable {
     }
 
     private BigDecimal getTotalCcf() {
-        if (invoceDto.getDetailInvoce().isEmpty()) {
+        if (invoce.getDetailInvoce().isEmpty()) {
             return BigDecimal.ZERO;
         }
 
@@ -345,7 +344,7 @@ public class InvoceView implements Serializable {
      * @return
      */
     private BigDecimal getTotalSEx() {
-        if (invoceDto.getDetailInvoce().isEmpty()) {
+        if (invoce.getDetailInvoce().isEmpty()) {
             return BigDecimal.ZERO;
         }
 
@@ -369,7 +368,7 @@ public class InvoceView implements Serializable {
     public void onDetFactura(SelectEvent<DetalleFacturaDto> event) {
         if (event.getObject() != null) {
             DetalleFacturaDto detFactura = event.getObject();
-            invoceDto.getDetailInvoce().add(detFactura);
+            invoce.getDetailInvoce().add(detFactura);
         }
     }
 
@@ -378,7 +377,7 @@ public class InvoceView implements Serializable {
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
 
-        invoceDto.setCondicionOperacion("1");
+        invoce.setCondicionOperacion("1");
     }
 
     public BigDecimal getTotalPagos() {
@@ -399,7 +398,7 @@ public class InvoceView implements Serializable {
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
 
-        invoceDto.setCondicionOperacion("1");
+        invoce.setCondicionOperacion("1");
 
         if (lstDetPago.isEmpty()) {
             detPago.setMonto(getTotal());
@@ -407,7 +406,7 @@ public class InvoceView implements Serializable {
     }
 
     public void removeDetInvoce(int index) {
-        invoceDto.getDetailInvoce().remove(index);
+        invoce.getDetailInvoce().remove(index);
     }
 
     public void backStep() {
@@ -442,7 +441,7 @@ public class InvoceView implements Serializable {
     private boolean stepValidate() {
         switch (activeStep) {
             case 0:
-                switch (invoceDto.getCodigoDte()) {
+                switch (invoce.getCodigoDte()) {
                     case "01": //FE
                         if (!requiereFactura) {
                             if (cliente.getIdCliente() == null) {
@@ -469,7 +468,7 @@ public class InvoceView implements Serializable {
                 }
             case 1:
                 //VALIDAR QUE EXISTA UN ITEM AGREGADO EN LA FACTURA
-                if (invoceDto.getDetailInvoce().isEmpty()) {
+                if (invoce.getDetailInvoce().isEmpty()) {
                     JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
                             MSG_ALERT,
                             "POR FAVOR AGREGE UN ITEM A LA FACTURA");
@@ -487,20 +486,20 @@ public class InvoceView implements Serializable {
         if (makeInvoce) {
             lstDetPago.forEach(det -> det.getMonto());
 
-            invoceDto.setDateInvoce(sfd.format(dateInvoce));
-            invoceDto.setDetailPayments(lstDetPago);
-            invoceDto.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
-            invoceDto.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
+            invoce.setDateInvoce(sfd.format(dateInvoce));
+            invoce.setDetailPayments(lstDetPago);
+            invoce.setIdEstablecimiento(Long.valueOf(sessionView.getIdEstablecimiento()));
+            invoce.setIdPuntoVenta(sessionView.getIdPuntoVenta() != null ? Long.valueOf(sessionView.getIdPuntoVenta()) : null);
 
             //Persistiendo factura
-            log.info("PERSISTIENDO FACTURA: " + invoceDto.toString());
-            ResponseRestApi<IdDto> response = invoceService.saveInvoce(invoceDto);
+            log.info("PERSISTIENDO FACTURA: " + invoce.toString());
+            ResponseRestApi<IdDto> response = invoceService.saveInvoce(invoce);
 
             if (response.getCodeHttp() == 201) {
                 IdDto newInvoce = response.getBody();
                 idFac = newInvoce.getId();
 
-                invoceDto.setIdFactura(idFac);
+                invoce.setIdFactura(idFac);
 
                 //enviando a MH
                 log.info("ENVIANDO DTE: " + idFac + " A MH");
@@ -565,7 +564,7 @@ public class InvoceView implements Serializable {
                 }
 
             } else {
-                log.error("ERROR CREANDO FACTURA: " + invoceDto.toString());
+                log.error("ERROR CREANDO FACTURA: " + invoce.toString());
                 log.error("CODIGO HTTP: " + response.getCodeHttp());
                 log.error("MENSAJE ERROR: " + response.getBody());
 
@@ -612,11 +611,11 @@ public class InvoceView implements Serializable {
                     "DEBE DE AGREGAR EL DETALLE DE PAGOS");
             return false;
         }
-        if (requiereFactura && invoceDto.getCodigoDte().equals("01")) {
-            invoceDto.setClientTemp(new ClientTempDto(nombreClienteReq, correoClienteReq, codigoTipoDocClienteReq, numDocClienteReq));
-            invoceDto.setIdCliente(null);
+        if (requiereFactura && invoce.getCodigoDte().equals("01")) {
+            invoce.setClientTemp(new ClientTempDto(nombreClienteReq, correoClienteReq, codigoTipoDocClienteReq, numDocClienteReq));
+            invoce.setIdCliente(null);
         } else if (!requiereFactura) {
-            invoceDto.setClientTemp(null);
+            invoce.setClientTemp(null);
         }
 
         BigDecimal total = lstDetPago.stream()
@@ -673,10 +672,10 @@ public class InvoceView implements Serializable {
         loadMetodoPago();
 
         cliente = new ClienteResponse();
-        invoceDto = new InvoceDto();
-        invoceDto.setCodigoDte("01");
+        invoce = new InvoceDto();
+        invoce.setCodigoDte("01");
 
-        invoceDto.setCondicionOperacion("1"); //CONTADO POR DEFECTO
+        invoce.setCondicionOperacion("1"); //CONTADO POR DEFECTO
 
         lstDetPago = new ArrayList<>();
         detPago = new DetallePago();
@@ -699,8 +698,8 @@ public class InvoceView implements Serializable {
         }
     }
 
-    public void requiereFactura() {
-
+    public void requiereFacturaAction() {
+        sinDatos = false;
     }
 
     public List<ClienteResponse> completeClient(String query) {
@@ -711,9 +710,9 @@ public class InvoceView implements Serializable {
         if (event.getObject() != null) {
             cliente = event.getObject();
 
-            if (invoceDto.getCodigoDte().equals("03")) {
+            if (invoce.getCodigoDte().equals("03")) {
                 if (cliente.getInscritoIva()) {
-                    invoceDto.setIdCliente(cliente.getIdCliente());
+                    invoce.setIdCliente(cliente.getIdCliente());
                 } else {
                     JsfUtil.showMessageDialog(FacesMessage.SEVERITY_WARN,
                             MSG_ALERT,
@@ -721,7 +720,7 @@ public class InvoceView implements Serializable {
                     cliente = new ClienteResponse();
                 }
             } else {
-                invoceDto.setIdCliente(cliente.getIdCliente());
+                invoce.setIdCliente(cliente.getIdCliente());
             }
         } else {
             cliente = new ClienteResponse();

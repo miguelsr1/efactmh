@@ -71,7 +71,7 @@ public class SessionService implements Serializable {
                         .getName();
     }
 
-    private void loadEmisor() {
+    public void loadEmisor() {
         ResponseRestApi<Emisor> response = emisorService.getEmisor();
         if (response.getCodeHttp() == 200) {
             emisor = response.getBody();
@@ -80,7 +80,7 @@ public class SessionService implements Serializable {
         }
     }
 
-    private void loadEstablecimiento() {
+    public void loadEstablecimiento() {
         lstEstablecimiento = catalogoService.getLstEstablecimiento();
     }
 
@@ -89,7 +89,7 @@ public class SessionService implements Serializable {
         return catalogoService.getLstPuntoVentaByEstablecimiento(idEstablecimiento);
     }
 
-    private void cargarParametrosMh() {
+    public void cargarParametrosMh() {
         ResponseRestApi<List<ParametroDto>> rest = RestUtil
                 .builder()
                 .clazz(ParametroDto.class)

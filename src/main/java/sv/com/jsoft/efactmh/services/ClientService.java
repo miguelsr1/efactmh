@@ -4,6 +4,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.List;
+
 import sv.com.jsoft.efactmh.model.Cliente;
 import sv.com.jsoft.efactmh.model.PerNaturalRequest;
 import sv.com.jsoft.efactmh.model.Personeria;
@@ -31,14 +33,14 @@ public class ClientService implements Serializable {
         return clientRepository.get(idCliente);
     }
 
-    public ResponseRestApi<ClienteDto> findAllClient() {
+    public ResponseRestApi<List<ClienteDto>>findAllClient() {
         return RestUtil
                 .builder()
                 .clazz(ClienteDto.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/client/")
                 .build()
-                .callGetOneAuth();
+                .callGetAllAuth();
     }
 
     public ResponseRestApi<Cliente> findClientById(Long idClient) {

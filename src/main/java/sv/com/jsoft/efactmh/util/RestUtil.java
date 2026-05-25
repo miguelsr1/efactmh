@@ -15,6 +15,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.faces.application.FacesMessage;
@@ -94,7 +95,7 @@ public class RestUtil {
                     return new ResponseRestApi<>(response.statusCode(), gson.fromJson(response.body(), lst));
                 }
             } else if (response.statusCode() == 404) {
-                return new ResponseRestApi<>(response.statusCode(), null);
+                return new ResponseRestApi<>(response.statusCode(), new ArrayList<>());
             }
         } catch (URISyntaxException | IOException | InterruptedException ex) {
             log.error("ERROR get - " + endpoint, ex);

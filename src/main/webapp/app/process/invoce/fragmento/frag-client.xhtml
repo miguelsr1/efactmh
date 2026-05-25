@@ -36,7 +36,7 @@
             <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
                 <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA"
                                          disabled="#{not invoceView.sinDatos}">
-                    <p:ajax update="dvClient" listener="#{invoceView.requiereFactura()}"/>
+                    <p:ajax update="dvClient" listener="#{invoceView.requiereFacturaAction()}"/>
                 </p:selectBooleanCheckbox>
             </div>
 

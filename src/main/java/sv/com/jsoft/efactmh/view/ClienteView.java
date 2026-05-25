@@ -3,6 +3,7 @@ package sv.com.jsoft.efactmh.view;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -66,8 +67,6 @@ public class ClienteView implements Serializable {
     @Inject
     UbicacionService ubicacionService;
     @Inject
-    SessionService sessionService;
-    @Inject
     ClientService clientService;
 
     @PostConstruct
@@ -85,10 +84,10 @@ public class ClienteView implements Serializable {
         pn = new PerNaturalRequest();
         codigoDepa = "06";
 
-        ResponseRestApi response = clientService.findAllClient();
+        ResponseRestApi<List<ClienteDto>> response = clientService.findAllClient();
 
         if (response.getCodeHttp() == 200) {
-            lstCliente = (List<ClienteDto>) response.getBody();
+            lstCliente = response.getBody();
         }
     }
 
@@ -135,13 +134,20 @@ public class ClienteView implements Serializable {
     // </editor-fold>
 
     public void nuevo() {
+        pn = createNewObject();
+
+        disabled = false;
+        tipoPersoneria = 1;
+    }
+
+    private PerNaturalRequest createNewObject() {
         pn = new PerNaturalRequest();
         pn.setPersoneria("N");
         pn.setDepartamento("06");
         pn.setMunicipio("14");
         pn.setCodigoTipoDoc("13");
-        disabled = false;
-        tipoPersoneria = 1;
+
+        return pn;
     }
 
     public void cancelar() {
@@ -149,8 +155,12 @@ public class ClienteView implements Serializable {
     }
 
     public void iniciarClient() {
-        pn = new PerNaturalRequest();
-        pj = new PerJuridicaRequest();
+        if (tipoPersoneria == 1) {
+            pn = createNewObject();
+            inscritoIva = false;
+        } else {
+            pj = new PerJuridicaRequest();
+        }
     }
 
     public void guardar() {
@@ -158,8 +168,8 @@ public class ClienteView implements Serializable {
         if (tipoPersoneria == 1) {
             pn.setDepartamento(codigoDepa);
             pn.setActivo(true);
-            
-            if(!inscritoIva){
+
+            if (!inscritoIva) {
                 pn.setNombreCompleto(pn.getNombreCompleto().toUpperCase());
                 pn.setDireccion(pn.getDireccion().toUpperCase());
                 pn.setEmail(pn.getEmail().toLowerCase());
@@ -178,7 +188,7 @@ public class ClienteView implements Serializable {
             pj.setNombreComercial(pj.getNombreComercial().toUpperCase());
             pj.setDireccionEmp(pj.getDireccionEmp().toUpperCase());
             pj.setEmailEmp(pj.getEmailEmp().toLowerCase());
-            
+
             pj.setDepartamentoEmp(codigoDepa);
             if (edit) {
                 pj.setActivo(true);
@@ -187,8 +197,8 @@ public class ClienteView implements Serializable {
                 codeResponse = clientService.insClient(null, pj);
             }
         }
-        
-        switch(codeResponse){
+
+        switch (codeResponse) {
             case 200:
             case 201:
                 JsfUtil.mensajeFromEnum(!edit ? TipoMensaje.INSERT : TipoMensaje.UPDATE);
@@ -210,13 +220,13 @@ public class ClienteView implements Serializable {
         idMuni = clienteDto.getIdMunicipio();
 
         MunicipioDto m = ubicacionService.findMunicipioById(idMuni);
-        
+
         codigoDepa = m.getCodDepartamento();
 
-        ResponseRestApi response = clientService.findClientById(clienteDto.getIdCliente());
+        ResponseRestApi<Cliente> response = clientService.findClientById(clienteDto.getIdCliente());
 
         if (response.getCodeHttp() == 200) {
-            Cliente client = (Cliente) response.getBody();
+            Cliente client = response.getBody();
             tipoPersoneria = client.getTipoPersoneria();
 
             if (client.getTipoPersoneria() == 1) {
@@ -256,15 +266,12 @@ public class ClienteView implements Serializable {
             }
         }
     }
-    
-    public int getMaxNumDoc(){
-        switch(pn.getCodigoTipoDoc()){
-            case "13":
-                return 9;
-            case "36":
-                return 14;
-            default:
-                return 30;
-        }
+
+    public int getMaxNumDoc() {
+        return switch (pn.getCodigoTipoDoc()) {
+            case "13" -> 9;
+            case "36" -> 14;
+            default -> 30;
+        };
     }
 }

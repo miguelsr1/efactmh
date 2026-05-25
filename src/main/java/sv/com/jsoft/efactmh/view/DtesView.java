@@ -107,16 +107,14 @@ public class DtesView implements Serializable {
             );
         }
 
-        RestUtil rest = RestUtil.builder()
+        ResponseRestApi<List<DtesResponse>> obj = RestUtil.builder()
                 .clazz(DtesResponse.class)
                 .accessToken(sessionService.getAccessTokenString())
                 .endpoint("/api/secured/dte/all" + (urlParams == null ? "" : urlParams))
-                .build();
+                .build()
+                .callGetAllAuth();
 
-        ResponseRestApi obj = rest.callGetAllAuth();
-        if (obj.getCodeHttp() == 200) {
-            lstDtes = (List<DtesResponse>) obj.getBody();
-        }
+        lstDtes = obj.getBody();
     }
 
     private String encode(String value) {
