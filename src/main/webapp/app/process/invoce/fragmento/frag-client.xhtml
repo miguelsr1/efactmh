@@ -25,17 +25,16 @@
                               maxdate="#{invoceView.dateInvoce}"/>
             </div>
 
-            <div class="field col-2" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
+            <div class="field col-6 md:col-6 lg:col-3" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
 
                 <p:selectBooleanCheckbox id="chbSinDatos" value="#{invoceView.sinDatos}" itemLabel="SIN DATOS"
                                          styleClass="mb-2">
-                    <p:ajax update="dvClient" listener="#{invoceView.facturaSinDatos()}"
-                            process="@this,txtFecha,chbSinDatos"/>
+                    <p:ajax update="dvClient, txtQuery" listener="#{invoceView.facturaSinDatos()}"
+                            process="@this,txtFecha,chbSinDatos,txtQuery"/>
                 </p:selectBooleanCheckbox>
             </div>
-            <div class="field col-10" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
-                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA"
-                                         disabled="#{not invoceView.sinDatos}">
+            <div class="field col-6 md:col-6 lg:col-9" style="display: #{invoceView.invoce.codigoDte eq '01' ? 'block':'none'}">
+                <p:selectBooleanCheckbox value="#{invoceView.requiereFactura}" itemLabel="REQUIERE FACTURA">
                     <p:ajax update="dvClient" listener="#{invoceView.requiereFacturaAction()}"/>
                 </p:selectBooleanCheckbox>
             </div>
@@ -44,6 +43,7 @@
             <div class="field col-12" style="display:#{invoceView.sinDatos ?'none':'block'}">
                 <p:outputLabel for="txtQuery" value="Buscar cliente (DUI o NOMBRE)"/>
                 <p:autoComplete id="txtQuery" value="#{invoceView.cliente}" minQueryLength="4"
+                                style="display:#{(invoceView.sinDatos or invoceView.requiereFactura) ?'none':'block'}"
                                 completeMethod="#{invoceView.completeClient}"
                                 var="client" itemLabel="#{client.nombreCompleto}#{client.razonSocial}"
                                 itemValue="#{client}"

@@ -65,12 +65,12 @@ public class InvoceView implements Serializable {
     @Getter
     @Setter
     private Date dateInvoce = new Date();
-    @Getter
-    private String taskSave;
-    @Getter
-    private String taskSendDte;
-    @Getter
-    private String taskComplete;
+    /* @Getter
+     private String taskSave;
+     @Getter
+     private String taskSendDte;
+     @Getter
+     private String taskComplete;*/
     @Getter
     private String fontWeightSave;
     @Getter
@@ -164,9 +164,9 @@ public class InvoceView implements Serializable {
 
         lstObservacionesMH = new ArrayList<>();
 
-        taskSave = "taskPending";
+        /*askSave = "taskPending";
         taskSendDte = "taskPending";
-        taskComplete = "taskPending";
+        taskComplete = "taskPending";*/
 
         fontWeightSave = "";
         fontWeightSendDte = "";
@@ -238,7 +238,6 @@ public class InvoceView implements Serializable {
         } else {
             PrimeFaces.current().executeScript("PF('dlgAddCustomer').show()");
         }
-        log.info(cliente.toString());
     }
 
     public BigDecimal getSumas() {
@@ -642,15 +641,15 @@ public class InvoceView implements Serializable {
 
         switch (message) {
             case "1":
-                taskSave = "taskComplete";
+                //taskSave = "taskComplete";
                 fontWeightSave = "font-weight: bold";
                 break;
             case "2":
-                taskSendDte = "taskComplete";
+                //taskSendDte = "taskComplete";
                 fontWeightSendDte = "font-weight: bold;";
                 break;
             case "3":
-                taskComplete = "taskComplete";
+                //taskComplete = "taskComplete";
                 fontWeightComplete = "font-weight: bold;";
                 break;
             default:
@@ -659,9 +658,9 @@ public class InvoceView implements Serializable {
     }
 
     public void clearStatus() {
-        taskSave = "taskPending";
+        /*taskSave = "taskPending";
         taskSendDte = "taskPending";
-        taskComplete = "taskPending";
+        taskComplete = "taskPending";*/
 
         fontWeightSave = "";
         fontWeightSendDte = "";
@@ -681,9 +680,9 @@ public class InvoceView implements Serializable {
         detPago = new DetallePago();
         detPago.setTipoPago("01"); //EFECTIVO
 
-        taskSave = "taskPending";
+        /*taskSave = "taskPending";
         taskSendDte = "taskPending";
-        taskComplete = "taskPending";
+        taskComplete = "taskPending";*/
 
         fontWeightSave = "";
         fontWeightSendDte = "";
@@ -695,11 +694,15 @@ public class InvoceView implements Serializable {
         queryParam = sinDatos ? "00000000-0" : null;
         if (queryParam != null) {
             findClient();
+        } else {
+            cliente = new ClienteResponse();
         }
     }
 
     public void requiereFacturaAction() {
         sinDatos = false;
+
+        cliente = new ClienteResponse();
     }
 
     public List<ClienteResponse> completeClient(String query) {

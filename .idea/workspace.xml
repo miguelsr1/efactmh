@@ -11,14 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="85580cf9-2787-4883-9385-bcf83773ba29" name="Changes" comment="mejoras en generico de restUtil">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/ClientService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/util/RestUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ClienteView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/ClienteView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/DtesView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-client.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/fragmento/frag-client.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/app/process/invoce/invoce.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -617,7 +612,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/InvoceView.java</url>
-          <line>533</line>
+          <line>532</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -644,11 +639,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/BuyService.java</url>
           <line>106</line>
           <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/view/SessionView.java</url>
-          <line>193</line>
-          <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sv/com/jsoft/efactmh/services/SessionService.java</url>
